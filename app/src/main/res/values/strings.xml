@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SuperApp</string>
+    <string name="title_fitness">Fitness App</string>
 </resources>

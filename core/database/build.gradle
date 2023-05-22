@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.emikhalets.database'
+    compileSdk rootProject.params.compileSdk
+
+    defaultConfig {
+        minSdk rootProject.params.minSdk
+        targetSdk rootProject.params.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion rootProject.params.composeCompiler
+    }
+}
+
+dependencies {
+
+    implementation("com.google.dagger:hilt-android:${versions.hilt}")
+    kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
+
+    implementation("androidx.room:room-runtime:${versions.room}")
+    implementation("androidx.room:room-ktx:${versions.room}")
+    kapt("androidx.room:room-compiler:${versions.room}")
+
+    testImplementation("junit:junit:${versions.junit}")
+    androidTestImplementation("androidx.test.ext:junit:${versions.junitExt}")
+}
