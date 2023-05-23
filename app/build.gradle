@@ -5,6 +5,10 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     namespace 'com.emikhalets.superapp'
     compileSdk rootProject.params.compileSdk
@@ -22,9 +26,21 @@ android {
         }
     }
 
-    buildTypes {
+    signingConfigs {
         release {
-            minifyEnabled false
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPass']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePass']
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -56,7 +72,7 @@ dependencies {
 
     implementation project(":application:events")
     implementation project(":application:finances")
-    implementation project(":application:fitness")
+    implementation project(":application:fitness:app")
     implementation project(":application:medialib")
     implementation project(":application:notes")
 

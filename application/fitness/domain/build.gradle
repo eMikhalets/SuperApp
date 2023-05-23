@@ -1,10 +1,12 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
 }
 
 android {
-    namespace 'com.emikhalets.common'
+    namespace 'com.emikhalets.fitness.domain'
     compileSdk rootProject.params.compileSdk
 
     defaultConfig {
@@ -22,11 +24,18 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion rootProject.params.composeCompiler
+    }
 }
 
 dependencies {
 
-    implementation("androidx.annotation:annotation-jvm:${versions.annotation}")
+    implementation("com.google.dagger:hilt-android:${versions.hilt}")
+    kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
 
     testImplementation("junit:junit:${versions.junit}")
     androidTestImplementation("androidx.test.ext:junit:${versions.junitExt}")

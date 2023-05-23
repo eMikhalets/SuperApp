@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.emikhalets.database'
+    namespace 'com.emikhalets.fitness.app'
     compileSdk rootProject.params.compileSdk
 
     defaultConfig {
@@ -15,11 +15,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
     }
 
     compileOptions {
@@ -39,12 +34,23 @@ android {
 
 dependencies {
 
+    implementation project(":application:fitness:data")
+    implementation project(":application:fitness:domain")
+    implementation project(":application:fitness:presentation")
+
+    // Core
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+
+    implementation("androidx.activity:activity-compose:1.7.1")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    implementation("com.google.accompanist:accompanist-systemuicontroller:${versions.accompanist}")
+
     implementation("com.google.dagger:hilt-android:${versions.hilt}")
     kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
-
-    api("androidx.room:room-runtime:${versions.room}")
-    api("androidx.room:room-ktx:${versions.room}")
-    kapt("androidx.room:room-compiler:${versions.room}")
 
     testImplementation("junit:junit:${versions.junit}")
     androidTestImplementation("androidx.test.ext:junit:${versions.junitExt}")

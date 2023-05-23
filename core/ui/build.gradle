@@ -11,7 +11,6 @@ android {
         minSdk rootProject.params.minSdk
         targetSdk rootProject.params.targetSdk
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
@@ -37,8 +36,6 @@ dependencies {
     api("androidx.compose.ui:ui-graphics")
     api("androidx.compose.ui:ui-tooling-preview")
     api("androidx.compose.material3:material3")
+    api("androidx.compose.material:material-icons-core")
     api("androidx.compose.material:material")
-
-    testImplementation("junit:junit:${versions.junit}")
-    androidTestImplementation("androidx.test.ext:junit:${versions.junitExt}")
 }

@@ -2,11 +2,13 @@
 buildscript {
     ext {
         versions = [
+                "accompanist": "0.28.0",
+                "annotation": "1.6.0",
                 "composeCompiler": "1.4.5",
-                "room": "2.5.1",
-                "hilt": "2.46.1",
                 "junit": "4.13.2",
                 "junitExt": "1.1.5",
+                "hilt": "2.46.1",
+                "room": "2.5.1",
         ]
         params = [
                 "compileSdk" : 33,
