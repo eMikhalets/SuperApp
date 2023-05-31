@@ -1,4 +1,4 @@
-package com.emikhalets.fitness.navigation
+package com.emikhalets.superapp
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
