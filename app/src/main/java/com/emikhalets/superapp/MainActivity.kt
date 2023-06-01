@@ -49,7 +49,7 @@ fun Application(navHostController: NavHostController) {
     AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.surface
+            color = MaterialTheme.colors.background
         ) {
             AppNavHost(navHostController)
         }

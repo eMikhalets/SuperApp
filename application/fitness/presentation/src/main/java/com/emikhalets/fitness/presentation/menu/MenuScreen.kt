@@ -4,13 +4,13 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.emikhalets.fitness.presentation.R
+import com.emikhalets.ui.component.AppButton
 import com.emikhalets.ui.component.ChildScreenBox
 import com.emikhalets.ui.theme.AppTheme
 
@@ -83,32 +83,24 @@ private fun ScreenContent(
             if (isInitialized) {
                 MenuButton(
                     text = stringResource(R.string.fitness_press),
-                    onClick = onPressClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 32.dp, end = 32.dp, top = 16.dp)
+                    onClick = onPressClick
                 )
+                Spacer(modifier = Modifier.height(32.dp))
                 MenuButton(
                     text = stringResource(R.string.fitness_pull_ups),
-                    onClick = onPullUpClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 32.dp, end = 32.dp, top = 32.dp)
+                    onClick = onPullUpClick
                 )
+                Spacer(modifier = Modifier.height(32.dp))
                 MenuButton(
                     text = stringResource(R.string.fitness_push_ups),
-                    onClick = onPushUpClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 32.dp, end = 32.dp, top = 32.dp)
+                    onClick = onPushUpClick
                 )
+                Spacer(modifier = Modifier.height(32.dp))
                 MenuButton(
                     text = stringResource(R.string.fitness_squats),
-                    onClick = onSquatClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 32.dp, end = 32.dp, top = 32.dp)
+                    onClick = onSquatClick
                 )
+                Spacer(modifier = Modifier.height(32.dp))
             } else {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -127,15 +119,14 @@ private fun MenuButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(
+    AppButton(
+        text = text,
         onClick = onClick,
-        modifier = modifier.height(48.dp)
-    ) {
-        Text(
-            text = text.uppercase(),
-            fontSize = 18.sp
-        )
-    }
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp)
+            .height(48.dp)
+    )
 }
 
 @Preview(showBackground = true)
