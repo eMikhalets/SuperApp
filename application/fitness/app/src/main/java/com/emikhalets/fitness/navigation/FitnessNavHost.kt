@@ -11,7 +11,6 @@ import androidx.navigation.navArgument
 import com.emikhalets.fitness.domain.entity.WorkoutType
 import com.emikhalets.fitness.presentation.menu.MenuScreen
 import com.emikhalets.fitness.presentation.stages.StagesScreen
-import com.emikhalets.fitness.presentation.workout.WorkoutScreen
 
 private const val ARGS_TYPE = "args_workout_type"
 
@@ -46,22 +45,6 @@ fun NavGraphBuilder.applicationFitness(navController: NavHostController) {
     ) {
         it.arguments?.getString(ARGS_TYPE)?.let { argType ->
             StagesScreen(
-                stageType = WorkoutType.valueOf(argType),
-                navigateBack = { navController.popBackStack() },
-                navigateToWorkout = { type ->
-                    navController.navigate("${FitnessScreen.Workout.route}/$type")
-                },
-                viewModel = hiltViewModel()
-            )
-        }
-    }
-
-    composable(
-        route = "${FitnessScreen.Workout.route}/{$ARGS_TYPE}",
-        arguments = listOf(navArgument(ARGS_TYPE) { type = NavType.StringType })
-    ) {
-        it.arguments?.getString(ARGS_TYPE)?.let { argType ->
-            WorkoutScreen(
                 stageType = WorkoutType.valueOf(argType),
                 navigateBack = { navController.popBackStack() },
                 viewModel = hiltViewModel()

@@ -4,11 +4,13 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,9 +19,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.emikhalets.fitness.presentation.R
+import com.emikhalets.ui.component.AppButton
+import com.emikhalets.ui.component.ChildScreenBox
 import com.emikhalets.ui.theme.AppTheme
 
 @Composable
@@ -67,53 +72,42 @@ private fun ScreenContent(
     onSquatClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        if (isInitialized) {
-            MenuButton(
-                text = "Press",
-                onClick = onPressClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 16.dp)
-            )
-            MenuButton(
-                text = "PullUp",
-                onClick = onPullUpClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-            MenuButton(
-                text = "PushUp",
-                onClick = onPushUpClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-            MenuButton(
-                text = "Squat",
-                onClick = onSquatClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-            MenuButton(
-                text = "Back",
-                onClick = onBackClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Application not initialized")
+    ChildScreenBox(onBackClick) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            if (isInitialized) {
+                MenuButton(
+                    text = stringResource(R.string.fitness_press),
+                    onClick = onPressClick
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                MenuButton(
+                    text = stringResource(R.string.fitness_pull_ups),
+                    onClick = onPullUpClick
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                MenuButton(
+                    text = stringResource(R.string.fitness_push_ups),
+                    onClick = onPushUpClick
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                MenuButton(
+                    text = stringResource(R.string.fitness_squats),
+                    onClick = onSquatClick
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = stringResource(R.string.fitness_app_not_inited))
+                }
             }
         }
     }
@@ -125,15 +119,14 @@ private fun MenuButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(
+    AppButton(
+        text = text,
         onClick = onClick,
-        modifier = modifier.height(48.dp)
-    ) {
-        Text(
-            text = text.uppercase(),
-            fontSize = 18.sp
-        )
-    }
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp)
+            .height(48.dp)
+    )
 }
 
 @Preview(showBackground = true)
