@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
@@ -34,7 +35,11 @@ fun AppTopBar(
             .zIndex(10f)
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(Color.White, Color.White, Color.Transparent),
+                    colors = listOf(
+                        MaterialTheme.colors.background,
+                        MaterialTheme.colors.background,
+                        Color.Transparent
+                    ),
                     startY = 0f,
                     endY = Float.POSITIVE_INFINITY,
                     tileMode = TileMode.Clamp

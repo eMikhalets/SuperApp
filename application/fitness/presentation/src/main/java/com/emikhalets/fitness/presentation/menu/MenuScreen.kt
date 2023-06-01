@@ -19,9 +19,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.fitness.presentation.R
 import com.emikhalets.ui.component.ChildScreenBox
 import com.emikhalets.ui.theme.AppTheme
 
@@ -80,28 +82,28 @@ private fun ScreenContent(
         ) {
             if (isInitialized) {
                 MenuButton(
-                    text = "Press",
+                    text = stringResource(R.string.fitness_press),
                     onClick = onPressClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 32.dp, end = 32.dp, top = 16.dp)
                 )
                 MenuButton(
-                    text = "PullUp",
+                    text = stringResource(R.string.fitness_pull_ups),
                     onClick = onPullUpClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 32.dp, end = 32.dp, top = 32.dp)
                 )
                 MenuButton(
-                    text = "PushUp",
+                    text = stringResource(R.string.fitness_push_ups),
                     onClick = onPushUpClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 32.dp, end = 32.dp, top = 32.dp)
                 )
                 MenuButton(
-                    text = "Squat",
+                    text = stringResource(R.string.fitness_squats),
                     onClick = onSquatClick,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -112,7 +114,7 @@ private fun ScreenContent(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Application not initialized")
+                    Text(text = stringResource(R.string.fitness_app_not_inited))
                 }
             }
         }

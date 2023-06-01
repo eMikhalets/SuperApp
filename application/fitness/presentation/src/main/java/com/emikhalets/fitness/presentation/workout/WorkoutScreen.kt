@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.common.formatTime
+import com.emikhalets.common.DateHelper
 import com.emikhalets.fitness.domain.entity.WorkoutDoneType
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
 import com.emikhalets.fitness.domain.entity.WorkoutType
@@ -101,7 +101,7 @@ private fun ScreenContent(
                     .padding(24.dp)
             )
             Text(
-                text = formatTime(state.timerValue),
+                text = DateHelper.formatTime(state.timerValue),
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
