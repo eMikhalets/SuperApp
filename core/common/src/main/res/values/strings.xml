@@ -1,0 +1,5 @@
+<resources>
+
+    <!--  Error messages  -->
+    <string name="error_internal">Internal error</string>
+</resources>
