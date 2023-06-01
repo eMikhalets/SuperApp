@@ -6,29 +6,33 @@ plugins {
 }
 
 android {
-    namespace 'com.emikhalets.fitness.app'
+    namespace 'com.emikhalets.fitness'
     compileSdk rootProject.params.compileSdk
 
     defaultConfig {
         minSdk rootProject.params.minSdk
         targetSdk rootProject.params.targetSdk
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility rootProject.params.java
+        targetCompatibility rootProject.params.java
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = rootProject.params.java.toString()
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.5'
     }
     buildFeatures {
         compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion rootProject.params.composeCompiler
     }
 }
 
@@ -37,21 +41,8 @@ dependencies {
     implementation project(":application:fitness:data")
     implementation project(":application:fitness:domain")
     implementation project(":application:fitness:presentation")
-
-    // Core
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
-
-    implementation("androidx.activity:activity-compose:1.7.1")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-
-    implementation("com.google.accompanist:accompanist-systemuicontroller:${versions.accompanist}")
+    implementation project(":core:navigation")
 
     implementation("com.google.dagger:hilt-android:${versions.hilt}")
     kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
-
-    testImplementation("junit:junit:${versions.junit}")
-    androidTestImplementation("androidx.test.ext:junit:${versions.junitExt}")
 }

@@ -21,6 +21,6 @@ sealed class UiString {
 
     companion object {
 
-        fun create(): UiString = UiString.Resource(R.string.error_internal)
+        fun create(): UiString = Resource(R.string.error_internal)
     }
 }

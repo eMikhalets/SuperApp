@@ -22,20 +22,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.emikhalets.common.formatTime
 import com.emikhalets.fitness.domain.entity.WorkoutDoneType
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
 import com.emikhalets.fitness.domain.entity.WorkoutType
 import com.emikhalets.fitness.presentation.WorkoutTypeHeader
-import com.emikhalets.ui.theme.SuperAppTheme
+import com.emikhalets.ui.theme.AppTheme
 import java.util.Date
 
 @Composable
 fun WorkoutScreen(
     stageType: WorkoutType,
     navigateBack: () -> Unit,
-    viewModel: WorkoutViewModel = hiltViewModel(),
+    viewModel: WorkoutViewModel,
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
@@ -162,7 +161,7 @@ private fun ColumnScope.WorkoutButton(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SuperAppTheme {
+    AppTheme {
         ScreenContent(
             state = WorkoutState(
                 workout = WorkoutEntity(

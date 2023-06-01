@@ -17,13 +17,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.emikhalets.fitness.domain.entity.WorkoutDoneType
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
 import com.emikhalets.fitness.domain.entity.WorkoutType
 import com.emikhalets.fitness.presentation.WorkoutStagesList
 import com.emikhalets.fitness.presentation.WorkoutTypeHeader
-import com.emikhalets.ui.theme.SuperAppTheme
+import com.emikhalets.ui.theme.AppTheme
 import java.util.Date
 
 @Composable
@@ -31,7 +30,7 @@ fun StagesScreen(
     stageType: WorkoutType,
     navigateBack: () -> Unit,
     navigateToWorkout: (WorkoutType) -> Unit,
-    viewModel: StagesViewModel = hiltViewModel(),
+    viewModel: StagesViewModel,
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
@@ -95,7 +94,7 @@ private fun ScreenContent(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SuperAppTheme {
+    AppTheme {
         ScreenContent(
             state = StagesState(
                 workoutList = listOf(

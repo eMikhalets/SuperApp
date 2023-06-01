@@ -20,8 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.emikhalets.ui.theme.SuperAppTheme
+import com.emikhalets.ui.theme.AppTheme
 
 @Composable
 fun MenuScreen(
@@ -30,7 +29,7 @@ fun MenuScreen(
     navigateToPushUp: () -> Unit,
     navigateToSquat: () -> Unit,
     navigateBack: () -> Unit,
-    viewModel: MenuViewModel = hiltViewModel(),
+    viewModel: MenuViewModel,
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
@@ -140,7 +139,7 @@ private fun MenuButton(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SuperAppTheme {
+    AppTheme {
         ScreenContent(
             isInitialized = true,
             onPressClick = {},

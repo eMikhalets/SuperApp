@@ -1,7 +1,9 @@
 package com.emikhalets.fitness.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -17,10 +19,7 @@ fun NavController.navigateToAppFitness(navOptions: NavOptions? = null) {
     this.navigate(FitnessScreen.MainMenu.route, navOptions)
 }
 
-//@Composable
-//fun FitnessNavHost(navController: NavHostController) {
-//    NavHost(navController, FitnessScreen.ManiMenu.route) {
-fun NavGraphBuilder.applicationFitness() {
+fun NavGraphBuilder.applicationFitness(navController: NavHostController) {
 
     composable(FitnessScreen.MainMenu.route) {
         MenuScreen(
@@ -36,7 +35,8 @@ fun NavGraphBuilder.applicationFitness() {
             navigateToSquat = {
                 navController.navigate("${FitnessScreen.Stages.route}/${WorkoutType.SQUAT}")
             },
-            navigateBack = { navController.popBackStack() }
+            navigateBack = { navController.popBackStack() },
+            viewModel = hiltViewModel()
         )
     }
 
@@ -50,7 +50,8 @@ fun NavGraphBuilder.applicationFitness() {
                 navigateBack = { navController.popBackStack() },
                 navigateToWorkout = { type ->
                     navController.navigate("${FitnessScreen.Workout.route}/$type")
-                }
+                },
+                viewModel = hiltViewModel()
             )
         }
     }
@@ -62,7 +63,8 @@ fun NavGraphBuilder.applicationFitness() {
         it.arguments?.getString(ARGS_TYPE)?.let { argType ->
             WorkoutScreen(
                 stageType = WorkoutType.valueOf(argType),
-                navigateBack = { navController.popBackStack() }
+                navigateBack = { navController.popBackStack() },
+                viewModel = hiltViewModel()
             )
         }
     }

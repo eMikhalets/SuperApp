@@ -12,23 +12,21 @@ android {
     defaultConfig {
         minSdk rootProject.params.minSdk
         targetSdk rootProject.params.targetSdk
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility rootProject.params.java
+        targetCompatibility rootProject.params.java
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion rootProject.params.composeCompiler
+        jvmTarget = rootProject.params.java.toString()
     }
 }
 
@@ -36,7 +34,4 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:${versions.hilt}")
     kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
-
-    testImplementation("junit:junit:${versions.junit}")
-    androidTestImplementation("androidx.test.ext:junit:${versions.junitExt}")
 }
