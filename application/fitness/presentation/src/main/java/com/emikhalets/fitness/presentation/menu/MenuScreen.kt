@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.ui.component.ChildScreenBox
 import com.emikhalets.ui.theme.AppTheme
 
 @Composable
@@ -67,53 +70,50 @@ private fun ScreenContent(
     onSquatClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        if (isInitialized) {
-            MenuButton(
-                text = "Press",
-                onClick = onPressClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 16.dp)
-            )
-            MenuButton(
-                text = "PullUp",
-                onClick = onPullUpClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-            MenuButton(
-                text = "PushUp",
-                onClick = onPushUpClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-            MenuButton(
-                text = "Squat",
-                onClick = onSquatClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-            MenuButton(
-                text = "Back",
-                onClick = onBackClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 32.dp)
-            )
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Application not initialized")
+    ChildScreenBox(onBackClick) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            if (isInitialized) {
+                MenuButton(
+                    text = "Press",
+                    onClick = onPressClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp, end = 32.dp, top = 16.dp)
+                )
+                MenuButton(
+                    text = "PullUp",
+                    onClick = onPullUpClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp, end = 32.dp, top = 32.dp)
+                )
+                MenuButton(
+                    text = "PushUp",
+                    onClick = onPushUpClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp, end = 32.dp, top = 32.dp)
+                )
+                MenuButton(
+                    text = "Squat",
+                    onClick = onSquatClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp, end = 32.dp, top = 32.dp)
+                )
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "Application not initialized")
+                }
             }
         }
     }
