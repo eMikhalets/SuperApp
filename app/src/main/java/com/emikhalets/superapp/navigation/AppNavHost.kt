@@ -17,7 +17,9 @@ fun AppNavHost(navController: NavHostController) {
     ) {
         composable(AppScreen.Main.route) {
             MainScreen(
-                navigateToApp = { type -> navController.navigateApp(type) }
+                navigateToApp = { type -> navController.navigateApp(type) },
+                navigateToWidget = { id -> },
+                navigateToNewWidget = {},
             )
         }
         applicationFitness(navController)

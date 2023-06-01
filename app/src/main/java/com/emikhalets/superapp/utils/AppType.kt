@@ -1,6 +1,6 @@
 package com.emikhalets.superapp.utils
 
-import android.content.res.Resources
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AttachMoney
@@ -10,26 +10,26 @@ import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.emikhalets.superapp.R
 
-enum class AppType(val appName: String, val appIcon: ImageVector) {
+enum class AppType(@StringRes val appNameRes: Int, val appIcon: ImageVector) {
 
     Events(
-        appName = Resources.getSystem().getString(R.string.app_events),
+        appNameRes = R.string.app_events,
         appIcon = Icons.Rounded.Event
     ),
     Finances(
-        appName = Resources.getSystem().getString(R.string.app_finances),
+        appNameRes = R.string.app_finances,
         appIcon = Icons.Rounded.AccountBalanceWallet
     ),
     Fitness(
-        appName = Resources.getSystem().getString(R.string.app_fitness),
+        appNameRes = R.string.app_fitness,
         appIcon = Icons.Rounded.FitnessCenter
     ),
     MediaLib(
-        appName = Resources.getSystem().getString(R.string.app_media_lib),
+        appNameRes = R.string.app_media_lib,
         appIcon = Icons.Rounded.AttachMoney
     ),
     Notes(
-        appName = Resources.getSystem().getString(R.string.app_notes),
+        appNameRes = R.string.app_notes,
         appIcon = Icons.Rounded.Notes
     );
 }

@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +32,8 @@ import com.emikhalets.ui.theme.AppTheme
 @Composable
 fun MainScreen(
     navigateToApp: (type: AppType) -> Unit,
+    navigateToWidget: (Int) -> Unit,
+    navigateToNewWidget: () -> Unit,
 ) {
     ScreenContent(
         onEventsAppClick = { navigateToApp(AppType.Events) },
@@ -36,6 +41,8 @@ fun MainScreen(
         onFitnessAppClick = { navigateToApp(AppType.Fitness) },
         onMediaLibAppClick = { navigateToApp(AppType.MediaLib) },
         onNotesAppClick = { navigateToApp(AppType.Notes) },
+        onWidgetClick = navigateToWidget,
+        onAddWidgetClick = navigateToNewWidget,
     )
 }
 
@@ -46,14 +53,22 @@ private fun ScreenContent(
     onFitnessAppClick: () -> Unit,
     onMediaLibAppClick: () -> Unit,
     onNotesAppClick: () -> Unit,
+    onWidgetClick: (Int) -> Unit,
+    onAddWidgetClick: () -> Unit,
 ) {
-    Applications(
-        onEventsAppClick = onEventsAppClick,
-        onFinancesAppClick = onFinancesAppClick,
-        onFitnessAppClick = onFitnessAppClick,
-        onMediaLibAppClick = onMediaLibAppClick,
-        onNotesAppClick = onNotesAppClick
-    )
+    Column(modifier = Modifier.fillMaxSize()) {
+        Applications(
+            onEventsAppClick = onEventsAppClick,
+            onFinancesAppClick = onFinancesAppClick,
+            onFitnessAppClick = onFitnessAppClick,
+            onMediaLibAppClick = onMediaLibAppClick,
+            onNotesAppClick = onNotesAppClick
+        )
+        MenuWidgets(
+            onWidgetClick = onWidgetClick,
+            onAddWidgetClick = onAddWidgetClick
+        )
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -65,44 +80,69 @@ private fun Applications(
     onMediaLibAppClick: () -> Unit,
     onNotesAppClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = stringResource(R.string.app_applications),
-            style = MaterialTheme.typography.h5,
-            color = MaterialTheme.colors.onPrimary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.primary)
-                .padding(16.dp, 8.dp)
+    MenuHeader(stringResource(R.string.app_applications))
+    FlowRow(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        MenuButton(
+            appType = AppType.Events,
+            onClick = onEventsAppClick
         )
-        FlowRow(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            MenuButton(
-                appType = AppType.Events,
-                onClick = onEventsAppClick
-            )
-            MenuButton(
-                appType = AppType.Finances,
-                onClick = onFinancesAppClick
-            )
-            MenuButton(
-                appType = AppType.Fitness,
-                onClick = onFitnessAppClick
-            )
-            MenuButton(
-                appType = AppType.MediaLib,
-                onClick = onMediaLibAppClick
-            )
-            MenuButton(
-                appType = AppType.Notes,
-                onClick = onNotesAppClick
-            )
-        }
+        MenuButton(
+            appType = AppType.Finances,
+            onClick = onFinancesAppClick
+        )
+        MenuButton(
+            appType = AppType.Fitness,
+            onClick = onFitnessAppClick
+        )
+        MenuButton(
+            appType = AppType.MediaLib,
+            onClick = onMediaLibAppClick
+        )
+        MenuButton(
+            appType = AppType.Notes,
+            onClick = onNotesAppClick
+        )
     }
+}
+
+@Composable
+private fun MenuWidgets(
+    onWidgetClick: (Int) -> Unit,
+    onAddWidgetClick: () -> Unit,
+) {
+    MenuHeader(stringResource(R.string.app_menu_widgets))
+    Icon(
+        imageVector = Icons.Rounded.Add,
+        contentDescription = null,
+        modifier = Modifier
+            .padding(16.dp)
+            .size(70.dp)
+            .background(
+                color = MaterialTheme.colors.secondary,
+                shape = MaterialTheme.shapes.medium
+            )
+            .clip(MaterialTheme.shapes.medium)
+            .clickable { onAddWidgetClick() }
+            .padding(16.dp)
+    )
+}
+
+@Composable
+private fun MenuHeader(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.h5,
+        color = MaterialTheme.colors.onPrimary,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.primary)
+            .padding(16.dp, 8.dp)
+    )
 }
 
 @Composable
@@ -111,29 +151,25 @@ private fun MenuButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .padding(12.dp)
-            .clickable { onClick() }
-    ) {
+    Column(modifier = modifier.padding(12.dp)) {
         Icon(
             imageVector = appType.appIcon,
             contentDescription = null,
             tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
-                .size(90.dp)
+                .size(80.dp)
                 .background(
                     color = MaterialTheme.colors.primary,
                     shape = MaterialTheme.shapes.medium
                 )
+                .clip(MaterialTheme.shapes.medium)
+                .clickable { onClick() }
                 .padding(16.dp)
 
         )
         Text(
-            text = appType.appName,
-            fontWeight = FontWeight.Medium,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center,
+            text = stringResource(appType.appNameRes),
+            style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(top = 6.dp)
                 .align(Alignment.CenterHorizontally)
@@ -151,6 +187,8 @@ private fun Preview() {
             onFitnessAppClick = {},
             onMediaLibAppClick = {},
             onNotesAppClick = {},
+            onWidgetClick = {},
+            onAddWidgetClick = {},
         )
     }
 }
