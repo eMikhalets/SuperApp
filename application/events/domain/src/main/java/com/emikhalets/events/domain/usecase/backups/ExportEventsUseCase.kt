@@ -1,4 +1,4 @@
-package com.emikhalets.events.domain.use_case.backups
+package com.emikhalets.events.domain.usecase.backups
 
 import android.net.Uri
 import com.emikhalets.events.domain.entity.EventEntity

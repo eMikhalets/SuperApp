@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.presentation.screens.events_list
 
 import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.events.domain.use_case.events.GetEventsUseCase
+import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.extensions.getMonthEdges
 import dagger.hilt.android.lifecycle.HiltViewModel

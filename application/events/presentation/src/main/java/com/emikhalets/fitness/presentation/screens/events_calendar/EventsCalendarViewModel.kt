@@ -1,6 +1,6 @@
 package com.emikhalets.simpleevents.presentation.screens.events_calendar
 
-import com.emikhalets.events.domain.use_case.events.GetEventsUseCase
+import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

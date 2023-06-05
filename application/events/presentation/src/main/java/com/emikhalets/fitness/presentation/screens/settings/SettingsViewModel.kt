@@ -4,11 +4,11 @@ import android.net.Uri
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.AlarmEntity
 import com.emikhalets.simpleevents.domain.usecase.alarms.AddAlarmUseCase
-import com.emikhalets.events.domain.use_case.alarms.DeleteAlarmUseCase
-import com.emikhalets.events.domain.use_case.alarms.GetAlarmsUseCase
-import com.emikhalets.events.domain.use_case.backups.ExportEventsUseCase
-import com.emikhalets.events.domain.use_case.backups.ImportEventsUseCase
-import com.emikhalets.events.domain.use_case.events.GetEventsUseCase
+import com.emikhalets.events.domain.usecase.alarms.DeleteAlarmUseCase
+import com.emikhalets.events.domain.usecase.alarms.GetAlarmsUseCase
+import com.emikhalets.events.domain.usecase.backups.ExportEventsUseCase
+import com.emikhalets.events.domain.usecase.backups.ImportEventsUseCase
+import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

@@ -1,8 +1,8 @@
 package com.emikhalets.simpleevents.presentation.screens.event_item
 
 import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.events.domain.use_case.events.DeleteEventUseCase
-import com.emikhalets.events.domain.use_case.events.GetEventsUseCase
+import com.emikhalets.events.domain.usecase.events.DeleteEventUseCase
+import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData

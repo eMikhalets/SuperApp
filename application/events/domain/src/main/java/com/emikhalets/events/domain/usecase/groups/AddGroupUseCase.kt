@@ -1,4 +1,4 @@
-package com.emikhalets.events.domain.use_case.groups
+package com.emikhalets.events.domain.usecase.groups
 
 import com.emikhalets.events.domain.entity.GroupEntity
 import com.emikhalets.events.domain.repository.EventsRepository

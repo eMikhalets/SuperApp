@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.emikhalets.events.data.database.table_groups.GroupDb
-import com.emikhalets.events.domain.use_case.groups.GetGroupsUseCase
+import com.emikhalets.events.domain.usecase.groups.GetGroupsUseCase
 import com.emikhalets.simpleevents.presentation.MainActivity
 import com.emikhalets.simpleevents.presentation.screens.groups.GroupsScreen
 import com.emikhalets.simpleevents.presentation.screens.groups.GroupsViewModel
