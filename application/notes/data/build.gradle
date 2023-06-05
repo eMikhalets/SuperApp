@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.emikhalets.notes.data'
+    compileSdk rootProject.params.compileSdk
+
+    defaultConfig {
+        minSdk rootProject.params.minSdk
+        targetSdk rootProject.params.targetSdk
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility rootProject.params.java
+        targetCompatibility rootProject.params.java
+    }
+    kotlinOptions {
+        jvmTarget = rootProject.params.java.toString()
+    }
+}
+
+dependencies {
+
+    implementation project(":application:notes:domain")
+    implementation project(":core:database")
+
+    kapt("androidx.room:room-compiler:${versions.room}")
+
+    implementation("com.google.dagger:hilt-android:${versions.hilt}")
+    kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
+}

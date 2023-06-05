@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SimpleNotes</string>
+
+    <string name="error_internal">Internal error</string>
+
+    <string name="pager_title_tasks">Tasks</string>
+    <string name="pager_title_notes">Notes</string>
+
+    <string name="tasks_list_save">Save</string>
+    <string name="tasks_list_completed">Completed tasks (%d)</string>
+    <string name="tasks_dialog_done">Done</string>
+    <string name="tasks_dialog_tap_for_subtask">Tap \"Enter\" to create subtask</string>
+
+    <string name="notes_list_save">Save</string>
+</resources>
