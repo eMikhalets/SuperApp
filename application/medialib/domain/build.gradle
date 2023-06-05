@@ -1,0 +1,37 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.emikhalets.medialib.domain'
+    compileSdk rootProject.params.compileSdk
+
+    defaultConfig {
+        minSdk rootProject.params.minSdk
+        targetSdk rootProject.params.targetSdk
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility rootProject.params.java
+        targetCompatibility rootProject.params.java
+    }
+    kotlinOptions {
+        jvmTarget = rootProject.params.java.toString()
+    }
+}
+
+dependencies {
+
+    implementation("com.google.dagger:hilt-android:${versions.hilt}")
+    kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
+}
