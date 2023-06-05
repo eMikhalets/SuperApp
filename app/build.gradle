@@ -62,7 +62,7 @@ android {
 
 dependencies {
 
-    implementation project(":application:events:app")
+//    implementation project(":application:events:app")
     implementation project(":application:fitness:app")
 
     implementation project(":core:common")
