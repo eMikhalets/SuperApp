@@ -1,59 +1,40 @@
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.hilt.get().pluginId)
 }
 
 android {
-    namespace = Configuration.namespace
-    compileSdk = 33
+    namespace = "com.emikhalets.finances"
+    compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
-        applicationId = Configuration.applicationId
-        minSdk = Configuration.minSdk
-        targetSdk = Configuration.targetSdk
-        versionCode = Configuration.versionCode
-        versionName = Configuration.versionName
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        minSdk = rootProject.extra["minSdk"] as Int
     }
 
-    buildTypes {
-        getByName("debug") {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro")
-        }
-        getByName("release") {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro")
-        }
-    }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_15
-        targetCompatibility = JavaVersion.VERSION_15
+        sourceCompatibility = rootProject.extra["java"] as JavaVersion
+        targetCompatibility = rootProject.extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = "15"
+        jvmTarget = rootProject.extra["java"].toString()
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerVersion = "1.8.0"
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
 dependencies {
 
-    implementation(project(":core"))
-    implementation(project(":data"))
-    implementation(project(":domain"))
-    implementation(project(":presentation"))
+    implementation(project(":application:finances:data"))
+    implementation(project(":application:finances:domain"))
+    implementation(project(":application:finances:presentation"))
+    implementation(project(":core:navigation"))
 
-    // DI
-    implementation(Dependencies.Hilt)
-    kapt(Dependencies.HiltCompiler)
+    implementation(libs.google.hilt.android)
+    kapt(libs.google.hilt.compiler)
 }

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.finances.data"
+    namespace = "com.emikhalets.events.data"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -24,7 +24,8 @@ android {
 
 dependencies {
 
-    implementation(project(":application:finances:domain"))
+    implementation(project(":application:events:domain"))
+    implementation(project(":core:common"))
     implementation(project(":core:database"))
 
     kapt(libs.androidx.room.compiler)

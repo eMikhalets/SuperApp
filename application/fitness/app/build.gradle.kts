@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.finances.data"
+    namespace = "com.emikhalets.fitness"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -20,14 +20,20 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
 
-    implementation(project(":application:finances:domain"))
-    implementation(project(":core:database"))
-
-    kapt(libs.androidx.room.compiler)
+    implementation(project(":application:fitness:data"))
+    implementation(project(":application:fitness:domain"))
+    implementation(project(":application:fitness:presentation"))
+    implementation(project(":core:navigation"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
