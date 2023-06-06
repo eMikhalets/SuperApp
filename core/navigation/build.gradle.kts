@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.finances.data"
+    namespace = "com.emikhalets.navigation"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -24,10 +24,8 @@ android {
 
 dependencies {
 
-    implementation(project(":application:finances:domain"))
-    implementation(project(":core:database"))
-
-    kapt(libs.androidx.room.compiler)
+    api(libs.androidx.navigation.compose)
+    api(libs.androidx.hilt.compose)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

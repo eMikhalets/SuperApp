@@ -1,37 +1,29 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.hilt.get().pluginId)
 }
 
 android {
-    compileSdk = 33
+    namespace = "com.emikhalets.finances.domain"
+    compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
-        minSdk = Configuration.minSdk
-        targetSdk = Configuration.targetSdk
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        minSdk = rootProject.extra["minSdk"] as Int
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_15
-        targetCompatibility = JavaVersion.VERSION_15
+        sourceCompatibility = rootProject.extra["java"] as JavaVersion
+        targetCompatibility = rootProject.extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = "15"
+        jvmTarget = rootProject.extra["java"].toString()
     }
 }
 
 dependencies {
 
-    implementation(project(":core"))
-
-    // DI
-    implementation(Dependencies.Hilt)
-    kapt(Dependencies.HiltCompiler)
-
-    // Testing
-    testImplementation(Dependencies.JUnit)
+    implementation(libs.google.hilt.android)
+    kapt(libs.google.hilt.compiler)
 }

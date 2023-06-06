@@ -1,64 +1,39 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.hilt.get().pluginId)
 }
 
 android {
-    compileSdk = 33
+    namespace = "com.emikhalets.finances.presentation"
+    compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
-        minSdk = Configuration.minSdk
-        targetSdk = Configuration.targetSdk
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        minSdk = rootProject.extra["minSdk"] as Int
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_15
-        targetCompatibility = JavaVersion.VERSION_15
+        sourceCompatibility = rootProject.extra["java"] as JavaVersion
+        targetCompatibility = rootProject.extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = "15"
-    }
-    composeOptions {
-        kotlinCompilerVersion = "1.8.0"
-        kotlinCompilerExtensionVersion = "1.4.0"
+        jvmTarget = rootProject.extra["java"].toString()
     }
     buildFeatures {
         compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
 dependencies {
 
-    implementation(project(":core"))
-    implementation(project(":domain"))
+    implementation(project(":application:finances:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
 
-    // General
-    api(Dependencies.Core)
-    implementation(Dependencies.Lifecycle)
-
-    // Compose
-    api(Dependencies.ComposeUi)
-    api(Dependencies.UiTooling)
-    api(Dependencies.Material)
-    implementation(Dependencies.IconsCore)
-    implementation(Dependencies.IconsExt)
-    api(Dependencies.ActivityCompose)
-    api(Dependencies.Navigation)
-    implementation(Dependencies.HiltCompose)
-
-    // DI
-    implementation(Dependencies.Hilt)
-    kapt(Dependencies.HiltCompiler)
-
-    // ThirdParty
-    implementation(Dependencies.Coil)
-
-    // Testing
-    testImplementation(Dependencies.JUnit)
-    androidTestImplementation(Dependencies.JUnitExt)
-    androidTestImplementation(Dependencies.JUnit4)
+    implementation(libs.google.hilt.android)
+    kapt(libs.google.hilt.compiler)
 }

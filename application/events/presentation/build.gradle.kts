@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
@@ -6,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.finances.data"
+    namespace = "com.emikhalets.events.presentation"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -20,14 +22,19 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
 
-    implementation(project(":application:finances:domain"))
-    implementation(project(":core:database"))
-
-    kapt(libs.androidx.room.compiler)
+    implementation(project(":application:events:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

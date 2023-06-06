@@ -6,11 +6,16 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.finances.data"
+    namespace = "com.emikhalets.database"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
         minSdk = rootProject.extra["minSdk"] as Int
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     compileOptions {
@@ -24,11 +29,10 @@ android {
 
 dependencies {
 
-    implementation(project(":application:finances:domain"))
-    implementation(project(":core:database"))
-
-    kapt(libs.androidx.room.compiler)
-
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
+
+    api(libs.androidx.room.runtime)
+    api(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
 }

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.finances.data"
+    namespace = "com.emikhalets.notes.presentation"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -20,14 +20,19 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
 
-    implementation(project(":application:finances:domain"))
-    implementation(project(":core:database"))
-
-    kapt(libs.androidx.room.compiler)
+    implementation(project(":application:notes:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

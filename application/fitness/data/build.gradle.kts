@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.finances.data"
+    namespace = "com.emikhalets.fitness.data"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -24,7 +24,7 @@ android {
 
 dependencies {
 
-    implementation(project(":application:finances:domain"))
+    implementation(project(":application:fitness:domain"))
     implementation(project(":core:database"))
 
     kapt(libs.androidx.room.compiler)
