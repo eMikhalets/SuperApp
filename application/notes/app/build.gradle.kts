@@ -1,54 +1,42 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'com.google.dagger.hilt.android'
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.hilt.get().pluginId)
 }
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
 android {
-    namespace 'com.emikhalets.notes'
-    compileSdk rootProject.params.compileSdk
+    namespace = "com.emikhalets.notes"
+    compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
-        minSdk rootProject.params.minSdk
-        targetSdk rootProject.params.targetSdk
-        consumerProguardFiles "consumer-rules.pro"
+        minSdk = rootProject.extra["minSdk"] as Int
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
-        sourceCompatibility rootProject.params.java
-        targetCompatibility rootProject.params.java
+        sourceCompatibility = rootProject.extra["java"] as JavaVersion
+        targetCompatibility = rootProject.extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = rootProject.params.java.toString()
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.4.5'
+        jvmTarget = rootProject.extra["java"].toString()
     }
     buildFeatures {
-        compose true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
 dependencies {
 
-    implementation project(":application:notes:data")
-    implementation project(":application:notes:domain")
-    implementation project(":application:notes:presentation")
-    implementation project(":core:navigation")
+    implementation(project(":application:notes:data"))
+    implementation(project(":application:notes:domain"))
+    implementation(project(":application:notes:presentation"))
+    implementation(project(":core:navigation"))
 
-    implementation("com.google.dagger:hilt-android:${versions.hilt}")
-    kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
+    implementation(libs.google.hilt.android)
+    kapt(libs.google.hilt.compiler)
 
 //    // Core
 //    implementation 'androidx.core:core-ktx:1.7.0'
