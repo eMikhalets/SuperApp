@@ -1,7 +1,6 @@
-package com.emikhalets.common
+package com.emikhalets.ui
 
 import android.content.res.Resources
-import androidx.annotation.StringRes
 
 sealed class UiString {
 
@@ -10,7 +9,7 @@ sealed class UiString {
     ) : UiString()
 
     class Resource(
-        @StringRes val resId: Int,
+        val resId: Int,
         vararg val args: Any,
     ) : UiString()
 
