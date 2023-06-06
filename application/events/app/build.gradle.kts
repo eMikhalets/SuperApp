@@ -1,39 +1,31 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlinx-serialization'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-kapt'
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.serialization.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.hilt.get().pluginId)
 }
 
 android {
-    namespace 'com.emikhalets.events'
-    compileSdk rootProject.params.compileSdk
+    namespace = "com.emikhalets.events"
+    compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
-        minSdk rootProject.params.minSdk
-        targetSdk rootProject.params.targetSdk
-        consumerProguardFiles "consumer-rules.pro"
+        minSdk = rootProject.extra["minSdk"] as Int
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
-        sourceCompatibility rootProject.params.java
-        targetCompatibility rootProject.params.java
+        sourceCompatibility = rootProject.extra["java"] as JavaVersion
+        targetCompatibility = rootProject.extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = rootProject.params.java.toString()
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.4.5'
+        jvmTarget = rootProject.extra["java"].toString()
     }
     buildFeatures {
-        compose true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
@@ -78,11 +70,11 @@ dependencies {
 //    debugImplementation("androidx.compose.ui:ui-tooling:$compose_version")
 //    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
 
-    implementation project(":application:events:data")
-    implementation project(":application:events:domain")
-    implementation project(":application:events:presentation")
-    implementation project(":core:navigation")
+    implementation(project(":application:events:data"))
+    implementation(project(":application:events:domain"))
+    implementation(project(":application:events:presentation"))
+    implementation(project(":core:navigation"))
 
-    implementation("com.google.dagger:hilt-android:${versions.hilt}")
-    kapt("com.google.dagger:hilt-compiler:${versions.hilt}")
+    implementation(libs.google.hilt.android)
+    kapt(libs.google.hilt.compiler)
 }
