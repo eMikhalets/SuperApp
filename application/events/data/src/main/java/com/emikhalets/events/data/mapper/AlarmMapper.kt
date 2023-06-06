@@ -7,16 +7,14 @@ object AlarmMapper {
 
     fun mapDbToEntity(entity: AlarmDb): AlarmEntity = AlarmEntity(
         id = entity.id,
-        nameEn = entity.nameEn,
         enabled = entity.enabled,
-        days = entity.days
+        milliseconds = entity.milliseconds
     )
 
     fun mapEntityToDb(entity: AlarmEntity): AlarmDb = AlarmDb(
         id = entity.id,
-        nameEn = entity.nameEn,
         enabled = entity.enabled,
-        days = entity.days
+        milliseconds = entity.milliseconds
     )
 
     fun mapDbListToList(list: List<AlarmDb>): List<AlarmEntity> = list.map {

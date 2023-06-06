@@ -48,6 +48,7 @@ include(":application:notes:data")
 include(":application:notes:domain")
 include(":application:notes:presentation")
 
+include(":core:background")
 include(":core:common")
 include(":core:database")
 include(":core:navigation")

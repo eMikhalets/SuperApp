@@ -4,7 +4,7 @@ import com.emikhalets.simpleevents.R
 import com.emikhalets.events.domain.usecase.events.GetEventByGroupUseCase
 import com.emikhalets.events.domain.usecase.groups.DeleteGroupUseCase
 import com.emikhalets.events.domain.usecase.groups.GetGroupsUseCase
-import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject

@@ -1,23 +1,24 @@
-package com.emikhalets.simpleevents.utils
+package com.emikhalets.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.ui.UiAction
-import com.emikhalets.ui.UiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-interface AppState
-interface AppAction
+interface UiState
+interface UiEffect
+interface UiAction
 
-abstract class BaseViewModel<S : UiState, A : UiAction> : ViewModel() {
+abstract class BaseViewModel<S : UiState, E : UiEffect, A : UiAction> : ViewModel() {
 
     private val initialState: S by lazy { createInitialState() }
 
@@ -26,6 +27,9 @@ abstract class BaseViewModel<S : UiState, A : UiAction> : ViewModel() {
 
     private val _action: MutableSharedFlow<A> = MutableSharedFlow()
     val action get() = _action.asSharedFlow()
+
+    private val _effect: Channel<E> = Channel()
+    val effect get() = _effect.receiveAsFlow()
 
     val currentState: S get() = state.value
 
@@ -37,28 +41,20 @@ abstract class BaseViewModel<S : UiState, A : UiAction> : ViewModel() {
 
     protected abstract fun handleEvent(action: A)
 
-    protected fun setState(reduce: (S) -> S) {
-        _state.update { reduce(it) }
-    }
+    fun setAction(action: A) = viewModelScope.launch { _action.emit(action) }
 
-    fun setAction(action: A) {
-        viewModelScope.launch { _action.emit(action) }
-    }
+    protected fun setState(reduce: (S) -> S) = _state.update { reduce(it) }
 
-    private fun subscribeEvents() {
-        viewModelScope.launch {
-            action.collect {
-                handleEvent(it)
-            }
-        }
-    }
+    protected fun setEffect(builder: () -> E) = viewModelScope.launch { _effect.send(builder()) }
 
-    fun launchMain(block: suspend CoroutineScope.() -> Unit): Job =
+    private fun subscribeEvents() = viewModelScope.launch { action.collect { handleEvent(it) } }
+
+    fun launchMainScope(block: suspend CoroutineScope.() -> Unit): Job =
         viewModelScope.launch(Dispatchers.Main) { block() }
 
-    fun launchDefault(block: suspend CoroutineScope.() -> Unit): Job =
+    fun launchDefaultScope(block: suspend CoroutineScope.() -> Unit): Job =
         viewModelScope.launch(Dispatchers.Default) { block() }
 
-    fun launchIO(block: suspend CoroutineScope.() -> Unit): Job =
+    fun launchIOScope(block: suspend CoroutineScope.() -> Unit): Job =
         viewModelScope.launch(Dispatchers.IO) { block() }
 }

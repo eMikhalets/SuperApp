@@ -1,5 +1,6 @@
 package com.emikhalets.events.data.repository
 
+import com.emikhalets.events.domain.repository.AlarmsRepository
 import com.emikhalets.events.domain.repository.EventsRepository
 import dagger.Binds
 import dagger.Module
@@ -8,8 +9,11 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class EventsRepositoryModule {
+abstract class EventsAppRepositoryModule {
 
     @Binds
     abstract fun bindsEventsRepository(impl: EventsRepositoryImpl): EventsRepository
+
+    @Binds
+    abstract fun bindsAlarmsRepository(impl: AlarmsRepositoryImpl): AlarmsRepository
 }

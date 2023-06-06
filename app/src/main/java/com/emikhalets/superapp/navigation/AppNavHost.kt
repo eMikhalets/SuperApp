@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.emikhalets.events.applicationEvents
+import com.emikhalets.events.navigateToAppEvents
 import com.emikhalets.fitness.navigation.applicationFitness
 import com.emikhalets.fitness.navigation.navigateToAppFitness
 import com.emikhalets.superapp.screen.MainScreen
@@ -22,6 +24,7 @@ fun AppNavHost(navController: NavHostController) {
                 navigateToNewWidget = {},
             )
         }
+        applicationEvents(navController)
         applicationFitness(navController)
     }
 }
@@ -29,7 +32,7 @@ fun AppNavHost(navController: NavHostController) {
 
 private fun NavHostController.navigateApp(type: AppType) {
     when (type) {
-        AppType.Events -> Unit
+        AppType.Events -> navigateToAppEvents()
         AppType.Finances -> Unit
         AppType.Fitness -> navigateToAppFitness()
         AppType.MediaLib -> Unit

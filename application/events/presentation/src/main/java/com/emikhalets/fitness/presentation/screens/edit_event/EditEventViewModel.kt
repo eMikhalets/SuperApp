@@ -4,7 +4,7 @@ import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.events.domain.usecase.events.AddEventUseCase
 import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
-import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.ui.BaseViewModel
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

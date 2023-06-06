@@ -89,12 +89,6 @@ object DateHelper {
         return SimpleDateFormat(pattern, Locale.ENGLISH).format(this)
     }
 
-    fun Long.formatDateMonth(): String =
-        SimpleDateFormat("MMMM", Locale.ENGLISH).format(this)
-
-    fun Long.formatDate(pattern: String = "dd MM yyyy"): String =
-        SimpleDateFormat(pattern, Locale.getDefault()).format(this)
-
     fun Long.formatDateThisYear(pattern: String): String {
         val date = this.localDate.withYear(LocalDate.now().year).milliseconds
         return SimpleDateFormat(pattern, Locale.ENGLISH).format(date)

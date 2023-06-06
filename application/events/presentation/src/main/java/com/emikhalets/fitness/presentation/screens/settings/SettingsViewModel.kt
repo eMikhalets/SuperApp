@@ -9,7 +9,7 @@ import com.emikhalets.events.domain.usecase.alarms.GetAlarmsUseCase
 import com.emikhalets.events.domain.usecase.backups.ExportEventsUseCase
 import com.emikhalets.events.domain.usecase.backups.ImportEventsUseCase
 import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
-import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
