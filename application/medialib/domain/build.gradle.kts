@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.fitness"
+    namespace = "com.emikhalets.medialib.domain"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -20,20 +20,9 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
 }
 
 dependencies {
-
-    implementation(project(":application:fitness:data"))
-    implementation(project(":application:fitness:domain"))
-    implementation(project(":application:fitness:presentation"))
-    implementation(project(":core:navigation"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

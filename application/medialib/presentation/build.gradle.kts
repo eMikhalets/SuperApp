@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.fitness"
+    namespace = "com.emikhalets.medialib.presentation"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -30,10 +30,9 @@ android {
 
 dependencies {
 
-    implementation(project(":application:fitness:data"))
-    implementation(project(":application:fitness:domain"))
-    implementation(project(":application:fitness:presentation"))
-    implementation(project(":core:navigation"))
+    implementation(project(":application:medialib:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
