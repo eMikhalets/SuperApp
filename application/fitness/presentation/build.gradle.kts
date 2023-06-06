@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.events.presentation"
+    namespace = "com.emikhalets.fitness.presentation"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -32,7 +32,7 @@ android {
 
 dependencies {
 
-    implementation(project(":application:events:domain"))
+    implementation(project(":application:fitness:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
 

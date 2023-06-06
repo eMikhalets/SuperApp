@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
@@ -8,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.events.presentation"
+    namespace = "com.emikhalets.fitness.data"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -22,19 +20,14 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
 }
 
 dependencies {
 
-    implementation(project(":application:events:domain"))
-    implementation(project(":core:common"))
-    implementation(project(":core:ui"))
+    implementation(project(":application:fitness:domain"))
+    implementation(project(":core:database"))
+
+    kapt(libs.androidx.room.compiler)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
