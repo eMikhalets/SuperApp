@@ -4,8 +4,8 @@ import android.net.Uri
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.AlarmEntity
 import com.emikhalets.simpleevents.domain.usecase.alarms.AddAlarmUseCase
-import com.emikhalets.events.domain.usecase.alarms.DeleteAlarmUseCase
-import com.emikhalets.events.domain.usecase.alarms.GetAlarmsUseCase
+import com.emikhalets.events.domain.usecase.alarms.AlarmsDeleteUseCase
+import com.emikhalets.events.domain.usecase.alarms.AlarmsGetUseCase
 import com.emikhalets.events.domain.usecase.backups.ExportEventsUseCase
 import com.emikhalets.events.domain.usecase.backups.ImportEventsUseCase
 import com.emikhalets.events.domain.usecase.events.EventsGetUseCase
@@ -16,9 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val getAlarmsUseCase: GetAlarmsUseCase,
+    private val getAlarmsUseCase: AlarmsGetUseCase,
     private val addAlarmsUseCase: AddAlarmUseCase,
-    private val deleteAlarmUseCase: DeleteAlarmUseCase,
+    private val deleteAlarmUseCase: AlarmsDeleteUseCase,
     private val importEventsUseCase: ImportEventsUseCase,
     private val exportEventsUseCase: ExportEventsUseCase,
     private val getEventsUseCase: EventsGetUseCase,

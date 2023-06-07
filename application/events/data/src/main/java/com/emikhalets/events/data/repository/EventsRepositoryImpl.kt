@@ -55,7 +55,7 @@ class EventsRepositoryImpl @Inject constructor(
         }.onFailure { it.printStackTrace() }
     }
 
-    override suspend fun getAllEvents(): Result<Flow<List<EventEntity>>> {
+    override suspend fun getAllEventsFlow(): Result<Flow<List<EventEntity>>> {
         return runCatching {
             eventsDao.getAllEntities().map {
                 EventMapper.mapDbListToList(it)

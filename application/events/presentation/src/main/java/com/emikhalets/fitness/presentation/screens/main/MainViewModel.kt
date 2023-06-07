@@ -2,7 +2,7 @@ package com.emikhalets.fitness.presentation.screens.main
 
 import com.emikhalets.common.onFailure
 import com.emikhalets.common.onSuccess
-import com.emikhalets.events.domain.usecase.alarms.AddDefaultAlarmsUseCase
+import com.emikhalets.events.domain.usecase.alarms.AlarmsInsertDefaultUseCase
 import com.emikhalets.fitness.presentation.screens.main.MainContract.Action
 import com.emikhalets.fitness.presentation.screens.main.MainContract.Effect
 import com.emikhalets.fitness.presentation.screens.main.MainContract.State
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val addDefaultAlarmsUseCase: AddDefaultAlarmsUseCase,
+    private val addDefaultAlarmsUseCase: AlarmsInsertDefaultUseCase,
 ) : BaseViewModel<State, Effect, Action>() {
 
     override fun createInitialState() = State()

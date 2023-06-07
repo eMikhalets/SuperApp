@@ -1,7 +1,6 @@
 package com.emikhalets.simpleevents.presentation.screens.group_item
 
 import com.emikhalets.simpleevents.R
-import com.emikhalets.events.domain.usecase.events.GetEventByGroupUseCase
 import com.emikhalets.events.domain.usecase.groups.DeleteGroupUseCase
 import com.emikhalets.events.domain.usecase.groups.GetGroupsUseCase
 import com.emikhalets.ui.BaseViewModel

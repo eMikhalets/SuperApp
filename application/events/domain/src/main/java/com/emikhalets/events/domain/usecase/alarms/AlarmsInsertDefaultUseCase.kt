@@ -5,7 +5,7 @@ import com.emikhalets.events.domain.entity.AlarmEntity
 import com.emikhalets.events.domain.repository.AlarmsRepository
 import javax.inject.Inject
 
-class AddDefaultAlarmsUseCase @Inject constructor(
+class AlarmsInsertDefaultUseCase @Inject constructor(
     private val alarmsRepo: AlarmsRepository,
 ) {
 
