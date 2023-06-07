@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.presentation.screens.events_list
+package com.emikhalets.fitness.presentation.screens.events_list
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,9 +45,9 @@ import com.emikhalets.simpleevents.utils.extensions.pluralsResource
 
 @Composable
 fun EventsListScreen(
-    state: EventsListState,
-    onAction: (EventsListAction) -> Unit,
-    onEventClick: (Long) -> Unit,
+    navigateToEvent: (id: Long) -> Unit,
+    navigateBack: () -> Unit,
+    viewModel: EventsListViewModel,
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }

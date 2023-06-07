@@ -2,8 +2,8 @@ package com.emikhalets.events
 
 enum class EventsScreen(val route: String) {
 
-    Main("events_main"),
-    EventsList("events_list"),
+    Main("events_app_main"),
+    EventsList("events_app_events_list"),
     EventsCalendar("events_calendar"),
     Groups("groups"),
     Settings("settings"),

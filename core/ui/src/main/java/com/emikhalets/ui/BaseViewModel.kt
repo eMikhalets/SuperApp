@@ -57,4 +57,8 @@ abstract class BaseViewModel<S : UiState, E : UiEffect, A : UiAction> : ViewMode
 
     fun launchIOScope(block: suspend CoroutineScope.() -> Unit): Job =
         viewModelScope.launch(Dispatchers.IO) { block() }
+
+    protected fun cancelJob(job: Job?) {
+        if (job != null && job.isActive) job.cancel()
+    }
 }

@@ -8,7 +8,7 @@ import com.emikhalets.events.domain.usecase.alarms.DeleteAlarmUseCase
 import com.emikhalets.events.domain.usecase.alarms.GetAlarmsUseCase
 import com.emikhalets.events.domain.usecase.backups.ExportEventsUseCase
 import com.emikhalets.events.domain.usecase.backups.ImportEventsUseCase
-import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.events.domain.usecase.events.EventsGetUseCase
 import com.emikhalets.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -21,7 +21,7 @@ class SettingsViewModel @Inject constructor(
     private val deleteAlarmUseCase: DeleteAlarmUseCase,
     private val importEventsUseCase: ImportEventsUseCase,
     private val exportEventsUseCase: ExportEventsUseCase,
-    private val getEventsUseCase: GetEventsUseCase,
+    private val getEventsUseCase: EventsGetUseCase,
 ) : BaseViewModel<SettingsState, SettingsAction>() {
 
     override fun createInitialState(): SettingsState = SettingsState()

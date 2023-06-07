@@ -1,6 +1,6 @@
 package com.emikhalets.simpleevents.presentation.screens.events_calendar
 
-import com.emikhalets.events.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.events.domain.usecase.events.EventsGetUseCase
 import com.emikhalets.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EventsCalendarViewModel @Inject constructor(
-    private val getEventsUseCase: GetEventsUseCase,
+    private val getEventsUseCase: EventsGetUseCase,
 ) : BaseViewModel<EventsCalendarState, EventsCalendarAction>() {
 
     override fun createInitialState() = EventsCalendarState()

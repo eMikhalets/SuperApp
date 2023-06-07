@@ -17,8 +17,7 @@ import com.emikhalets.simpleevents.presentation.screens.edit_event.EditEventScre
 import com.emikhalets.simpleevents.presentation.screens.event_item.EventItemScreen
 import com.emikhalets.simpleevents.presentation.screens.events_calendar.EventsCalendarScreen
 import com.emikhalets.simpleevents.presentation.screens.events_calendar.EventsCalendarViewModel
-import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListScreen
-import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListViewModel
+import com.emikhalets.fitness.presentation.screens.events_list.EventsListScreen
 import com.emikhalets.simpleevents.presentation.screens.group_edit.GroupEditScreen
 import com.emikhalets.simpleevents.presentation.screens.group_edit.GroupEditViewModel
 import com.emikhalets.simpleevents.presentation.screens.group_item.GroupItemScreen
@@ -44,6 +43,14 @@ fun NavGraphBuilder.applicationEvents(navController: NavHostController) {
         )
     }
 
+    composable(EventsScreen.EventsList.route) {
+        EventsListScreen(
+            navigateToEvent = { id -> },
+            navigateBack = { navController.popBackStack(EventsScreen.Main.route, true) },
+            viewModel = hiltViewModel()
+        )
+    }
+
     composable(
         route = "${FitnessScreen.Stages.route}/{$ARGS_TYPE}",
         arguments = listOf(navArgument(ARGS_TYPE) { type = NavType.StringType })
@@ -55,18 +62,6 @@ fun NavGraphBuilder.applicationEvents(navController: NavHostController) {
                 viewModel = hiltViewModel()
             )
         }
-    }
-
-    composable(AppScreen.EventsList.route) {
-        val viewModel: EventsListViewModel = hiltViewModel()
-        val state by viewModel.state.collectAsState()
-        EventsListScreen(
-            state = state,
-            onAction = viewModel::setAction,
-            onEventClick = { eventId ->
-                navController.navigate("${AppScreen.Event.route}/$eventId")
-            }
-        )
     }
 
     composable(AppScreen.EventsCalendar.route) {
