@@ -3,10 +3,10 @@ package com.emikhalets.superapp.utils
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
-import androidx.compose.material.icons.rounded.AttachMoney
+import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.FitnessCenter
-import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.material.icons.rounded.VideoLibrary
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class AppType(@StringRes val appNameRes: Int, val appIcon: ImageVector) {
@@ -25,10 +25,10 @@ enum class AppType(@StringRes val appNameRes: Int, val appIcon: ImageVector) {
     ),
     MediaLib(
         appNameRes = com.emikhalets.common.R.string.app_media_lib,
-        appIcon = Icons.Rounded.AttachMoney
+        appIcon = Icons.Rounded.VideoLibrary
     ),
     Notes(
         appNameRes = com.emikhalets.common.R.string.app_notes,
-        appIcon = Icons.Rounded.Notes
+        appIcon = Icons.Rounded.EditNote
     );
 }
