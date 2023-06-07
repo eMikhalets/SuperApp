@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="fitness_press">Press</string>
-    <string name="fitness_pull_ups">Pull Ups</string>
-    <string name="fitness_push_ups">Push Ups</string>
-    <string name="fitness_squats">Squats</string>
-    <string name="fitness_app_not_inited">Application not initialized</string>
+    <!--  Events List Screen  -->
+    <string name="events_list_search_placeholder">Search for a event name</string>
+    <string name="events_list_empty_events">Events list is empty</string>
+    <plurals name="events_list_event_days">
+        <item quantity="one">DAY</item>
+        <item quantity="other">DAYS</item>
+    </plurals>
 </resources>

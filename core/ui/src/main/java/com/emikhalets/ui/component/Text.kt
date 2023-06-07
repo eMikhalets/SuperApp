@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.presentation.components
+package com.emikhalets.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

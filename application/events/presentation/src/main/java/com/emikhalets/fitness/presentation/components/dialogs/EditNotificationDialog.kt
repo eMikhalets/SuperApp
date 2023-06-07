@@ -28,9 +28,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.AlarmEntity
-import com.emikhalets.simpleevents.presentation.components.AppButton
-import com.emikhalets.simpleevents.presentation.components.AppText
-import com.emikhalets.simpleevents.presentation.components.AppTextField
+import com.emikhalets.ui.component.AppButton
+import com.emikhalets.ui.component.AppText
+import com.emikhalets.ui.component.AppTextField
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.utils.extensions.toast
 

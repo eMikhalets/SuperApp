@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.presentation.components
+package com.emikhalets.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.Icon

@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.presentation.components.AppButton
-import com.emikhalets.simpleevents.presentation.components.AppIcon
-import com.emikhalets.simpleevents.presentation.components.AppText
+import com.emikhalets.ui.component.AppButton
+import com.emikhalets.ui.component.AppIcon
+import com.emikhalets.ui.component.AppText
 import com.emikhalets.simpleevents.presentation.components.dialogs.DeleteEventDialog
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme

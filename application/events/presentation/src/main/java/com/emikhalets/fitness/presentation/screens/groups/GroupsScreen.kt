@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -33,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.GroupEntity
 import com.emikhalets.simpleevents.domain.entity.PreviewEntity
-import com.emikhalets.simpleevents.presentation.components.AppText
+import com.emikhalets.ui.component.AppText
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 

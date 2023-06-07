@@ -1,10 +1,10 @@
-package com.emikhalets.simpleevents.presentation.components
+package com.emikhalets.ui.component
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -12,6 +12,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +25,7 @@ fun AppTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String? = null,
-    @DrawableRes leadingIcon: Int? = null,
+    leadingIcon: ImageVector? = null,
     type: KeyboardType = KeyboardType.Text,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     maxLines: Int = Int.MAX_VALUE,
@@ -36,7 +37,7 @@ fun AppTextField(
             { Text(placeholder) }
         } else null,
         leadingIcon = if (leadingIcon != null) {
-            { AppIcon(leadingIcon) }
+            { Icon(leadingIcon, "") }
         } else null,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = MaterialTheme.colors.onBackground,
@@ -66,9 +67,11 @@ fun AppTextField(
 @Composable
 private fun Preview() {
     AppTheme {
-        AppTextField(value = "",
+        AppTextField(
+            value = "",
             onValueChange = {},
             placeholder = "Some placeHolder",
-            modifier = Modifier.padding(32.dp))
+            modifier = Modifier.padding(32.dp)
+        )
     }
 }

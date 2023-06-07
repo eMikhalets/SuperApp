@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.emikhalets.simpleevents.presentation.components.AppText
-import com.emikhalets.simpleevents.presentation.components.AppTextButton
+import com.emikhalets.ui.component.AppText
+import com.emikhalets.ui.component.AppTextButton
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 
 @Composable
