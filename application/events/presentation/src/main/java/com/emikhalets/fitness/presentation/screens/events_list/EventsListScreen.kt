@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,47 +33,52 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.entity.PreviewEntity
+import com.emikhalets.common.R
+import com.emikhalets.events.domain.entity.EventEntity
+import com.emikhalets.fitness.presentation.screens.events_list.EventsListContract.Action
+import com.emikhalets.fitness.presentation.screens.events_list.EventsListContract.Effect
 import com.emikhalets.simpleevents.presentation.components.AppIcon
 import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.AppTextField
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
-import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.utils.extensions.formatDate
 import com.emikhalets.simpleevents.utils.extensions.formatHomeInfo
 import com.emikhalets.simpleevents.utils.extensions.pluralsResource
+import com.emikhalets.ui.component.CHILD_SCREEN_BOX_PADDING
+import com.emikhalets.ui.component.ChildScreenBox
+import com.emikhalets.ui.theme.AppTheme
 
 @Composable
 fun EventsListScreen(
+    navigateToNewEvent: () -> Unit,
     navigateToEvent: (id: Long) -> Unit,
     navigateBack: () -> Unit,
     viewModel: EventsListViewModel,
 ) {
-    var searchQuery by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val state by viewModel.state.collectAsState()
+    val effect by viewModel.effect.collectAsState(null)
+
     var errorMessage by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        onAction(EventsListAction.GetEvents)
+        viewModel.setAction(Action.GetEvents)
     }
 
-    LaunchedEffect(state.error) {
-        val error = state.error
-        if (error != null) {
-            errorMessage = error.asString()
-            onAction(EventsListAction.AcceptError)
+    LaunchedEffect(effect) {
+        when (val effectValue = effect) {
+            is Effect.ErrorDialog -> errorMessage = effectValue.message?.asString(context) ?: ""
+            null -> errorMessage = ""
         }
     }
 
     ScreenContent(
-        state = state,
-        searchQuery = searchQuery,
-        onSearchQueryChange = { newQuery ->
-            searchQuery = newQuery
-            onAction(EventsListAction.SearchEvents(searchQuery))
-        },
-        onEventClick = onEventClick
+        searchQuery = state.searchQuery,
+        events = state.events,
+        onSearchQueryChange = { viewModel.setAction(Action.SearchEvents(it)) },
+        onNewEventClick = navigateToNewEvent,
+        onEventClick = navigateToEvent,
+        onBackClick = navigateBack
     )
 
     if (errorMessage.isNotEmpty()) {
@@ -84,20 +91,28 @@ fun EventsListScreen(
 
 @Composable
 private fun ScreenContent(
-    state: EventsListState,
     searchQuery: String,
+    events: List<EventEntity>,
     onSearchQueryChange: (String) -> Unit,
+    onNewEventClick: () -> Unit,
     onEventClick: (Long) -> Unit,
+    onBackClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        SearchBox(
-            searchQuery = searchQuery,
-            onSearchQueryChange = onSearchQueryChange,
-        )
-        EventsListBox(
-            eventsMap = state.eventsMap,
-            onEventClick = onEventClick
-        )
+    ChildScreenBox(onBackClick, stringResource(R.string.app_events)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = CHILD_SCREEN_BOX_PADDING)
+        ) {
+            SearchBox(
+                searchQuery = searchQuery,
+                onSearchQueryChange = onSearchQueryChange,
+            )
+            EventsListBox(
+                eventsMap = state.eventsMap,
+                onEventClick = onEventClick
+            )
+        }
     }
 }
 
@@ -255,12 +270,12 @@ private fun SquareColumn(
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            state = EventsListState(
-                eventsMap = PreviewEntity.getEventListScreenEvents()
-            ),
             searchQuery = "Some query",
+            events = previewEventsListScreen(),
             onSearchQueryChange = {},
-            onEventClick = {}
+            onNewEventClick = {},
+            onEventClick = {},
+            onBackClick = {}
         )
     }
 }

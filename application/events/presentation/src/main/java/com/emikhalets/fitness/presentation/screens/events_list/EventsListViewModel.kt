@@ -1,5 +1,7 @@
 package com.emikhalets.fitness.presentation.screens.events_list
 
+import com.emikhalets.common.onFailure
+import com.emikhalets.common.onSuccess
 import com.emikhalets.events.domain.entity.EventEntity
 import com.emikhalets.events.domain.usecase.events.EventsGetUseCase
 import com.emikhalets.fitness.presentation.screens.events_list.EventsListContract.Action
@@ -42,9 +44,10 @@ class EventsListViewModel @Inject constructor(
 
     private fun searchEvents(query: String) {
         cancelJob(searchJob)
+        setState { it.copy(searchQuery = query) }
         searchJob = launchIOScope {
-            val list = eventsGetUseCase.invoke(query, currentState.events)
-            setState { it.copy(events = list, query = query) }
+            val list = eventsGetUseCase.invoke(query, currentState.savedEvents)
+            setState { it.copy(events = list) }
         }
     }
 

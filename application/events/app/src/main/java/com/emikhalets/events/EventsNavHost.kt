@@ -45,6 +45,7 @@ fun NavGraphBuilder.applicationEvents(navController: NavHostController) {
 
     composable(EventsScreen.EventsList.route) {
         EventsListScreen(
+            navigateToNewEvent = {},
             navigateToEvent = { id -> },
             navigateBack = { navController.popBackStack(EventsScreen.Main.route, true) },
             viewModel = hiltViewModel()

@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.fitness.presentation.screens.main.MainContract.Action
 import com.emikhalets.fitness.presentation.screens.main.MainContract.Effect
+import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.ui.component.ChildScreenBox
 import com.emikhalets.ui.theme.AppTheme
 
@@ -55,7 +56,10 @@ fun MainScreen(
     ScreenContent(onBackClick = navigateBack)
 
     if (errorMessage.isNotEmpty()) {
-        // TODO show dialog
+        ErrorDialog(
+            message = errorMessage,
+            onOkClick = { errorMessage = "" }
+        )
     }
 }
 

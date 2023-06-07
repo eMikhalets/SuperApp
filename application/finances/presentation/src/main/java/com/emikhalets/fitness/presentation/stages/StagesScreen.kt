@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.emikhalets.fitness.domain.entity.WorkoutDoneType
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
 import com.emikhalets.fitness.domain.entity.WorkoutType
+import com.emikhalets.ui.component.CHILD_SCREEN_BOX_PADDING
 import com.emikhalets.ui.component.ChildScreenBox
 import com.emikhalets.ui.theme.AppTheme
 import java.util.Date
@@ -75,7 +76,7 @@ private fun ScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 52.dp)
+                .padding(top = CHILD_SCREEN_BOX_PADDING)
         ) {
             WorkoutStagesList(
                 workoutList = state.workoutList,

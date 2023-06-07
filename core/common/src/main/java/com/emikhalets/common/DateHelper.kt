@@ -14,6 +14,8 @@ object DateHelper {
 
     private val timezone = ZoneId.systemDefault()
 
+    /** Instants */
+
     fun localDate(timestamp: Long = Date().time): LocalDate {
         val instant = Instant.ofEpochMilli(timestamp)
         return LocalDateTime.ofInstant(instant, timezone).toLocalDate()
@@ -31,6 +33,12 @@ object DateHelper {
     fun timestamp(localDateTime: LocalDateTime, zone: ZoneId = timezone): Long {
         return localDateTime.atZone(zone).toInstant().toEpochMilli()
     }
+
+    fun timestampOf(year: Int, month: Int, day: Int): Long {
+        return timestamp(LocalDate.of(year, month, day))
+    }
+
+    /** Formatters */
 
     fun formatDate(timestamp: Long, pattern: String): String {
         return getFormatter(pattern).format(Date(timestamp))
@@ -57,7 +65,6 @@ object DateHelper {
     ): SimpleDateFormat {
         return SimpleDateFormat(pattern, locale)
     }
-
 
     // End and Start of dates
 

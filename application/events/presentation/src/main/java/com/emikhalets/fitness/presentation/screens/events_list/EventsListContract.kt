@@ -14,7 +14,7 @@ object EventsListContract {
         val isLoading: Boolean = true,
         val savedEvents: List<EventEntity> = emptyList(),
         val events: List<EventEntity> = emptyList(),
-        val query: String = "",
+        val searchQuery: String = "",
     ) : UiState
 
     @Immutable

@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val addDefaultAlarmsUseCase: AlarmsInsertDefaultUseCase,
+    private val alarmsInsertDefaultUseCase: AlarmsInsertDefaultUseCase,
 ) : BaseViewModel<State, Effect, Action>() {
 
     override fun createInitialState() = State()
@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
     private fun createDefaultAlarms() {
         launchIOScope {
             setState { it.copy(isLoading = true) }
-            addDefaultAlarmsUseCase.invoke()
+            alarmsInsertDefaultUseCase.invoke()
                 .onSuccess { handleSuccess() }
                 .onFailure { code, message -> handleError(code, message) }
         }

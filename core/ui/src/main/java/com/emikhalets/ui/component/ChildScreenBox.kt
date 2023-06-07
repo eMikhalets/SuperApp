@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.ui.theme.AppTheme
 
+val CHILD_SCREEN_BOX_PADDING = 52.dp
+
 @Composable
 fun ChildScreenBox(
     onBackClick: () -> Unit,
