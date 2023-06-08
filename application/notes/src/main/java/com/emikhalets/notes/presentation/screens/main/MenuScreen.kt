@@ -24,9 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.emikhalets.fitness.presentation.R
-import com.emikhalets.ui.component.AppButton
-import com.emikhalets.ui.component.ChildScreenBox
-import com.emikhalets.ui.theme.AppTheme
+import com.emikhalets.core.ui.component.AppButton
+import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
 fun MenuScreen(
@@ -83,7 +83,7 @@ private fun ScreenContent(
     onSquatClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    ChildScreenBox(onBackClick) {
+    AppChildScreenBox(onBackClick) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,

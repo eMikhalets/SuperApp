@@ -22,6 +22,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "SuperApp"
 include(":app")
+include(":application:notes")
+include(":core")
 
 //include(":application:events:app")
 //include(":application:events:data")
@@ -42,9 +44,3 @@ include(":app")
 //include(":application:medialib:data")
 //include(":application:medialib:domain")
 //include(":application:medialib:presentation")
-include(":application:notes")
-
-include(":core:common")
-include(":core:database")
-include(":core:navigation")
-include(":core:ui")

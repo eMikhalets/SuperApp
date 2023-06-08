@@ -1,7 +1,7 @@
 package com.emikhalets.notes.data.repository
 
-import com.emikhalets.common.AppResult
-import com.emikhalets.common.execute
+import com.emikhalets.core.common.AppResult
+import com.emikhalets.core.common.execute
 import com.emikhalets.notes.data.database.table_notes.NotesDao
 import com.emikhalets.notes.data.database.table_tasks.TasksDao
 import com.emikhalets.notes.data.mappers.NotesMapper

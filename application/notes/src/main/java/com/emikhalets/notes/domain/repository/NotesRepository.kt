@@ -1,6 +1,6 @@
 package com.emikhalets.notes.domain.repository
 
-import com.emikhalets.common.AppResult
+import com.emikhalets.core.common.AppResult
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.domain.entity.TaskEntity
 import kotlinx.coroutines.flow.Flow

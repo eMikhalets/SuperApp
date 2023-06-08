@@ -93,11 +93,7 @@ dependencies {
 //    implementation(project(":application:fitness:app"))
 //    implementation(project(":application:medialib:app"))
     implementation(project(":application:notes"))
-
-    implementation(project(":core:common"))
-    implementation(project(":core:database"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:ui"))
+    implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.google.accompanist)

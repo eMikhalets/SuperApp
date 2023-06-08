@@ -30,10 +30,7 @@ android {
 
 dependencies {
 
-    implementation(project(":core:common"))
-    implementation(project(":core:database"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:navigation"))
+    implementation(project(":core"))
 
     kapt(libs.androidx.room.compiler)
 

@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.emikhalets.superapp.navigation.AppNavHost
-import com.emikhalets.ui.theme.AppTheme
-import com.emikhalets.ui.theme.Purple500
+import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.Purple500
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
