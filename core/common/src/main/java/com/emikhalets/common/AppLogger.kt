@@ -2,12 +2,14 @@ package com.emikhalets.common
 
 import android.util.Log
 
-fun logd(tag: String, text: String) = AppLogger.logd(tag, text)
+fun logd(tag: String, text: String?) =
+    text?.let { AppLogger.logd(tag, text) }
 
-fun logi(tag: String, text: String) = AppLogger.logi(tag, text)
+fun logi(tag: String, text: String?) =
+    text?.let { AppLogger.logi(tag, text) }
 
-fun loge(tag: String, text: String, throwable: Throwable? = null) =
-    AppLogger.loge(tag, text, throwable)
+fun loge(tag: String, text: String?, throwable: Throwable? = null) =
+    text?.let { AppLogger.loge(tag, text, throwable) }
 
 object AppLogger {
 

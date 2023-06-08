@@ -88,11 +88,11 @@ android {
 
 dependencies {
 
-    implementation(project(":application:events:app"))
-    implementation(project(":application:finances:app"))
-    implementation(project(":application:fitness:app"))
-    implementation(project(":application:medialib:app"))
-    implementation(project(":application:notes:app"))
+//    implementation(project(":application:events:app"))
+//    implementation(project(":application:finances:app"))
+//    implementation(project(":application:fitness:app"))
+//    implementation(project(":application:medialib:app"))
+    implementation(project(":application:notes"))
 
     implementation(project(":core:common"))
     implementation(project(":core:database"))
