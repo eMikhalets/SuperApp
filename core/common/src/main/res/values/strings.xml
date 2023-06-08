@@ -6,4 +6,6 @@
     <string name="app_media_lib">MediaLib</string>
     <string name="app_notes">Notes</string>
     <string name="app_initialization">App Initialization</string>
+
+    <string name="error_internal">Internal error</string>
 </resources>

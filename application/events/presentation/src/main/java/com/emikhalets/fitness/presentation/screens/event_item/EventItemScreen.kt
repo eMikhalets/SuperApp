@@ -40,6 +40,7 @@ import com.emikhalets.simpleevents.presentation.components.dialogs.DeleteEventDi
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.events.domain.entity.EventType
+import com.emikhalets.fitness.presentation.screens.event_item.EventItemViewModel
 import com.emikhalets.simpleevents.utils.extensions.formatDateFull
 
 @Composable

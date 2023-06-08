@@ -1,6 +1,7 @@
 package com.emikhalets.ui
 
 import android.content.Context
+import com.emikhalets.common.AppError
 
 sealed class UiString {
 
@@ -25,5 +26,7 @@ sealed class UiString {
         fun create(resource: Int): UiString = Resource(resource)
 
         fun create(message: String): UiString = Message(message)
+
+        fun create(error: AppError): UiString = Resource(error.messageRes)
     }
 }
