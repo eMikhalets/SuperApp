@@ -1,18 +1,18 @@
 package com.emikhalets.core.ui
 
+import android.content.Context
 import android.content.res.Resources
+import androidx.compose.runtime.Immutable
 import com.emikhalets.core.R
 
+@Immutable
 sealed class UiString {
 
+    @Immutable
     data class Message(val value: String?) : UiString()
 
+    @Immutable
     class Resource(val resId: Int, vararg val args: Any) : UiString()
-
-    fun asString(): String = when (this) {
-        is Message -> value ?: Resources.getSystem().getString(R.string.error_internal)
-        is Resource -> Resources.getSystem().getString(resId, *args)
-    }
 
     companion object {
 
@@ -22,4 +22,10 @@ sealed class UiString {
 
         fun create(stringRes: Int): UiString = Resource(stringRes)
     }
+}
+
+fun UiString?.asString(context: Context): String = when (this) {
+    is UiString.Message -> value ?: Resources.getSystem().getString(R.string.error_internal)
+    is UiString.Resource -> context.getString(resId, *args)
+    else -> Resources.getSystem().getString(R.string.error_internal)
 }

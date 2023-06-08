@@ -8,107 +8,94 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.emikhalets.simplenotes.presentation.theme.AppTheme
-import com.emikhalets.simplenotes.utils.toast
+import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.component.AppFloatButton
+import com.emikhalets.core.ui.component.AppMessageDialog
+import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.notes.domain.entity.NoteEntity
+import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
+import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
 
 @Composable
-fun NotesListScreen(viewModel: NotesListViewModel = hiltViewModel()) {
-    val context = LocalContext.current
+fun NotesListScreen(
+    navigateBack: () -> Unit,
+    viewModel: NotesListViewModel,
+) {
     val state by viewModel.state.collectAsState()
-
-    var editNoteEntity by remember { mutableStateOf<com.emikhalets.notes.domain.entity.NoteEntity?>(null) }
-    var showAddTaskDialog by remember { mutableStateOf(false) }
+    val effect by viewModel.effect.collectAsState(0)
 
     LaunchedEffect(Unit) {
-        viewModel.getAllNotes()
+        viewModel.setAction(Action.GetNotes)
     }
 
-    LaunchedEffect(state.error) {
-        val error = state.error
-        if (error != null) {
-            val message = error.asString(context)
-            message.toast(context)
-            viewModel.resetError()
-        }
-    }
-
-    NotesListScreen(
+    ScreenContent(
         notesList = state.notesList,
-        onNoteClick = { entity -> editNoteEntity = entity },
-        onAddNoteClick = { showAddTaskDialog = true },
+        onNoteClick = { viewModel.setAction(Action.EditNoteDialog(it)) },
+        onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog(it)) },
+        onAddNoteClick = { viewModel.setAction(Action.AddNoteDialog) },
+        onBackClick = navigateBack
     )
 
-    if (showAddTaskDialog) {
-        AddNoteDialog(
-            onDismiss = { showAddTaskDialog = false },
-            onSaveClick = { title, content ->
-                viewModel.insertNote(title, content)
-                showAddTaskDialog = false
-            }
-        )
-    }
+    when (effect) {
+        is Effect.Error -> AppMessageDialog((effect as Effect.Error).message)
 
-    if (editNoteEntity != null) {
-        EditNoteDialog(
-            initTitle = editNoteEntity?.title ?: "",
-            initContent = editNoteEntity?.content ?: "",
-            onDismiss = { editNoteEntity = null },
-            onSaveClick = { title, content ->
-                viewModel.updateNote(editNoteEntity, title, content)
-                editNoteEntity = null
-            }
+        Effect.AddNoteDialog -> EditNoteDialog(
+            entity = null,
+            onSaveClick = { viewModel.setAction(Action.AddNote(it)) }
         )
+
+        is Effect.EditNoteDialog -> EditNoteDialog(
+            entity = (effect as Effect.EditNoteDialog).entity,
+            onSaveClick = { viewModel.setAction(Action.EditNote(it)) }
+        )
+
+        is Effect.DeleteNoteDialog -> TODO("Need to implement delete dialog")
     }
 }
 
 @Composable
-private fun NotesListScreen(
-    notesList: List<com.emikhalets.notes.domain.entity.NoteEntity>,
-    onNoteClick: (com.emikhalets.notes.domain.entity.NoteEntity) -> Unit,
+private fun ScreenContent(
+    notesList: List<NoteEntity>,
+    onNoteClick: (NoteEntity) -> Unit,
+    onDeleteNoteClick: (NoteEntity) -> Unit,
     onAddNoteClick: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
+    AppChildScreenBox(onBackClick, stringResource(com.emikhalets.core.R.string.application_notes)) {
+        Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(notesList) { entity ->
                     NoteRow(entity, onNoteClick)
                 }
             }
-        }
-        FloatingActionButton(
-            onClick = { onAddNoteClick() },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            AppFloatButton(
+                icon = Icons.Rounded.Add,
+                onClick = { onAddNoteClick() },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+            )
         }
     }
 }
 
 @Composable
 private fun NoteRow(
-    entity: com.emikhalets.notes.domain.entity.NoteEntity,
-    onNoteClick: (com.emikhalets.notes.domain.entity.NoteEntity) -> Unit,
+    entity: NoteEntity,
+    onNoteClick: (NoteEntity) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -132,39 +119,20 @@ private fun NoteRow(
 @Composable
 private fun ScreenPreview() {
     AppTheme {
-        NotesListScreen(
+        ScreenContent(
             notesList = listOf(
-                com.emikhalets.notes.domain.entity.NoteEntity(
-                    title = "Note title",
-                    content = "Note content"
-                ),
-                com.emikhalets.notes.domain.entity.NoteEntity(
-                    title = "Note title",
-                    content = "Note content"
-                ),
-                com.emikhalets.notes.domain.entity.NoteEntity(
-                    title = "Note title",
-                    content = "Note content"
-                ),
-                com.emikhalets.notes.domain.entity.NoteEntity(
-                    title = "Note title",
-                    content = "Note content"
-                ),
-                com.emikhalets.notes.domain.entity.NoteEntity(
-                    title = "Note title",
-                    content = "Note content"
-                ),
-                com.emikhalets.notes.domain.entity.NoteEntity(
-                    title = "Note title",
-                    content = "Note content"
-                ),
-                com.emikhalets.notes.domain.entity.NoteEntity(
-                    title = "Note title",
-                    content = "Note content"
-                ),
+                NoteEntity("Note title", "Note content"),
+                NoteEntity("Note title", "Note content"),
+                NoteEntity("Note title", "Note content"),
+                NoteEntity("Note title", "Note content"),
+                NoteEntity("Note title", "Note content"),
+                NoteEntity("Note title", "Note content"),
+                NoteEntity("Note title", "Note content"),
             ),
             onNoteClick = {},
             onAddNoteClick = {},
+            onDeleteNoteClick = {},
+            onBackClick = {}
         )
     }
 }

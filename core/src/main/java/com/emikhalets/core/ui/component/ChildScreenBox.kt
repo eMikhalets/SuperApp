@@ -2,6 +2,7 @@ package com.emikhalets.core.ui.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,7 @@ import com.emikhalets.core.ui.theme.AppTheme
 fun AppChildScreenBox(
     onBackClick: () -> Unit,
     label: String? = null,
-    content: @Composable (PaddingValues) -> Unit,
+    content: @Composable ColumnScope.(PaddingValues) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         AppTopBar(onBackClick, Modifier, label)

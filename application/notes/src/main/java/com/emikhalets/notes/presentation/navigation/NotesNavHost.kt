@@ -6,38 +6,17 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.emikhalets.fitness.presentation.stages.StagesScreen
+import com.emikhalets.notes.presentation.screens.notes.NotesListScreen
 
 fun NavController.navigateToAppNotes(navOptions: NavOptions? = null) {
-    this.navigate(NotesScreen.Pager.route, navOptions)
+    this.navigate(NotesScreen.Notes.route, navOptions)
 }
 
 fun NavGraphBuilder.applicationNotes(navController: NavHostController) {
 
-    composable(NotesScreen.Pager.route) {
-        StagesScreen(
-            navigateBack = { navController.popBackStack(NotesScreen.Main.route, true) },
-            viewModel = hiltViewModel()
-        )
-    }
-
-    composable(NotesScreen.Tasks.route) {
-        StagesScreen(
-            navigateBack = { navController.popBackStack() },
-            viewModel = hiltViewModel()
-        )
-    }
-
     composable(NotesScreen.Notes.route) {
-        StagesScreen(
-            navigateBack = { navController.popBackStack() },
-            viewModel = hiltViewModel()
-        )
-    }
-
-    composable(NotesScreen.Settings.route) {
-        StagesScreen(
-            navigateBack = { navController.popBackStack() },
+        NotesListScreen(
+            navigateBack = { navController.popBackStack(NotesScreen.Notes.route, true) },
             viewModel = hiltViewModel()
         )
     }

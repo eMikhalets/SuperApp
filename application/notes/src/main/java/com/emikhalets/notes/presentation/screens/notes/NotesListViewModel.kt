@@ -1,75 +1,79 @@
 package com.emikhalets.notes.presentation.screens.notes
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.emikhalets.simplenotes.domain.use_cases.notes.DeleteNoteUseCase
-import com.emikhalets.simplenotes.domain.use_cases.notes.GetAllNotesUseCase
-import com.emikhalets.simplenotes.domain.use_cases.notes.InsertNoteUseCase
-import com.emikhalets.simplenotes.domain.use_cases.notes.UpdateNoteUseCase
-import com.emikhalets.simplenotes.utils.UiString
+import com.emikhalets.core.common.BaseViewModel
+import com.emikhalets.core.common.launchScope
+import com.emikhalets.core.common.onFailure
+import com.emikhalets.core.common.onSuccess
+import com.emikhalets.core.ui.UiString
+import com.emikhalets.notes.domain.entity.NoteEntity
+import com.emikhalets.notes.domain.usecase.NotesUseCase
+import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
+import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
+import com.emikhalets.notes.presentation.screens.notes.NotesListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class NotesListViewModel @Inject constructor(
-    private val getAllNotesUseCase: GetAllNotesUseCase,
-    private val insertNoteUseCase: InsertNoteUseCase,
-    private val updateNoteUseCase: UpdateNoteUseCase,
-    private val deleteNoteUseCase: DeleteNoteUseCase,
-) : ViewModel() {
+    private val notesUseCase: NotesUseCase,
+) : BaseViewModel<Action, Effect, State>() {
 
-    private val _state = MutableStateFlow(NotesListState())
-    val state get() = _state.asStateFlow()
+    override fun createInitialState() = State()
 
-    fun resetError() = _state.update { it.copy(error = null) }
+    override fun handleEvent(action: Action) {
+        when (action) {
+            Action.GetNotes -> getNotes()
+            is Action.AddNote -> insertNote(action.note)
+            is Action.EditNote -> updateNote(action.note)
+            is Action.DeleteNote -> deleteNote(action.note)
+            Action.AddNoteDialog -> setEffect { Effect.AddNoteDialog }
+            is Action.EditNoteDialog -> setEffect { Effect.EditNoteDialog(action.note) }
+            is Action.DeleteNoteDialog -> setEffect { Effect.DeleteNoteDialog(action.note) }
+        }
+    }
 
-    fun getAllNotes() {
-        viewModelScope.launch {
-            getAllNotesUseCase.invoke()
+    private fun getNotes() {
+        launchScope {
+            notesUseCase.getAllFlow()
                 .onSuccess { flow -> setAllNotesState(flow) }
-                .onFailure { throwable -> handleFailure(throwable) }
+                .onFailure { code, message -> handleFailure(code, message) }
         }
     }
 
-    private suspend fun setAllNotesState(flow: Flow<List<com.emikhalets.notes.domain.entity.NoteEntity>>) {
-        flow.collectLatest { list ->
-            _state.update { it.copy(notesList = list) }
-        }
-    }
-
-    fun insertNote(title: String, content: String) {
-        viewModelScope.launch {
-            val entity = com.emikhalets.notes.domain.entity.NoteEntity(
-                title = title,
-                content = content,
-                savedTime = Date().time
-            )
-            insertNoteUseCase.invoke(entity).onFailure { throwable -> handleFailure(throwable) }
-        }
-    }
-
-    fun updateNote(entity: com.emikhalets.notes.domain.entity.NoteEntity?, newTitle: String, newContent: String) {
+    private fun insertNote(entity: NoteEntity?) {
         entity ?: return
-        viewModelScope.launch {
-            val newEntity = entity.copy(title = newTitle, content = newContent)
-            updateNoteUseCase.invoke(newEntity).onFailure { throwable -> handleFailure(throwable) }
+        launchScope {
+            notesUseCase.insert(entity)
+                .onFailure { code, message -> handleFailure(code, message) }
         }
     }
 
-    fun deleteNote(entity: com.emikhalets.notes.domain.entity.NoteEntity) {
-        viewModelScope.launch {
-            deleteNoteUseCase.invoke(entity).onFailure { throwable -> handleFailure(throwable) }
+    private fun updateNote(entity: NoteEntity?) {
+        entity ?: return
+        launchScope {
+            notesUseCase.update(entity)
+                .onFailure { code, message -> handleFailure(code, message) }
         }
     }
 
-    private fun handleFailure(throwable: Throwable) {
-        _state.update { it.copy(error = UiString.create(throwable.message)) }
+    private fun deleteNote(entity: NoteEntity?) {
+        entity ?: return
+        launchScope {
+            notesUseCase.delete(entity)
+                .onFailure { code, message -> handleFailure(code, message) }
+        }
+    }
+
+    private suspend fun setAllNotesState(flow: Flow<List<NoteEntity>>) {
+        flow.collectLatest { list ->
+            setState { it.copy(isLoading = false, notesList = list) }
+        }
+    }
+
+    private fun handleFailure(code: Int, message: UiString?) {
+        setState { it.copy(isLoading = false) }
+        setEffect { Effect.Error(message) }
     }
 }

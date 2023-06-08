@@ -6,12 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.emikhalets.notes.data.database.table_notes.NoteDb
 import com.emikhalets.notes.data.database.table_notes.NotesDao
-import com.emikhalets.notes.data.database.table_tasks.TaskDb
-import com.emikhalets.notes.data.database.table_tasks.TasksDao
 
 @Database(
     entities = [
-        TaskDb::class,
         NoteDb::class,
     ],
     autoMigrations = [],
@@ -20,7 +17,6 @@ import com.emikhalets.notes.data.database.table_tasks.TasksDao
 )
 abstract class NotesDatabase : RoomDatabase() {
 
-    abstract val tasksDao: TasksDao
     abstract val notesDao: NotesDao
 
     companion object {
