@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
-import com.emikhalets.core.ui.component.AppMessageDialog
+import com.emikhalets.core.ui.component.AppDialogMessage
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
@@ -52,7 +52,7 @@ fun NotesListScreen(
     )
 
     when (effect) {
-        is Effect.Error -> AppMessageDialog((effect as Effect.Error).message)
+        is Effect.Error -> AppDialogMessage((effect as Effect.Error).message)
 
         Effect.AddNoteDialog -> EditNoteDialog(
             entity = null,

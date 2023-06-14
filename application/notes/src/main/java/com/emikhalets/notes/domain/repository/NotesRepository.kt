@@ -13,4 +13,6 @@ interface NotesRepository {
     suspend fun deleteNote(entity: NoteEntity): AppResult<Unit>
 
     fun getNotes(): AppResult<Flow<List<NoteEntity>>>
+
+    suspend fun getNote(id: Long): AppResult<NoteEntity>
 }

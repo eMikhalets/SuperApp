@@ -6,9 +6,9 @@ import com.emikhalets.notes.data.database.table_notes.NotesDao
 import com.emikhalets.notes.data.mappers.NotesMapper
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.domain.repository.NotesRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 class NotesRepositoryImpl @Inject constructor(
     private val notesDao: NotesDao,
@@ -37,6 +37,13 @@ class NotesRepositoryImpl @Inject constructor(
             notesDao.getAllFlow().map {
                 NotesMapper.mapDbListToEntityList(it)
             }
+        }
+    }
+
+    override suspend fun getNote(id: Long): AppResult<NoteEntity> {
+        return execute {
+            val entity = notesDao.getItemById(id)
+            NotesMapper.mapDbToEntity(entity)
         }
     }
 }

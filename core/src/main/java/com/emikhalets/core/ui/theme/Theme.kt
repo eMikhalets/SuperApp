@@ -18,6 +18,7 @@ private val LightColorPalette = lightColors(
     primaryVariant = Purple700,
     secondary = Teal200,
     secondaryVariant = Color(0xFF018786),
+    surface = Color.White,
     background = ColorSurface,
     error = Color(0xFFB00020),
     onPrimary = ColorSurface,

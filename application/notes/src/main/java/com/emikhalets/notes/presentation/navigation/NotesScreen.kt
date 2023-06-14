@@ -1,6 +1,7 @@
 package com.emikhalets.notes.presentation.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -12,6 +13,11 @@ sealed class NotesScreen(val route: String, val icon: ImageVector) {
         "app_notes_list",
         Icons.Rounded.EditNote
     ), AppBottomBarItem
+
+    object Note : NotesScreen(
+        "app_note_item",
+        Icons.Default.Android
+    )
 
     object Settings : NotesScreen(
         "app_notes_settings",

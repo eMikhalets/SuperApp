@@ -21,4 +21,7 @@ interface NotesDao {
 
     @Query("SELECT * FROM notes ORDER BY create_timestamp DESC")
     fun getAllFlow(): Flow<List<NoteDb>>
+
+    @Query("SELECT * FROM notes WHERE id=:id")
+    suspend fun getItemById(id: Long): NoteDb
 }

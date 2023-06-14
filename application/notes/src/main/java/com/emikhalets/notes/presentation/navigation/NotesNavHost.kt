@@ -22,6 +22,13 @@ fun NavGraphBuilder.applicationNotes(navController: NavHostController) {
         )
     }
 
+    composable(NotesScreen.Note.route) {
+        NotesListScreen(
+            navigateBack = { navController.popBackStack(NotesScreen.Notes.route, true) },
+            viewModel = hiltViewModel()
+        )
+    }
+
     composable(NotesScreen.Settings.route) {
         NotesSettingsScreen(
             navigateBack = { navController.popBackStack() },

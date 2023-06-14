@@ -3,8 +3,8 @@ package com.emikhalets.notes.domain.usecase
 import com.emikhalets.core.common.AppResult
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.domain.repository.NotesRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class NotesUseCase @Inject constructor(
     private val appRepo: NotesRepository,
@@ -22,7 +22,11 @@ class NotesUseCase @Inject constructor(
         return appRepo.deleteNote(entity)
     }
 
-    suspend fun getAllFlow(): AppResult<Flow<List<NoteEntity>>> {
+    fun getAllFlow(): AppResult<Flow<List<NoteEntity>>> {
         return appRepo.getNotes()
+    }
+
+    suspend fun getItem(id: Long): AppResult<NoteEntity> {
+        return appRepo.getNote(id)
     }
 }
