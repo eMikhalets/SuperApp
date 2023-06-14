@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.emikhalets.notes.presentation.navigation.applicationNotes
+import com.emikhalets.notes.presentation.navigation.navigateToAppNotes
 //import com.emikhalets.fitness.navigation.applicationFitness
 //import com.emikhalets.fitness.navigation.navigateToAppFitness
 import com.emikhalets.superapp.screen.MainScreen
@@ -23,6 +25,7 @@ fun AppNavHost(navController: NavHostController) {
             )
         }
 //        applicationFitness(navController)
+        applicationNotes(navController)
     }
 }
 
@@ -33,6 +36,6 @@ private fun NavHostController.navigateApp(type: AppType) {
         AppType.Finances -> Unit
         AppType.Fitness -> Unit // navigateToAppFitness()
         AppType.MediaLib -> Unit
-        AppType.Notes -> Unit
+        AppType.Notes -> navigateToAppNotes()
     }
 }

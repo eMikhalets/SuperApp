@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -17,13 +18,13 @@ import com.emikhalets.core.AppBottomBarItem
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
+@NonRestartableComposable
 fun AppScaffold(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
     bottomBarList: List<AppBottomBarItem> = emptyList(),
     content: @Composable () -> Unit,
 ) {
-
     Scaffold(
         scaffoldState = scaffoldState,
         bottomBar = {

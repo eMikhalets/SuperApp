@@ -18,15 +18,18 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.headerLarge
+import com.emikhalets.core.ui.theme.primaryLarge
 import com.emikhalets.superapp.R
 import com.emikhalets.superapp.utils.AppType
-import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
 fun MainScreen(
@@ -136,14 +139,14 @@ private fun MenuWidgets(
 }
 
 @Composable
+@NonRestartableComposable
 private fun MenuHeader(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.h5,
-        color = MaterialTheme.colors.onPrimary,
+        style = MaterialTheme.typography.headerLarge,
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colors.primary)
+            .padding(top = 16.dp)
             .padding(16.dp, 8.dp)
     )
 }
@@ -172,7 +175,7 @@ private fun MenuButton(
         )
         Text(
             text = stringResource(appType.appNameRes),
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.primaryLarge,
             modifier = Modifier
                 .padding(top = 6.dp)
                 .align(Alignment.CenterHorizontally)

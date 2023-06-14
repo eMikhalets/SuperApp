@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.emikhalets.notes.presentation.screens.notes.NotesListScreen
+import com.emikhalets.notes.presentation.screens.settings.NotesSettingsScreen
 
 fun NavController.navigateToAppNotes(navOptions: NavOptions? = null) {
     this.navigate(NotesScreen.Notes.route, navOptions)
@@ -18,6 +19,12 @@ fun NavGraphBuilder.applicationNotes(navController: NavHostController) {
         NotesListScreen(
             navigateBack = { navController.popBackStack(NotesScreen.Notes.route, true) },
             viewModel = hiltViewModel()
+        )
+    }
+
+    composable(NotesScreen.Settings.route) {
+        NotesSettingsScreen(
+            navigateBack = { navController.popBackStack() },
         )
     }
 }

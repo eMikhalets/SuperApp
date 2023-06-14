@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -18,13 +20,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.component.AppMessageDialog
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.primary
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
@@ -78,7 +80,13 @@ private fun ScreenContent(
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(notesList) { entity ->
-                    NoteRow(entity, onNoteClick)
+                    NoteBox(
+                        entity = entity,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onNoteClick(entity) }
+                            .padding(8.dp, 4.dp)
+                    )
                 }
             }
             AppFloatButton(
@@ -93,42 +101,38 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun NoteRow(
-    entity: NoteEntity,
-    onNoteClick: (NoteEntity) -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onNoteClick(entity) }
-            .padding(8.dp, 4.dp)
-    ) {
-        Text(
-            text = entity.title,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            text = entity.content,
-            modifier = Modifier.fillMaxWidth()
-        )
+private fun NoteBox(entity: NoteEntity, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
+        Column(modifier = modifier.fillMaxSize()) {
+            Text(
+                text = entity.title,
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = entity.content,
+                style = MaterialTheme.typography.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+            )
+            Text(
+                text = entity.updateTimestamp.toString(),
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+            )
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ScreenPreview() {
+private fun Preview() {
     AppTheme {
         ScreenContent(
-            notesList = listOf(
-                NoteEntity("Note title", "Note content"),
-                NoteEntity("Note title", "Note content"),
-                NoteEntity("Note title", "Note content"),
-                NoteEntity("Note title", "Note content"),
-                NoteEntity("Note title", "Note content"),
-                NoteEntity("Note title", "Note content"),
-                NoteEntity("Note title", "Note content"),
-            ),
+            notesList = getNotesListPreview(),
             onNoteClick = {},
             onAddNoteClick = {},
             onDeleteNoteClick = {},

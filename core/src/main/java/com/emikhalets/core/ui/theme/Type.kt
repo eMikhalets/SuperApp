@@ -23,6 +23,27 @@ private val nunitoSans = FontFamily(
     Font(R.font.nunito_sans_bold, FontWeight.Bold),
 )
 
+val Typography.primary: TextStyle
+    get() = TextStyle(
+        fontFamily = nunitoSans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    )
+
+val Typography.primaryLarge: TextStyle
+    get() = TextStyle(
+        fontFamily = nunitoSans,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+    )
+
+val Typography.headerLarge: TextStyle
+    get() = TextStyle(
+        fontFamily = nunitoSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp
+    )
+
 val Typography = Typography(
     h1 = TextStyle(
         fontFamily = nunitoSans,

@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
+@NonRestartableComposable
 fun AppButton(
     text: String,
     onClick: () -> Unit,
@@ -33,6 +35,7 @@ fun AppButton(
 }
 
 @Composable
+@NonRestartableComposable
 fun AppTextButton(
     text: String,
     onClick: () -> Unit,
@@ -50,6 +53,7 @@ fun AppTextButton(
 }
 
 @Composable
+@NonRestartableComposable
 fun AppFloatButton(
     icon: ImageVector,
     onClick: () -> Unit,
@@ -57,6 +61,8 @@ fun AppFloatButton(
 ) {
     FloatingActionButton(
         onClick = { onClick() },
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = MaterialTheme.colors.onPrimary,
         modifier = modifier
     ) {
         Icon(imageVector = icon, contentDescription = null)
