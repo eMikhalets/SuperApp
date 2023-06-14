@@ -2,6 +2,7 @@ package com.emikhalets.core.ui.component
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -65,7 +66,11 @@ fun AppFloatButton(
         contentColor = MaterialTheme.colors.onPrimary,
         modifier = modifier
     ) {
-        Icon(imageVector = icon, contentDescription = null)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(36.dp)
+        )
     }
 }
 

@@ -23,11 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.core.ui.theme.headerLarge
-import com.emikhalets.core.ui.theme.primaryLarge
 import com.emikhalets.superapp.R
 import com.emikhalets.superapp.utils.AppType
 
@@ -143,7 +142,8 @@ private fun MenuWidgets(
 private fun MenuHeader(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.headerLarge,
+        style = MaterialTheme.typography.h5,
+        fontWeight = FontWeight.SemiBold,
         modifier = modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
@@ -175,7 +175,7 @@ private fun MenuButton(
         )
         Text(
             text = stringResource(appType.appNameRes),
-            style = MaterialTheme.typography.primaryLarge,
+            style = MaterialTheme.typography.body1,
             modifier = Modifier
                 .padding(top = 6.dp)
                 .align(Alignment.CenterHorizontally)

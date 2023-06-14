@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -26,7 +27,6 @@ import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.component.AppMessageDialog
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.core.ui.theme.primary
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
@@ -78,14 +78,19 @@ private fun ScreenContent(
 ) {
     AppChildScreenBox(onBackClick, stringResource(com.emikhalets.core.R.string.application_notes)) {
         Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
                 items(notesList) { entity ->
                     NoteBox(
                         entity = entity,
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable { onNoteClick(entity) }
-                            .padding(8.dp, 4.dp)
+                            .padding(8.dp)
                     )
                 }
             }
@@ -102,16 +107,24 @@ private fun ScreenContent(
 
 @Composable
 private fun NoteBox(entity: NoteEntity, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Column(modifier = modifier.fillMaxSize()) {
+    Card(
+        elevation = 0.dp,
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)
+        ) {
             Text(
                 text = entity.title,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.body2,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
                 text = entity.content,
-                style = MaterialTheme.typography.primary,
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.secondaryVariant,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 4.dp)
@@ -119,6 +132,7 @@ private fun NoteBox(entity: NoteEntity, modifier: Modifier = Modifier) {
             Text(
                 text = entity.updateTimestamp.toString(),
                 style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.secondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 4.dp)

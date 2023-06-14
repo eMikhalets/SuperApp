@@ -32,7 +32,7 @@ fun AppChildScreenBox(
             content = { content(PaddingValues(top = 52.dp)) },
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
+                .background(MaterialTheme.colors.background)
                 .verticalScrollIf(isScrollable, rememberScrollState())
                 .padding(top = 52.dp)
         )

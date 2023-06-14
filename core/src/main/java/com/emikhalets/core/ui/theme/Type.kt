@@ -23,50 +23,29 @@ private val nunitoSans = FontFamily(
     Font(R.font.nunito_sans_bold, FontWeight.Bold),
 )
 
-val Typography.primary: TextStyle
-    get() = TextStyle(
-        fontFamily = nunitoSans,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-
-val Typography.primaryLarge: TextStyle
-    get() = TextStyle(
-        fontFamily = nunitoSans,
-        fontWeight = FontWeight.Medium,
-        fontSize = 18.sp,
-    )
-
-val Typography.headerLarge: TextStyle
-    get() = TextStyle(
-        fontFamily = nunitoSans,
-        fontWeight = FontWeight.Bold,
-        fontSize = 24.sp
-    )
-
 val Typography = Typography(
     h1 = TextStyle(
         fontFamily = nunitoSans,
         fontWeight = FontWeight.Bold,
-        fontSize = 96.sp,
+        fontSize = 60.sp,
         letterSpacing = (-1.5).sp
     ),
     h2 = TextStyle(
         fontFamily = nunitoSans,
         fontWeight = FontWeight.Bold,
-        fontSize = 60.sp,
+        fontSize = 40.sp,
         letterSpacing = (-0.5).sp
     ),
     h3 = TextStyle(
         fontFamily = nunitoSans,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 48.sp,
+        fontSize = 32.sp,
         letterSpacing = 0.sp
     ),
     h4 = TextStyle(
         fontFamily = nunitoSans,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 34.sp,
+        fontSize = 28.sp,
         letterSpacing = 0.25.sp
     ),
     h5 = TextStyle(
@@ -84,26 +63,17 @@ val Typography = Typography(
     subtitle1 = TextStyle(
         fontFamily = nunitoSans,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        letterSpacing = 0.15.sp
-    ),
-    subtitle2 = TextStyle(
-        fontFamily = nunitoSans,
-        fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
-        letterSpacing = 0.1.sp
     ),
     body1 = TextStyle(
         fontFamily = nunitoSans,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        letterSpacing = 0.5.sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
     ),
     body2 = TextStyle(
         fontFamily = nunitoSans,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        letterSpacing = 0.25.sp
+        fontSize = 16.sp,
     ),
     button = TextStyle(
         fontFamily = nunitoSans,
@@ -113,7 +83,7 @@ val Typography = Typography(
     ),
     caption = TextStyle(
         fontFamily = nunitoSans,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Light,
         fontSize = 12.sp,
         letterSpacing = 0.4.sp
     ),
