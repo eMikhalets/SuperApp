@@ -26,10 +26,8 @@ class NotesListViewModel @Inject constructor(
         when (action) {
             Action.GetNotes -> getNotes()
             is Action.AddNote -> insertNote(action.note)
-            is Action.EditNote -> updateNote(action.note)
             is Action.DeleteNote -> deleteNote(action.note)
             Action.AddNoteDialog -> setEffect { Effect.AddNoteDialog }
-            is Action.EditNoteDialog -> setEffect { Effect.EditNoteDialog(action.note) }
             is Action.DeleteNoteDialog -> setEffect { Effect.DeleteNoteDialog(action.note) }
         }
     }
@@ -46,14 +44,6 @@ class NotesListViewModel @Inject constructor(
         entity ?: return
         launchScope {
             notesUseCase.insert(entity)
-                .onFailure { code, message -> handleFailure(code, message) }
-        }
-    }
-
-    private fun updateNote(entity: NoteEntity?) {
-        entity ?: return
-        launchScope {
-            notesUseCase.update(entity)
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }

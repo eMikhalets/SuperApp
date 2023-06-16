@@ -13,10 +13,8 @@ object NotesListContract {
     sealed class Action : UiAction {
 
         object AddNoteDialog : Action()
-        class EditNoteDialog(val note: NoteEntity) : Action()
         class DeleteNoteDialog(val note: NoteEntity) : Action()
         class AddNote(val note: NoteEntity?) : Action()
-        class EditNote(val note: NoteEntity?) : Action()
         class DeleteNote(val note: NoteEntity?) : Action()
         object GetNotes : Action()
     }
@@ -25,7 +23,6 @@ object NotesListContract {
     sealed class Effect : UiEffect {
 
         object AddNoteDialog : Effect()
-        class EditNoteDialog(val entity: NoteEntity) : Effect()
         class DeleteNoteDialog(val entity: NoteEntity) : Effect()
         class Error(val message: UiString?) : Effect()
     }

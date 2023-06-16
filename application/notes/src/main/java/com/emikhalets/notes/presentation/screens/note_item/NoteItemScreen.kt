@@ -40,8 +40,8 @@ import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Effe
 @Composable
 fun NoteItemScreen(
     navigateBack: () -> Unit,
-    noteId: Long?,
     viewModel: NoteItemViewModel,
+    noteId: Long?,
 ) {
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(0)

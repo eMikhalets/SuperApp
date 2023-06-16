@@ -24,8 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.component.AppChildScreenBox
-import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.component.AppDialogMessage
+import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
@@ -33,6 +33,7 @@ import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
 
 @Composable
 fun NotesListScreen(
+    navigateToNote: (id: Long) -> Unit,
     navigateBack: () -> Unit,
     viewModel: NotesListViewModel,
 ) {
@@ -45,7 +46,7 @@ fun NotesListScreen(
 
     ScreenContent(
         notesList = state.notesList,
-        onNoteClick = { viewModel.setAction(Action.EditNoteDialog(it)) },
+        onNoteClick = { navigateToNote(it) },
         onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog(it)) },
         onAddNoteClick = { viewModel.setAction(Action.AddNoteDialog) },
         onBackClick = navigateBack
@@ -59,11 +60,6 @@ fun NotesListScreen(
             onSaveClick = { viewModel.setAction(Action.AddNote(it)) }
         )
 
-        is Effect.EditNoteDialog -> EditNoteDialog(
-            entity = (effect as Effect.EditNoteDialog).entity,
-            onSaveClick = { viewModel.setAction(Action.EditNote(it)) }
-        )
-
         is Effect.DeleteNoteDialog -> TODO("Need to implement delete dialog")
     }
 }
@@ -71,7 +67,7 @@ fun NotesListScreen(
 @Composable
 private fun ScreenContent(
     notesList: List<NoteEntity>,
-    onNoteClick: (NoteEntity) -> Unit,
+    onNoteClick: (Long) -> Unit,
     onDeleteNoteClick: (NoteEntity) -> Unit,
     onAddNoteClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -89,7 +85,7 @@ private fun ScreenContent(
                         entity = entity,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onNoteClick(entity) }
+                            .clickable { onNoteClick(entity.id) }
                             .padding(8.dp)
                     )
                 }
