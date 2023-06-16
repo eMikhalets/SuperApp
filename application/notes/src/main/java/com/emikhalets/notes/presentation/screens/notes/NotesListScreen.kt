@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.component.AppDialogDelete
 import com.emikhalets.core.ui.component.AppDialogMessage
 import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.theme.AppTheme
@@ -33,12 +34,12 @@ import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
 
 @Composable
 fun NotesListScreen(
-    navigateToNote: (id: Long) -> Unit,
+    navigateToNote: (id: Long?) -> Unit,
     navigateBack: () -> Unit,
     viewModel: NotesListViewModel,
 ) {
     val state by viewModel.state.collectAsState()
-    val effect by viewModel.effect.collectAsState(0)
+    val effect by viewModel.effect.collectAsState(null)
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetNotes)
@@ -48,19 +49,26 @@ fun NotesListScreen(
         notesList = state.notesList,
         onNoteClick = { navigateToNote(it) },
         onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog(it)) },
-        onAddNoteClick = { viewModel.setAction(Action.AddNoteDialog) },
+        onAddNoteClick = { navigateToNote(null) },
         onBackClick = navigateBack
     )
 
     when (effect) {
         is Effect.Error -> AppDialogMessage((effect as Effect.Error).message)
 
-        Effect.AddNoteDialog -> EditNoteDialog(
-            entity = null,
-            onSaveClick = { viewModel.setAction(Action.AddNote(it)) }
-        )
 
-        is Effect.DeleteNoteDialog -> TODO("Need to implement delete dialog")
+        is Effect.DeleteNoteDialog -> {
+            AppDialogDelete(
+                entity = (effect as Effect.DeleteNoteDialog).entity,
+                onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) }
+            )
+        }
+
+        is Effect.NavigateToNewNote -> {
+            navigateToNote((effect as Effect.NavigateToNewNote).id)
+        }
+
+        null -> Unit
     }
 }
 

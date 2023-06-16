@@ -12,9 +12,7 @@ object NotesListContract {
     @Immutable
     sealed class Action : UiAction {
 
-        object AddNoteDialog : Action()
         class DeleteNoteDialog(val note: NoteEntity) : Action()
-        class AddNote(val note: NoteEntity?) : Action()
         class DeleteNote(val note: NoteEntity?) : Action()
         object GetNotes : Action()
     }
@@ -22,9 +20,9 @@ object NotesListContract {
     @Immutable
     sealed class Effect : UiEffect {
 
-        object AddNoteDialog : Effect()
         class DeleteNoteDialog(val entity: NoteEntity) : Effect()
         class Error(val message: UiString?) : Effect()
+        class NavigateToNewNote(val id: Long?) : Effect()
     }
 
     @Immutable
