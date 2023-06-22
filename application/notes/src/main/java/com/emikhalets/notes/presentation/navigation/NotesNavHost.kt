@@ -21,16 +21,6 @@ fun NavController.navigateToAppNotes(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.applicationNotes(navController: NavHostController) {
 
-    composable(NotesScreen.Main.route) {
-        NotesListScreen(
-            navigateToNote = { id ->
-                navController.navigate("${NotesScreen.NoteItem.route}/$id")
-            },
-            navigateBack = { navController.popBackStack(NotesScreen.NotesList.route, true) },
-            viewModel = hiltViewModel()
-        )
-    }
-
     composable(NotesScreen.NotesList.route) {
         NotesListScreen(
             navigateToNote = { id ->

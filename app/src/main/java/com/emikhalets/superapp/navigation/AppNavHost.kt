@@ -1,13 +1,12 @@
 package com.emikhalets.superapp.navigation
 
+//import com.emikhalets.fitness.navigation.applicationFitness
+//import com.emikhalets.fitness.navigation.navigateToAppFitness
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.notes.presentation.navigation.applicationNotes
-import com.emikhalets.notes.presentation.navigation.navigateToAppNotes
-//import com.emikhalets.fitness.navigation.applicationFitness
-//import com.emikhalets.fitness.navigation.navigateToAppFitness
+import com.emikhalets.notes.presentation.navigation.NotesApplication
 import com.emikhalets.superapp.screen.MainScreen
 import com.emikhalets.superapp.utils.AppType
 
@@ -24,8 +23,13 @@ fun AppNavHost(navController: NavHostController) {
                 navigateToNewWidget = {},
             )
         }
-//        applicationFitness(navController)
-        applicationNotes(navController)
+
+        composable(AppScreen.Notes.route) {
+            NotesApplication(
+                navGraph = this,
+                navHostController = navController,
+            )
+        }
     }
 }
 
@@ -36,6 +40,6 @@ private fun NavHostController.navigateApp(type: AppType) {
         AppType.Finances -> Unit
         AppType.Fitness -> Unit // navigateToAppFitness()
         AppType.MediaLib -> Unit
-        AppType.Notes -> navigateToAppNotes()
+        AppType.Notes -> navigate(AppScreen.Notes.route)
     }
 }
