@@ -23,7 +23,7 @@ class NotesListViewModel @Inject constructor(
     private val insertNoteUseCase: InsertNoteUseCase,
     private val updateNoteUseCase: UpdateNoteUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase,
-) : ViewModel() {
+) : BaseViewModel<Action, Effect, State>() {
 
     private val _state = MutableStateFlow(NotesListState())
     val state get() = _state.asStateFlow()
@@ -55,7 +55,11 @@ class NotesListViewModel @Inject constructor(
         }
     }
 
-    fun updateNote(entity: com.emikhalets.notes.domain.entity.NoteEntity?, newTitle: String, newContent: String) {
+    fun updateNote(
+        entity: com.emikhalets.notes.domain.entity.NoteEntity?,
+        newTitle: String,
+        newContent: String,
+    ) {
         entity ?: return
         viewModelScope.launch {
             val newEntity = entity.copy(title = newTitle, content = newContent)

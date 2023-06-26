@@ -49,13 +49,14 @@ android {
             isMinifyEnabled = true
             isShrinkResources = false
             applicationIdSuffix = ".debug"
+            versionNameSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
-        val release by getting {
+        release {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true

@@ -3,6 +3,7 @@ androidxComposeBom = '2023.04.01'
 androidxComposeNavigation = '2.5.3'
 androidxComposeHilt = '1.0.0'
 androidxCore = '1.10.1'
+androidxDatastore = '1.0.0'
 androidxLifecycle = '2.6.1'
 androidxRoom = '2.5.1'
 agp = "8.0.2"
@@ -22,6 +23,7 @@ androidx-compose-material = { group = "androidx.compose.material", name = "mater
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx-compose-material-icons-ext = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 androidx-hilt-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxComposeHilt" }

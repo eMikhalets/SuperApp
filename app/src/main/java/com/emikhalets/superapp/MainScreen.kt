@@ -1,4 +1,4 @@
-package com.emikhalets.superapp.screen
+package com.emikhalets.superapp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.superapp.R
 import com.emikhalets.superapp.utils.AppType
 
 @Composable

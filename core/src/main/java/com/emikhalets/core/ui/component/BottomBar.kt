@@ -39,7 +39,8 @@ fun AppBottomBar(
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
-                        restoreState = true
+                        // TODO: commented restore state in bottom bar
+//                        restoreState = true
                     }
                 }
             )

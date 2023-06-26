@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -27,14 +26,11 @@ fun AppScaffold(
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
-        bottomBar = {
-            if (bottomBarList.isNotEmpty()) AppBottomBar(navController, bottomBarList)
-        }
+        backgroundColor = MaterialTheme.colors.background,
+        bottomBar = { if (bottomBarList.isNotEmpty()) AppBottomBar(navController, bottomBarList) }
     ) {
-        Surface(color = MaterialTheme.colors.surface) {
-            Box(modifier = Modifier.padding(it)) {
-                content()
-            }
+        Box(modifier = Modifier.padding(it)) {
+            content()
         }
     }
 }

@@ -1,21 +1,21 @@
 package com.emikhalets.superapp.navigation
 
-//import com.emikhalets.fitness.navigation.applicationFitness
-//import com.emikhalets.fitness.navigation.navigateToAppFitness
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.notes.presentation.navigation.NotesApplication
-import com.emikhalets.superapp.screen.MainScreen
+import com.emikhalets.core.AppBottomBarItem
+import com.emikhalets.notes.presentation.navigation.applicationNotes
+import com.emikhalets.notes.presentation.navigation.navigateToAppNotes
+import com.emikhalets.superapp.MainScreen
 import com.emikhalets.superapp.utils.AppType
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = AppScreen.Main.route,
-    ) {
+fun AppNavHost(
+    navController: NavHostController,
+    bottomBarList: (List<AppBottomBarItem>) -> Unit,
+) {
+    NavHost(navController, AppScreen.Main.route) {
         composable(AppScreen.Main.route) {
             MainScreen(
                 navigateToApp = { type -> navController.navigateApp(type) },
@@ -23,23 +23,16 @@ fun AppNavHost(navController: NavHostController) {
                 navigateToNewWidget = {},
             )
         }
-
-        composable(AppScreen.Notes.route) {
-            NotesApplication(
-                navGraph = this,
-                navHostController = navController,
-            )
-        }
+        applicationNotes(navController, bottomBarList)
     }
 }
-
 
 private fun NavHostController.navigateApp(type: AppType) {
     when (type) {
         AppType.Events -> Unit
         AppType.Finances -> Unit
-        AppType.Fitness -> Unit // navigateToAppFitness()
+        AppType.Fitness -> Unit
         AppType.MediaLib -> Unit
-        AppType.Notes -> navigate(AppScreen.Notes.route)
+        AppType.Notes -> navigateToAppNotes()
     }
 }

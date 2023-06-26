@@ -5,16 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.superapp.navigation.AppNavHost
+import com.emikhalets.core.AppBottomBarItem
+import com.emikhalets.core.ui.component.AppScaffold
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.Purple500
+import com.emikhalets.superapp.navigation.AppNavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,6 +32,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+            val scaffoldState = rememberScaffoldState()
             val systemUiController = rememberSystemUiController()
 
             SideEffect {
@@ -39,19 +46,29 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            Application(navController)
+            Application(navController, scaffoldState)
         }
     }
 }
 
 @Composable
-fun Application(navHostController: NavHostController) {
+fun Application(navHostController: NavHostController, scaffoldState: ScaffoldState) {
+    val bottomBarList = remember { mutableStateListOf<AppBottomBarItem>() }
+
     AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            AppNavHost(navHostController)
+            AppScaffold(navHostController, scaffoldState, bottomBarList) {
+                AppNavHost(navHostController) {
+                    // TODO: not sure about bottom bar items lists equals
+                    if (bottomBarList != it) {
+                        bottomBarList.clear()
+                        bottomBarList.addAll(it)
+                    }
+                }
+            }
         }
     }
 }

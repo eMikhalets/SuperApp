@@ -37,6 +37,8 @@ android {
 
 dependencies {
 
+    api(libs.androidx.core.ktx)
+
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     api(libs.androidx.compose.ui)
@@ -48,6 +50,8 @@ dependencies {
     api(libs.androidx.compose.material.icons.ext)
 
     api(libs.androidx.lifecycle.viewmodel.ktx)
+
+    api(libs.androidx.datastore)
 
     api(libs.androidx.navigation.compose)
     api(libs.androidx.hilt.compose)
