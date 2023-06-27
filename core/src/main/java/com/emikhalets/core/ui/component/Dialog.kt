@@ -14,13 +14,14 @@ import androidx.compose.ui.window.DialogProperties
 fun AppDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
+    cancelable: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Dialog(
         onDismissRequest = { onDismiss() },
         properties = DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false
+            dismissOnBackPress = cancelable,
+            dismissOnClickOutside = cancelable
         )
     ) {
         Column(

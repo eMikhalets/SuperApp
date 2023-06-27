@@ -41,9 +41,11 @@ fun AppTextButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     TextButton(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier.height(48.dp)
     ) {
         Text(

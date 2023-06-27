@@ -4,4 +4,6 @@
     <string name="app_notes_save">Save note</string>
     <string name="app_notes_title">Title</string>
     <string name="app_notes_content">Content</string>
+    <string name="app_notes_completed">Completed %d</string>
+    <string name="app_notes_done">Done</string>
 </resources>

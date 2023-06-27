@@ -22,7 +22,7 @@ fun <T> AppDialogDelete(
     onDeleteClick: (entity: T?) -> Unit,
     onDismiss: () -> Unit = {},
 ) {
-    AppDialog {
+    AppDialog(onDismiss = onDismiss) {
         Text(
             text = stringResource(R.string.app_dialog_delete_title),
             textAlign = TextAlign.Center,

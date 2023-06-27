@@ -24,7 +24,7 @@ fun AppDialogMessage(
     title: String? = null,
 ) {
     val context = LocalContext.current
-    AppDialog {
+    AppDialog(onDismiss = onDismiss) {
         if (!title.isNullOrBlank()) {
             Text(
                 text = title,

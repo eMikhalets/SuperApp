@@ -13,15 +13,26 @@ import com.emikhalets.core.common.AppCode
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemScreen
 import com.emikhalets.notes.presentation.screens.notes.NotesListScreen
 import com.emikhalets.notes.presentation.screens.settings.NotesSettingsScreen
+import com.emikhalets.notes.presentation.screens.tasks.TasksListScreen
+
+private val bottomBarItems: List<AppScreen> = listOf(
+    AppNotesScreen.TasksList, AppNotesScreen.NotesList, AppNotesScreen.Settings
+)
 
 fun NavGraphBuilder.applicationNotes(
     graphRoute: String,
     navController: NavHostController,
     bottomBarList: (List<AppScreen>) -> Unit,
 ) {
-    navigation(AppNotesScreen.NotesList.route, graphRoute) {
+    navigation(AppNotesScreen.TasksList.route, graphRoute) {
+        composable(AppNotesScreen.TasksList.route) {
+            bottomBarList(bottomBarItems)
+            TasksListScreen(
+                navigateBack = { navController.popBackStack() },
+                viewModel = hiltViewModel()
+            )
+        }
         composable(AppNotesScreen.NotesList.route) {
-            bottomBarList(listOf(AppNotesScreen.NotesList, AppNotesScreen.Settings))
             NotesListScreen(
                 navigateToNote = { id ->
                     navController.navigate("${AppNotesScreen.NoteItem.route}/$id")
