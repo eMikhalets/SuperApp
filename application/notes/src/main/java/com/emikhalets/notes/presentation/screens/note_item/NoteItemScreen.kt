@@ -19,12 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.core.common.formatWithPattern
 import com.emikhalets.core.toast
 import com.emikhalets.core.ui.component.AppButton
 import com.emikhalets.core.ui.component.AppChildScreenBox
@@ -41,7 +40,7 @@ import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Effe
 fun NoteItemScreen(
     navigateBack: () -> Unit,
     viewModel: NoteItemViewModel,
-    noteId: Long?,
+    noteId: Long,
 ) {
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(0)
@@ -57,7 +56,7 @@ fun NoteItemScreen(
 
     LaunchedEffect(state.noteEntity) {
         title = state.noteEntity?.title ?: ""
-        updateDate = state.noteEntity?.updateTimestamp?.toString() ?: ""
+        updateDate = state.noteEntity?.updateTimestamp.formatWithPattern("EEEE, dd MMMM yyyy")
         content = state.noteEntity?.content ?: ""
     }
 
@@ -66,8 +65,14 @@ fun NoteItemScreen(
         updateDate = updateDate,
         content = content,
         isNeedSave = isNeedSave,
-        onTitleChanged = { isNeedSave = true },
-        onContentChanged = { isNeedSave = true },
+        onTitleChanged = {
+            isNeedSave = true
+            title = it
+        },
+        onContentChanged = {
+            isNeedSave = true
+            content = it
+        },
         onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog) },
         onSaveNoteClick = {
             val newEntity = state.noteEntity?.copy(title = title, content = content)
@@ -145,17 +150,12 @@ private fun NoteEditBox(
     onContentChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val focusRequester = FocusRequester.Default
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
     Column(modifier = modifier) {
         AppTextField(
             value = title,
             onValueChange = onTitleChanged,
             fontSize = 20.sp,
+            placeholder = stringResource(R.string.app_notes_title),
             modifier = Modifier.fillMaxWidth()
         )
         Text(
@@ -170,10 +170,11 @@ private fun NoteEditBox(
         AppTextField(
             value = content,
             onValueChange = onContentChanged,
+            placeholder = stringResource(R.string.app_notes_content),
+            singleLine = false,
             modifier = Modifier
                 .fillMaxSize()
                 .height(IntrinsicSize.Max)
-                .focusRequester(focusRequester)
         )
     }
 }

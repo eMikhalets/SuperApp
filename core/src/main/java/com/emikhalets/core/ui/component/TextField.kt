@@ -1,39 +1,33 @@
 package com.emikhalets.core.ui.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.core.ui.theme.AppTheme
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @NonRestartableComposable
 fun AppTextField(
@@ -43,39 +37,44 @@ fun AppTextField(
     errorMessage: String? = null,
     placeholder: String? = null,
     label: String? = null,
-    maxLines: Int = Int.MAX_VALUE,
+    leadingIcon: ImageVector? = null,
+    trailingIcon: ImageVector? = null,
+    singleLine: Boolean = true,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     keyboardType: KeyboardType = KeyboardType.Text,
     onDoneClick: (KeyboardActionScope.() -> Unit)? = {},
     textColor: Color = MaterialTheme.colors.onSurface,
     fontSize: TextUnit = 16.sp,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val maxLinesValue by remember { mutableStateOf(if (maxLines < 1) 1 else maxLines) }
-    val singleLineValue by remember { mutableStateOf(maxLinesValue <= 1) }
-
-    val colors = TextFieldDefaults.textFieldColors(
-        backgroundColor = MaterialTheme.colors.surface,
-        textColor = textColor,
-        cursorColor = MaterialTheme.colors.primary,
-        errorCursorColor = MaterialTheme.colors.error,
-    )
-
-    Column(modifier = modifier) {
-        BasicTextField(
+    Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
+        TextField(
             value = value,
-            modifier = modifier
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colors.surface, RectangleShape)
                 .defaultMinSize(
                     minWidth = TextFieldDefaults.MinWidth,
                     minHeight = TextFieldDefaults.MinHeight
                 ),
-            onValueChange = onValueChange,
             enabled = true,
             readOnly = false,
             textStyle = LocalTextStyle.current.copy(fontSize = fontSize),
-            cursorBrush = SolidColor(colors.cursorColor(errorMessage != null).value),
-            visualTransformation = VisualTransformation.None,
+            label = if (!label.isNullOrBlank()) {
+                { Text(label) }
+            } else null,
+            placeholder = if (!placeholder.isNullOrBlank()) {
+                { Text(placeholder, fontSize = fontSize) }
+            } else null,
+            leadingIcon = if (leadingIcon != null) {
+                { Icon(leadingIcon, contentDescription = null) }
+            } else null,
+            trailingIcon = if (trailingIcon != null) {
+                { Icon(trailingIcon, contentDescription = null) }
+            } else null,
+            singleLine = singleLine,
+            isError = errorMessage != null,
+            shape = RectangleShape,
             keyboardOptions = KeyboardOptions(
                 capitalization = capitalization,
                 keyboardType = keyboardType,
@@ -83,22 +82,18 @@ fun AppTextField(
             keyboardActions = KeyboardActions(
                 onDone = onDoneClick,
             ),
-            interactionSource = interactionSource,
-            singleLine = singleLineValue,
-            maxLines = maxLinesValue,
-            minLines = 1,
-            decorationBox = @Composable { innerTextField ->
-                TextFieldDefaults.TextFieldDecorationBox(
-                    value = value,
-                    visualTransformation = VisualTransformation.None,
-                    innerTextField = innerTextField,
-                    singleLine = singleLineValue,
-                    enabled = true,
-                    isError = errorMessage != null,
-                    interactionSource = interactionSource,
-                    colors = colors
-                )
-            }
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = textColor,
+                backgroundColor = MaterialTheme.colors.surface,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent,
+                errorLeadingIconColor = MaterialTheme.colors.onSurface
+                    .copy(alpha = TextFieldDefaults.IconOpacity),
+                errorTrailingIconColor = MaterialTheme.colors.onSurface
+                    .copy(alpha = TextFieldDefaults.IconOpacity),
+            ),
         )
         if (errorMessage != null) {
             Text(

@@ -30,8 +30,8 @@ class NoteItemViewModel @Inject constructor(
         }
     }
 
-    private fun getNote(id: Long?) {
-        id ?: return
+    private fun getNote(id: Long) {
+        if (id <= 0) return
         launchScope {
             notesUseCase.getItem(id)
                 .onSuccess { item -> setNoteState(item) }

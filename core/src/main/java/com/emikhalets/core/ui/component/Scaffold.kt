@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.core.AppBottomBarItem
+import com.emikhalets.core.AppScreen
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
@@ -21,7 +21,7 @@ import com.emikhalets.core.ui.theme.AppTheme
 fun AppScaffold(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
-    bottomBarList: List<AppBottomBarItem> = emptyList(),
+    bottomBarList: List<AppScreen> = emptyList(),
     content: @Composable () -> Unit,
 ) {
     Scaffold(

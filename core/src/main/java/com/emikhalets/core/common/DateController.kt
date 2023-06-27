@@ -7,7 +7,7 @@ import java.time.ZoneId
 import java.util.Date
 import javax.inject.Inject
 
-class DateHelper @Inject constructor() {
+class DateController @Inject constructor() {
 
     private val timezone = ZoneId.systemDefault()
 

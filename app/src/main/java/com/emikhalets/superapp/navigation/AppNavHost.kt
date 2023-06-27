@@ -4,26 +4,26 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.core.AppBottomBarItem
+import com.emikhalets.core.AppScreen
 import com.emikhalets.notes.presentation.navigation.applicationNotes
-import com.emikhalets.notes.presentation.navigation.navigateToAppNotes
 import com.emikhalets.superapp.MainScreen
 import com.emikhalets.superapp.utils.AppType
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    bottomBarList: (List<AppBottomBarItem>) -> Unit,
+    bottomBarList: (List<AppScreen>) -> Unit,
 ) {
-    NavHost(navController, AppScreen.Main.route) {
-        composable(AppScreen.Main.route) {
+    NavHost(navController, AppMainScreen.Main.route) {
+        composable(AppMainScreen.Main.route) {
+            bottomBarList(emptyList())
             MainScreen(
                 navigateToApp = { type -> navController.navigateApp(type) },
                 navigateToWidget = { id -> },
                 navigateToNewWidget = {},
             )
         }
-        applicationNotes(navController, bottomBarList)
+        applicationNotes(AppMainScreen.APP_NOTES_ROUTE, navController, bottomBarList)
     }
 }
 
@@ -33,6 +33,6 @@ private fun NavHostController.navigateApp(type: AppType) {
         AppType.Finances -> Unit
         AppType.Fitness -> Unit
         AppType.MediaLib -> Unit
-        AppType.Notes -> navigateToAppNotes()
+        AppType.Notes -> navigate(AppMainScreen.APP_NOTES_ROUTE)
     }
 }

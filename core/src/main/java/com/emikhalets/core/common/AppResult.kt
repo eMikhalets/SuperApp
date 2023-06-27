@@ -4,8 +4,6 @@ package com.emikhalets.core.common
 
 import com.emikhalets.core.ui.UiString
 import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 sealed class AppResult<out T> {
 
@@ -16,11 +14,6 @@ sealed class AppResult<out T> {
     val isSuccess: Boolean get() = this !is Failure
 
     val isFailure: Boolean get() = this is Failure
-
-    fun exceptionOrNull(): Pair<Int, UiString?>? = when (this) {
-        is Failure -> Pair(this.code, this.message)
-        else -> null
-    }
 
     companion object {
 
@@ -43,14 +36,20 @@ inline fun <R> execute(block: () -> R): AppResult<R> {
 }
 
 inline fun <T> AppResult<T>.onFailure(action: (code: Int, message: UiString?) -> Unit): AppResult<T> {
-    contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
-    exceptionOrNull()?.let { (code, message) -> action(code, message) }
+    // TODO: not sure if I need contract function in my custom result wrapper
+//    contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
+    if (this.isFailure) {
+        val result = this as? AppResult.Failure ?: return this
+        action(result.code, result.message)
+    }
     return this
 }
 
-@Suppress("UNCHECKED_CAST")
 inline fun <T> AppResult<T>.onSuccess(action: (data: T) -> Unit): AppResult<T> {
-    contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
-    if (isSuccess) action(this as T)
+//    contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
+    if (isSuccess) {
+        val data = (this as? AppResult.Success)?.data ?: return this
+        action(data)
+    }
     return this
 }

@@ -2,8 +2,8 @@ package com.emikhalets.core
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
-interface AppBottomBarItem {
+interface AppScreen {
 
     val route: String
-    val icon: ImageVector
+    val icon: ImageVector?
 }

@@ -15,7 +15,7 @@ object NoteItemContract {
         object DeleteNoteDialog : Action()
         object DeleteNote : Action()
         class SaveNote(val entity: NoteEntity?) : Action()
-        class GetNote(val id: Long?) : Action()
+        class GetNote(val id: Long) : Action()
     }
 
     @Immutable

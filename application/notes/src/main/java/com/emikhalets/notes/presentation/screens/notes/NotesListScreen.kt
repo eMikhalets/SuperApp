@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.core.common.AppCode
+import com.emikhalets.core.common.formatWithPattern
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppDialogDelete
 import com.emikhalets.core.ui.component.AppDialogMessage
@@ -49,7 +51,7 @@ fun NotesListScreen(
         notesList = state.notesList,
         onNoteClick = { navigateToNote(it) },
         onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog(it)) },
-        onAddNoteClick = { navigateToNote(null) },
+        onAddNoteClick = { navigateToNote(AppCode.NO_ID) },
         onBackClick = navigateBack
     )
 
@@ -134,7 +136,7 @@ private fun NoteBox(entity: NoteEntity, modifier: Modifier = Modifier) {
                     .padding(top = 4.dp)
             )
             Text(
-                text = entity.updateTimestamp.toString(),
+                text = entity.updateTimestamp.formatWithPattern("EEE, dd/MM/yyyy"),
                 style = MaterialTheme.typography.caption,
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier

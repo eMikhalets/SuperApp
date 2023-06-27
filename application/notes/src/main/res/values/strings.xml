@@ -2,4 +2,6 @@
     <string name="app_notes_saved">Note saved!</string>
     <string name="app_notes_deleted">Note deleted!</string>
     <string name="app_notes_save">Save note</string>
+    <string name="app_notes_title">Title</string>
+    <string name="app_notes_content">Content</string>
 </resources>

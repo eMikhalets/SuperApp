@@ -17,13 +17,13 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.core.AppBottomBarItem
+import com.emikhalets.core.AppScreen
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
 fun AppBottomBar(
     navController: NavHostController,
-    bottomBarItems: List<AppBottomBarItem>,
+    bottomBarItems: List<AppScreen>,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -31,7 +31,8 @@ fun AppBottomBar(
     BottomNavigation {
         bottomBarItems.forEach { item ->
             BottomNavigationItem(
-                icon = { Icon(imageVector = item.icon, contentDescription = null) },
+                icon = item.icon?.let { { Icon(imageVector = it, contentDescription = null) } }
+                    ?: {},
                 selectedContentColor = MaterialTheme.colors.onPrimary,
                 unselectedContentColor = MaterialTheme.colors.onSecondary,
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
@@ -55,15 +56,15 @@ private fun Preview() {
         AppBottomBar(
             navController = rememberNavController(),
             bottomBarItems = listOf(
-                object : AppBottomBarItem {
+                object : AppScreen {
                     override val route: String = "tasks"
                     override val icon: ImageVector = Icons.Rounded.Task
                 },
-                object : AppBottomBarItem {
+                object : AppScreen {
                     override val route: String = "notes"
                     override val icon: ImageVector = Icons.Rounded.EditNote
                 },
-                object : AppBottomBarItem {
+                object : AppScreen {
                     override val route: String = "settings"
                     override val icon: ImageVector = Icons.Rounded.Settings
                 }
