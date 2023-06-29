@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.emikhalets.core.AppScreen
-import com.emikhalets.notes.presentation.navigation.applicationNotes
+import com.emikhalets.notes.app.applicationNotes
 import com.emikhalets.superapp.MainScreen
 import com.emikhalets.superapp.utils.AppType
 

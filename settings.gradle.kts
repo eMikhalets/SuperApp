@@ -22,7 +22,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = "SuperApp"
 include(":app")
-include(":application:notes")
+
+include(":application:notes:app")
+include(":application:notes:data")
+include(":application:notes:domain")
+include(":application:notes:presentation")
+
 include(":core")
 
 //include(":application:events:app")

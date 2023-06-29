@@ -93,7 +93,7 @@ dependencies {
 //    implementation(project(":application:finances:app"))
 //    implementation(project(":application:fitness:app"))
 //    implementation(project(":application:medialib:app"))
-    implementation(project(":application:notes"))
+    implementation(project(":application:notes:app"))
     implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)
