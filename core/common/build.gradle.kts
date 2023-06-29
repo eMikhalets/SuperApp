@@ -22,12 +22,6 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
 }
 
 dependencies {

@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.ui.component.AppDialog
 import com.emikhalets.core.ui.component.AppTextButton
 import com.emikhalets.core.ui.component.AppTextField
+import com.emikhalets.core.ui.dialog.AppDialog
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.R
 import com.emikhalets.notes.domain.entity.TaskEntity

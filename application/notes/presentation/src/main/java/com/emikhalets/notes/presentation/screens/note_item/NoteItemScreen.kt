@@ -24,13 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.core.common.date.formatWithPattern
-import com.emikhalets.core.toast
+import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.component.AppButton
 import com.emikhalets.core.ui.component.AppChildScreenBox
-import com.emikhalets.core.ui.component.AppDialogDelete
-import com.emikhalets.core.ui.component.AppDialogMessage
-import com.emikhalets.core.ui.component.AppTextField
-import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.dialog.AppDialogDelete
+import com.emikhalets.core.ui.dialog.AppDialogMessage
 import com.emikhalets.notes.domain.R
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Action
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Effect
@@ -87,12 +85,12 @@ fun NoteItemScreen(
         }
 
         Effect.NoteSaved -> {
-            toast(R.string.app_notes_saved)
+            AppToast(R.string.app_notes_saved)
             navigateBack()
         }
 
         Effect.NoteDeleted -> {
-            toast(R.string.app_notes_deleted)
+            AppToast(R.string.app_notes_deleted)
             navigateBack()
         }
 
@@ -117,7 +115,10 @@ private fun ScreenContent(
     onSaveNoteClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(onBackClick, stringResource(com.emikhalets.core.R.string.application_notes)) {
+    AppChildScreenBox(
+        onBackClick,
+        stringResource(com.emikhalets.core.common.R.string.application_notes)
+    ) {
         Box(modifier = Modifier.fillMaxSize()) {
             NoteEditBox(
                 title = title,
@@ -150,7 +151,7 @@ private fun NoteEditBox(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        AppTextField(
+        com.emikhalets.core.ui.component.AppTextField(
             value = title,
             onValueChange = onTitleChanged,
             fontSize = 20.sp,
@@ -166,7 +167,7 @@ private fun NoteEditBox(
                 .background(MaterialTheme.colors.surface)
                 .padding(16.dp)
         )
-        AppTextField(
+        com.emikhalets.core.ui.component.AppTextField(
             value = content,
             onValueChange = onContentChanged,
             placeholder = stringResource(R.string.app_notes_content),
@@ -181,7 +182,7 @@ private fun NoteEditBox(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    AppTheme {
+    com.emikhalets.core.ui.theme.AppTheme {
         ScreenContent(
             title = "Test title",
             updateDate = "Test update date",

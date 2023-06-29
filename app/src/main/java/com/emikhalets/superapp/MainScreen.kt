@@ -185,7 +185,7 @@ private fun MenuButton(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    AppTheme {
+    com.emikhalets.core.ui.theme.AppTheme {
         ScreenContent(
             onEventsAppClick = {},
             onFinancesAppClick = {},

@@ -7,9 +7,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.emikhalets.core.ARGS
-import com.emikhalets.core.AppScreen
 import com.emikhalets.core.common.AppCode
+import com.emikhalets.core.navigation.ARGS
+import com.emikhalets.core.navigation.AppScreen
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemScreen
 import com.emikhalets.notes.presentation.screens.notes.NotesListScreen
 import com.emikhalets.notes.presentation.screens.settings.NotesSettingsScreen

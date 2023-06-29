@@ -35,8 +35,9 @@ dependencies {
     implementation(project(":application:notes:data"))
     implementation(project(":application:notes:domain"))
     implementation(project(":application:notes:presentation"))
-    implementation(project(":core"))
     implementation(project(":core:common"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

@@ -4,7 +4,6 @@ import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
-import com.emikhalets.core.common.UiString
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.domain.usecase.NotesUseCase
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Action
@@ -67,7 +66,7 @@ class NoteItemViewModel @Inject constructor(
         setState { it.copy(isLoading = false, noteEntity = item) }
     }
 
-    private fun handleFailure(code: Int, message: UiString?) {
+    private fun handleFailure(code: Int, message: com.emikhalets.core.common.UiString?) {
         setState { it.copy(isLoading = false) }
         setEffect { Effect.Error(message) }
     }

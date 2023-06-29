@@ -22,7 +22,7 @@ object TasksListContract {
     sealed class Effect : UiEffect {
 
         class DeleteTaskDialog(val entity: TaskEntity) : Effect()
-        class Error(val message: UiString?) : Effect()
+        class Error(val message: com.emikhalets.core.common.UiString?) : Effect()
     }
 
     @Immutable

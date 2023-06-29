@@ -6,7 +6,7 @@ import androidx.compose.material.icons.rounded.Checklist
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.emikhalets.core.AppScreen
+import com.emikhalets.core.navigation.AppScreen
 
 sealed class AppNotesScreen(val route: String, val icon: ImageVector) {
 

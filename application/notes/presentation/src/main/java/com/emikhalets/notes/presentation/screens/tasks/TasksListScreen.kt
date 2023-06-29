@@ -32,9 +32,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.component.AppChildScreenBox
-import com.emikhalets.core.ui.component.AppDialogDelete
-import com.emikhalets.core.ui.component.AppDialogMessage
 import com.emikhalets.core.ui.component.AppFloatButton
+import com.emikhalets.core.ui.dialog.AppDialogDelete
+import com.emikhalets.core.ui.dialog.AppDialogMessage
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.R
 import com.emikhalets.notes.domain.entity.TaskEntity
@@ -105,7 +105,10 @@ private fun ScreenContent(
     onCollapseTasksClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(onBackClick, stringResource(com.emikhalets.core.R.string.application_notes)) {
+    AppChildScreenBox(
+        onBackClick,
+        stringResource(com.emikhalets.core.common.R.string.application_notes)
+    ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {

@@ -89,13 +89,11 @@ android {
 
 dependencies {
 
-//    implementation(project(":application:events:app"))
-//    implementation(project(":application:finances:app"))
-//    implementation(project(":application:fitness:app"))
-//    implementation(project(":application:medialib:app"))
     implementation(project(":application:notes:app"))
-    implementation(project(":core"))
+
     implementation(project(":core:common"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.google.accompanist)

@@ -21,7 +21,7 @@ object NotesListContract {
     sealed class Effect : UiEffect {
 
         class DeleteNoteDialog(val entity: NoteEntity) : Effect()
-        class Error(val message: UiString?) : Effect()
+        class Error(val message: com.emikhalets.core.common.UiString?) : Effect()
         class NavigateToNewNote(val id: Long?) : Effect()
     }
 

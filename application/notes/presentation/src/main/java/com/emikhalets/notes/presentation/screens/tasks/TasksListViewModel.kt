@@ -4,7 +4,6 @@ import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
-import com.emikhalets.core.common.UiString
 import com.emikhalets.notes.domain.entity.TaskEntity
 import com.emikhalets.notes.domain.usecase.TasksUseCase
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Action
@@ -67,7 +66,7 @@ class TasksListViewModel @Inject constructor(
         }
     }
 
-    private fun handleFailure(code: Int, message: UiString?) {
+    private fun handleFailure(code: Int, message: com.emikhalets.core.common.UiString?) {
         setState { it.copy(isLoading = false) }
         setEffect { Effect.Error(message) }
     }

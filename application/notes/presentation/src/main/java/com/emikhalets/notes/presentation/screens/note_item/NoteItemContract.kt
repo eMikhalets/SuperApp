@@ -24,7 +24,7 @@ object NoteItemContract {
         object NoteSaved : Effect()
         object NoteDeleted : Effect()
         object DeleteNoteDialog : Effect()
-        class Error(val message: UiString?) : Effect()
+        class Error(val message: com.emikhalets.core.common.UiString?) : Effect()
     }
 
     @Immutable

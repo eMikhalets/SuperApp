@@ -33,8 +33,8 @@ android {
 dependencies {
 
     implementation(project(":application:notes:domain"))
-    implementation(project(":core"))
     implementation(project(":core:common"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

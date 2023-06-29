@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.AppCode
 import com.emikhalets.core.common.date.formatWithPattern
 import com.emikhalets.core.ui.component.AppChildScreenBox
-import com.emikhalets.core.ui.component.AppDialogDelete
-import com.emikhalets.core.ui.component.AppDialogMessage
 import com.emikhalets.core.ui.component.AppFloatButton
+import com.emikhalets.core.ui.dialog.AppDialogDelete
+import com.emikhalets.core.ui.dialog.AppDialogMessage
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
@@ -85,7 +85,10 @@ private fun ScreenContent(
     onAddNoteClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(onBackClick, stringResource(com.emikhalets.core.R.string.application_notes)) {
+    AppChildScreenBox(
+        onBackClick,
+        stringResource(com.emikhalets.core.common.R.string.application_notes)
+    ) {
         Box(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),

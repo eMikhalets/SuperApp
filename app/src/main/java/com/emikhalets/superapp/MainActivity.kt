@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.core.AppScreen
+import com.emikhalets.core.navigation.AppScreen
 import com.emikhalets.core.ui.component.AppScaffold
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.Purple500
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
             SideEffect {
                 systemUiController.setStatusBarColor(
-                    color = Purple500,
+                    color = com.emikhalets.core.ui.theme.Purple500,
                     darkIcons = false
                 )
                 systemUiController.setNavigationBarColor(
@@ -53,14 +53,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Application(navHostController: NavHostController, scaffoldState: ScaffoldState) {
-    val bottomBarList = remember { mutableStateListOf<AppScreen>() }
+    val bottomBarList = remember { mutableStateListOf<com.emikhalets.core.navigation.AppScreen>() }
 
-    AppTheme {
+    com.emikhalets.core.ui.theme.AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            AppScaffold(navHostController, scaffoldState, bottomBarList) {
+            com.emikhalets.core.ui.component.AppScaffold(
+                navHostController,
+                scaffoldState,
+                bottomBarList
+            ) {
                 AppNavHost(navHostController) {
                     // TODO: not sure about bottom bar items lists equals
                     if (bottomBarList != it) {
