@@ -26,21 +26,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.superapp.utils.AppType
+import com.emikhalets.core.common.ApplicationItem
+import com.emikhalets.core.ui.getAppIcon
 
 @Composable
 fun MainScreen(
-    navigateToApp: (type: AppType) -> Unit,
+    navigateToApp: (type: ApplicationItem) -> Unit,
     navigateToWidget: (Int) -> Unit,
     navigateToNewWidget: () -> Unit,
 ) {
     ScreenContent(
-        onEventsAppClick = { navigateToApp(AppType.Events) },
-        onFinancesAppClick = { navigateToApp(AppType.Finances) },
-        onFitnessAppClick = { navigateToApp(AppType.Fitness) },
-        onMediaLibAppClick = { navigateToApp(AppType.MediaLib) },
-        onNotesAppClick = { navigateToApp(AppType.Notes) },
+        onAppClick = navigateToApp,
         onWidgetClick = navigateToWidget,
         onAddWidgetClick = navigateToNewWidget,
     )
@@ -48,11 +44,7 @@ fun MainScreen(
 
 @Composable
 private fun ScreenContent(
-    onEventsAppClick: () -> Unit,
-    onFinancesAppClick: () -> Unit,
-    onFitnessAppClick: () -> Unit,
-    onMediaLibAppClick: () -> Unit,
-    onNotesAppClick: () -> Unit,
+    onAppClick: (ApplicationItem) -> Unit,
     onWidgetClick: (Int) -> Unit,
     onAddWidgetClick: () -> Unit,
 ) {
@@ -62,11 +54,7 @@ private fun ScreenContent(
             .verticalScroll(rememberScrollState())
     ) {
         Applications(
-            onEventsAppClick = onEventsAppClick,
-            onFinancesAppClick = onFinancesAppClick,
-            onFitnessAppClick = onFitnessAppClick,
-            onMediaLibAppClick = onMediaLibAppClick,
-            onNotesAppClick = onNotesAppClick
+            onAppClick = onAppClick,
         )
         MenuWidgets(
             onWidgetClick = onWidgetClick,
@@ -77,13 +65,7 @@ private fun ScreenContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Applications(
-    onEventsAppClick: () -> Unit,
-    onFinancesAppClick: () -> Unit,
-    onFitnessAppClick: () -> Unit,
-    onMediaLibAppClick: () -> Unit,
-    onNotesAppClick: () -> Unit,
-) {
+private fun Applications(onAppClick: (ApplicationItem) -> Unit) {
     MenuHeader(stringResource(R.string.app_applications))
     FlowRow(
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -91,26 +73,12 @@ private fun Applications(
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        MenuButton(
-            appType = AppType.Events,
-            onClick = onEventsAppClick
-        )
-        MenuButton(
-            appType = AppType.Finances,
-            onClick = onFinancesAppClick
-        )
-        MenuButton(
-            appType = AppType.Fitness,
-            onClick = onFitnessAppClick
-        )
-        MenuButton(
-            appType = AppType.MediaLib,
-            onClick = onMediaLibAppClick
-        )
-        MenuButton(
-            appType = AppType.Notes,
-            onClick = onNotesAppClick
-        )
+        ApplicationItem.values().forEach { application ->
+            MenuButton(
+                appType = application,
+                onClick = { onAppClick(application) }
+            )
+        }
     }
 }
 
@@ -152,13 +120,13 @@ private fun MenuHeader(text: String, modifier: Modifier = Modifier) {
 
 @Composable
 private fun MenuButton(
-    appType: AppType,
+    appType: ApplicationItem,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.padding(12.dp)) {
         Icon(
-            imageVector = appType.appIcon,
+            imageVector = appType.getAppIcon(),
             contentDescription = null,
             tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
@@ -187,11 +155,7 @@ private fun MenuButton(
 private fun Preview() {
     com.emikhalets.core.ui.theme.AppTheme {
         ScreenContent(
-            onEventsAppClick = {},
-            onFinancesAppClick = {},
-            onFitnessAppClick = {},
-            onMediaLibAppClick = {},
-            onNotesAppClick = {},
+            onAppClick = {},
             onWidgetClick = {},
             onAddWidgetClick = {},
         )
