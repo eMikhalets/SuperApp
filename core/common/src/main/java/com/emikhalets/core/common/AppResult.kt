@@ -1,9 +1,4 @@
-@file:OptIn(ExperimentalContracts::class)
-
 package com.emikhalets.core.common
-
-import com.emikhalets.core.ui.UiString
-import kotlin.contracts.ExperimentalContracts
 
 sealed class AppResult<out T> {
 
@@ -36,8 +31,6 @@ inline fun <R> execute(block: () -> R): AppResult<R> {
 }
 
 inline fun <T> AppResult<T>.onFailure(action: (code: Int, message: UiString?) -> Unit): AppResult<T> {
-    // TODO: not sure if I need contract function in my custom result wrapper
-//    contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
     if (this.isFailure) {
         val result = this as? AppResult.Failure ?: return this
         action(result.code, result.message)
@@ -46,7 +39,6 @@ inline fun <T> AppResult<T>.onFailure(action: (code: Int, message: UiString?) ->
 }
 
 inline fun <T> AppResult<T>.onSuccess(action: (data: T) -> Unit): AppResult<T> {
-//    contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
     if (isSuccess) {
         val data = (this as? AppResult.Success)?.data ?: return this
         action(data)

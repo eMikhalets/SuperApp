@@ -28,6 +28,7 @@ dependencies {
 
     implementation(project(":application:notes:domain"))
     implementation(project(":core"))
+    implementation(project(":core:common"))
 
     kapt(libs.androidx.room.compiler)
 

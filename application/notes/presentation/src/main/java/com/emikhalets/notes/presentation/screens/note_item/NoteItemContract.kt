@@ -1,10 +1,10 @@
 package com.emikhalets.notes.presentation.screens.note_item
 
 import androidx.compose.runtime.Immutable
-import com.emikhalets.core.common.UiAction
-import com.emikhalets.core.common.UiEffect
-import com.emikhalets.core.common.UiState
-import com.emikhalets.core.ui.UiString
+import com.emikhalets.core.common.mvi.UiAction
+import com.emikhalets.core.common.mvi.UiEffect
+import com.emikhalets.core.common.mvi.UiState
+import com.emikhalets.core.common.UiString
 import com.emikhalets.notes.domain.entity.NoteEntity
 
 object NoteItemContract {

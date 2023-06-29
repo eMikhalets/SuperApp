@@ -38,7 +38,7 @@ abstract class NotesDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): NotesDatabase {
             return Room
-                .databaseBuilder(context, NotesDatabase::class.java, "Notes.db")
+                .databaseBuilder(context, NotesDatabase::class.java, "AppNotes.db")
                 .build()
         }
     }

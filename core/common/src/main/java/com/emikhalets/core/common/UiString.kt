@@ -1,17 +1,12 @@
-package com.emikhalets.core.ui
+package com.emikhalets.core.common
 
 import android.content.Context
 import android.content.res.Resources
-import androidx.compose.runtime.Immutable
-import com.emikhalets.core.R
 
-@Immutable
 sealed class UiString {
 
-    @Immutable
     data class Message(val value: String?) : UiString()
 
-    @Immutable
     class Resource(val resId: Int, vararg val args: Any) : UiString()
 
     companion object {

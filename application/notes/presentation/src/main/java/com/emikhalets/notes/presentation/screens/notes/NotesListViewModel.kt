@@ -1,10 +1,10 @@
 package com.emikhalets.notes.presentation.screens.notes
 
-import com.emikhalets.core.common.BaseViewModel
-import com.emikhalets.core.common.launchScope
+import com.emikhalets.core.common.mvi.BaseViewModel
+import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
-import com.emikhalets.core.ui.UiString
+import com.emikhalets.core.common.UiString
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.domain.usecase.NotesUseCase
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action

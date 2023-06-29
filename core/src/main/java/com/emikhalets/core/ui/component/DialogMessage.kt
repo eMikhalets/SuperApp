@@ -13,13 +13,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.R
-import com.emikhalets.core.ui.UiString
-import com.emikhalets.core.ui.asString
+import com.emikhalets.core.common.UiString
+import com.emikhalets.core.common.asString
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
 fun AppDialogMessage(
-    message: UiString?,
+    message: com.emikhalets.core.common.UiString?,
     onDismiss: () -> Unit = {},
     title: String? = null,
 ) {
@@ -62,6 +62,6 @@ fun AppDialogMessage(
 @Composable
 private fun ScreenPreview() {
     AppTheme {
-        AppDialogMessage(UiString.create("Dialog message"), {}, "Dialog title")
+        AppDialogMessage(com.emikhalets.core.common.UiString.create("Dialog message"), {}, "Dialog title")
     }
 }

@@ -27,6 +27,7 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":core:common"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

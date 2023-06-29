@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.AppCode
-import com.emikhalets.core.common.formatWithPattern
+import com.emikhalets.core.common.date.formatWithPattern
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppDialogDelete
 import com.emikhalets.core.ui.component.AppDialogMessage

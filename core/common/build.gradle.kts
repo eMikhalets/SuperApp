@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.notes.presentation"
+    namespace = "com.emikhalets.core.common"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -32,9 +32,9 @@ android {
 
 dependencies {
 
-    implementation(project(":application:notes:domain"))
-    implementation(project(":core"))
-    implementation(project(":core:common"))
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.lifecycle.viewmodel.ktx)
+    api(libs.androidx.datastore)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

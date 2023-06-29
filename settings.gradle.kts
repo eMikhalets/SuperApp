@@ -29,23 +29,4 @@ include(":application:notes:domain")
 include(":application:notes:presentation")
 
 include(":core")
-
-//include(":application:events:app")
-//include(":application:events:data")
-//include(":application:events:domain")
-//include(":application:events:presentation")
-//
-//include(":application:finances:app")
-//include(":application:finances:data")
-//include(":application:finances:domain")
-//include(":application:finances:presentation")
-//
-//include(":application:fitness:app")
-//include(":application:fitness:data")
-//include(":application:fitness:domain")
-//include(":application:fitness:presentation")
-//
-//include(":application:medialib:app")
-//include(":application:medialib:data")
-//include(":application:medialib:domain")
-//include(":application:medialib:presentation")
+include(":core:common")

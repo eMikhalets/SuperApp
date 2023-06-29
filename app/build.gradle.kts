@@ -95,6 +95,7 @@ dependencies {
 //    implementation(project(":application:medialib:app"))
     implementation(project(":application:notes:app"))
     implementation(project(":core"))
+    implementation(project(":core:common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.google.accompanist)
