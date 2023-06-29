@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.AppCode
+import com.emikhalets.core.common.ApplicationItem
 import com.emikhalets.core.common.date.formatWithPattern
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
@@ -85,10 +86,7 @@ private fun ScreenContent(
     onAddNoteClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(
-        onBackClick,
-        stringResource(com.emikhalets.core.common.R.string.application_notes)
-    ) {
+    AppChildScreenBox(onBackClick, stringResource(ApplicationItem.Notes.appNameRes)) {
         Box(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),

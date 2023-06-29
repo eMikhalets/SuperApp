@@ -2,6 +2,7 @@ package com.emikhalets.notes.data.database
 
 import android.content.Context
 import com.emikhalets.notes.data.database.table_notes.NotesDao
+import com.emikhalets.notes.data.database.table_subtasks.SubtasksDao
 import com.emikhalets.notes.data.database.table_tasks.TasksDao
 import dagger.Module
 import dagger.Provides
@@ -26,5 +27,10 @@ object NotesDatabaseModule {
     @Provides
     fun providesTasksDao(database: NotesDatabase): TasksDao {
         return database.tasksDao
+    }
+
+    @Provides
+    fun providesSubtasksDao(database: NotesDatabase): SubtasksDao {
+        return database.subtasksDao
     }
 }

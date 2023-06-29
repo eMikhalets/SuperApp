@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.core.common.ApplicationItem
 import com.emikhalets.core.common.date.formatWithPattern
 import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.component.AppButton
@@ -115,10 +116,7 @@ private fun ScreenContent(
     onSaveNoteClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(
-        onBackClick,
-        stringResource(com.emikhalets.core.common.R.string.application_notes)
-    ) {
+    AppChildScreenBox(onBackClick, stringResource(ApplicationItem.Notes.appNameRes)) {
         Box(modifier = Modifier.fillMaxSize()) {
             NoteEditBox(
                 title = title,

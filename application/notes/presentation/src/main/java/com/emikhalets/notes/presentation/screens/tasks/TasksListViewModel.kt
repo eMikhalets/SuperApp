@@ -4,7 +4,9 @@ import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
+import com.emikhalets.notes.domain.entity.SubtaskEntity
 import com.emikhalets.notes.domain.entity.TaskEntity
+import com.emikhalets.notes.domain.usecase.SubtasksUseCase
 import com.emikhalets.notes.domain.usecase.TasksUseCase
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Action
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Effect
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 @HiltViewModel
 class TasksListViewModel @Inject constructor(
     private val tasksUseCase: TasksUseCase,
+    private val subtasksUseCase: SubtasksUseCase,
 ) : BaseViewModel<Action, Effect, State>() {
 
     override fun createInitialState() = State()
@@ -27,6 +30,7 @@ class TasksListViewModel @Inject constructor(
             is Action.DeleteTask -> deleteTask(action.task)
             is Action.DeleteTaskDialog -> setEffect { Effect.DeleteTaskDialog(action.task) }
             is Action.CompleteTask -> updateTask(action.task, action.complete)
+            is Action.CompleteSubtask -> updateSubtask(action.task, action.complete)
         }
     }
 
@@ -53,6 +57,18 @@ class TasksListViewModel @Inject constructor(
                 tasksUseCase.insert(entity.copy(isCompleted = complete))
             } else {
                 tasksUseCase.update(entity.copy(isCompleted = complete))
+            }
+            result.onFailure { code, message -> handleFailure(code, message) }
+        }
+    }
+
+    private fun updateSubtask(entity: SubtaskEntity?, complete: Boolean) {
+        launchScope {
+            entity ?: return@launchScope
+            val result = if (entity.id == 0L) {
+                subtasksUseCase.insert(entity.copy(isCompleted = complete))
+            } else {
+                subtasksUseCase.update(entity.copy(isCompleted = complete))
             }
             result.onFailure { code, message -> handleFailure(code, message) }
         }

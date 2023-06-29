@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
+import com.emikhalets.notes.data.database.embeded.TaskWithSubtasksDb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,6 +24,7 @@ interface TasksDao {
     @Delete
     suspend fun delete(entity: TaskDb)
 
+    @Transaction
     @Query("SELECT * FROM tasks ORDER BY create_timestamp DESC")
-    fun getAllFlow(): Flow<List<TaskDb>>
+    fun getAllFlow(): Flow<List<TaskWithSubtasksDb>>
 }

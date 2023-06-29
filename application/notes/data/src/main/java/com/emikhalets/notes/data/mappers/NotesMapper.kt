@@ -5,17 +5,17 @@ import com.emikhalets.notes.domain.entity.NoteEntity
 
 object NotesMapper {
 
-    fun mapDbToEntity(dbEntity: NoteDb): NoteEntity =
+    fun mapDbToEntity(entity: NoteDb): NoteEntity =
         NoteEntity(
-            id = dbEntity.id,
-            title = dbEntity.title,
-            content = dbEntity.content,
-            createTimestamp = dbEntity.createTimestamp,
-            updateTimestamp = dbEntity.updateTimestamp,
+            id = entity.id,
+            title = entity.title,
+            content = entity.content,
+            createTimestamp = entity.createTimestamp,
+            updateTimestamp = entity.updateTimestamp,
         )
 
-    fun mapDbListToEntityList(dbList: List<NoteDb>): List<NoteEntity> =
-        dbList.map { mapDbToEntity(it) }
+    fun mapDbListToEntityList(list: List<NoteDb>): List<NoteEntity> =
+        list.map { mapDbToEntity(it) }
 
     fun mapEntityToDb(entity: NoteEntity): NoteDb = NoteDb(
         id = entity.id,
@@ -25,6 +25,6 @@ object NotesMapper {
         updateTimestamp = entity.updateTimestamp,
     )
 
-    fun mapEntityListToDbList(entityList: List<NoteEntity>): List<NoteDb> =
-        entityList.map { mapEntityToDb(it) }
+    fun mapEntityListToDbList(list: List<NoteEntity>): List<NoteDb> =
+        list.map { mapEntityToDb(it) }
 }

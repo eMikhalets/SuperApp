@@ -1,5 +1,6 @@
 package com.emikhalets.notes.presentation.screens.tasks
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,14 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,15 +32,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.core.common.ApplicationItem
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.dialog.AppDialogDelete
 import com.emikhalets.core.ui.dialog.AppDialogMessage
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.R
+import com.emikhalets.notes.domain.entity.SubtaskEntity
 import com.emikhalets.notes.domain.entity.TaskEntity
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Action
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Effect
@@ -63,6 +70,9 @@ fun TasksListScreen(
         onTaskClick = { entity -> taskEntity = entity },
         onTaskComplete = { entity, checked ->
             viewModel.setAction(Action.CompleteTask(entity, checked))
+        },
+        onSubtaskComplete = { entity, checked ->
+            viewModel.setAction(Action.CompleteSubtask(entity, checked))
         },
         onAddTaskClick = { taskEntity = TaskEntity("") },
         onCollapseTasksClick = { checkedTasksCollapsed = !checkedTasksCollapsed },
@@ -101,14 +111,12 @@ private fun ScreenContent(
     checkedTasksCollapsed: Boolean,
     onTaskClick: (TaskEntity) -> Unit,
     onTaskComplete: (TaskEntity, Boolean) -> Unit,
+    onSubtaskComplete: (SubtaskEntity, Boolean) -> Unit,
     onAddTaskClick: () -> Unit,
     onCollapseTasksClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(
-        onBackClick,
-        stringResource(com.emikhalets.core.common.R.string.application_notes)
-    ) {
+    AppChildScreenBox(onBackClick, stringResource(ApplicationItem.Notes.appNameRes)) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -116,6 +124,7 @@ private fun ScreenContent(
                         TaskBox(
                             entity = entity,
                             onCheckTask = onTaskComplete,
+                            onCheckSubtask = onSubtaskComplete,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { onTaskClick(entity) }
@@ -135,6 +144,7 @@ private fun ScreenContent(
                                 TaskBox(
                                     entity = entity,
                                     onCheckTask = onTaskComplete,
+                                    onCheckSubtask = onSubtaskComplete,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable { onTaskClick(entity) }
@@ -193,34 +203,101 @@ private fun CompletedTasksHeader(
 private fun TaskBox(
     entity: TaskEntity,
     onCheckTask: (TaskEntity, Boolean) -> Unit,
+    onCheckSubtask: (SubtaskEntity, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        elevation = 0.dp,
-        modifier = modifier
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+    Card(elevation = 0.dp, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 2.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Checkbox(
-                    checked = entity.isCompleted,
-                    onCheckedChange = { onCheckTask(entity, it) }
-                )
-                Text(
+                TaskRow(
                     text = entity.content,
-                    color = if (entity.isCompleted) Color.Gray else Color.Unspecified,
-                    textDecoration = if (entity.isCompleted) TextDecoration.LineThrough else null,
+                    checked = entity.isCompleted,
+                    onChecked = { onCheckTask(entity, it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .padding(start = 8.dp)
                 )
+                if (entity.subtasks.isNotEmpty()) {
+                    SubtasksCountBox(
+                        count = entity.subtasksCount,
+                        completed = entity.subtasksCompletedCount,
+                    )
+                }
+            }
+            if (!entity.isCompleted) {
+                entity.subtasks.forEach { subtask ->
+                    TaskRow(
+                        text = subtask.content,
+                        checked = subtask.isCompleted,
+                        onChecked = { onCheckSubtask(subtask, it) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp)
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun TaskRow(
+    text: String,
+    checked: Boolean,
+    onChecked: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    bold: Boolean = false,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onChecked,
+            modifier = Modifier.align(Alignment.Top)
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.body1,
+            color = if (checked) Color.Gray else Color.Unspecified,
+            textDecoration = if (checked) TextDecoration.LineThrough else null,
+            fontWeight = if (bold) FontWeight.Medium else FontWeight.Normal,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun SubtasksCountBox(
+    count: Int,
+    completed: Int,
+    modifier: Modifier = Modifier,
+    bold: Boolean = false,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(8.dp, 2.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.app_notes_counter, completed, count),
+            style = MaterialTheme.typography.body1,
+        )
+        Icon(
+            imageVector = Icons.Rounded.KeyboardArrowDown,
+            contentDescription = null,
+            tint = MaterialTheme.colors.secondaryVariant,
+            modifier = Modifier
+                .padding(start = 12.dp)
+                .background(MaterialTheme.colors.secondary, CircleShape)
+        )
     }
 }
 
@@ -229,11 +306,12 @@ private fun TaskBox(
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            tasksList = getTasksListPreview(),
-            checkedTasksList = getTasksListPreview(),
+            tasksList = getTasksListPreview(false),
+            checkedTasksList = getTasksListPreview(true),
             checkedTasksCollapsed = false,
             onTaskClick = {},
             onTaskComplete = { _, _ -> },
+            onSubtaskComplete = { _, _ -> },
             onAddTaskClick = {},
             onCollapseTasksClick = {},
             onBackClick = {}

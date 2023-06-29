@@ -2,6 +2,7 @@ package com.emikhalets.notes.domain.repository
 
 import com.emikhalets.core.common.AppResult
 import com.emikhalets.notes.domain.entity.NoteEntity
+import com.emikhalets.notes.domain.entity.SubtaskEntity
 import com.emikhalets.notes.domain.entity.TaskEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -24,4 +25,10 @@ interface NotesRepository {
     suspend fun deleteTask(entity: TaskEntity): AppResult<Unit>
 
     fun getTasks(): AppResult<Flow<List<TaskEntity>>>
+
+    suspend fun insertSubtask(entity: SubtaskEntity): AppResult<Unit>
+
+    suspend fun updateSubtask(entity: SubtaskEntity): AppResult<Unit>
+
+    suspend fun deleteSubtask(entity: SubtaskEntity): AppResult<Unit>
 }
