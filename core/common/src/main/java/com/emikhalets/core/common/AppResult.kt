@@ -12,11 +12,11 @@ sealed class AppResult<out T> {
 
     companion object {
 
-        fun <T> success(data: T, code: Int = AppCode.SUCCESS): AppResult<T> {
+        fun <T> success(data: T, code: Int = AppCode.Success): AppResult<T> {
             return Success(code, data)
         }
 
-        fun <T> failure(message: UiString?, code: Int = AppCode.FAILURE): AppResult<T> {
+        fun <T> failure(message: UiString?, code: Int = AppCode.Failure): AppResult<T> {
             return Failure(code, message)
         }
     }

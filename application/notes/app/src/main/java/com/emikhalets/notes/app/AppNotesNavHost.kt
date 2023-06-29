@@ -1,63 +1,69 @@
 package com.emikhalets.notes.app
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Checklist
+import androidx.compose.material.icons.rounded.EditNote
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.emikhalets.core.common.AppCode
-import com.emikhalets.core.navigation.ARGS
-import com.emikhalets.core.navigation.AppScreen
+import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemScreen
 import com.emikhalets.notes.presentation.screens.notes.NotesListScreen
 import com.emikhalets.notes.presentation.screens.settings.NotesSettingsScreen
 import com.emikhalets.notes.presentation.screens.tasks.TasksListScreen
 
-private val bottomBarItems: List<AppScreen> = listOf(
-    AppNotesScreen.TasksList, AppNotesScreen.NotesList, AppNotesScreen.Settings
+private val bottomBarItems: List<AppBottomBarItem> = listOf(
+    object : AppBottomBarItem {
+        override val route: String = AppNotesDestination.Tasks
+        override val icon: ImageVector = Icons.Rounded.Checklist
+    },
+    object : AppBottomBarItem {
+        override val route: String = AppNotesDestination.Notes
+        override val icon: ImageVector = Icons.Rounded.EditNote
+    },
+    object : AppBottomBarItem {
+        override val route: String = AppNotesDestination.Settings
+        override val icon: ImageVector = Icons.Rounded.Settings
+    },
 )
 
 fun NavGraphBuilder.applicationNotes(
-    graphRoute: String,
     navController: NavHostController,
-    bottomBarList: (List<AppScreen>) -> Unit,
+    bottomBarList: (List<AppBottomBarItem>) -> Unit,
 ) {
-    navigation(AppNotesScreen.TasksList.route, graphRoute) {
-        composable(AppNotesScreen.TasksList.route) {
+    navigation(AppNotesDestination.Tasks, AppNotesDestination.NavGraph) {
+        composable(AppNotesDestination.Tasks) {
             bottomBarList(bottomBarItems)
             TasksListScreen(
                 navigateBack = { navController.popBackStack() },
                 viewModel = hiltViewModel()
             )
         }
-        composable(AppNotesScreen.NotesList.route) {
+        composable(AppNotesDestination.Notes) {
             NotesListScreen(
                 navigateToNote = { id ->
-                    navController.navigate("${AppNotesScreen.NoteItem.route}/$id")
+                    navController.navigate(AppNotesDestination.noteWithArgs(id))
                 },
-                navigateBack = {
-                    navController.popBackStack()
-                },
+                navigateBack = { navController.popBackStack() },
                 viewModel = hiltViewModel()
             )
         }
-        composable(
-            "${AppNotesScreen.NoteItem.route}/{${ARGS.NOTE_ID}}",
-            listOf(navArgument(ARGS.NOTE_ID) { type = NavType.LongType })
-        ) {
+        composable(AppNotesDestination.NoteWithArgs, AppNotesDestination.noteArgsList) {
             NoteItemScreen(
                 navigateBack = {
-                    navController.popBackStack(AppNotesScreen.NotesList.route, false)
+                    navController.popBackStack(AppNotesDestination.Notes, false)
                 },
                 viewModel = hiltViewModel(),
-                noteId = it.arguments?.getLong(ARGS.NOTE_ID) ?: AppCode.NO_ID
+                noteId = AppNotesDestination.getNoteArgsId(it)
             )
         }
-        composable(AppNotesScreen.Settings.route) {
+        composable(AppNotesDestination.Settings) {
             NotesSettingsScreen(
-                navigateBack = { navController.popBackStack() },
+                navigateBack = { navController.popBackStack() }
             )
         }
     }

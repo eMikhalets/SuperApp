@@ -16,10 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.core.navigation.AppScreen
+import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.core.ui.component.AppScaffold
-import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.core.ui.theme.Purple500
 import com.emikhalets.superapp.navigation.AppNavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,14 +51,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Application(navHostController: NavHostController, scaffoldState: ScaffoldState) {
-    val bottomBarList = remember { mutableStateListOf<com.emikhalets.core.navigation.AppScreen>() }
+    val bottomBarList = remember { mutableStateListOf<AppBottomBarItem>() }
 
     com.emikhalets.core.ui.theme.AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            com.emikhalets.core.ui.component.AppScaffold(
+            AppScaffold(
                 navHostController,
                 scaffoldState,
                 bottomBarList
