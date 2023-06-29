@@ -76,7 +76,11 @@ class TasksListViewModel @Inject constructor(
 
     private suspend fun setAllTasksState(flow: Flow<List<TaskEntity>>) {
         flow.collectLatest { list ->
-            val tasks = list.filter { !it.isCompleted }
+            val tasks = list
+                .filter { !it.isCompleted }
+                .map { entity ->
+                    entity.copy(subtasks = entity.subtasks.sortedBy { !it.isCompleted })
+                }
             val checked = list.filter { it.isCompleted }
             setState { it.copy(isLoading = false, tasksList = tasks, checkedList = checked) }
         }

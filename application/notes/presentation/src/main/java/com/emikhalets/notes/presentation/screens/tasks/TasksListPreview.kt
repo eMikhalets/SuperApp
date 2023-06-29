@@ -11,7 +11,10 @@ fun getTasksListPreview(completed: Boolean): List<TaskEntity> {
     )
     return listOf(
         TaskEntity("Task Content", subtasks = subtasks, isCompleted = completed),
-        TaskEntity("Task Content Task Content Task Content Task Content Task Content Task Content Task Content", isCompleted = completed),
+        TaskEntity(
+            "Task Content Task Content Task Content Task Content Task Content Task Content Task Content",
+            isCompleted = completed
+        ),
         TaskEntity("Task Content", isCompleted = completed),
         TaskEntity("Task Content", isCompleted = completed),
     )
