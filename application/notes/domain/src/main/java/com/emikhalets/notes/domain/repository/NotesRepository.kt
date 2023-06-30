@@ -28,6 +28,8 @@ interface NotesRepository {
 
     suspend fun insertSubtask(entity: SubtaskEntity): AppResult<Unit>
 
+    suspend fun insertSubtasks(entities: List<SubtaskEntity>): AppResult<Unit>
+
     suspend fun updateSubtask(entity: SubtaskEntity): AppResult<Unit>
 
     suspend fun deleteSubtask(entity: SubtaskEntity): AppResult<Unit>

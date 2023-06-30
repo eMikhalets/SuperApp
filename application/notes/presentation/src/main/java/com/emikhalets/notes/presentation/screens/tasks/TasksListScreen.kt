@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -127,8 +128,9 @@ private fun ScreenContent(
                             onCheckSubtask = onSubtaskComplete,
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .padding(8.dp, 4.dp)
+                                .clip(MaterialTheme.shapes.medium)
                                 .clickable { onTaskClick(entity) }
-                                .padding(8.dp, 4.dp),
                         )
                     }
                     if (checkedTasksList.isNotEmpty()) {
@@ -147,7 +149,6 @@ private fun ScreenContent(
                                     onCheckSubtask = onSubtaskComplete,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clickable { onTaskClick(entity) }
                                         .padding(8.dp, 4.dp),
                                 )
                             }
@@ -210,7 +211,7 @@ private fun TaskBox(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(8.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

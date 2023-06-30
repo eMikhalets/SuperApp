@@ -1,5 +1,6 @@
 package com.emikhalets.core.ui.component
 
+import android.view.KeyEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
@@ -16,10 +17,13 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.core.ui.theme.AppTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @NonRestartableComposable
 fun AppTextField(
@@ -42,7 +47,8 @@ fun AppTextField(
     singleLine: Boolean = true,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     keyboardType: KeyboardType = KeyboardType.Text,
-    onDoneClick: (KeyboardActionScope.() -> Unit)? = {},
+    onDoneClick: (KeyboardActionScope.() -> Unit)? = null,
+    onBackspaceEvent: () -> Unit = {},
     textColor: Color = MaterialTheme.colors.onSurface,
     fontSize: TextUnit = 16.sp,
 ) {
@@ -56,7 +62,15 @@ fun AppTextField(
                 .defaultMinSize(
                     minWidth = TextFieldDefaults.MinWidth,
                     minHeight = TextFieldDefaults.MinHeight
-                ),
+                )
+                .onKeyEvent {
+                    if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DEL) {
+                        onBackspaceEvent()
+                        true
+                    } else {
+                        false
+                    }
+                },
             enabled = true,
             readOnly = false,
             textStyle = LocalTextStyle.current.copy(fontSize = fontSize),

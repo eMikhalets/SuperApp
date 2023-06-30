@@ -43,7 +43,12 @@ class NotesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertTask(entity: TaskEntity): AppResult<Unit> {
-        return execute { tasksDao.insert(TasksMapper.mapEntityToDb(entity)) }
+        return execute {
+            val id = tasksDao.insert(TasksMapper.mapEntityToDb(entity))
+            entity.subtasks.forEach {
+                subtasksDao.insert(SubtasksMapper.mapEntityToDb(it.copy(taskId = id)))
+            }
+        }
     }
 
     override suspend fun updateTask(entity: TaskEntity): AppResult<Unit> {
@@ -59,11 +64,15 @@ class NotesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertSubtask(entity: SubtaskEntity): AppResult<Unit> {
-        return execute { subtasksDao.delete(SubtasksMapper.mapEntityToDb(entity)) }
+        return execute { subtasksDao.insert(SubtasksMapper.mapEntityToDb(entity)) }
+    }
+
+    override suspend fun insertSubtasks(entities: List<SubtaskEntity>): AppResult<Unit> {
+        return execute { subtasksDao.insert(SubtasksMapper.mapEntityListToDbList(entities)) }
     }
 
     override suspend fun updateSubtask(entity: SubtaskEntity): AppResult<Unit> {
-        return execute { subtasksDao.delete(SubtasksMapper.mapEntityToDb(entity)) }
+        return execute { subtasksDao.update(SubtasksMapper.mapEntityToDb(entity)) }
     }
 
     override suspend fun deleteSubtask(entity: SubtaskEntity): AppResult<Unit> {

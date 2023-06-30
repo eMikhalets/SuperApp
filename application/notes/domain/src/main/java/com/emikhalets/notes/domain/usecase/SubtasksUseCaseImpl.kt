@@ -13,6 +13,10 @@ class SubtasksUseCaseImpl @Inject constructor(
         return appRepo.insertSubtask(entity)
     }
 
+    override suspend fun insert(entities: List<SubtaskEntity>): AppResult<Unit> {
+        return appRepo.insertSubtasks(entities)
+    }
+
     override suspend fun update(entity: SubtaskEntity): AppResult<Unit> {
         return appRepo.updateSubtask(entity)
     }

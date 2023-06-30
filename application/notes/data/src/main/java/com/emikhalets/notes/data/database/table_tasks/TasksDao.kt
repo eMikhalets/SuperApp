@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface TasksDao {
 
     @Insert
-    suspend fun insert(entity: TaskDb)
+    suspend fun insert(entity: TaskDb): Long
 
     @Update
     suspend fun update(entity: TaskDb)

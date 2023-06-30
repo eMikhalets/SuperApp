@@ -65,12 +65,8 @@ class TasksListViewModel @Inject constructor(
     private fun updateSubtask(entity: SubtaskEntity?, complete: Boolean) {
         launchScope {
             entity ?: return@launchScope
-            val result = if (entity.id == 0L) {
-                subtasksUseCase.insert(entity.copy(isCompleted = complete))
-            } else {
-                subtasksUseCase.update(entity.copy(isCompleted = complete))
-            }
-            result.onFailure { code, message -> handleFailure(code, message) }
+            subtasksUseCase.update(entity.copy(isCompleted = complete))
+                .onFailure { code, message -> handleFailure(code, message) }
         }
     }
 
@@ -79,7 +75,7 @@ class TasksListViewModel @Inject constructor(
             val tasks = list
                 .filter { !it.isCompleted }
                 .map { entity ->
-                    entity.copy(subtasks = entity.subtasks.sortedBy { !it.isCompleted })
+                    entity.copy(subtasks = entity.subtasks.sortedBy { it.isCompleted })
                 }
             val checked = list.filter { it.isCompleted }
             setState { it.copy(isLoading = false, tasksList = tasks, checkedList = checked) }
