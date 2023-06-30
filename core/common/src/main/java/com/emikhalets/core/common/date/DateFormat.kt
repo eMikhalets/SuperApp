@@ -9,17 +9,9 @@ fun Long?.formatWithPattern(pattern: String): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(date)
 }
 
-fun Long?.formatFullDate(): String {
-    val date = this?.let { Date(it) } ?: Date().time
-    return SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(date)
-}
-
-fun Long?.formatMidDate(): String {
-    val date = this?.let { Date(it) } ?: Date().time
-    return SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(date)
-}
-
-fun Long?.formatShortDate(): String {
-    val date = this?.let { Date(it) } ?: Date().time
-    return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(date)
-}
+fun Long?.formatFullDate() = formatWithPattern("dd MMMM yyyy")
+fun Long?.formatFullWithWeekDate() = formatWithPattern("EEEE, dd MMMM yyyy")
+fun Long?.formatMidDate() = formatWithPattern("dd MMM yyyy")
+fun Long?.formatMidWithWeekDate() = formatWithPattern("EEE, dd MMM yyyy")
+fun Long?.formatShortDate() = formatWithPattern("dd/MM/yyyy")
+fun Long?.formatShortWithWeekDate() = formatWithPattern("EEE, dd/MM/yyyy")

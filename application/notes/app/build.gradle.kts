@@ -13,6 +13,7 @@ android {
 
     defaultConfig {
         minSdk = rootProject.extra["minSdk"] as Int
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -41,4 +42,9 @@ dependencies {
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
