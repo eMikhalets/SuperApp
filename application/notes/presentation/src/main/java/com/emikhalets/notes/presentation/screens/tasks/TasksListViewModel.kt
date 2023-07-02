@@ -1,5 +1,6 @@
 package com.emikhalets.notes.presentation.screens.tasks
 
+import com.emikhalets.core.common.logd
 import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
@@ -78,6 +79,7 @@ class TasksListViewModel @Inject constructor(
                     entity.copy(subtasks = entity.subtasks.sortedBy { it.isCompleted })
                 }
             val checked = list.filter { it.isCompleted }
+            logd(TAG, "Set tasks list = $tasks")
             setState { it.copy(isLoading = false, tasksList = tasks, checkedList = checked) }
         }
     }
@@ -85,5 +87,10 @@ class TasksListViewModel @Inject constructor(
     private fun handleFailure(code: Int, message: com.emikhalets.core.common.UiString?) {
         setState { it.copy(isLoading = false) }
         setEffect { Effect.Error(message) }
+    }
+
+    companion object {
+
+        private const val TAG = "TasksListVM"
     }
 }

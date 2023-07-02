@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -207,6 +208,9 @@ private fun TaskBox(
     onCheckSubtask: (SubtaskEntity, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // TODO: temp keep subtasks expanded value in composable
+    var expanded by remember { mutableStateOf(true) }
+
     Card(elevation = 0.dp, modifier = modifier) {
         Column(
             modifier = Modifier
@@ -229,10 +233,12 @@ private fun TaskBox(
                     SubtasksCountBox(
                         count = entity.subtasksCount,
                         completed = entity.subtasksCompletedCount,
+                        expanded = expanded,
+                        onClick = { expanded = !expanded }
                     )
                 }
             }
-            if (!entity.isCompleted) {
+            if (!entity.isCompleted && entity.subtasks.isNotEmpty() && expanded) {
                 entity.subtasks.forEach { subtask ->
                     TaskRow(
                         text = subtask.content,
@@ -280,19 +286,27 @@ private fun TaskRow(
 private fun SubtasksCountBox(
     count: Int,
     completed: Int,
+    expanded: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     bold: Boolean = false,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(8.dp, 2.dp)
+        modifier = Modifier
+            .padding(8.dp, 2.dp)
+            .clickable { onClick() }
     ) {
         Text(
             text = stringResource(R.string.app_notes_counter, completed, count),
             style = MaterialTheme.typography.body1,
         )
         Icon(
-            imageVector = Icons.Rounded.KeyboardArrowDown,
+            imageVector = if (expanded) {
+                Icons.Rounded.KeyboardArrowDown
+            } else {
+                Icons.Rounded.KeyboardArrowUp
+            },
             contentDescription = null,
             tint = MaterialTheme.colors.secondaryVariant,
             modifier = Modifier

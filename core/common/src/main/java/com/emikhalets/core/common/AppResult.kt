@@ -26,6 +26,7 @@ inline fun <R> execute(block: () -> R): AppResult<R> {
     return try {
         AppResult.success(block())
     } catch (e: Throwable) {
+        loge("Execute", e)
         AppResult.failure(UiString.create(e.message))
     }
 }

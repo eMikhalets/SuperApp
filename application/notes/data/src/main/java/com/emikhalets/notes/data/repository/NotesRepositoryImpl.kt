@@ -2,6 +2,7 @@ package com.emikhalets.notes.data.repository
 
 import com.emikhalets.core.common.AppResult
 import com.emikhalets.core.common.execute
+import com.emikhalets.core.common.logd
 import com.emikhalets.notes.data.database.table_notes.NotesDao
 import com.emikhalets.notes.data.database.table_subtasks.SubtasksDao
 import com.emikhalets.notes.data.database.table_tasks.TasksDao
@@ -52,7 +53,19 @@ class NotesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateTask(entity: TaskEntity): AppResult<Unit> {
-        return execute { tasksDao.update(TasksMapper.mapEntityToDb(entity)) }
+        return execute {
+            entity.subtasks.forEach {
+                if (it.id == 0L) {
+                    logd(TAG, "Inserting subtask = ${it.copy(taskId = entity.id)}")
+                    subtasksDao.insert(SubtasksMapper.mapEntityToDb(it))
+                } else {
+                    logd(TAG, "Updating subtask = $it")
+                    subtasksDao.update(SubtasksMapper.mapEntityToDb(it))
+                }
+            }
+            logd(TAG, "Updating task = $entity")
+            tasksDao.update(TasksMapper.mapEntityToDb(entity))
+        }
     }
 
     override suspend fun deleteTask(entity: TaskEntity): AppResult<Unit> {
@@ -77,5 +90,10 @@ class NotesRepositoryImpl @Inject constructor(
 
     override suspend fun deleteSubtask(entity: SubtaskEntity): AppResult<Unit> {
         return execute { subtasksDao.delete(SubtasksMapper.mapEntityToDb(entity)) }
+    }
+
+    companion object {
+
+        private const val TAG = "NotesRepository"
     }
 }

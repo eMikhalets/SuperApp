@@ -100,14 +100,6 @@ fun TaskDialog(
     }
 }
 
-private fun List<SubtaskEntity>.getContent(index: Int): String? {
-    return try {
-        this[index].content
-    } catch (e: IndexOutOfBoundsException) {
-        null
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun ScreenPreview() {

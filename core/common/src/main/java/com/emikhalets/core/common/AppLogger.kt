@@ -14,6 +14,10 @@ fun loge(tag: String, text: String?, throwable: Throwable? = null) {
     text?.let { AppLogger.loge(tag, text, throwable) }
 }
 
+fun loge(tag: String, throwable: Throwable? = null) {
+    AppLogger.loge(tag, throwable)
+}
+
 object AppLogger {
 
     private var isLogsEnabled: Boolean = false
@@ -32,5 +36,9 @@ object AppLogger {
 
     fun loge(tag: String, text: String, throwable: Throwable? = null) {
         if (isLogsEnabled) Log.e(tag, text, throwable)
+    }
+
+    fun loge(tag: String, throwable: Throwable? = null) {
+        if (isLogsEnabled) Log.e(tag, "", throwable)
     }
 }

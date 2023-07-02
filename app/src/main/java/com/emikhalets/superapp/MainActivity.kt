@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.emikhalets.core.common.AppLogger
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.core.ui.component.AppScaffold
 import com.emikhalets.superapp.navigation.AppNavHost
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppLogger.init()
 
         setContent {
             val navController = rememberNavController()
