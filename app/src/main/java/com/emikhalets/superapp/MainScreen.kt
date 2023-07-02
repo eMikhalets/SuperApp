@@ -27,14 +27,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.ApplicationItem
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.getAppIcon
+import com.emikhalets.core.ui.theme.AppTheme
 
+@NonRestartableComposable
 @Composable
 fun MainScreen(
     navigateToApp: (type: ApplicationItem) -> Unit,
     navigateToWidget: (Int) -> Unit,
     navigateToNewWidget: () -> Unit,
 ) {
+    logi("MainScreen", "Invoke")
     ScreenContent(
         onAppClick = navigateToApp,
         onWidgetClick = navigateToWidget,
@@ -48,6 +52,7 @@ private fun ScreenContent(
     onWidgetClick: (Int) -> Unit,
     onAddWidgetClick: () -> Unit,
 ) {
+    logi("MainScreen.Content", "Invoke")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,7 +71,11 @@ private fun ScreenContent(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Applications(onAppClick: (ApplicationItem) -> Unit) {
-    MenuHeader(stringResource(R.string.app_applications))
+    logi("MainScreen.Applications", "Invoke")
+    MenuHeader(
+        text = stringResource(R.string.app_applications),
+        modifier = Modifier.fillMaxWidth()
+    )
     FlowRow(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
@@ -87,7 +96,11 @@ private fun MenuWidgets(
     onWidgetClick: (Int) -> Unit,
     onAddWidgetClick: () -> Unit,
 ) {
-    MenuHeader(stringResource(R.string.app_menu_widgets))
+    logi("MainScreen.MenuWidgets", "Invoke")
+    MenuHeader(
+        text = stringResource(R.string.app_menu_widgets),
+        modifier = Modifier.fillMaxWidth()
+    )
     Icon(
         imageVector = Icons.Rounded.Add,
         contentDescription = null,
@@ -107,12 +120,12 @@ private fun MenuWidgets(
 @Composable
 @NonRestartableComposable
 private fun MenuHeader(text: String, modifier: Modifier = Modifier) {
+    logi("MainScreen.MenuHeader", "Invoke: text = $text")
     Text(
         text = text,
         style = MaterialTheme.typography.h5,
         fontWeight = FontWeight.SemiBold,
         modifier = modifier
-            .fillMaxWidth()
             .padding(top = 16.dp)
             .padding(16.dp, 8.dp)
     )
@@ -124,6 +137,7 @@ private fun MenuButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    logi("MainScreen.MenuButton", "Invoke: appType = ${stringResource(appType.appNameRes)}")
     Column(modifier = modifier.padding(12.dp)) {
         Icon(
             imageVector = appType.getAppIcon(),
@@ -153,7 +167,7 @@ private fun MenuButton(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    com.emikhalets.core.ui.theme.AppTheme {
+    AppTheme {
         ScreenContent(
             onAppClick = {},
             onWidgetClick = {},

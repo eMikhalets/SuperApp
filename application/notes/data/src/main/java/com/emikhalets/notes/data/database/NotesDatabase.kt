@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.emikhalets.core.common.logi
 import com.emikhalets.notes.data.database.table_notes.NoteDb
 import com.emikhalets.notes.data.database.table_notes.NotesDao
 import com.emikhalets.notes.data.database.table_subtasks.SubtaskDb
@@ -29,10 +30,13 @@ abstract class NotesDatabase : RoomDatabase() {
 
     companion object {
 
+        private const val TAG = "NotesDatabase"
+
         @Volatile
         private var instance: NotesDatabase? = null
 
         fun getInstance(context: Context): NotesDatabase {
+            logi(TAG, "getInstance()")
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also {
                     instance = it
@@ -41,6 +45,7 @@ abstract class NotesDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): NotesDatabase {
+            logi(TAG, "buildDatabase()")
             return Room
                 .databaseBuilder(context, NotesDatabase::class.java, "AppNotes.db")
                 .build()
