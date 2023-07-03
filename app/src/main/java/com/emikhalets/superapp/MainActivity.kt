@@ -61,9 +61,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// TODO: Application composable invokes infinity, cause - bottomBarList callback
 @Composable
-fun Application(navHostController: NavHostController, scaffoldState: ScaffoldState) {
+private fun Application(navHostController: NavHostController, scaffoldState: ScaffoldState) {
     val tag = "Application"
     logi(tag, "Invoke")
     val bottomBarList = remember { mutableStateListOf<AppBottomBarItem>() }
@@ -80,8 +79,7 @@ fun Application(navHostController: NavHostController, scaffoldState: ScaffoldSta
                 bottomBarList
             ) {
                 AppNavHost(navHostController) {
-                    // TODO: not sure about bottom bar items lists equals
-                    if (bottomBarList != it) {
+                    if (!bottomBarList.same(it)) {
                         bottomBarList.clear()
                         bottomBarList.addAll(it)
                     }
@@ -89,4 +87,8 @@ fun Application(navHostController: NavHostController, scaffoldState: ScaffoldSta
             }
         }
     }
+}
+
+private fun List<AppBottomBarItem>.same(list: List<AppBottomBarItem>): Boolean {
+    return this.containsAll(list) && list.containsAll(this)
 }

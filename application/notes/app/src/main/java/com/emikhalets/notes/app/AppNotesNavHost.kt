@@ -40,6 +40,7 @@ fun NavGraphBuilder.applicationNotes(
 ) {
     navigation(AppNotesDestination.Tasks, AppNotesDestination.NavGraph) {
         composable(AppNotesDestination.Tasks) {
+            logi(TAG, "Composable TasksListScreen")
             bottomBarList(bottomBarItems)
             TasksListScreen(
                 navigateBack = {
@@ -50,6 +51,7 @@ fun NavGraphBuilder.applicationNotes(
             )
         }
         composable(AppNotesDestination.Notes) {
+            logi(TAG, "Composable NotesListScreen")
             NotesListScreen(
                 navigateToNote = { id ->
                     logi(TAG, "Navigate to note: id = $id")
@@ -63,6 +65,7 @@ fun NavGraphBuilder.applicationNotes(
             )
         }
         composable(AppNotesDestination.NoteWithArgs, AppNotesDestination.noteArgsList) {
+            logi(TAG, "Composable NoteItemScreen")
             NoteItemScreen(
                 navigateBack = {
                     logi(TAG, "Navigate back to notes list")
@@ -73,6 +76,7 @@ fun NavGraphBuilder.applicationNotes(
             )
         }
         composable(AppNotesDestination.Settings) {
+            logi(TAG, "Composable SettingsScreen")
             SettingsScreen(
                 navigateBack = {
                     logi(TAG, "Navigate back")

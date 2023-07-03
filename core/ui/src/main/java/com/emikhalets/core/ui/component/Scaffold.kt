@@ -27,7 +27,7 @@ fun AppScaffold(
     Scaffold(
         scaffoldState = scaffoldState,
         backgroundColor = MaterialTheme.colors.background,
-        bottomBar = { if (bottomBarList.isNotEmpty()) AppBottomBar(navController, bottomBarList) }
+//        bottomBar = { if (bottomBarList.isNotEmpty()) AppBottomBar(navController, bottomBarList) }
     ) {
         Box(modifier = Modifier.padding(it)) {
             content()
