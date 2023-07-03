@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
@@ -6,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.navigation"
+    namespace = "com.emikhalets.core.navigation"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -19,6 +21,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 

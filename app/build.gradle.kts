@@ -49,13 +49,14 @@ android {
             isMinifyEnabled = true
             isShrinkResources = false
             applicationIdSuffix = ".debug"
+            versionNameSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
-        val release by getting {
+        release {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
@@ -88,14 +89,9 @@ android {
 
 dependencies {
 
-//    implementation(project(":application:events:app"))
-//    implementation(project(":application:finances:app"))
-//    implementation(project(":application:fitness:app"))
-//    implementation(project(":application:medialib:app"))
-    implementation(project(":application:notes"))
+    implementation(project(":application:notes:app"))
 
     implementation(project(":core:common"))
-    implementation(project(":core:database"))
     implementation(project(":core:navigation"))
     implementation(project(":core:ui"))
 

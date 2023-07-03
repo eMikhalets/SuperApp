@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
@@ -6,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.database"
+    namespace = "com.emikhalets.core.database"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -29,10 +31,10 @@ android {
 
 dependencies {
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
-
     api(libs.androidx.room.runtime)
     api(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
+
+    implementation(libs.google.hilt.android)
+    kapt(libs.google.hilt.compiler)
 }

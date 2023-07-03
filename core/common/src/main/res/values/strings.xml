@@ -1,5 +1,19 @@
 <resources>
+    <string name="app_name">SuperApp</string>
+    <string name="app_ok">OK</string>
+    <string name="app_save">Save</string>
+    <string name="app_delete">Delete</string>
+    <string name="app_cancel">Cancel</string>
 
-    <!--  Error messages  -->
+    <string name="application_events">Events</string>
+    <string name="application_finances">Finances</string>
+    <string name="application_fitness">Fitness</string>
+    <string name="application_medialib">MediaLib</string>
+    <string name="application_tasks">Tasks</string>
+    <string name="application_notes">Notes</string>
+
     <string name="error_internal">Internal error</string>
+
+    <string name="app_dialog_delete_title">Deleting</string>
+    <string name="app_dialog_delete_message">Delete this item?</string>
 </resources>

@@ -23,28 +23,14 @@ dependencyResolutionManagement {
 rootProject.name = "SuperApp"
 include(":app")
 
-//include(":application:events:app")
-//include(":application:events:data")
-//include(":application:events:domain")
-//include(":application:events:presentation")
-//
-//include(":application:finances:app")
-//include(":application:finances:data")
-//include(":application:finances:domain")
-//include(":application:finances:presentation")
-//
-//include(":application:fitness:app")
-//include(":application:fitness:data")
-//include(":application:fitness:domain")
-//include(":application:fitness:presentation")
-//
-//include(":application:medialib:app")
-//include(":application:medialib:data")
-//include(":application:medialib:domain")
-//include(":application:medialib:presentation")
-include(":application:notes")
+include(":application:notes:app")
+include(":application:notes:data")
+include(":application:notes:domain")
+include(":application:notes:presentation")
 
 include(":core:common")
 include(":core:database")
+include(":core:di")
 include(":core:navigation")
+include(":core:network")
 include(":core:ui")
