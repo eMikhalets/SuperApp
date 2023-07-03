@@ -11,22 +11,22 @@ class SubtasksUseCaseImpl @Inject constructor(
 ) : SubtasksUseCase {
 
     override suspend fun insert(entity: SubtaskEntity): AppResult<Unit> {
-        logi(TAG, "insert(): entity = $entity")
+        logi(TAG, "Insert: entity = $entity")
         return appRepo.insertSubtask(entity)
     }
 
     override suspend fun insert(entities: List<SubtaskEntity>): AppResult<Unit> {
-        logi(TAG, "insert(): size = ${entities.count()}")
+        logi(TAG, "Insert: size = ${entities.count()}")
         return appRepo.insertSubtasks(entities)
     }
 
     override suspend fun update(entity: SubtaskEntity): AppResult<Unit> {
-        logi(TAG, "update(): entity = $entity")
+        logi(TAG, "Update: entity = $entity")
         return appRepo.updateSubtask(entity)
     }
 
     override suspend fun delete(entity: SubtaskEntity): AppResult<Unit> {
-        logi(TAG, "delete(): entity = $entity")
+        logi(TAG, "Delete: entity = $entity")
         return appRepo.deleteSubtask(entity)
     }
 

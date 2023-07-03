@@ -36,7 +36,7 @@ abstract class NotesDatabase : RoomDatabase() {
         private var instance: NotesDatabase? = null
 
         fun getInstance(context: Context): NotesDatabase {
-            logi(TAG, "getInstance()")
+            logi(TAG, "Get instance")
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also {
                     instance = it
@@ -45,7 +45,7 @@ abstract class NotesDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): NotesDatabase {
-            logi(TAG, "buildDatabase()")
+            logi(TAG, "Building database")
             return Room
                 .databaseBuilder(context, NotesDatabase::class.java, "AppNotes.db")
                 .build()

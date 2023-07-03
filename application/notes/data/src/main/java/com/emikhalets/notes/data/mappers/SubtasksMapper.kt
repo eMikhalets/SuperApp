@@ -9,8 +9,8 @@ object SubtasksMapper {
     private const val TAG = "SubtasksMapper"
 
     fun mapDbToEntity(entity: SubtaskDb): SubtaskEntity {
-        logi(TAG, "mapDbToEntity(): entity = $entity")
-        return SubtaskEntity(
+        logi(TAG, "Db To Entity: entity = $entity")
+        val result = SubtaskEntity(
             id = entity.id,
             taskId = entity.taskId,
             content = entity.content,
@@ -18,16 +18,17 @@ object SubtasksMapper {
             createTimestamp = entity.createTimestamp,
             updateTimestamp = entity.updateTimestamp,
         )
+        logi(TAG, "Result = $result")
+        return result
     }
 
     fun mapDbListToEntityList(list: List<SubtaskDb>): List<SubtaskEntity> {
-        logi(TAG, "mapDbListToEntityList(): size = ${list.count()}")
         return list.map { mapDbToEntity(it) }
     }
 
     fun mapEntityToDb(entity: SubtaskEntity): SubtaskDb {
-        logi(TAG, "mapEntityToDb(): entity = $entity")
-        return SubtaskDb(
+        logi(TAG, "Entity To Db: entity = $entity")
+        val result = SubtaskDb(
             id = entity.id,
             taskId = entity.taskId,
             content = entity.content,
@@ -35,10 +36,11 @@ object SubtasksMapper {
             createTimestamp = entity.createTimestamp,
             updateTimestamp = entity.updateTimestamp,
         )
+        logi(TAG, "Result = $result")
+        return result
     }
 
     fun mapEntityListToDbList(list: List<SubtaskEntity>): List<SubtaskDb> {
-        logi(TAG, "mapDbListToEntityList(): size = ${list.count()}")
         return list.map { mapEntityToDb(it) }
     }
 }

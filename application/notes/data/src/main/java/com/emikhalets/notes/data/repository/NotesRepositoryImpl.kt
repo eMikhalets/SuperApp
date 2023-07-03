@@ -25,47 +25,51 @@ class NotesRepositoryImpl @Inject constructor(
 ) : NotesRepository {
 
     override suspend fun insertNote(entity: NoteEntity): AppResult<Unit> {
-        logi(TAG, "insertNote(): entity = $entity")
+        logi(TAG, "Insert note: entity = $entity")
         return execute { notesDao.insert(NotesMapper.mapEntityToDb(entity)) }
     }
 
     override suspend fun updateNote(entity: NoteEntity): AppResult<Unit> {
-        logi(TAG, "updateNote(): entity = $entity")
+        logi(TAG, "Update note: entity = $entity")
         return execute { notesDao.update(NotesMapper.mapEntityToDb(entity)) }
     }
 
     override suspend fun deleteNote(entity: NoteEntity): AppResult<Unit> {
-        logi(TAG, "deleteNote(): entity = $entity")
+        logi(TAG, "Delete note: entity = $entity")
         return execute { notesDao.delete(NotesMapper.mapEntityToDb(entity)) }
     }
 
     override fun getNotes(): AppResult<Flow<List<NoteEntity>>> {
-        logi(TAG, "getNotes()")
+        logi(TAG, "Get all notes")
         return execute { notesDao.getAllFlow().map { NotesMapper.mapDbListToEntityList(it) } }
     }
 
     override suspend fun getNote(id: Long): AppResult<NoteEntity> {
-        logi(TAG, "getNote(): id = $id")
+        logi(TAG, "Get note: id = $id")
         return execute { NotesMapper.mapDbToEntity(notesDao.getItemById(id)) }
     }
 
     override suspend fun insertTask(entity: TaskEntity): AppResult<Unit> {
-        logi(TAG, "insertTask(): entity = $entity")
+        logi(TAG, "Insert task: entity = $entity")
         return execute {
+            logd(TAG, "Inserting task = $entity")
             val id = tasksDao.insert(TasksMapper.mapEntityToDb(entity))
             entity.subtasks.forEach {
-                subtasksDao.insert(SubtasksMapper.mapEntityToDb(it.copy(taskId = id)))
+                val subtask = it.copy(taskId = id)
+                logd(TAG, "Inserting subtask = $subtask")
+                subtasksDao.insert(SubtasksMapper.mapEntityToDb(subtask))
             }
         }
     }
 
     override suspend fun updateTask(entity: TaskEntity): AppResult<Unit> {
-        logi(TAG, "updateTask(): entity = $entity")
+        logi(TAG, "Update task: entity = $entity")
         return execute {
             entity.subtasks.forEach {
                 if (it.id == 0L) {
-                    logd(TAG, "Inserting subtask = ${it.copy(taskId = entity.id)}")
-                    subtasksDao.insert(SubtasksMapper.mapEntityToDb(it))
+                    val subtask = it.copy(taskId = entity.id)
+                    logd(TAG, "Inserting subtask = $subtask")
+                    subtasksDao.insert(SubtasksMapper.mapEntityToDb(subtask))
                 } else {
                     logd(TAG, "Updating subtask = $it")
                     subtasksDao.update(SubtasksMapper.mapEntityToDb(it))
@@ -77,32 +81,32 @@ class NotesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteTask(entity: TaskEntity): AppResult<Unit> {
-        logi(TAG, "deleteTask(): entity = $entity")
+        logi(TAG, "Delete task: entity = $entity")
         return execute { tasksDao.delete(TasksMapper.mapEntityToDb(entity)) }
     }
 
     override fun getTasks(): AppResult<Flow<List<TaskEntity>>> {
-        logi(TAG, "getTasks()")
+        logi(TAG, "Get all tasks")
         return execute { tasksDao.getAllFlow().map { TasksMapper.mapDbListToEntityList(it) } }
     }
 
     override suspend fun insertSubtask(entity: SubtaskEntity): AppResult<Unit> {
-        logi(TAG, "insertSubtask(): entity = $entity")
+        logi(TAG, "Insert subtask: entity = $entity")
         return execute { subtasksDao.insert(SubtasksMapper.mapEntityToDb(entity)) }
     }
 
     override suspend fun insertSubtasks(entities: List<SubtaskEntity>): AppResult<Unit> {
-        logi(TAG, "insertSubtasks(): size = ${entities.count()}")
+        logi(TAG, "Insert subtasks: size = ${entities.count()}")
         return execute { subtasksDao.insert(SubtasksMapper.mapEntityListToDbList(entities)) }
     }
 
     override suspend fun updateSubtask(entity: SubtaskEntity): AppResult<Unit> {
-        logi(TAG, "updateSubtask(): entity = $entity")
+        logi(TAG, "Update subtask: entity = $entity")
         return execute { subtasksDao.update(SubtasksMapper.mapEntityToDb(entity)) }
     }
 
     override suspend fun deleteSubtask(entity: SubtaskEntity): AppResult<Unit> {
-        logi(TAG, "deleteSubtask(): entity = $entity")
+        logi(TAG, "Delete subtask: entity = $entity")
         return execute { subtasksDao.delete(SubtasksMapper.mapEntityToDb(entity)) }
     }
 

@@ -10,11 +10,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemScreen
 import com.emikhalets.notes.presentation.screens.notes.NotesListScreen
 import com.emikhalets.notes.presentation.screens.settings.SettingsScreen
 import com.emikhalets.notes.presentation.screens.tasks.TasksListScreen
+
+private const val TAG = "AppNotesGraph"
 
 private val bottomBarItems: List<AppBottomBarItem> = listOf(
     object : AppBottomBarItem {
@@ -39,22 +42,30 @@ fun NavGraphBuilder.applicationNotes(
         composable(AppNotesDestination.Tasks) {
             bottomBarList(bottomBarItems)
             TasksListScreen(
-                navigateBack = { navController.popBackStack() },
+                navigateBack = {
+                    logi(TAG, "Navigate back")
+                    navController.popBackStack()
+                },
                 viewModel = hiltViewModel()
             )
         }
         composable(AppNotesDestination.Notes) {
             NotesListScreen(
                 navigateToNote = { id ->
+                    logi(TAG, "Navigate to note: id = $id")
                     navController.navigate(AppNotesDestination.noteWithArgs(id))
                 },
-                navigateBack = { navController.popBackStack() },
+                navigateBack = {
+                    logi(TAG, "Navigate back")
+                    navController.popBackStack()
+                },
                 viewModel = hiltViewModel()
             )
         }
         composable(AppNotesDestination.NoteWithArgs, AppNotesDestination.noteArgsList) {
             NoteItemScreen(
                 navigateBack = {
+                    logi(TAG, "Navigate back to notes list")
                     navController.popBackStack(AppNotesDestination.Notes, false)
                 },
                 viewModel = hiltViewModel(),
@@ -63,7 +74,10 @@ fun NavGraphBuilder.applicationNotes(
         }
         composable(AppNotesDestination.Settings) {
             SettingsScreen(
-                navigateBack = { navController.popBackStack() }
+                navigateBack = {
+                    logi(TAG, "Navigate back")
+                    navController.popBackStack()
+                }
             )
         }
     }

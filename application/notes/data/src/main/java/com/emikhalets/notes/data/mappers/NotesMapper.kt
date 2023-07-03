@@ -9,34 +9,36 @@ object NotesMapper {
     private const val TAG = "NotesMapper"
 
     fun mapDbToEntity(entity: NoteDb): NoteEntity {
-        logi(TAG, "mapDbToEntity(): entity = $entity")
-        return NoteEntity(
+        logi(TAG, "Db To Entity: entity = $entity")
+        val result = NoteEntity(
             id = entity.id,
             title = entity.title,
             content = entity.content,
             createTimestamp = entity.createTimestamp,
             updateTimestamp = entity.updateTimestamp,
         )
+        logi(TAG, "Result = $result")
+        return result
     }
 
     fun mapDbListToEntityList(list: List<NoteDb>): List<NoteEntity> {
-        logi(TAG, "mapDbListToEntityList(): size = ${list.count()}")
         return list.map { mapDbToEntity(it) }
     }
 
     fun mapEntityToDb(entity: NoteEntity): NoteDb {
-        logi(TAG, "mapEntityToDb(): entity = $entity")
-        return NoteDb(
+        logi(TAG, "Entity To Db: entity = $entity")
+        val result = NoteDb(
             id = entity.id,
             title = entity.title,
             content = entity.content,
             createTimestamp = entity.createTimestamp,
             updateTimestamp = entity.updateTimestamp,
         )
+        logi(TAG, "Result = $result")
+        return result
     }
 
     fun mapEntityListToDbList(list: List<NoteEntity>): List<NoteDb> {
-        logi(TAG, "mapEntityListToDbList(): size = ${list.count()}")
         return list.map { mapEntityToDb(it) }
     }
 }
