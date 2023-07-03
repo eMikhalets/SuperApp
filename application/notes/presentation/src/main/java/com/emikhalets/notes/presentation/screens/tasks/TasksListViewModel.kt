@@ -1,5 +1,6 @@
 package com.emikhalets.notes.presentation.screens.tasks
 
+import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
 import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
@@ -26,6 +27,7 @@ class TasksListViewModel @Inject constructor(
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
+        logd(TAG, "User event: $action")
         when (action) {
             Action.GetTask -> getTasks()
             is Action.DeleteTask -> deleteTask(action.task)
@@ -36,6 +38,7 @@ class TasksListViewModel @Inject constructor(
     }
 
     private fun getTasks() {
+        logd(TAG, "Get tasks")
         launchScope {
             tasksUseCase.getAllFlow()
                 .onSuccess { flow -> setAllTasksState(flow) }
@@ -44,6 +47,7 @@ class TasksListViewModel @Inject constructor(
     }
 
     private fun deleteTask(entity: TaskEntity?) {
+        logd(TAG, "Delete task: entity = $entity")
         entity ?: return
         launchScope {
             tasksUseCase.delete(entity)
@@ -52,6 +56,7 @@ class TasksListViewModel @Inject constructor(
     }
 
     private fun updateTask(entity: TaskEntity?, complete: Boolean) {
+        logd(TAG, "Update task: entity = $entity, complete = $complete")
         launchScope {
             entity ?: return@launchScope
             val result = if (entity.id == 0L) {
@@ -64,6 +69,7 @@ class TasksListViewModel @Inject constructor(
     }
 
     private fun updateSubtask(entity: SubtaskEntity?, complete: Boolean) {
+        logd(TAG, "Update subtask: entity = $entity, complete = $complete")
         launchScope {
             entity ?: return@launchScope
             subtasksUseCase.update(entity.copy(isCompleted = complete))
@@ -79,12 +85,13 @@ class TasksListViewModel @Inject constructor(
                     entity.copy(subtasks = entity.subtasks.sortedBy { it.isCompleted })
                 }
             val checked = list.filter { it.isCompleted }
-            logd(TAG, "Set tasks list = $tasks")
+            logd(TAG, "Collecting tasks:\nlist = $tasks\ncompleted = $checked")
             setState { it.copy(isLoading = false, tasksList = tasks, checkedList = checked) }
         }
     }
 
-    private fun handleFailure(code: Int, message: com.emikhalets.core.common.UiString?) {
+    private fun handleFailure(code: Int, message: UiString?) {
+        logd(TAG, "Handling error: code = $code")
         setState { it.copy(isLoading = false) }
         setEffect { Effect.Error(message) }
     }

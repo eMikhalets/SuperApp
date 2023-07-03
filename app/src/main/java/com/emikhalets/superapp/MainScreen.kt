@@ -31,6 +31,8 @@ import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.getAppIcon
 import com.emikhalets.core.ui.theme.AppTheme
 
+private const val TAG = "Main"
+
 @NonRestartableComposable
 @Composable
 fun MainScreen(
@@ -38,7 +40,7 @@ fun MainScreen(
     navigateToWidget: (Int) -> Unit,
     navigateToNewWidget: () -> Unit,
 ) {
-    logi("MainScreen", "Invoke")
+    logi(TAG, "Invoke")
     ScreenContent(
         onAppClick = navigateToApp,
         onWidgetClick = navigateToWidget,
@@ -52,7 +54,7 @@ private fun ScreenContent(
     onWidgetClick: (Int) -> Unit,
     onAddWidgetClick: () -> Unit,
 ) {
-    logi("MainScreen.Content", "Invoke")
+    logi("$TAG.Content", "Invoke")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +73,7 @@ private fun ScreenContent(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Applications(onAppClick: (ApplicationItem) -> Unit) {
-    logi("MainScreen.Applications", "Invoke")
+    logi("$TAG.Applications", "Invoke")
     MenuHeader(
         text = stringResource(R.string.app_applications),
         modifier = Modifier.fillMaxWidth()
@@ -96,7 +98,7 @@ private fun MenuWidgets(
     onWidgetClick: (Int) -> Unit,
     onAddWidgetClick: () -> Unit,
 ) {
-    logi("MainScreen.MenuWidgets", "Invoke")
+    logi("$TAG.MenuWidgets", "Invoke")
     MenuHeader(
         text = stringResource(R.string.app_menu_widgets),
         modifier = Modifier.fillMaxWidth()
@@ -120,7 +122,7 @@ private fun MenuWidgets(
 @Composable
 @NonRestartableComposable
 private fun MenuHeader(text: String, modifier: Modifier = Modifier) {
-    logi("MainScreen.MenuHeader", "Invoke: text = $text")
+    logi("$TAG.MenuHeader", "Invoke: text = $text")
     Text(
         text = text,
         style = MaterialTheme.typography.h5,
@@ -137,7 +139,7 @@ private fun MenuButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    logi("MainScreen.MenuButton", "Invoke: appType = ${stringResource(appType.appNameRes)}")
+    logi("$TAG.MenuButton", "Invoke: appType = ${stringResource(appType.appNameRes)}")
     Column(modifier = modifier.padding(12.dp)) {
         Icon(
             imageVector = appType.getAppIcon(),

@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        logi(TAG, "onCreate()")
+        logi(TAG, "Created")
         AppLogger.init()
 
         setContent {

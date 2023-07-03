@@ -12,27 +12,27 @@ class NotesUseCaseImpl @Inject constructor(
 ) : NotesUseCase {
 
     override suspend fun insert(entity: NoteEntity): AppResult<Unit> {
-        logi(TAG, "insert(): entity = $entity")
+        logi(TAG, "Insert: entity = $entity")
         return appRepo.insertNote(entity)
     }
 
     override suspend fun update(entity: NoteEntity): AppResult<Unit> {
-        logi(TAG, "update(): entity = $entity")
+        logi(TAG, "Update: entity = $entity")
         return appRepo.updateNote(entity)
     }
 
     override suspend fun delete(entity: NoteEntity): AppResult<Unit> {
-        logi(TAG, "delete(): entity = $entity")
+        logi(TAG, "Delete: entity = $entity")
         return appRepo.deleteNote(entity)
     }
 
     override fun getAllFlow(): AppResult<Flow<List<NoteEntity>>> {
-        logi(TAG, "getAllFlow()")
+        logi(TAG, "Get all notes")
         return appRepo.getNotes()
     }
 
     override suspend fun getItem(id: Long): AppResult<NoteEntity> {
-        logi(TAG, "getItem(): id = $id")
+        logi(TAG, "Get note: id = $id")
         return appRepo.getNote(id)
     }
 

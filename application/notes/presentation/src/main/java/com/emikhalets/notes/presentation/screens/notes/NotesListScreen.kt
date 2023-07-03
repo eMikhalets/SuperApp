@@ -27,8 +27,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.AppCode
-import com.emikhalets.core.common.ApplicationItem
-import com.emikhalets.core.common.date.formatWithPattern
+import com.emikhalets.core.common.ApplicationItem.Notes.appNameRes
+import com.emikhalets.core.common.date.formatShortWithWeekDate
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.dialog.AppDialogDelete
@@ -38,12 +39,15 @@ import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
 
+private const val TAG = "NotesList"
+
 @Composable
 fun NotesListScreen(
     navigateToNote: (id: Long?) -> Unit,
     navigateBack: () -> Unit,
     viewModel: NotesListViewModel,
 ) {
+    logi(TAG, "Invoke")
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
 
@@ -60,10 +64,14 @@ fun NotesListScreen(
     )
 
     when (effect) {
-        is Effect.Error -> AppDialogMessage((effect as Effect.Error).message)
+        is Effect.Error -> {
+            logi(TAG, "Set effect: error")
+            AppDialogMessage((effect as Effect.Error).message)
+        }
 
 
         is Effect.DeleteNoteDialog -> {
+            logi(TAG, "Set effect: delete task")
             AppDialogDelete(
                 entity = (effect as Effect.DeleteNoteDialog).entity,
                 onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) }
@@ -71,6 +79,7 @@ fun NotesListScreen(
         }
 
         is Effect.NavigateToNewNote -> {
+            logi(TAG, "Set effect: nav to new note")
             navigateToNote((effect as Effect.NavigateToNewNote).id)
         }
 
@@ -86,7 +95,8 @@ private fun ScreenContent(
     onAddNoteClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(onBackClick, stringResource(ApplicationItem.Notes.appNameRes)) {
+    logi("${TAG}.ScreenContent", "Invoke: list = $notesList")
+    AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         Box(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -119,6 +129,7 @@ private fun ScreenContent(
 
 @Composable
 private fun NoteBox(entity: NoteEntity, modifier: Modifier = Modifier) {
+    logi("${TAG}.NoteBox", "Invoke: entity = $entity")
     Card(
         elevation = 0.dp,
         modifier = modifier
@@ -145,7 +156,7 @@ private fun NoteBox(entity: NoteEntity, modifier: Modifier = Modifier) {
                     .weight(1f)
             )
             Text(
-                text = entity.updateTimestamp.formatWithPattern("EEE, dd/MM/yyyy"),
+                text = entity.updateTimestamp.formatShortWithWeekDate(),
                 style = MaterialTheme.typography.caption,
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier

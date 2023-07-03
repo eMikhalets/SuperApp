@@ -13,7 +13,7 @@ import androidx.navigation.navigation
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemScreen
 import com.emikhalets.notes.presentation.screens.notes.NotesListScreen
-import com.emikhalets.notes.presentation.screens.settings.NotesSettingsScreen
+import com.emikhalets.notes.presentation.screens.settings.SettingsScreen
 import com.emikhalets.notes.presentation.screens.tasks.TasksListScreen
 
 private val bottomBarItems: List<AppBottomBarItem> = listOf(
@@ -62,7 +62,7 @@ fun NavGraphBuilder.applicationNotes(
             )
         }
         composable(AppNotesDestination.Settings) {
-            NotesSettingsScreen(
+            SettingsScreen(
                 navigateBack = { navController.popBackStack() }
             )
         }

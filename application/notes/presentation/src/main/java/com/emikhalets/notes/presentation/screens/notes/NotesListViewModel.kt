@@ -1,5 +1,7 @@
 package com.emikhalets.notes.presentation.screens.notes
 
+import com.emikhalets.core.common.UiString
+import com.emikhalets.core.common.logd
 import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
@@ -22,6 +24,7 @@ class NotesListViewModel @Inject constructor(
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
+        logd(TAG, "User event: $action")
         when (action) {
             Action.GetNotes -> getNotes()
             is Action.DeleteNote -> deleteNote(action.note)
@@ -30,6 +33,7 @@ class NotesListViewModel @Inject constructor(
     }
 
     private fun getNotes() {
+        logd(TAG, "Get notes")
         launchScope {
             notesUseCase.getAllFlow()
                 .onSuccess { flow -> setAllNotesState(flow) }
@@ -38,6 +42,7 @@ class NotesListViewModel @Inject constructor(
     }
 
     private fun deleteNote(entity: NoteEntity?) {
+        logd(TAG, "Delete note: entity = $entity")
         entity ?: return
         launchScope {
             notesUseCase.delete(entity)
@@ -47,12 +52,19 @@ class NotesListViewModel @Inject constructor(
 
     private suspend fun setAllNotesState(flow: Flow<List<NoteEntity>>) {
         flow.collectLatest { list ->
+            logd(TAG, "Collecting notes: list = $list")
             setState { it.copy(isLoading = false, notesList = list) }
         }
     }
 
-    private fun handleFailure(code: Int, message: com.emikhalets.core.common.UiString?) {
+    private fun handleFailure(code: Int, message: UiString?) {
+        logd(TAG, "Handle error: code = $code")
         setState { it.copy(isLoading = false) }
         setEffect { Effect.Error(message) }
+    }
+
+    companion object {
+
+        private const val TAG = "NotesListVM"
     }
 }

@@ -1,5 +1,7 @@
 package com.emikhalets.notes.presentation.screens.note_item
 
+import com.emikhalets.core.common.UiString
+import com.emikhalets.core.common.logd
 import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
@@ -21,6 +23,7 @@ class NoteItemViewModel @Inject constructor(
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
+        logd(TAG, "User event: $action")
         when (action) {
             Action.DeleteNote -> deleteNote()
             Action.DeleteNoteDialog -> setEffect { Effect.DeleteNoteDialog }
@@ -30,6 +33,7 @@ class NoteItemViewModel @Inject constructor(
     }
 
     private fun getNote(id: Long) {
+        logd(TAG, "Get note: id = $id")
         if (id <= 0) return
         launchScope {
             notesUseCase.getItem(id)
@@ -39,6 +43,7 @@ class NoteItemViewModel @Inject constructor(
     }
 
     private fun updateNote(entity: NoteEntity?) {
+        logd(TAG, "Update note: entity = $entity")
         entity ?: return
         launchScope {
             if (entity.id == 0L) {
@@ -54,6 +59,7 @@ class NoteItemViewModel @Inject constructor(
 
     private fun deleteNote() {
         val entity = currentState.noteEntity
+        logd(TAG, "Delete note: entity = $entity")
         entity ?: return
         launchScope {
             notesUseCase.delete(entity)
@@ -63,11 +69,18 @@ class NoteItemViewModel @Inject constructor(
     }
 
     private fun setNoteState(item: NoteEntity) {
+        logd(TAG, "Set note state: entity = $item")
         setState { it.copy(isLoading = false, noteEntity = item) }
     }
 
-    private fun handleFailure(code: Int, message: com.emikhalets.core.common.UiString?) {
+    private fun handleFailure(code: Int, message: UiString?) {
+        logd(TAG, "Handle error: code = $code")
         setState { it.copy(isLoading = false) }
         setEffect { Effect.Error(message) }
+    }
+
+    companion object {
+
+        private const val TAG = "NoteItemVM"
     }
 }

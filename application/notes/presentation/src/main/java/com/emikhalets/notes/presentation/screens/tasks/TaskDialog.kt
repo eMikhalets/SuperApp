@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.component.AppTextButton
 import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.dialog.AppDialog
@@ -31,12 +32,15 @@ import com.emikhalets.notes.domain.entity.TaskEntity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+private const val TAG = "TaskDialog"
+
 @Composable
 fun TaskDialog(
     task: TaskEntity,
     onDismiss: () -> Unit,
     onDoneClick: (TaskEntity) -> Unit,
 ) {
+    logi(TAG, "Invoke: task = $task")
     val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
     var taskContent by remember { mutableStateOf(task.content) }

@@ -9,7 +9,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        logi(TAG, "onCreate()")
+        logi(TAG, "Created")
     }
 
     companion object {

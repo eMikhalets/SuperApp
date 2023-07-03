@@ -23,16 +23,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.core.common.ApplicationItem
-import com.emikhalets.core.common.date.formatWithPattern
+import com.emikhalets.core.common.ApplicationItem.Notes.appNameRes
+import com.emikhalets.core.common.date.formatFullWithWeekDate
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.component.AppButton
 import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.dialog.AppDialogDelete
 import com.emikhalets.core.ui.dialog.AppDialogMessage
+import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.R
+import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Action
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Effect
+
+private const val TAG = "NoteItem"
 
 @Composable
 fun NoteItemScreen(
@@ -40,6 +46,7 @@ fun NoteItemScreen(
     viewModel: NoteItemViewModel,
     noteId: Long,
 ) {
+    logi(TAG, "Invoke: id = $noteId")
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(0)
 
@@ -54,7 +61,7 @@ fun NoteItemScreen(
 
     LaunchedEffect(state.noteEntity) {
         title = state.noteEntity?.title ?: ""
-        updateDate = state.noteEntity?.updateTimestamp.formatWithPattern("EEEE, dd MMMM yyyy")
+        updateDate = state.noteEntity?.updateTimestamp.formatFullWithWeekDate()
         content = state.noteEntity?.content ?: ""
     }
 
@@ -74,7 +81,7 @@ fun NoteItemScreen(
         onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog) },
         onSaveNoteClick = {
             val newEntity = state.noteEntity?.copy(title = title, content = content)
-                ?: com.emikhalets.notes.domain.entity.NoteEntity(title, content)
+                ?: NoteEntity(title, content)
             viewModel.setAction(Action.SaveNote(newEntity))
         },
         onBackClick = navigateBack
@@ -82,20 +89,24 @@ fun NoteItemScreen(
 
     when (effect) {
         is Effect.Error -> {
+            logi(TAG, "Set effect: error")
             AppDialogMessage(message = (effect as Effect.Error).message)
         }
 
         Effect.NoteSaved -> {
+            logi(TAG, "Set effect: note saved")
             AppToast(R.string.app_notes_saved)
             navigateBack()
         }
 
         Effect.NoteDeleted -> {
+            logi(TAG, "Set effect: note deleted")
             AppToast(R.string.app_notes_deleted)
             navigateBack()
         }
 
         Effect.DeleteNoteDialog -> {
+            logi(TAG, "Set effect: delete task")
             AppDialogDelete(
                 entity = null,
                 onDeleteClick = { viewModel.setAction(Action.DeleteNote) }
@@ -116,7 +127,14 @@ private fun ScreenContent(
     onSaveNoteClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(onBackClick, stringResource(ApplicationItem.Notes.appNameRes)) {
+    logi(
+        "${TAG}.ScreenContent", "Invoke:\n" +
+                "title = $title,\n" +
+                "updateDate = $updateDate,\n" +
+                "content = $content,\n" +
+                "isNeedSave = $isNeedSave"
+    )
+    AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         Box(modifier = Modifier.fillMaxSize()) {
             NoteEditBox(
                 title = title,
@@ -148,8 +166,14 @@ private fun NoteEditBox(
     onContentChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    logi(
+        "${TAG}.NoteEditBox", "Invoke:\n" +
+                "title = $title,\n" +
+                "updateDate = $updateDate,\n" +
+                "content = $content"
+    )
     Column(modifier = modifier) {
-        com.emikhalets.core.ui.component.AppTextField(
+        AppTextField(
             value = title,
             onValueChange = onTitleChanged,
             fontSize = 20.sp,
@@ -165,7 +189,7 @@ private fun NoteEditBox(
                 .background(MaterialTheme.colors.surface)
                 .padding(16.dp)
         )
-        com.emikhalets.core.ui.component.AppTextField(
+        AppTextField(
             value = content,
             onValueChange = onContentChanged,
             placeholder = stringResource(R.string.app_notes_content),
@@ -180,7 +204,7 @@ private fun NoteEditBox(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    com.emikhalets.core.ui.theme.AppTheme {
+    AppTheme {
         ScreenContent(
             title = "Test title",
             updateDate = "Test update date",

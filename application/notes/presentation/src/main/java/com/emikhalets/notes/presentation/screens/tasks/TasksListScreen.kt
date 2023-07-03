@@ -39,6 +39,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.ApplicationItem
+import com.emikhalets.core.common.ApplicationItem.Notes.appNameRes
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.dialog.AppDialogDelete
@@ -50,11 +52,14 @@ import com.emikhalets.notes.domain.entity.TaskEntity
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Action
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Effect
 
+private const val TAG = "TasksList"
+
 @Composable
 fun TasksListScreen(
     navigateBack: () -> Unit,
     viewModel: TasksListViewModel,
 ) {
+    logi(TAG, "Invoke")
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
 
@@ -82,9 +87,13 @@ fun TasksListScreen(
     )
 
     when (effect) {
-        is Effect.Error -> AppDialogMessage((effect as Effect.Error).message)
+        is Effect.Error -> {
+            logi(TAG, "Set effect: error")
+            AppDialogMessage((effect as Effect.Error).message)
+        }
 
         is Effect.DeleteTaskDialog -> {
+            logi(TAG, "Set effect: delete task")
             AppDialogDelete(
                 entity = (effect as Effect.DeleteTaskDialog).entity,
                 onDeleteClick = { viewModel.setAction(Action.DeleteTask(it)) }
@@ -94,9 +103,11 @@ fun TasksListScreen(
         null -> Unit
     }
 
-    if (taskEntity != null) {
+    val taskValue = taskEntity
+    if (taskValue != null) {
+        logi(TAG, "Show task dialog: entity = $taskValue")
         TaskDialog(
-            task = taskEntity!!,
+            task = taskValue,
             onDismiss = { taskEntity = null },
             onDoneClick = { task ->
                 taskEntity = null
@@ -118,7 +129,13 @@ private fun ScreenContent(
     onCollapseTasksClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(onBackClick, stringResource(ApplicationItem.Notes.appNameRes)) {
+    logi(
+        "$TAG.ScreenContent", "Invoke:\n" +
+                "tasks = $tasksList,\n" +
+                "completed = $checkedTasksList,\n" +
+                "completedCollapsed = $checkedTasksCollapsed"
+    )
+    AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -174,6 +191,11 @@ private fun CompletedTasksHeader(
     checkedTasksCollapsed: Boolean,
     onCollapseTasksClick: () -> Unit,
 ) {
+    logi(
+        "$TAG.CompletedTasksHeader", "Invoke:\n" +
+                "tasksSize = $tasksSize,\n" +
+                "checkedTasksCollapsed = $checkedTasksCollapsed"
+    )
     val collapsedTasksIcon = if (checkedTasksCollapsed) {
         Icons.Default.KeyboardArrowUp
     } else {
@@ -208,6 +230,7 @@ private fun TaskBox(
     onCheckSubtask: (SubtaskEntity, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    logi("$TAG.TaskBox", "Invoke: entity = $entity")
     // TODO: temp keep subtasks expanded value in composable
     var expanded by remember { mutableStateOf(true) }
 
@@ -262,6 +285,7 @@ private fun TaskRow(
     modifier: Modifier = Modifier,
     bold: Boolean = false,
 ) {
+    logi("$TAG.TaskRow", "Invoke: text = $text, checked = $checked")
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -289,8 +313,13 @@ private fun SubtasksCountBox(
     expanded: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    bold: Boolean = false,
 ) {
+    logi(
+        "$TAG.SubtasksCountBox", "Invoke:\n" +
+                "count = $count,\n" +
+                "completed = $completed,\n" +
+                "expanded = $expanded"
+    )
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

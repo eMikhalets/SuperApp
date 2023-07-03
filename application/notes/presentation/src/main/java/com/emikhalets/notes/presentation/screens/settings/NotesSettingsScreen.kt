@@ -10,14 +10,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.common.ApplicationItem
+import com.emikhalets.core.common.ApplicationItem.Notes.appNameRes
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.theme.AppTheme
 
+private const val TAG = "Settings"
+
 @Composable
-fun NotesSettingsScreen(
+fun SettingsScreen(
     navigateBack: () -> Unit,
 ) {
+    logi(TAG, "Invoke")
     ScreenContent(
         onBackClick = navigateBack
     )
@@ -27,7 +31,8 @@ fun NotesSettingsScreen(
 private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
-    AppChildScreenBox(onBackClick, stringResource(ApplicationItem.Notes.appNameRes)) {
+    logi("$TAG.ScreenContent", "Invoke")
+    AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         Text(
             text = "Not implemented",
             style = MaterialTheme.typography.h6,
