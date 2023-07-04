@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import com.emikhalets.core.common.ApplicationItem
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
+import com.emikhalets.fitness.navigation.AppFitnessDestination
+import com.emikhalets.fitness.navigation.applicationFitness
 import com.emikhalets.notes.app.AppNotesDestination
 import com.emikhalets.notes.app.applicationNotes
 import com.emikhalets.superapp.MainScreen
@@ -33,6 +35,7 @@ fun AppNavHost(
                 navigateToNewWidget = {},
             )
         }
+        applicationFitness(navController, bottomBarList)
         applicationNotes(navController, bottomBarList)
     }
 }
@@ -41,7 +44,7 @@ private fun NavHostController.navigateApp(type: ApplicationItem) {
     when (type) {
         ApplicationItem.Events -> Unit
         ApplicationItem.Finances -> Unit
-        ApplicationItem.Fitness -> Unit
+        ApplicationItem.Fitness -> navigate(AppFitnessDestination.NavGraph)
         ApplicationItem.MediaLib -> Unit
         ApplicationItem.Notes -> navigate(AppNotesDestination.NavGraph)
     }

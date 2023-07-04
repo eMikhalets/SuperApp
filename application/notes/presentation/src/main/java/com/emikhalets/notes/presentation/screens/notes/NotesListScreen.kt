@@ -59,7 +59,7 @@ fun NotesListScreen(
         notesList = state.notesList,
         onNoteClick = { navigateToNote(it) },
         onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog(it)) },
-        onAddNoteClick = { navigateToNote(AppCode.NoId) },
+        onAddNoteClick = { navigateToNote(AppCode.IdNull) },
         onBackClick = navigateBack
     )
 

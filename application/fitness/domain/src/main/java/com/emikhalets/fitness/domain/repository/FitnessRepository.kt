@@ -1,7 +1,6 @@
 package com.emikhalets.fitness.domain.repository
 
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
-import com.emikhalets.fitness.domain.entity.WorkoutType
 import kotlinx.coroutines.flow.Flow
 
 interface FitnessRepository {

@@ -3,11 +3,7 @@ package com.emikhalets.fitness.presentation.stages
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.common.UiString
-import com.emikhalets.fitness.domain.entity.WorkoutDoneType
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
-import com.emikhalets.fitness.domain.entity.WorkoutType
-import com.emikhalets.fitness.domain.use_case.GetWorkoutsUseCase
-import com.emikhalets.fitness.domain.use_case.UpdateWorkoutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

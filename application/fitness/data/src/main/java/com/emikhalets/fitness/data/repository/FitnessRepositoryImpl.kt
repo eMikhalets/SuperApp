@@ -3,7 +3,6 @@ package com.emikhalets.fitness.data.repository
 import com.emikhalets.fitness.data.database.WorkoutsDao
 import com.emikhalets.fitness.data.mapper.WorkoutMapper
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
-import com.emikhalets.fitness.domain.entity.WorkoutType
 import com.emikhalets.fitness.domain.repository.FitnessRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

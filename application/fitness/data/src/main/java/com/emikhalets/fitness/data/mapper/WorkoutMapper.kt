@@ -2,9 +2,7 @@ package com.emikhalets.fitness.data.mapper
 
 import com.emikhalets.fitness.data.database.WorkoutDB
 import com.emikhalets.fitness.domain.entity.WorkoutData
-import com.emikhalets.fitness.domain.entity.WorkoutDoneType
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
-import com.emikhalets.fitness.domain.entity.WorkoutType
 
 object WorkoutMapper {
 

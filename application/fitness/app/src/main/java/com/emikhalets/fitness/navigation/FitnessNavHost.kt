@@ -8,7 +8,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.emikhalets.fitness.domain.entity.WorkoutType
 import com.emikhalets.fitness.presentation.menu.MenuScreen
 import com.emikhalets.fitness.presentation.stages.StagesScreen
 
