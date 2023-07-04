@@ -1,4 +1,4 @@
-package com.emikhalets.fitness.presentation.programs
+package com.emikhalets.fitness.presentation.program
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,43 +19,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.common.AppCode
 import com.emikhalets.core.common.ApplicationItem.Fitness.appNameRes
 import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.dialog.AppDialogDelete
 import com.emikhalets.core.ui.dialog.AppDialogMessage
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.fitness.domain.R
 import com.emikhalets.fitness.domain.entity.ProgramEntity
-import com.emikhalets.fitness.presentation.programs.ProgramsContract.Action
-import com.emikhalets.fitness.presentation.programs.ProgramsContract.Effect
+import com.emikhalets.fitness.domain.entity.WorkoutEntity
+import com.emikhalets.fitness.presentation.program.ProgramContract.Action
+import com.emikhalets.fitness.presentation.program.ProgramContract.Effect
 
-private const val TAG = "Programs"
+private const val TAG = "Program"
 
 @Composable
-fun ProgramsScreen(
-    navigateToProgram: (id: Long) -> Unit,
+fun ProgramScreen(
     navigateBack: () -> Unit,
-    viewModel: ProgramsViewModel,
+    viewModel: ProgramViewModel,
+    programId: Long,
 ) {
-    logi(TAG, "Invoke")
+    logi(TAG, "Invoke: id = $programId")
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
 
+    var deleteProgram by remember { mutableStateOf<ProgramEntity?>(null) }
+
     LaunchedEffect(Unit) {
-        viewModel.setAction(Action.GetPrograms)
+        viewModel.setAction(Action.GetProgram(programId))
     }
 
     ScreenContent(
-        programs = state.programs,
-        onProgramClick = { entity -> navigateToProgram(entity.id) },
-        onAddProgramClick = { navigateToProgram(AppCode.IdNull) },
+        program = state.program,
+        onProgramDeleteClick = { deleteProgram = it },
         onBackClick = navigateBack
     )
 
@@ -65,43 +71,46 @@ fun ProgramsScreen(
             AppDialogMessage((effect as Effect.Error).message)
         }
 
+        Effect.ProgramDeleted -> {
+            logi(TAG, "Set effect: program deleted")
+            AppToast(R.string.app_fitness_program_deleted)
+            navigateBack()
+        }
+
         null -> Unit
+    }
+
+    val deleteEntity = deleteProgram
+    if (deleteEntity != null) {
+        logi(TAG, "Show delete dialog: entity = $deleteEntity")
+        AppDialogDelete(
+            entity = deleteEntity,
+            onDeleteClick = { viewModel.setAction(Action.DeleteProgram(it)) }
+        )
     }
 }
 
 @Composable
 private fun ScreenContent(
-    programs: List<ProgramEntity>,
-    onProgramClick: (ProgramEntity) -> Unit,
-    onAddProgramClick: () -> Unit,
+    program: ProgramEntity?,
+    onProgramDeleteClick: (ProgramEntity?) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    logi("$TAG.ScreenContent", "Invoke: programs = $programs")
+    logi("$TAG.ScreenContent", "Invoke: program = $program")
     AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(programs, key = { it.id }) { entity ->
-                ProgramBox(
-                    entity = entity,
-                    onProgramClick = onProgramClick
-                )
-            }
-            item {
-                AddProgramBox(
-                    onClick = onAddProgramClick,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
+        if (program != null) {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(program.workouts, key = { it.id }) { entity ->
+                    WorkoutBox(entity = entity)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun ProgramBox(
-    entity: ProgramEntity,
-    onProgramClick: (ProgramEntity) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    logi("$TAG.ProgramBox", "Invoke: entity = $entity")
+private fun WorkoutBox(entity: WorkoutEntity, modifier: Modifier = Modifier) {
+    logi("$TAG.WorkoutBox", "Invoke: entity = $entity")
     Card(
         elevation = 0.dp,
         modifier = modifier
@@ -162,9 +171,8 @@ private fun AddProgramBox(onClick: () -> Unit, modifier: Modifier = Modifier) {
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            programs = getProgramsPreview(),
-            onProgramClick = {},
-            onAddProgramClick = {},
+            program = ProgramEntity("", emptyList()),
+            onProgramDeleteClick = {},
             onBackClick = {}
         )
     }

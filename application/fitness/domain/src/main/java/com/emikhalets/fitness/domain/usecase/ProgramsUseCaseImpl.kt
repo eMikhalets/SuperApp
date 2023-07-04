@@ -7,11 +7,15 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class GetProgramsUseCaseImpl @Inject constructor(
+class ProgramsUseCaseImpl @Inject constructor(
     private val repository: FitnessRepository,
-) : GetProgramsUseCase {
+) : ProgramsUseCase {
 
-    override suspend operator fun invoke(): AppResult<Flow<List<ProgramEntity>>> {
+    override fun getAll(): AppResult<Flow<List<ProgramEntity>>> {
+        return AppResult.success(flowOf())
+    }
+
+    override fun getItem(id: Long): AppResult<Flow<ProgramEntity>> {
         return AppResult.success(flowOf())
     }
 }

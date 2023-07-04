@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_fitness_add_program">Add new workout program!</string>
+    <string name="app_fitness_program_deleted">Program has been deleted</string>
 </resources>

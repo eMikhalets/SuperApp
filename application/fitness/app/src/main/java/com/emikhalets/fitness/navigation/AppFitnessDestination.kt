@@ -10,14 +10,12 @@ object AppFitnessDestination : AppDestination {
 
     const val NavGraph: String = "app_fitness_graph"
 
-    const val Tasks: String = "app_fitness_tasks"
-    const val Notes: String = "app_fitness_notes"
-    const val Note: String = "app_fitness_note"
-    const val Settings: String = "app_fitness_settings"
+    const val Programs: String = "app_fitness_programs"
+    const val Program: String = "app_fitness_program"
 
-    const val NoteWithArgs: String = "$Note/{${AppFitnessArgs.NoteId}}"
-    fun noteWithArgs(id: Long?): String = "$Note/${id ?: AppCode.IdNull}"
-    val noteArgsList = listOf(navArgument(AppFitnessArgs.NoteId) { type = NavType.LongType })
-    fun getNoteArgsId(entry: NavBackStackEntry) =
-        entry.arguments?.getLong(AppFitnessArgs.NoteId) ?: AppCode.IdNull
+    const val ProgramWithArgs: String = "$Program/{${AppFitnessArgs.ProgramId}}"
+    fun programWithArgs(id: Long?): String = "$Program/${id ?: AppCode.IdNull}"
+    val programArgsList = listOf(navArgument(AppFitnessArgs.ProgramId) { type = NavType.LongType })
+    fun getProgramArgsId(entry: NavBackStackEntry) =
+        entry.arguments?.getLong(AppFitnessArgs.ProgramId) ?: AppCode.IdNull
 }

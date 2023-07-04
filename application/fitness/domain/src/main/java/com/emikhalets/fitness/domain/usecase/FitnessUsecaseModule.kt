@@ -10,5 +10,5 @@ import dagger.hilt.components.SingletonComponent
 abstract class FitnessUsecaseModule {
 
     @Binds
-    abstract fun bindsProgramsUsecase(impl: GetProgramsUseCaseImpl): GetProgramsUseCase
+    abstract fun bindsProgramsUsecase(impl: ProgramsUseCaseImpl): ProgramsUseCase
 }
