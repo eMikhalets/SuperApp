@@ -2,4 +2,9 @@
 <resources>
     <string name="app_fitness_add_program">Add new workout program!</string>
     <string name="app_fitness_program_deleted">Program has been deleted</string>
+    <string name="app_fitness_program_saved">Program has been saved</string>
+    <string name="app_fitness_program_name">Program name</string>
+    <string name="app_fitness_workout_add">Add new workout</string>
+    <string name="app_fitness_exercise_add">Add new exercise</string>
+    <string name="app_fitness_exercise_add">Add new exercise</string>
 </resources>

@@ -7,7 +7,8 @@ import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
 import com.emikhalets.fitness.domain.entity.ProgramEntity
-import com.emikhalets.fitness.domain.usecase.ProgramsUseCase
+import com.emikhalets.fitness.domain.usecase.DeleteProgramUseCase
+import com.emikhalets.fitness.domain.usecase.GetProgramFlowUseCase
 import com.emikhalets.fitness.presentation.program.ProgramContract.Action
 import com.emikhalets.fitness.presentation.program.ProgramContract.Effect
 import com.emikhalets.fitness.presentation.program.ProgramContract.State
@@ -18,7 +19,8 @@ import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class ProgramViewModel @Inject constructor(
-    private val programsUseCase: ProgramsUseCase,
+    private val getProgramFlowUseCase: GetProgramFlowUseCase,
+    private val deleteProgramUseCase: DeleteProgramUseCase,
 ) : BaseViewModel<Action, Effect, State>() {
 
     override fun createInitialState() = State()
@@ -35,7 +37,7 @@ class ProgramViewModel @Inject constructor(
         logd(TAG, "Get program: id = $id")
         if (id <= 0) return
         launchScope {
-            programsUseCase.getItem(id)
+            getProgramFlowUseCase(id)
                 .onSuccess { flow -> setProgramState(flow) }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
@@ -45,7 +47,7 @@ class ProgramViewModel @Inject constructor(
         logd(TAG, "Delete program: $entity")
         if (entity == null) return
         launchScope {
-            programsUseCase.delete(entity)
+            deleteProgramUseCase(entity)
                 .onSuccess { setEffect { Effect.ProgramDeleted } }
                 .onFailure { code, message -> handleFailure(code, message) }
         }

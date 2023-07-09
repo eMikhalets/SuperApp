@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.core.ui.theme.AppTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @NonRestartableComposable
 fun AppTextField(

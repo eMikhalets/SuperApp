@@ -7,7 +7,7 @@ import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
 import com.emikhalets.fitness.domain.entity.ProgramEntity
-import com.emikhalets.fitness.domain.usecase.ProgramsUseCase
+import com.emikhalets.fitness.domain.usecase.GetProgramsFlowUseCase
 import com.emikhalets.fitness.presentation.programs.ProgramsContract.Action
 import com.emikhalets.fitness.presentation.programs.ProgramsContract.Effect
 import com.emikhalets.fitness.presentation.programs.ProgramsContract.State
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class ProgramsViewModel @Inject constructor(
-    private val programsUseCase: ProgramsUseCase,
+    private val getProgramsFlowUseCase: GetProgramsFlowUseCase,
 ) : BaseViewModel<Action, Effect, State>() {
 
     override fun createInitialState() = State()
@@ -33,7 +33,7 @@ class ProgramsViewModel @Inject constructor(
     private fun getPrograms() {
         logd(TAG, "Get programs")
         launchScope {
-            programsUseCase.getAll()
+            getProgramsFlowUseCase()
                 .onSuccess { flow -> setProgramsState(flow) }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
