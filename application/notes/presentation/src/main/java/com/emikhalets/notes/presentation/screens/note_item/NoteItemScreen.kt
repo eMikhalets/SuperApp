@@ -36,7 +36,6 @@ import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.R
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Action
-import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Effect
 
 private const val TAG = "NoteItem"
 
@@ -48,12 +47,12 @@ fun NoteItemScreen(
 ) {
     logi(TAG, "Invoke: id = $noteId")
     val state by viewModel.state.collectAsState()
-    val effect by viewModel.effect.collectAsState(0)
 
     var title by remember { mutableStateOf("") }
     var updateDate by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var isNeedSave by remember { mutableStateOf(false) }
+    var deletedEntity by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetNote(noteId))
@@ -78,7 +77,7 @@ fun NoteItemScreen(
             isNeedSave = true
             content = it
         },
-        onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog) },
+        onDeleteNoteClick = { deletedEntity = true },
         onSaveNoteClick = {
             val newEntity = state.noteEntity?.copy(title = title, content = content)
                 ?: NoteEntity(title, content)
@@ -87,31 +86,32 @@ fun NoteItemScreen(
         onBackClick = navigateBack
     )
 
-    when (effect) {
-        is Effect.Error -> {
-            logi(TAG, "Set effect: error")
-            AppDialogMessage(message = (effect as Effect.Error).message)
-        }
+    if (!deletedEntity) {
+        logi(TAG, "Show delete task dialog")
+        AppDialogDelete(
+            entity = null,
+            onDeleteClick = {
+                deletedEntity = false
+                viewModel.setAction(Action.DeleteNote)
+            }
+        )
+    }
 
-        Effect.NoteSaved -> {
-            logi(TAG, "Set effect: note saved")
-            AppToast(R.string.app_notes_saved)
-            navigateBack()
-        }
+    if (state.error != null) {
+        logi(TAG, "Show error dialog")
+        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
+    }
 
-        Effect.NoteDeleted -> {
-            logi(TAG, "Set effect: note deleted")
-            AppToast(R.string.app_notes_deleted)
-            navigateBack()
-        }
+    if (state.isNoteDeleted) {
+        logi(TAG, "Note deleted")
+        AppToast(R.string.app_notes_deleted)
+        navigateBack()
+    }
 
-        Effect.DeleteNoteDialog -> {
-            logi(TAG, "Set effect: delete task")
-            AppDialogDelete(
-                entity = null,
-                onDeleteClick = { viewModel.setAction(Action.DeleteNote) }
-            )
-        }
+    if (state.isNoteSaved) {
+        logi(TAG, "Note saved")
+        AppToast(R.string.app_notes_saved)
+        navigateBack()
     }
 }
 

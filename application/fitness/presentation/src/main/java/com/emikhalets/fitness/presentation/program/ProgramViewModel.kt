@@ -10,7 +10,6 @@ import com.emikhalets.fitness.domain.entity.ProgramEntity
 import com.emikhalets.fitness.domain.usecase.DeleteProgramUseCase
 import com.emikhalets.fitness.domain.usecase.GetProgramFlowUseCase
 import com.emikhalets.fitness.presentation.program.ProgramContract.Action
-import com.emikhalets.fitness.presentation.program.ProgramContract.Effect
 import com.emikhalets.fitness.presentation.program.ProgramContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,16 +20,21 @@ import kotlinx.coroutines.flow.collectLatest
 class ProgramViewModel @Inject constructor(
     private val getProgramFlowUseCase: GetProgramFlowUseCase,
     private val deleteProgramUseCase: DeleteProgramUseCase,
-) : BaseViewModel<Action, Effect, State>() {
+) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
         logd(TAG, "User event: $action")
         when (action) {
+            Action.DropError -> dropErrorState()
             is Action.GetProgram -> getProgram(action.id)
             is Action.DeleteProgram -> deleteProgram(action.entity)
         }
+    }
+
+    private fun dropErrorState() {
+        setState { it.copy(error = null) }
     }
 
     private fun getProgram(id: Long) {
@@ -48,7 +52,7 @@ class ProgramViewModel @Inject constructor(
         if (entity == null) return
         launchScope {
             deleteProgramUseCase(entity)
-                .onSuccess { setEffect { Effect.ProgramDeleted } }
+                .onSuccess { setState { it.copy(isProgramDeleted = true) } }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }
@@ -62,8 +66,7 @@ class ProgramViewModel @Inject constructor(
 
     private fun handleFailure(code: Int, message: UiString?) {
         logd(TAG, "Handling error: code = $code")
-        setState { it.copy(isLoading = false) }
-        setEffect { Effect.Error(message) }
+        setState { it.copy(isLoading = false, error = message) }
     }
 
     companion object {

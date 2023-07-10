@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.AppCode
 import com.emikhalets.core.common.ApplicationItem.Fitness.appNameRes
 import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.dialog.AppDialogMessage
 import com.emikhalets.core.ui.theme.AppTheme

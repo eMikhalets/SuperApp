@@ -19,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,7 +40,6 @@ import com.emikhalets.core.ui.dialog.AppDialogMessage
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
-import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
 
 private const val TAG = "NotesList"
 
@@ -49,7 +51,8 @@ fun NotesListScreen(
 ) {
     logi(TAG, "Invoke")
     val state by viewModel.state.collectAsState()
-    val effect by viewModel.effect.collectAsState(null)
+
+    var deletedEntity by remember { mutableStateOf<NoteEntity?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetNotes)
@@ -58,32 +61,23 @@ fun NotesListScreen(
     ScreenContent(
         notesList = state.notesList,
         onNoteClick = { navigateToNote(it) },
-        onDeleteNoteClick = { viewModel.setAction(Action.DeleteNoteDialog(it)) },
+        onDeleteNoteClick = { deletedEntity = it },
         onAddNoteClick = { navigateToNote(AppCode.IdNull) },
         onBackClick = navigateBack
     )
 
-    when (effect) {
-        is Effect.Error -> {
-            logi(TAG, "Set effect: error")
-            AppDialogMessage((effect as Effect.Error).message)
-        }
+    if (state.error != null) {
+        logi(TAG, "Show error dialog")
+        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
+    }
 
-
-        is Effect.DeleteNoteDialog -> {
-            logi(TAG, "Set effect: delete task")
-            AppDialogDelete(
-                entity = (effect as Effect.DeleteNoteDialog).entity,
-                onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) }
-            )
-        }
-
-        is Effect.NavigateToNewNote -> {
-            logi(TAG, "Set effect: nav to new note")
-            navigateToNote((effect as Effect.NavigateToNewNote).id)
-        }
-
-        null -> Unit
+    val deleted = deletedEntity
+    if (deleted != null) {
+        logi(TAG, "Show delete note dialog: entity = $deleted")
+        AppDialogDelete(
+            entity = deleted,
+            onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) }
+        )
     }
 }
 

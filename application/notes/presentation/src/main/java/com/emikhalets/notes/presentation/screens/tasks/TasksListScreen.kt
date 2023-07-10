@@ -38,9 +38,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.common.ApplicationItem
 import com.emikhalets.core.common.ApplicationItem.Notes.appNameRes
 import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppFloatButton
 import com.emikhalets.core.ui.dialog.AppDialogDelete
@@ -50,7 +50,6 @@ import com.emikhalets.notes.domain.R
 import com.emikhalets.notes.domain.entity.SubtaskEntity
 import com.emikhalets.notes.domain.entity.TaskEntity
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Action
-import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Effect
 
 private const val TAG = "TasksList"
 
@@ -61,10 +60,10 @@ fun TasksListScreen(
 ) {
     logi(TAG, "Invoke")
     val state by viewModel.state.collectAsState()
-    val effect by viewModel.effect.collectAsState(null)
 
     var taskEntity by remember { mutableStateOf<TaskEntity?>(null) }
     var checkedTasksCollapsed by remember { mutableStateOf(true) }
+    var deletedEntity by remember { mutableStateOf<TaskEntity?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetTask)
@@ -86,21 +85,16 @@ fun TasksListScreen(
         onBackClick = navigateBack
     )
 
-    when (effect) {
-        is Effect.Error -> {
-            logi(TAG, "Set effect: error")
-            AppDialogMessage((effect as Effect.Error).message)
-        }
-
-        is Effect.DeleteTaskDialog -> {
-            logi(TAG, "Set effect: delete task")
-            AppDialogDelete(
-                entity = (effect as Effect.DeleteTaskDialog).entity,
-                onDeleteClick = { viewModel.setAction(Action.DeleteTask(it)) }
-            )
-        }
-
-        null -> Unit
+    val deleted = deletedEntity
+    if (deleted != null) {
+        logi(TAG, "Show delete task dialog: entity = $deleted")
+        AppDialogDelete(
+            entity = deleted,
+            onDeleteClick = {
+                deletedEntity = null
+                viewModel.setAction(Action.DeleteTask(it))
+            }
+        )
     }
 
     val taskValue = taskEntity
@@ -114,6 +108,17 @@ fun TasksListScreen(
                 viewModel.setAction(Action.CompleteTask(task, false))
             }
         )
+    }
+
+    if (state.error != null) {
+        logi(TAG, "Show error dialog")
+        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
+    }
+
+    if (state.isTaskDeleted) {
+        logi(TAG, "Task deleted")
+        AppToast(R.string.app_notes_task_deleted)
+        navigateBack()
     }
 }
 

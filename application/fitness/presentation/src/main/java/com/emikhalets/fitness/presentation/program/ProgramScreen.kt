@@ -33,8 +33,6 @@ import com.emikhalets.fitness.domain.entity.ProgramEntity
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
 import com.emikhalets.fitness.domain.entity.enums.ProgramType
 import com.emikhalets.fitness.presentation.program.ProgramContract.Action
-import com.emikhalets.fitness.presentation.program.ProgramContract.Effect
-import com.emikhalets.fitness.presentation.program_edit.AddWorkoutBox
 
 private const val TAG = "Program"
 
@@ -59,21 +57,6 @@ fun ProgramScreen(
         onBackClick = navigateBack
     )
 
-    when (effect) {
-        is Effect.Error -> {
-            logi(TAG, "Set effect: error")
-            AppDialogMessage((effect as Effect.Error).message)
-        }
-
-        Effect.ProgramDeleted -> {
-            logi(TAG, "Set effect: program deleted")
-            AppToast(R.string.app_fitness_program_deleted)
-            navigateBack()
-        }
-
-        null -> Unit
-    }
-
     val deleteEntity = deleteProgram
     if (deleteEntity != null) {
         logi(TAG, "Show delete dialog: entity = $deleteEntity")
@@ -81,6 +64,17 @@ fun ProgramScreen(
             entity = deleteEntity,
             onDeleteClick = { viewModel.setAction(Action.DeleteProgram(it)) }
         )
+    }
+
+    if (state.error != null) {
+        logi(TAG, "Show error dialog")
+        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
+    }
+
+    if (state.isProgramDeleted) {
+        logi(TAG, "Program deleted")
+        AppToast(R.string.app_fitness_program_deleted)
+        navigateBack()
     }
 }
 
@@ -104,19 +98,12 @@ private fun ScreenContent(
                 if (program.workouts.isNotEmpty()) {
                     items(program.workouts, key = { it.id }) { workout ->
                         WorkoutBox(
-                            name = workout.name,
-                            onNameChanged = {},
-                            exercises = workout.exercises,
-                            onRemoveClick = { onWorkoutsChangeClick(workout) },
+                            workout = workout,
+                            onRemoveClick = {},
                             onAddExerciseClick = {},
                             onDeleteExerciseClick = {},
                         )
                     }
-                }
-                item {
-                    AddWorkoutBox(
-                        onClick = { onWorkoutsChangeClick(null) }
-                    )
                 }
             }
         }
@@ -173,7 +160,7 @@ private fun ExerciseBox(
                             reps.removeAt(index)
                         }
                     },
-                    onDoneClick = { onRepsChanged() },
+//                    onDoneClick = { onRepsChanged() },
                     onBackspaceEvent = {
                         if (rep == 0) {
                         }
