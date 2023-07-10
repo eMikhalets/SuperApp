@@ -113,7 +113,6 @@ private fun MainItemBox(
 ) {
     logi("$TAG.MainItemBox", "Invoke")
     Card(
-        elevation = 1.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)

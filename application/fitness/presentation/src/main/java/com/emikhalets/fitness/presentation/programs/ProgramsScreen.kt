@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -76,13 +77,19 @@ private fun ScreenContent(
             items(programs, key = { it.id }) { entity ->
                 ProgramBox(
                     entity = entity,
-                    onProgramClick = onProgramClick
+                    onProgramClick = onProgramClick,
+                    modifier = Modifier.padding(8.dp, 4.dp)
                 )
+            }
+            if (programs.isNotEmpty()) {
+                item {
+                    Divider(modifier = Modifier.padding(8.dp))
+                }
             }
             item {
                 AddProgramBox(
                     onClick = onAddProgramClick,
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(8.dp, 4.dp)
                 )
             }
         }
@@ -97,7 +104,6 @@ private fun ProgramBox(
 ) {
     logi("$TAG.ProgramBox", "Invoke: entity = $entity")
     Card(
-        elevation = 0.dp,
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp, 4.dp)
@@ -107,7 +113,7 @@ private fun ProgramBox(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(16.dp, 8.dp)
         ) {
             Text(
                 text = entity.name,
@@ -119,7 +125,10 @@ private fun ProgramBox(
 }
 
 @Composable
-private fun AddProgramBox(onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun AddProgramBox(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     logi("$TAG.AddProgramBox", "Invoke")
     Card(
         elevation = 0.dp,
@@ -139,8 +148,8 @@ private fun AddProgramBox(onClick: () -> Unit, modifier: Modifier = Modifier) {
                 imageVector = Icons.Rounded.Add,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(24.dp)
                     .padding(8.dp)
+                    .size(24.dp)
             )
             Text(
                 text = stringResource(R.string.app_fitness_add_program),
