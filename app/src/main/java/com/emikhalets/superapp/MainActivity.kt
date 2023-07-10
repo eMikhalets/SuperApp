@@ -40,15 +40,12 @@ class MainActivity : ComponentActivity() {
             val systemUiController = rememberSystemUiController()
 
             SideEffect {
-                logi(TAG, "Set Android bars colors")
+                logi(TAG, "Set Android UI")
                 systemUiController.setStatusBarColor(
                     color = Purple500,
                     darkIcons = false
                 )
-                systemUiController.setNavigationBarColor(
-                    color = Purple500,
-                    darkIcons = false
-                )
+                systemUiController.isNavigationBarVisible = false
             }
 
             Application(navController, scaffoldState)

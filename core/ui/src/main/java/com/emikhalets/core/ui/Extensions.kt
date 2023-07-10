@@ -6,15 +6,23 @@ import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.emikhalets.core.common.ApplicationItem
+import androidx.compose.ui.res.stringResource
+import com.emikhalets.core.common.ApplicationEntity
 
-fun ApplicationItem.getAppIcon(): ImageVector {
+@Composable
+fun ApplicationEntity.getIcon(): ImageVector {
     return when (this) {
-        ApplicationItem.Events -> Icons.Rounded.Event
-        ApplicationItem.Finances -> Icons.Rounded.AccountBalanceWallet
-        ApplicationItem.Fitness -> Icons.Rounded.FitnessCenter
-        ApplicationItem.MediaLib -> Icons.Rounded.AttachMoney
-        ApplicationItem.Notes -> Icons.Rounded.Notes
+        ApplicationEntity.Events -> Icons.Rounded.Event
+        ApplicationEntity.Finances -> Icons.Rounded.AccountBalanceWallet
+        ApplicationEntity.Fitness -> Icons.Rounded.FitnessCenter
+        ApplicationEntity.MediaLib -> Icons.Rounded.AttachMoney
+        ApplicationEntity.Notes -> Icons.Rounded.Notes
     }
+}
+
+@Composable
+fun ApplicationEntity.getName(): String {
+    return stringResource(this.appNameRes)
 }

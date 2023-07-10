@@ -38,7 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.common.ApplicationItem.Notes.appNameRes
+import com.emikhalets.core.common.ApplicationEntity.Notes.appNameRes
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.component.AppChildScreenBox

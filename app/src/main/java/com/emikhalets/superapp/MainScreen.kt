@@ -4,160 +4,182 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.common.ApplicationItem
+import com.emikhalets.core.common.ApplicationEntity
+import com.emikhalets.core.common.isEnabled
+import com.emikhalets.core.common.isVisible
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.getAppIcon
+import com.emikhalets.core.ui.getIcon
+import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.theme.AppTheme
 
 private const val TAG = "Main"
 
-@NonRestartableComposable
 @Composable
 fun MainScreen(
-    navigateToApp: (type: ApplicationItem) -> Unit,
+    navigateToApp: (type: ApplicationEntity) -> Unit,
     navigateToWidget: (Int) -> Unit,
     navigateToNewWidget: () -> Unit,
 ) {
     logi(TAG, "Invoke")
     ScreenContent(
-        onAppClick = navigateToApp,
+        onApplicationClick = navigateToApp,
         onWidgetClick = navigateToWidget,
         onAddWidgetClick = navigateToNewWidget,
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ScreenContent(
-    onAppClick: (ApplicationItem) -> Unit,
+    onApplicationClick: (ApplicationEntity) -> Unit,
     onWidgetClick: (Int) -> Unit,
     onAddWidgetClick: () -> Unit,
 ) {
-    logi("$TAG.Content", "Invoke")
+    logi("$TAG.ScreenContent", "Invoke")
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Applications(
-            onAppClick = onAppClick,
-        )
-        MenuWidgets(
-            onWidgetClick = onWidgetClick,
-            onAddWidgetClick = onAddWidgetClick
-        )
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun Applications(onAppClick: (ApplicationItem) -> Unit) {
-    logi("$TAG.Applications", "Invoke")
-    MenuHeader(
-        text = stringResource(R.string.app_applications),
-        modifier = Modifier.fillMaxWidth()
-    )
-    FlowRow(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        ApplicationItem.values().forEach { application ->
-            MenuButton(
-                appType = application,
-                onClick = { onAppClick(application) }
+        Spacer(modifier = Modifier.height(16.dp))
+        MainItemBox(stringResource(R.string.app_main_header_applications)) {
+            FlowRow(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                ApplicationEntity.values().forEach { application ->
+                    if (application.isVisible()) {
+                        ApplicationButton(
+                            application = application,
+                            onClick = { onApplicationClick(application) }
+                        )
+                    }
+                }
+            }
+        }
+        MainItemBox(stringResource(R.string.app_main_header_widgets)) {
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(70.dp)
+                    .background(
+                        color = MaterialTheme.colors.secondary,
+                        shape = MaterialTheme.shapes.medium
+                    )
+                    .clip(MaterialTheme.shapes.medium)
+                    .clickable { onAddWidgetClick() }
+                    .padding(16.dp)
             )
         }
     }
 }
 
 @Composable
-private fun MenuWidgets(
-    onWidgetClick: (Int) -> Unit,
-    onAddWidgetClick: () -> Unit,
+private fun MainItemBox(
+    label: String,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
-    logi("$TAG.MenuWidgets", "Invoke")
-    MenuHeader(
-        text = stringResource(R.string.app_menu_widgets),
-        modifier = Modifier.fillMaxWidth()
-    )
-    Icon(
-        imageVector = Icons.Rounded.Add,
-        contentDescription = null,
+    logi("$TAG.MainItemBox", "Invoke")
+    Card(
+        elevation = 1.dp,
         modifier = Modifier
-            .padding(16.dp)
-            .size(70.dp)
-            .background(
-                color = MaterialTheme.colors.secondary,
-                shape = MaterialTheme.shapes.medium
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            MainHeaderText(
+                text = label,
+                modifier = Modifier.padding(8.dp)
             )
-            .clip(MaterialTheme.shapes.medium)
-            .clickable { onAddWidgetClick() }
-            .padding(16.dp)
-    )
+            Divider()
+            content()
+        }
+    }
 }
 
 @Composable
-@NonRestartableComposable
-private fun MenuHeader(text: String, modifier: Modifier = Modifier) {
-    logi("$TAG.MenuHeader", "Invoke: text = $text")
+private fun MainHeaderText(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.MainHeaderText", "Invoke: text = $text")
     Text(
         text = text,
         style = MaterialTheme.typography.h5,
-        fontWeight = FontWeight.SemiBold,
-        modifier = modifier
-            .padding(top = 16.dp)
-            .padding(16.dp, 8.dp)
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = modifier.fillMaxWidth()
     )
 }
 
 @Composable
-private fun MenuButton(
-    appType: ApplicationItem,
-    onClick: () -> Unit,
+private fun ApplicationButton(
+    application: ApplicationEntity,
+    onClick: (ApplicationEntity) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    logi("$TAG.MenuButton", "Invoke: appType = ${stringResource(appType.appNameRes)}")
+    logi("$TAG.ApplicationButton", "Invoke: appType = ${application.getName()}")
+
+    val backColor = if (application.isEnabled()) {
+        MaterialTheme.colors.primary
+    } else {
+        MaterialTheme.colors.secondary
+    }
+
+    val textColor = if (application.isEnabled()) {
+        MaterialTheme.colors.onSurface
+    } else {
+        MaterialTheme.colors.secondaryVariant
+    }
+
     Column(modifier = modifier.padding(12.dp)) {
         Icon(
-            imageVector = appType.getAppIcon(),
+            imageVector = application.getIcon(),
             contentDescription = null,
             tint = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .size(80.dp)
-                .background(
-                    color = MaterialTheme.colors.primary,
-                    shape = MaterialTheme.shapes.medium
-                )
+                .background(color = backColor, shape = MaterialTheme.shapes.medium)
                 .clip(MaterialTheme.shapes.medium)
-                .clickable { onClick() }
+                .clickable(application.isEnabled()) { onClick(application) }
                 .padding(16.dp)
-
         )
         Text(
-            text = stringResource(appType.appNameRes),
+            text = application.getName(),
+            color = textColor,
             style = MaterialTheme.typography.body1,
             modifier = Modifier
                 .padding(top = 6.dp)
@@ -171,7 +193,7 @@ private fun MenuButton(
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            onAppClick = {},
+            onApplicationClick = {},
             onWidgetClick = {},
             onAddWidgetClick = {},
         )

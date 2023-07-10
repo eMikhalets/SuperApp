@@ -18,7 +18,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.emikhalets.core.common.ApplicationItem.Fitness.appNameRes
+import com.emikhalets.core.common.ApplicationEntity.Fitness.appNameRes
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.common.toIntOrNull
 import com.emikhalets.core.ui.AppToast

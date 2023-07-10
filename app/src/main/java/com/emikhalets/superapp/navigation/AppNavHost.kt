@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.core.common.ApplicationItem
+import com.emikhalets.core.common.ApplicationEntity
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.fitness.navigation.AppFitnessDestination
@@ -40,12 +40,12 @@ fun AppNavHost(
     }
 }
 
-private fun NavHostController.navigateApp(type: ApplicationItem) {
+private fun NavHostController.navigateApp(type: ApplicationEntity) {
     when (type) {
-        ApplicationItem.Events -> Unit
-        ApplicationItem.Finances -> Unit
-        ApplicationItem.Fitness -> navigate(AppFitnessDestination.NavGraph)
-        ApplicationItem.MediaLib -> Unit
-        ApplicationItem.Notes -> navigate(AppNotesDestination.NavGraph)
+        ApplicationEntity.Events -> Unit
+        ApplicationEntity.Finances -> Unit
+        ApplicationEntity.Fitness -> navigate(AppFitnessDestination.NavGraph)
+        ApplicationEntity.MediaLib -> Unit
+        ApplicationEntity.Notes -> navigate(AppNotesDestination.NavGraph)
     }
 }
