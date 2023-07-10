@@ -37,10 +37,7 @@ class ProgramEditViewModel @Inject constructor(
 
     private fun getProgram(id: Long) {
         logd(TAG, "Get program: id = $id")
-        if (id <= 0) {
-            setState { it.copy(error = UiString.create()) }
-            return
-        }
+        if (id <= 0) return
         launchScope {
             setState { it.copy(isLoading = true) }
             getProgramUseCase(id)

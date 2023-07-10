@@ -1,13 +1,17 @@
 package com.emikhalets.fitness.presentation.program_edit
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -24,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,6 +57,7 @@ fun ProgramEditScreen(
 
     var name by remember { mutableStateOf("") }
     val workouts = remember { mutableStateListOf<WorkoutEntity>() }
+    val exercise by remember { mutableStateOf<ExerciseEntity?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetProgram(programId))
@@ -86,12 +92,26 @@ fun ProgramEditScreen(
                 }
             }
         },
+        onWorkoutNameChanged = { workout, newName ->
+            val id = workouts.indexOf(workout)
+            if (id >= 0) workouts[id] = workout.copy(name = newName)
+        },
         onBackClick = navigateBack
     )
 
     if (state.error != null) {
         logi(TAG, "Show error dialog")
         AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
+    }
+
+    // TODO: implement exercise name changing
+    val exerciseEntity = exercise
+    if (exerciseEntity != null) {
+        logi(TAG, "Show exercise dialog")
+        ExerciseDialog(
+            exercise = exerciseEntity,
+            onDoneClick = {}
+        )
     }
 
     if (state.isProgramSaved) {
@@ -108,6 +128,7 @@ private fun ScreenContent(
     workouts: List<WorkoutEntity>,
     onWorkoutsChangeClick: (WorkoutEntity?) -> Unit,
     onExercisesChangeClick: (WorkoutEntity, ExerciseEntity?) -> Unit,
+    onWorkoutNameChanged: (WorkoutEntity, String) -> Unit,
     onBackClick: () -> Unit,
 ) {
     logi("$TAG.ScreenContent", "Invoke: name = $name")
@@ -118,18 +139,19 @@ private fun ScreenContent(
                     value = name,
                     onValueChange = onNameChanged,
                     placeholder = stringResource(R.string.app_fitness_program_name),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                 )
             }
             if (workouts.isNotEmpty()) {
                 items(workouts, key = { it.id }) { workout ->
                     WorkoutBox(
-                        name = workout.name,
-                        onNameChanged = {},
-                        exercises = workout.exercises,
+                        workout = workout,
+                        onNameChanged = onWorkoutNameChanged,
                         onRemoveClick = { onWorkoutsChangeClick(workout) },
-                        onAddExerciseClick = {},
-                        onDeleteExerciseClick = {},
+                        onAddExerciseClick = { onExercisesChangeClick(workout, null) },
+                        onDeleteExerciseClick = { onExercisesChangeClick(workout, it) },
                     )
                 }
             }
@@ -143,89 +165,118 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun AddWorkoutBox(onClick: () -> Unit) {
+private fun AddWorkoutBox(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+
     logi("$TAG.AddWorkoutBox", "Invoke")
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+    Card(
+        elevation = 0.dp,
+        modifier = modifier
             .fillMaxWidth()
+            .padding(16.dp, 8.dp)
+            .clip(MaterialTheme.shapes.medium)
             .clickable { onClick() }
     ) {
-        Icon(
-            imageVector = Icons.Rounded.Add,
-            contentDescription = null,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .size(24.dp)
+                .fillMaxWidth()
                 .padding(8.dp)
-        )
-        Text(
-            text = stringResource(R.string.app_fitness_workout_add),
-            style = MaterialTheme.typography.h5,
-            modifier = Modifier.fillMaxWidth()
-        )
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = stringResource(R.string.app_fitness_workout_add),
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
 @Composable
 private fun WorkoutBox(
-    name: String,
-    onNameChanged: (String) -> Unit,
-    exercises: List<ExerciseEntity>,
+    workout: WorkoutEntity,
+    onNameChanged: (WorkoutEntity, String) -> Unit,
     onRemoveClick: () -> Unit,
     onAddExerciseClick: () -> Unit,
     onDeleteExerciseClick: (ExerciseEntity) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    logi("$TAG.WorkoutBox", "Invoke")
-    Column(modifier = Modifier.fillMaxWidth()) {
-        AppTextField(
-            value = name,
-            onValueChange = onNameChanged,
-            placeholder = stringResource(R.string.app_fitness_workout_name),
-            modifier = Modifier.fillMaxWidth()
-        )
-        if (exercises.isNotEmpty()) {
-            exercises.forEachIndexed { index, exercise ->
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "${index + 1}. ${exercise.name}",
-                        style = MaterialTheme.typography.h6,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Icon(
-                        imageVector = Icons.Rounded.Delete,
-                        contentDescription = null,
+    logi("$TAG.WorkoutBox", "Invoke: workout = $workout")
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 8.dp)
+    ) {
+        Column(modifier = modifier.fillMaxWidth()) {
+            AppTextField(
+                value = workout.name,
+                onValueChange = { onNameChanged(workout, it) },
+                placeholder = stringResource(R.string.app_fitness_workout_name),
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (workout.exercises.isNotEmpty()) {
+                workout.exercises.forEachIndexed { index, exercise ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .size(24.dp)
-                            .padding(8.dp)
-                            .clickable { onDeleteExerciseClick(exercise) }
-                    )
+                            .fillMaxWidth()
+                            .padding(8.dp, 4.dp)
+                    ) {
+                        Text(
+                            text = "${index + 1}. ${exercise.name}",
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        )
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(24.dp)
+                                .clickable { onDeleteExerciseClick(exercise) }
+                        )
+                    }
                 }
             }
+            AddExerciseBox(onAddExerciseClick)
         }
-        AddExerciseBox(onAddExerciseClick)
     }
 }
 
 @Composable
-private fun AddExerciseBox(onClick: () -> Unit) {
+private fun AddExerciseBox(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     logi("$TAG.AddExerciseBox", "Invoke")
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
+            .padding(8.dp)
     ) {
         Icon(
             imageVector = Icons.Rounded.Add,
             contentDescription = null,
-            modifier = Modifier
-                .size(24.dp)
-                .padding(8.dp)
+            modifier = Modifier.size(24.dp)
         )
+        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(R.string.app_fitness_exercise_add),
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.fillMaxWidth()
+            style = MaterialTheme.typography.h6
         )
     }
 }
@@ -237,37 +288,10 @@ private fun Preview() {
         ScreenContent(
             name = "Program #1",
             onNameChanged = {},
-            workouts = listOf(
-                WorkoutEntity(
-                    0, "Workout #1",
-                    listOf(
-                        ExerciseEntity(0, "Exercise #1"),
-                        ExerciseEntity(0, "Exercise #2"),
-                        ExerciseEntity(0, "Exercise #3"),
-                        ExerciseEntity(0, "Exercise #4"),
-                        ExerciseEntity(0, "Exercise #5")
-                    )
-                ),
-                WorkoutEntity(
-                    0, "Workout #2",
-                    listOf(
-                        ExerciseEntity(0, "Exercise #1"),
-                        ExerciseEntity(0, "Exercise #2"),
-                        ExerciseEntity(0, "Exercise #3"),
-                    )
-                ),
-                WorkoutEntity(
-                    0, "Workout #3",
-                    listOf(
-                        ExerciseEntity(0, "Exercise #1"),
-                        ExerciseEntity(0, "Exercise #2"),
-                        ExerciseEntity(0, "Exercise #3"),
-                        ExerciseEntity(0, "Exercise #4"),
-                    )
-                ),
-            ),
+            workouts = getProgramEditPreview(),
             onWorkoutsChangeClick = {},
             onExercisesChangeClick = { _, _ -> },
+            onWorkoutNameChanged = { _, _ -> },
             onBackClick = {}
         )
     }
