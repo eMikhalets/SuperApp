@@ -1,6 +1,6 @@
 package com.emikhalets.fitness.presentation.stages
 
-import com.emikhalets.common.UiString
+import com.emikhalets.core.common.UiString
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
 
 data class StagesState(

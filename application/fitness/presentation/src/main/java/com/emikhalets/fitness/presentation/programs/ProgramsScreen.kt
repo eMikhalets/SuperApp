@@ -34,7 +34,6 @@ import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.fitness.domain.R
 import com.emikhalets.fitness.domain.entity.ProgramEntity
 import com.emikhalets.fitness.presentation.programs.ProgramsContract.Action
-import com.emikhalets.fitness.presentation.programs.ProgramsContract.Effect
 
 private const val TAG = "Programs"
 
@@ -46,7 +45,6 @@ fun ProgramsScreen(
 ) {
     logi(TAG, "Invoke")
     val state by viewModel.state.collectAsState()
-    val effect by viewModel.effect.collectAsState(null)
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetPrograms)
@@ -59,13 +57,9 @@ fun ProgramsScreen(
         onBackClick = navigateBack
     )
 
-    when (effect) {
-        is Effect.Error -> {
-            logi(TAG, "Set effect: error")
-            AppDialogMessage((effect as Effect.Error).message)
-        }
-
-        null -> Unit
+    if (state.error != null) {
+        logi(TAG, "Show error dialog")
+        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
     }
 }
 

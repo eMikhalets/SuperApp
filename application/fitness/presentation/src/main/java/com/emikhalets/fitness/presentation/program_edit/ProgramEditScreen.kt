@@ -38,20 +38,17 @@ import com.emikhalets.fitness.domain.R
 import com.emikhalets.fitness.domain.entity.ExerciseEntity
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
 import com.emikhalets.fitness.presentation.program_edit.ProgramEditContract.Action
-import com.emikhalets.fitness.presentation.program_edit.ProgramEditContract.Effect
 
 private const val TAG = "ProgramEdit"
 
 @Composable
 fun ProgramEditScreen(
-    navigateToProgram: (id: Long) -> Unit,
     navigateBack: () -> Unit,
     viewModel: ProgramEditViewModel,
     programId: Long,
 ) {
     logi(TAG, "Invoke: programId = $programId")
     val state by viewModel.state.collectAsState()
-    val effect by viewModel.effect.collectAsState(null)
 
     var name by remember { mutableStateOf("") }
     val workouts = remember { mutableStateListOf<WorkoutEntity>() }
@@ -71,25 +68,36 @@ fun ProgramEditScreen(
         name = name,
         onNameChanged = { name = it },
         workouts = workouts,
-        onAddWorkoutClick = { workouts.add(WorkoutEntity()) },
-        onWorkoutRemoveClick = { workouts.remove(it) },
-        onAddExerciseClick = { workouts.(workouts.find { item -> item.id == it.id }) },
+        onWorkoutsChangeClick = { workout ->
+            workout?.let { workouts.remove(it) }
+                ?: workouts.add(WorkoutEntity())
+        },
+        onExercisesChangeClick = { workout, exercise ->
+            val id = workouts.indexOf(workout)
+            if (id >= 0) {
+                val entity = workouts[id]
+                val newExercises = entity.exercises.toMutableList()
+                workouts[id] = if (exercise != null) {
+                    newExercises.remove(exercise)
+                    entity.copy(exercises = newExercises)
+                } else {
+                    newExercises.add(ExerciseEntity())
+                    entity.copy(exercises = newExercises)
+                }
+            }
+        },
         onBackClick = navigateBack
     )
 
-    when (effect) {
-        is Effect.Error -> {
-            logi(TAG, "Set effect: error")
-            AppDialogMessage((effect as Effect.Error).message)
-        }
+    if (state.error != null) {
+        logi(TAG, "Show error dialog")
+        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
+    }
 
-        Effect.ProgramSaved -> {
-            logi(TAG, "Set effect: program saved")
-            AppToast(R.string.app_fitness_program_saved)
-            navigateBack()
-        }
-
-        null -> Unit
+    if (state.isProgramSaved) {
+        logi(TAG, "Program saved")
+        AppToast(R.string.app_fitness_program_saved)
+        navigateBack()
     }
 }
 
@@ -98,9 +106,8 @@ private fun ScreenContent(
     name: String,
     onNameChanged: (String) -> Unit,
     workouts: List<WorkoutEntity>,
-    onAddWorkoutClick: () -> Unit,
-    onWorkoutRemoveClick: (WorkoutEntity) -> Unit,
-    onAddExerciseClick: (Int) -> Unit,
+    onWorkoutsChangeClick: (WorkoutEntity?) -> Unit,
+    onExercisesChangeClick: (WorkoutEntity, ExerciseEntity?) -> Unit,
     onBackClick: () -> Unit,
 ) {
     logi("$TAG.ScreenContent", "Invoke: name = $name")
@@ -120,13 +127,16 @@ private fun ScreenContent(
                         name = workout.name,
                         onNameChanged = {},
                         exercises = workout.exercises,
-                        onAddExerciseClick = { onAddExerciseClick(workout) },
+                        onRemoveClick = { onWorkoutsChangeClick(workout) },
+                        onAddExerciseClick = {},
                         onDeleteExerciseClick = {},
                     )
                 }
             }
             item {
-                AddWorkoutBox(onAddWorkoutClick)
+                AddWorkoutBox(
+                    onClick = { onWorkoutsChangeClick(null) }
+                )
             }
         }
     }
@@ -161,6 +171,7 @@ private fun WorkoutBox(
     name: String,
     onNameChanged: (String) -> Unit,
     exercises: List<ExerciseEntity>,
+    onRemoveClick: () -> Unit,
     onAddExerciseClick: () -> Unit,
     onDeleteExerciseClick: (ExerciseEntity) -> Unit,
 ) {
@@ -169,7 +180,7 @@ private fun WorkoutBox(
         AppTextField(
             value = name,
             onValueChange = onNameChanged,
-            placeholder = stringResource(R.string.app_fitness_program_name),
+            placeholder = stringResource(R.string.app_fitness_workout_name),
             modifier = Modifier.fillMaxWidth()
         )
         if (exercises.isNotEmpty()) {
@@ -224,9 +235,39 @@ private fun AddExerciseBox(onClick: () -> Unit) {
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            programs = getProgramsPreview(),
-            onProgramClick = {},
-            onAddProgramClick = {},
+            name = "Program #1",
+            onNameChanged = {},
+            workouts = listOf(
+                WorkoutEntity(
+                    0, "Workout #1",
+                    listOf(
+                        ExerciseEntity(0, "Exercise #1"),
+                        ExerciseEntity(0, "Exercise #2"),
+                        ExerciseEntity(0, "Exercise #3"),
+                        ExerciseEntity(0, "Exercise #4"),
+                        ExerciseEntity(0, "Exercise #5")
+                    )
+                ),
+                WorkoutEntity(
+                    0, "Workout #2",
+                    listOf(
+                        ExerciseEntity(0, "Exercise #1"),
+                        ExerciseEntity(0, "Exercise #2"),
+                        ExerciseEntity(0, "Exercise #3"),
+                    )
+                ),
+                WorkoutEntity(
+                    0, "Workout #3",
+                    listOf(
+                        ExerciseEntity(0, "Exercise #1"),
+                        ExerciseEntity(0, "Exercise #2"),
+                        ExerciseEntity(0, "Exercise #3"),
+                        ExerciseEntity(0, "Exercise #4"),
+                    )
+                ),
+            ),
+            onWorkoutsChangeClick = {},
+            onExercisesChangeClick = { _, _ -> },
             onBackClick = {}
         )
     }

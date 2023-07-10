@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.fitness.presentation.program.ProgramScreen
+import com.emikhalets.fitness.presentation.program_edit.ProgramEditScreen
 import com.emikhalets.fitness.presentation.programs.ProgramsScreen
 
 private const val TAG = "AppFitnessGraph"
@@ -22,7 +23,7 @@ fun NavGraphBuilder.applicationFitness(
             ProgramsScreen(
                 navigateToProgram = { id ->
                     logi(TAG, "Navigate to program: id = $id")
-                    navController.navigate(AppFitnessDestination.programWithArgs(id))
+                    navController.navigate(AppFitnessDestination.programEditWithArgs(id))
                 },
                 navigateBack = {
                     logi(TAG, "Navigate back")
@@ -31,15 +32,32 @@ fun NavGraphBuilder.applicationFitness(
                 viewModel = hiltViewModel()
             )
         }
-        composable(AppFitnessDestination.ProgramWithArgs, AppFitnessDestination.programArgsList) {
-            logi(TAG, "Composable NoteItemScreen")
+        composable(
+            AppFitnessDestination.ProgramWithArgs,
+            AppFitnessDestination.programArgsList
+        ) {
+            logi(TAG, "Composable ProgramScreen")
             ProgramScreen(
                 navigateBack = {
                     logi(TAG, "Navigate back")
                     navController.popBackStack()
                 },
                 viewModel = hiltViewModel(),
-                programId = AppFitnessDestination.getProgramArgsId(it)
+                programId = AppFitnessArgs.getProgramId(it)
+            )
+        }
+        composable(
+            AppFitnessDestination.ProgramEditWithArgs,
+            AppFitnessDestination.programEditArgsList
+        ) {
+            logi(TAG, "Composable ProgramEditScreen")
+            ProgramEditScreen(
+                navigateBack = {
+                    logi(TAG, "Navigate back")
+                    navController.popBackStack()
+                },
+                viewModel = hiltViewModel(),
+                programId = AppFitnessArgs.getProgramId(it)
             )
         }
     }

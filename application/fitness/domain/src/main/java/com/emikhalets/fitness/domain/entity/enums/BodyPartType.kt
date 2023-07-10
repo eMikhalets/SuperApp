@@ -1,6 +1,6 @@
-package com.emikhalets.fitness.domain.entity
+package com.emikhalets.fitness.domain.entity.enums
 
-enum class ExerciseType {
+enum class BodyPartType {
 
     Traps,
     Shoulders,

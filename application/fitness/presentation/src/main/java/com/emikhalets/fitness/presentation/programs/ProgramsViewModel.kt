@@ -9,7 +9,6 @@ import com.emikhalets.core.common.onSuccess
 import com.emikhalets.fitness.domain.entity.ProgramEntity
 import com.emikhalets.fitness.domain.usecase.GetProgramsFlowUseCase
 import com.emikhalets.fitness.presentation.programs.ProgramsContract.Action
-import com.emikhalets.fitness.presentation.programs.ProgramsContract.Effect
 import com.emikhalets.fitness.presentation.programs.ProgramsContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -19,20 +18,26 @@ import kotlinx.coroutines.flow.collectLatest
 @HiltViewModel
 class ProgramsViewModel @Inject constructor(
     private val getProgramsFlowUseCase: GetProgramsFlowUseCase,
-) : BaseViewModel<Action, Effect, State>() {
+) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
         logd(TAG, "User event: $action")
         when (action) {
+            Action.DropError -> dropErrorState()
             Action.GetPrograms -> getPrograms()
         }
+    }
+
+    private fun dropErrorState() {
+        setState { it.copy(error = null) }
     }
 
     private fun getPrograms() {
         logd(TAG, "Get programs")
         launchScope {
+            setState { it.copy(isLoading = true) }
             getProgramsFlowUseCase()
                 .onSuccess { flow -> setProgramsState(flow) }
                 .onFailure { code, message -> handleFailure(code, message) }
@@ -48,8 +53,7 @@ class ProgramsViewModel @Inject constructor(
 
     private fun handleFailure(code: Int, message: UiString?) {
         logd(TAG, "Handling error: code = $code")
-        setState { it.copy(isLoading = false) }
-        setEffect { Effect.Error(message) }
+        setState { it.copy(isLoading = false, error = message) }
     }
 
     companion object {

@@ -1,5 +1,7 @@
 package com.emikhalets.fitness.domain.entity
 
+import com.emikhalets.fitness.domain.entity.enums.ProgramType
+
 data class ProgramEntity(
     val id: Long,
     val name: String,

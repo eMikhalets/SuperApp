@@ -1,5 +1,6 @@
 package com.emikhalets.fitness.presentation.stages
 
+/*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.common.UiString
@@ -52,4 +53,4 @@ class StagesViewModel @Inject constructor(
     private fun setErrorState(message: UiString) {
         _state.update { _state.value.copy(error = message) }
     }
-}
+}*/

@@ -10,7 +10,6 @@ import com.emikhalets.fitness.domain.entity.WorkoutEntity
 import com.emikhalets.fitness.domain.usecase.GetProgramUseCase
 import com.emikhalets.fitness.domain.usecase.SaveProgramUseCase
 import com.emikhalets.fitness.presentation.program_edit.ProgramEditContract.Action
-import com.emikhalets.fitness.presentation.program_edit.ProgramEditContract.Effect
 import com.emikhalets.fitness.presentation.program_edit.ProgramEditContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -19,25 +18,31 @@ import javax.inject.Inject
 class ProgramEditViewModel @Inject constructor(
     private val getProgramUseCase: GetProgramUseCase,
     private val saveProgramUseCase: SaveProgramUseCase,
-) : BaseViewModel<Action, Effect, State>() {
+) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
         logd(TAG, "User event: $action")
         when (action) {
+            Action.DropError -> dropErrorState()
             is Action.GetProgram -> getProgram(action.id)
             is Action.SaveProgram -> saveProgram(action.name, action.workouts)
         }
     }
 
+    private fun dropErrorState() {
+        setState { it.copy(error = null) }
+    }
+
     private fun getProgram(id: Long) {
         logd(TAG, "Get program: id = $id")
         if (id <= 0) {
-            setEffect { Effect.Error(UiString.create()) }
+            setState { it.copy(error = UiString.create()) }
             return
         }
         launchScope {
+            setState { it.copy(isLoading = true) }
             getProgramUseCase(id)
                 .onSuccess { entity -> setState { it.copy(isLoading = false, program = entity) } }
                 .onFailure { code, message -> handleFailure(code, message) }
@@ -47,16 +52,16 @@ class ProgramEditViewModel @Inject constructor(
     private fun saveProgram(name: String, workouts: List<WorkoutEntity>) {
         logd(TAG, "Save program: name = $name, workouts = $workouts")
         launchScope {
+            setState { it.copy(isLoading = true) }
             saveProgramUseCase(name, workouts)
-                .onSuccess { setEffect { Effect.ProgramSaved } }
+                .onSuccess { setState { it.copy(isLoading = false, isProgramSaved = true) } }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }
 
     private fun handleFailure(code: Int, message: UiString?) {
         logd(TAG, "Handling error: code = $code")
-        setState { it.copy(isLoading = false) }
-        setEffect { Effect.Error(message) }
+        setState { it.copy(isLoading = false, error = message) }
     }
 
     companion object {
