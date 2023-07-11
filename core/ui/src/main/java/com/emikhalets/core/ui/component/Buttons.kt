@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.ui.theme.AppTheme
@@ -33,6 +34,15 @@ fun AppButton(
             style = MaterialTheme.typography.button
         )
     }
+}
+
+@Composable
+@NonRestartableComposable
+fun AppButtonOk(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AppButton(text = stringResource(com.emikhalets.core.common.R.string.app_ok), onClick, modifier)
 }
 
 @Composable
