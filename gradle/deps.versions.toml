@@ -14,6 +14,7 @@ gradle = "8.1.1"
 jetBrainsKotlin = "1.8.20"
 junit = "4.13.2"
 junitExt = "1.1.4"
+jsoup = "1.16.1"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
@@ -39,6 +40,7 @@ google-hilt-android = { group = "com.google.dagger", name = "hilt-android", vers
 google-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "googleHilt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

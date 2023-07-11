@@ -1,25 +1,31 @@
 package com.emikhalets.convert.domain
 
 import android.content.Context
-import com.emikhalets.core.common.AppDataStore
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import com.emikhalets.core.common.retrieve
+import com.emikhalets.core.common.store
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+private const val NAME = "AppConvertData"
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME)
+
 class ConvertDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
-) : AppDataStore(context, NAME) {
+) {
 
     suspend fun getCurrenciesDate(block: (Long) -> Unit) {
-        getLong(CURRENCIES_DATE) { block(it) }
+        context.dataStore.retrieve(CURRENCIES_DATE, block)
     }
 
     suspend fun setCurrenciesDate(value: Long) {
-        setLong(CURRENCIES_DATE, value)
+        context.dataStore.store(CURRENCIES_DATE, value)
     }
 
     companion object {
 
-        private const val NAME = "AppConvertData"
         private const val CURRENCIES_DATE = "CURRENCIES_DATE"
     }
 }

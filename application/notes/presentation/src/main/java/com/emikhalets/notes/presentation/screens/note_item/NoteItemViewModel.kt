@@ -22,7 +22,7 @@ class NoteItemViewModel @Inject constructor(
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
-        logd(TAG, "User event: $action")
+        logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
             Action.DropError -> dropErrorState()
             Action.DeleteNote -> deleteNote()

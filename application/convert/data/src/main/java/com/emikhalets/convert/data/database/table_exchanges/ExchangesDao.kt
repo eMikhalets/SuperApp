@@ -18,9 +18,15 @@ interface ExchangesDao {
     @Update
     suspend fun update(entity: ExchangeDb)
 
+    @Update
+    suspend fun update(list: List<ExchangeDb>)
+
     @Query("DELETE FROM exchanges WHERE main = :code OR secondary = :code")
     suspend fun delete(code: String)
 
     @Query("SELECT * FROM exchanges")
     fun getAllFlow(): Flow<List<ExchangeDb>>
+
+    @Query("SELECT * FROM exchanges")
+    suspend fun getAll(): List<ExchangeDb>
 }

@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.emikhalets.convert.app.AppConvertDestination
+import com.emikhalets.convert.app.applicationConvert
 import com.emikhalets.core.common.ApplicationEntity
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
@@ -27,7 +28,7 @@ fun AppNavHost(
             bottomBarList(emptyList())
             MainScreen(
                 navigateToApp = { type ->
-                    logi(TAG, "Navigate to application: $type")
+                    logi(TAG, "Navigate to application: ${type.javaClass.simpleName}")
                     navController.navigateApp(type)
                 },
                 navigateToWidget = { id ->
@@ -36,6 +37,7 @@ fun AppNavHost(
                 navigateToNewWidget = {},
             )
         }
+        applicationConvert(navController, bottomBarList)
         applicationFitness(navController, bottomBarList)
         applicationNotes(navController, bottomBarList)
     }

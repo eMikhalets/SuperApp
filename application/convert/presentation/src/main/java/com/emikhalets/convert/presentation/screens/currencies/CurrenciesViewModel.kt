@@ -16,6 +16,8 @@ import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -28,14 +30,25 @@ class CurrenciesViewModel @Inject constructor(
     private val dataStore: ConvertDataStore,
 ) : BaseViewModel<Action, State>() {
 
+    private var convertJob: Job? = null
+
+    init {
+        launchScope {
+            dataStore.getCurrenciesDate { date ->
+                logd(TAG, "Collecting date = $date")
+                setState { it.copy(date = date) }
+            }
+        }
+    }
+
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
-        logd(TAG, "User event: $action")
+        logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
             Action.DropError -> dropErrorState()
             Action.GetExchanges -> getExchanges()
-            Action.NewCurrencyShow -> setState { it.copy(isNewCurrencyVisible = true) }
+            is Action.NewCurrencyShow -> setNewCurrencyState(action.visible)
             is Action.AddCurrency -> addCurrency(action.code)
             is Action.Convert -> convert(action.value)
             is Action.DeleteCurrency -> deleteCurrency(action.code)
@@ -46,6 +59,10 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun dropErrorState() {
         setState { it.copy(error = null) }
+    }
+
+    private fun setNewCurrencyState(visible: Boolean) {
+        setState { it.copy(isNewCurrencyVisible = visible, newCurrencyCode = "") }
     }
 
     private fun getExchanges() {
@@ -59,8 +76,10 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun addCurrency(code: String) {
         logd(TAG, "Add currency: code = $code")
+        if (code.isBlank()) return
         launchScope {
-            addCurrencyUseCase(code)
+            setNewCurrencyState(false)
+            addCurrencyUseCase(code.uppercase())
                 .onSuccess { setState { it.copy(isLoading = false) } }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
@@ -68,6 +87,7 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun deleteCurrency(code: String) {
         logd(TAG, "Delete currency: code = $code")
+        if (code.isBlank()) return
         launchScope {
             deleteCurrencyUseCase(code)
                 .onSuccess { setState { it.copy(isLoading = false) } }
@@ -76,9 +96,11 @@ class CurrenciesViewModel @Inject constructor(
     }
 
     private fun convert(value: Double) {
-        logd(TAG, "Convert value: base = ${currentState.baseCurrency}, value = $value")
-        launchScope {
-            convertCurrencyUseCase(value)
+        if (convertJob?.isActive == true) convertJob?.cancel()
+        convertJob = launchScope {
+            delay(750)
+            logd(TAG, "Convert value: base = ${currentState.baseCurrency}, value = $value")
+            convertCurrencyUseCase(currentState.exchanges, currentState.baseCurrency, value)
                 .onSuccess { result ->
                     setState { it.copy(isLoading = false, currencies = result) }
                 }
@@ -95,16 +117,13 @@ class CurrenciesViewModel @Inject constructor(
                     currencies[exchange.mainCurrency] = exchange.value
                 }
             }
-            dataStore.getCurrenciesDate { date ->
-                setState {
-                    it.copy(
-                        isLoading = false,
-                        exchanges = list,
-                        currencies = currencies,
-                        date = date,
-                        isOldValues = list.any { item -> item.isOldValue() }
-                    )
-                }
+            setState {
+                it.copy(
+                    isLoading = false,
+                    exchanges = list,
+                    currencies = currencies,
+                    isOldValues = list.any { item -> item.isOldValue() }
+                )
             }
         }
     }

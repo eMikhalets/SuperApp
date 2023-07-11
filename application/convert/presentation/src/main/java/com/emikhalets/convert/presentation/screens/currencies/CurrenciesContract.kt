@@ -13,7 +13,7 @@ object CurrenciesContract {
 
         object DropError : Action()
         object GetExchanges : Action()
-        object NewCurrencyShow : Action()
+        class NewCurrencyShow(val visible: Boolean) : Action()
         class AddCurrency(val code: String) : Action()
         class DeleteCurrency(val code: String) : Action()
         class NewCurrencyCode(val code: String) : Action()

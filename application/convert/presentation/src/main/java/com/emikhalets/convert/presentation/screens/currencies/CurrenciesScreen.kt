@@ -42,7 +42,6 @@ import com.emikhalets.core.common.date.formatFullDate
 import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.common.mvi.toDoubleOrZero
 import com.emikhalets.core.ui.asString
 import com.emikhalets.core.ui.component.AppButton
 import com.emikhalets.core.ui.component.AppButtonOk
@@ -67,7 +66,7 @@ fun CurrenciesScreen(
 
     ScreenContent(
         state = state,
-        onNewCurrencyVisible = { viewModel.setAction(Action.NewCurrencyShow) },
+        onNewCurrencyVisible = { viewModel.setAction(Action.NewCurrencyShow(it)) },
         onCurrencyCodeChanged = { viewModel.setAction(Action.NewCurrencyCode(it)) },
         onCurrencySaveClick = { viewModel.setAction(Action.AddCurrency(it)) },
         onCurrencyDeleteClick = { viewModel.setAction(Action.DeleteCurrency(it)) },
@@ -210,7 +209,7 @@ private fun CurrencyBox(
             )
             AppTextField(
                 value = value.toString(),
-                onValueChange = { if (isBase) onBaseValueChanged(it.toDoubleOrZero()) },
+                onValueChange = { if (isBase) onBaseValueChanged(it.toDoubleOrNull() ?: 0.0) },
                 fontSize = 20.sp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -241,9 +240,12 @@ private fun NewCurrencyBox(
 ) {
     logi("$TAG.NewCurrencyBox", "Invoke: code = $code")
 
-    val focusRequester = remember { FocusRequester.Default }
+    val focusRequester = remember { FocusRequester() }
 
-    Row(modifier = modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
         AppTextField(
             value = code,
             onValueChange = onCodeChanged,
@@ -258,7 +260,7 @@ private fun NewCurrencyBox(
             contentDescription = null,
             modifier = Modifier
                 .padding(8.dp)
-                .size(24.dp)
+                .size(32.dp)
                 .clickable { onCancelClick() }
         )
         Icon(

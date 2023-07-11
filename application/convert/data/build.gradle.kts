@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":application:convert:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:database"))
+    implementation(project(":core:network"))
 
     kapt(libs.androidx.room.compiler)
 

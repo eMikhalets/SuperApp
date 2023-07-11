@@ -16,7 +16,7 @@ data class ExchangeEntity(
         id = 0,
         mainCurrency = mainCurrency,
         secondaryCurrency = secondaryCurrency,
-        value = -1.0,
+        value = 0.0,
         date = Date().time,
     )
 
@@ -24,8 +24,9 @@ data class ExchangeEntity(
         return this.copy(value = value)
     }
 
-    fun getExchangeCodes(): Pair<String, String> {
-        return Pair("$mainCurrency$secondaryCurrency", "$secondaryCurrency$mainCurrency")
+    fun getRequestCode(): String {
+        if (secondaryCurrency.isBlank()) return ""
+        return "$mainCurrency$secondaryCurrency"
     }
 
     fun isOldValue(): Boolean {
@@ -35,5 +36,10 @@ data class ExchangeEntity(
             .plusDays(1)
             .timestamp()
         return startOfNextDay >= Date().time
+    }
+
+    fun isCurrency(base: String, currency: String): Boolean {
+        return mainCurrency == base && secondaryCurrency == currency
+                || mainCurrency == currency && secondaryCurrency == base
     }
 }
