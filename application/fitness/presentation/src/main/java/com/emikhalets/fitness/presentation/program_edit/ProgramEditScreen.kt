@@ -57,7 +57,7 @@ fun ProgramEditScreen(
 
     var name by remember { mutableStateOf("") }
     val workouts = remember { mutableStateListOf<WorkoutEntity>() }
-    val exercise by remember { mutableStateOf<ExerciseEntity?>(null) }
+    var changedExercise by remember { mutableStateOf<ExerciseEntity?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetProgram(programId))
@@ -83,12 +83,11 @@ fun ProgramEditScreen(
             if (id >= 0) {
                 val entity = workouts[id]
                 val newExercises = entity.exercises.toMutableList()
-                workouts[id] = if (exercise != null) {
-                    newExercises.remove(exercise)
-                    entity.copy(exercises = newExercises)
+                if (exercise != null) {
+                    changedExercise = exercise
                 } else {
                     newExercises.add(ExerciseEntity())
-                    entity.copy(exercises = newExercises)
+                    workouts[id] = entity.copy(exercises = newExercises)
                 }
             }
         },
@@ -104,13 +103,17 @@ fun ProgramEditScreen(
         AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
     }
 
-    // TODO: implement exercise name changing
-    val exerciseEntity = exercise
-    if (exerciseEntity != null) {
+    val exercise = changedExercise
+    if (exercise != null) {
         logi(TAG, "Show exercise dialog")
         ExerciseDialog(
-            exercise = exerciseEntity,
-            onDoneClick = {}
+            exercise = exercise,
+            onDoneClick = {
+                changedExercise = null
+                // TODO: implement exercise name changing
+//                val id = workouts.indexOf(workout)
+//                workouts[id] = entity.copy(exercises = entity.exercises.toMutableList())
+            }
         )
     }
 
