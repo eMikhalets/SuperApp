@@ -6,6 +6,7 @@ sealed class ApplicationEntity(
     @StringRes val appNameRes: Int,
 ) {
 
+    object Convert : ApplicationEntity(R.string.application_convert)
     object Events : ApplicationEntity(R.string.application_events)
     object Finances : ApplicationEntity(R.string.application_finances)
     object Fitness : ApplicationEntity(R.string.application_fitness)
@@ -16,6 +17,7 @@ sealed class ApplicationEntity(
 
         fun values(): List<ApplicationEntity> {
             val list = mutableListOf<ApplicationEntity>()
+            if (Convert.isVisible()) list.add(Convert)
             if (Events.isVisible()) list.add(Events)
             if (Finances.isVisible()) list.add(Finances)
             if (Fitness.isVisible()) list.add(Fitness)
@@ -28,6 +30,7 @@ sealed class ApplicationEntity(
 
 fun ApplicationEntity.isEnabled(): Boolean {
     return when (this) {
+        ApplicationEntity.Convert -> true
         ApplicationEntity.Events -> false
         ApplicationEntity.Finances -> false
         ApplicationEntity.Fitness -> true
@@ -38,6 +41,7 @@ fun ApplicationEntity.isEnabled(): Boolean {
 
 fun ApplicationEntity.isVisible(): Boolean {
     return when (this) {
+        ApplicationEntity.Convert -> true
         ApplicationEntity.Events -> true
         ApplicationEntity.Finances -> true
         ApplicationEntity.Fitness -> true

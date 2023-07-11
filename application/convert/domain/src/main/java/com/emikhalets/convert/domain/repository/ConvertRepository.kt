@@ -10,5 +10,5 @@ interface ConvertRepository {
 
     suspend fun deleteCurrency(code: String): AppResult<Unit>
 
-    fun getCurrenciesExchange(): AppResult<Flow<List<ExchangeEntity>>>
+    suspend fun getCurrenciesExchange(): AppResult<Flow<List<ExchangeEntity>>>
 }

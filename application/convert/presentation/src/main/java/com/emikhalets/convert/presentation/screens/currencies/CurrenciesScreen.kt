@@ -30,13 +30,17 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.convert.domain.R
 import com.emikhalets.convert.presentation.screens.currencies.CurrenciesContract.Action
-import com.emikhalets.core.common.ApplicationEntity.Notes.appNameRes
+import com.emikhalets.core.common.ApplicationEntity.Convert.appNameRes
 import com.emikhalets.core.common.date.formatFullDate
+import com.emikhalets.core.common.date.localDate
+import com.emikhalets.core.common.date.timestamp
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.common.mvi.toDoubleOrZero
 import com.emikhalets.core.ui.asString
@@ -45,6 +49,7 @@ import com.emikhalets.core.ui.component.AppButtonOk
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.theme.AppTheme
+import java.util.Date
 
 private const val TAG = "Currencies"
 
@@ -109,23 +114,26 @@ private fun ScreenContent(
 
     AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            item {
-                Text(
-                    text = if (state.isOldValues) {
-                        stringResource(R.string.app_convert_old_values, date)
-                    } else {
-                        stringResource(R.string.app_convert_valid_values, date)
-                    },
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .background(
-                            if (state.isOldValues) MaterialTheme.colors.error
-                            else Color.Transparent
-                        )
-                        .padding(16.dp)
-                )
+            if (state.date > 0) {
+                item {
+                    Text(
+                        text = if (state.isOldValues) {
+                            stringResource(R.string.app_convert_old_values, date)
+                        } else {
+                            stringResource(R.string.app_convert_valid_values, date)
+                        },
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .background(
+                                if (state.isOldValues) MaterialTheme.colors.error
+                                else Color.Transparent
+                            )
+                            .padding(16.dp)
+                    )
+                }
             }
             state.currencies.forEach { (code, value) ->
                 item {
@@ -150,13 +158,18 @@ private fun ScreenContent(
                         modifier = Modifier.fillMaxWidth()
                     )
                 } else {
-                    AppButton(
-                        text = stringResource(R.string.app_convert_add),
-                        onClick = { onNewCurrencyVisible(true) },
+                    Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(8.dp)
-                    )
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                    ) {
+                        AppButton(
+                            text = stringResource(R.string.app_convert_add),
+                            onClick = { onNewCurrencyVisible(true) },
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
                 }
             }
         }
@@ -176,21 +189,23 @@ private fun CurrencyBox(
     logi("$TAG.CurrencyBox", "Invoke: code = $code, value = $value, isBase = $isBase")
     Card(
         backgroundColor = if (isBase) {
-            MaterialTheme.colors.surface
+            MaterialTheme.colors.secondary.copy(alpha = 0.1f)
         } else {
-            MaterialTheme.colors.secondary.copy(alpha = 0.2f)
+            MaterialTheme.colors.surface
         },
-        modifier = modifier
+        modifier = modifier.padding(16.dp, 8.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
                 text = code,
-                style = MaterialTheme.typography.subtitle1,
-                color = MaterialTheme.colors.secondary,
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .background(MaterialTheme.colors.surface)
                     .padding(16.dp)
             )
             AppTextField(
@@ -209,7 +224,7 @@ private fun CurrencyBox(
                 contentDescription = null,
                 modifier = Modifier
                     .padding(8.dp)
-                    .size(24.dp)
+                    .size(32.dp)
                     .clickable { onDeleteCurrencyClick(code) }
             )
         }
@@ -267,7 +282,9 @@ private fun Preview() {
     AppTheme {
         ScreenContent(
             state = CurrenciesContract.State(
-                currencies = mapOf("USD" to 123.45, "RUB" to 123.45, "VND" to 123.4)
+                currencies = mapOf("USD" to 123.45, "RUB" to 123.45, "VND" to 123.4),
+                baseCurrency = "RUB",
+                date = Date().time.localDate().minusDays(2).timestamp()
             ),
             onNewCurrencyVisible = {},
             onCurrencyCodeChanged = {},

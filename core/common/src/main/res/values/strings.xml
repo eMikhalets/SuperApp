@@ -5,6 +5,7 @@
     <string name="app_delete">Delete</string>
     <string name="app_cancel">Cancel</string>
 
+    <string name="application_convert">Convert</string>
     <string name="application_events">Events</string>
     <string name="application_finances">Finances</string>
     <string name="application_fitness">Fitness</string>

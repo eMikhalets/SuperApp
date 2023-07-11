@@ -1,5 +1,6 @@
 package com.emikhalets.convert.presentation.screens.currencies
 
+import com.emikhalets.convert.domain.ConvertDataStore
 import com.emikhalets.convert.domain.entity.ExchangeEntity
 import com.emikhalets.convert.domain.usecase.AddCurrencyUseCase
 import com.emikhalets.convert.domain.usecase.ConvertCurrencyUseCase
@@ -14,7 +15,6 @@ import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +25,7 @@ class CurrenciesViewModel @Inject constructor(
     private val addCurrencyUseCase: AddCurrencyUseCase,
     private val deleteCurrencyUseCase: DeleteCurrencyUseCase,
     private val convertCurrencyUseCase: ConvertCurrencyUseCase,
+    private val dataStore: ConvertDataStore,
 ) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
@@ -94,14 +95,16 @@ class CurrenciesViewModel @Inject constructor(
                     currencies[exchange.mainCurrency] = exchange.value
                 }
             }
-            setState {
-                it.copy(
-                    isLoading = false,
-                    exchanges = list,
-                    currencies = currencies,
-                    date = Date().time,
-                    isOldValues = list.any { item -> item.isOldValue() }
-                )
+            dataStore.getCurrenciesDate { date ->
+                setState {
+                    it.copy(
+                        isLoading = false,
+                        exchanges = list,
+                        currencies = currencies,
+                        date = date,
+                        isOldValues = list.any { item -> item.isOldValue() }
+                    )
+                }
             }
         }
     }

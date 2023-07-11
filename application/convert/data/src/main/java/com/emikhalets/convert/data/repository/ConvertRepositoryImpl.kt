@@ -2,6 +2,7 @@ package com.emikhalets.convert.data.repository
 
 import com.emikhalets.convert.data.database.table_exchanges.ExchangesDao
 import com.emikhalets.convert.data.mappers.ExchangesMapper
+import com.emikhalets.convert.domain.ConvertDataStore
 import com.emikhalets.convert.domain.entity.ExchangeEntity
 import com.emikhalets.convert.domain.repository.ConvertRepository
 import com.emikhalets.core.common.AppResult
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.map
 
 class ConvertRepositoryImpl @Inject constructor(
     private val exchangesDao: ExchangesDao,
+    private val dataStore: ConvertDataStore,
 ) : ConvertRepository {
 
     override suspend fun insertCurrency(code: String): AppResult<Unit> {
@@ -44,9 +46,11 @@ class ConvertRepositoryImpl @Inject constructor(
         return execute { exchangesDao.delete(code) }
     }
 
-    override fun getCurrenciesExchange(): AppResult<Flow<List<ExchangeEntity>>> {
+    override suspend fun getCurrenciesExchange(): AppResult<Flow<List<ExchangeEntity>>> {
         logi(TAG, "Get exchanges")
         return execute {
+            // TODO: set parser and update date
+//            dataStore.setCurrenciesDate(Date().time)
             exchangesDao.getAllFlow().map { ExchangesMapper.mapDbListToEntityList(it) }
         }
     }

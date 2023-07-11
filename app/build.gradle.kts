@@ -89,6 +89,7 @@ android {
 
 dependencies {
 
+    implementation(project(":application:convert:app"))
     implementation(project(":application:fitness:app"))
     implementation(project(":application:notes:app"))
 

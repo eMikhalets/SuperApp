@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.emikhalets.convert.app.AppConvertDestination
 import com.emikhalets.core.common.ApplicationEntity
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
@@ -42,6 +43,7 @@ fun AppNavHost(
 
 private fun NavHostController.navigateApp(type: ApplicationEntity) {
     when (type) {
+        ApplicationEntity.Convert -> navigate(AppConvertDestination.NavGraph)
         ApplicationEntity.Events -> Unit
         ApplicationEntity.Finances -> Unit
         ApplicationEntity.Fitness -> navigate(AppFitnessDestination.NavGraph)

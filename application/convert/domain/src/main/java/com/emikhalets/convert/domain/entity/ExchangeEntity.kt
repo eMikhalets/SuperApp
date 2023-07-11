@@ -29,7 +29,11 @@ data class ExchangeEntity(
     }
 
     fun isOldValue(): Boolean {
-        val endOfDay = date.localDate().atStartOfDay().plusDays(1).timestamp()
-        return endOfDay < Date().time
+        val startOfNextDay = date
+            .localDate()
+            .atStartOfDay()
+            .plusDays(1)
+            .timestamp()
+        return startOfNextDay >= Date().time
     }
 }

@@ -29,7 +29,7 @@ object CurrenciesContract {
         val newCurrencyCode: String = "",
         val exchanges: List<ExchangeEntity> = emptyList(),
         val currencies: Map<String, Double> = emptyMap(),
-        val date: Long = 0,
+        val date: Long = -1,
         val baseCurrency: String = "",
         val baseValue: Double = 0.0,
         val error: UiString? = null,

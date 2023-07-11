@@ -11,7 +11,7 @@ class GetExchangesUseCase @Inject constructor(
     private val convertRepository: ConvertRepository,
 ) {
 
-    operator fun invoke(): AppResult<Flow<List<ExchangeEntity>>> {
+    suspend operator fun invoke(): AppResult<Flow<List<ExchangeEntity>>> {
         logi("GetExchangesUC", "Invoke")
         return convertRepository.getCurrenciesExchange()
     }
