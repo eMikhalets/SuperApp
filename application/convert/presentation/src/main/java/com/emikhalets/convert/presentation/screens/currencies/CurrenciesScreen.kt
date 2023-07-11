@@ -21,12 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.emikhalets.convert.domain.R
 import com.emikhalets.convert.presentation.screens.currencies.CurrenciesContract.Action
 import com.emikhalets.core.common.ApplicationEntity.Notes.appNameRes
+import com.emikhalets.core.common.date.formatFullDate
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.common.mvi.toDoubleOrZero
 import com.emikhalets.core.ui.asString
@@ -101,8 +104,29 @@ private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
+
+    val date by remember { mutableStateOf(state.date.formatFullDate()) }
+
     AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            item {
+                Text(
+                    text = if (state.isOldValues) {
+                        stringResource(R.string.app_convert_old_values, date)
+                    } else {
+                        stringResource(R.string.app_convert_valid_values, date)
+                    },
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(
+                            if (state.isOldValues) MaterialTheme.colors.error
+                            else Color.Transparent
+                        )
+                        .padding(16.dp)
+                )
+            }
             state.currencies.forEach { (code, value) ->
                 item {
                     CurrencyBox(
@@ -115,24 +139,24 @@ private fun ScreenContent(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                item {
-                    if (state.isNewCurrencyVisible) {
-                        NewCurrencyBox(
-                            code = state.newCurrencyCode,
-                            onCodeChanged = onCurrencyCodeChanged,
-                            onSaveClick = onCurrencySaveClick,
-                            onCancelClick = { onNewCurrencyVisible(false) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    } else {
-                        AppButton(
-                            text = stringResource(R.string.app_convert_add),
-                            onClick = { onNewCurrencyVisible(true) },
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(8.dp)
-                        )
-                    }
+            }
+            item {
+                if (state.isNewCurrencyVisible) {
+                    NewCurrencyBox(
+                        code = state.newCurrencyCode,
+                        onCodeChanged = onCurrencyCodeChanged,
+                        onSaveClick = onCurrencySaveClick,
+                        onCancelClick = { onNewCurrencyVisible(false) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    AppButton(
+                        text = stringResource(R.string.app_convert_add),
+                        onClick = { onNewCurrencyVisible(true) },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(8.dp)
+                    )
                 }
             }
         }
