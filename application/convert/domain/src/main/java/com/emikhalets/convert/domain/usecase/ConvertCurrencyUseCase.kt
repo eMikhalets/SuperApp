@@ -1,6 +1,7 @@
 package com.emikhalets.convert.domain.usecase
 
 import com.emikhalets.convert.domain.entity.ExchangeEntity
+import com.emikhalets.convert.domain.entity.getCurrencies
 import com.emikhalets.core.common.AppResult
 import com.emikhalets.core.common.execute
 import com.emikhalets.core.common.logi
@@ -18,8 +19,7 @@ class ConvertCurrencyUseCase @Inject constructor() {
         logi("ConvertCurrencyUC", "Invoke")
         return withContext(Dispatchers.IO) {
             execute {
-                input.map { it.mainCurrency }
-                    .toSet()
+                input.getCurrencies()
                     .associateBy(
                         { it },
                         {

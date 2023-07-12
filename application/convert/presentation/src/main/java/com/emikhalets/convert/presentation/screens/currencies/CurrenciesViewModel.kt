@@ -2,6 +2,7 @@ package com.emikhalets.convert.presentation.screens.currencies
 
 import com.emikhalets.convert.domain.ConvertDataStore
 import com.emikhalets.convert.domain.entity.ExchangeEntity
+import com.emikhalets.convert.domain.entity.getCurrencies
 import com.emikhalets.convert.domain.usecase.AddCurrencyUseCase
 import com.emikhalets.convert.domain.usecase.ConvertCurrencyUseCase
 import com.emikhalets.convert.domain.usecase.DeleteCurrencyUseCase
@@ -80,7 +81,7 @@ class CurrenciesViewModel @Inject constructor(
         launchScope {
             setNewCurrencyState(false)
             addCurrencyUseCase(code.uppercase())
-                .onSuccess { setState { it.copy(isLoading = false) } }
+                .onSuccess { getExchanges() }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }
@@ -95,28 +96,26 @@ class CurrenciesViewModel @Inject constructor(
         }
     }
 
-    private fun convert(value: Double) {
+    private fun convert(value: String) {
+        setState { it.copy(baseValue = value) }
         if (convertJob?.isActive == true) convertJob?.cancel()
         convertJob = launchScope {
             delay(750)
             logd(TAG, "Convert value: base = ${currentState.baseCurrency}, value = $value")
-            convertCurrencyUseCase(currentState.exchanges, currentState.baseCurrency, value)
-                .onSuccess { result ->
-                    setState { it.copy(isLoading = false, currencies = result) }
-                }
-                .onFailure { code, message -> handleFailure(code, message) }
+            value.toDoubleOrNull()?.let { converted ->
+                convertCurrencyUseCase(currentState.exchanges, currentState.baseCurrency, converted)
+                    .onSuccess { result ->
+                        setState { it.copy(isLoading = false, currencies = result) }
+                    }
+                    .onFailure { code, message -> handleFailure(code, message) }
+            }
         }
     }
 
     private suspend fun setExchangesFlow(flow: Flow<List<ExchangeEntity>>) {
         flow.collectLatest { list ->
             logd(TAG, "Collecting exchanges list: $list")
-            val currencies = mutableMapOf<String, Double>()
-            list.forEach { exchange ->
-                if (!currencies.containsKey(exchange.mainCurrency)) {
-                    currencies[exchange.mainCurrency] = exchange.value
-                }
-            }
+            val currencies = list.getCurrencies().associateBy({ it }, { 0.0 })
             setState {
                 it.copy(
                     isLoading = false,

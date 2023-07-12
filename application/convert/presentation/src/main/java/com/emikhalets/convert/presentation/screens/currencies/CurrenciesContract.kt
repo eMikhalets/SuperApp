@@ -17,7 +17,7 @@ object CurrenciesContract {
         class AddCurrency(val code: String) : Action()
         class DeleteCurrency(val code: String) : Action()
         class NewCurrencyCode(val code: String) : Action()
-        class Convert(val value: Double) : Action()
+        class Convert(val value: String) : Action()
         class SetBase(val code: String) : Action()
     }
 
@@ -29,9 +29,9 @@ object CurrenciesContract {
         val newCurrencyCode: String = "",
         val exchanges: List<ExchangeEntity> = emptyList(),
         val currencies: Map<String, Double> = emptyMap(),
-        val date: Long = -1,
+        val date: Long = 0,
         val baseCurrency: String = "",
-        val baseValue: Double = 0.0,
+        val baseValue: String = "0.0",
         val error: UiString? = null,
     ) : UiState
 }

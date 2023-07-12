@@ -5,6 +5,7 @@ import com.emikhalets.convert.data.database.table_exchanges.ExchangesDao
 import com.emikhalets.convert.data.mappers.ExchangesMapper
 import com.emikhalets.convert.domain.ConvertDataStore
 import com.emikhalets.convert.domain.entity.ExchangeEntity
+import com.emikhalets.convert.domain.entity.getCurrencies
 import com.emikhalets.convert.domain.repository.ConvertRepository
 import com.emikhalets.core.common.AppResult
 import com.emikhalets.core.common.execute
@@ -22,28 +23,34 @@ class ConvertRepositoryImpl @Inject constructor(
     override suspend fun insertCurrency(code: String): AppResult<Unit> {
         logi(TAG, "Insert currency: code = $code")
         return execute {
-            val newExchanges = exchangesDao.getAll()
-                .mapNotNull { if (it.secondary.isNotBlank()) it.main else null }
-                .toSet()
-                .map { ExchangeEntity(it, code) }
-                .ifEmptyOrHasCode(code)
-            exchangesDao.insert(ExchangesMapper.mapEntityListToDbList(newExchanges))
-        }
-    }
-
-    private fun List<ExchangeEntity>.ifEmptyOrHasCode(code: String): List<ExchangeEntity> {
-        return if (count() == 1 && first().secondaryCurrency.isBlank()) {
-            listOf(first().copy(secondaryCurrency = code))
-        } else if (isEmpty()) {
-            listOf(ExchangeEntity(code, ""))
-        } else {
-            this
+            val exchanges = exchangesDao.getAll()
+            if (exchanges.map { it.main }.contains(code)) {
+                return AppResult.success(Unit)
+            }
+            if (exchanges.count() == 1 && exchanges.first().secondary.isBlank()) {
+                exchangesDao.update(exchanges.first().copy(secondary = code))
+            } else {
+                val newExchanges = exchanges
+                    .map { ExchangesMapper.mapDbToEntity(it) }
+                    .getCurrencies()
+                    .map { ExchangeEntity(it, code) }
+                    .ifEmpty { listOf(ExchangeEntity(code, "")) }
+                exchangesDao.insert(ExchangesMapper.mapEntityListToDbList(newExchanges))
+            }
         }
     }
 
     override suspend fun deleteCurrency(code: String): AppResult<Unit> {
         logi(TAG, "Delete currency: code = $code")
-        return execute { exchangesDao.delete(code) }
+        return execute {
+            val exchanges = exchangesDao.getAll()
+            if (exchanges.count() == 1 && exchanges.first().secondary.isNotBlank()) {
+                dataStore.setCurrenciesDate(0)
+                exchangesDao.update(exchanges.first().copy(secondary = ""))
+            } else {
+                exchangesDao.delete(code)
+            }
+        }
     }
 
     override suspend fun getCurrenciesExchange(): AppResult<Flow<List<ExchangeEntity>>> {
@@ -62,8 +69,9 @@ class ConvertRepositoryImpl @Inject constructor(
             .any { item -> item.secondaryCurrency.isNotBlank() && item.isOldValue() }
         logi(TAG, "Need update exchanges: $needUpdate")
         if (needUpdate) {
-            CurrencyParser().getExchanges(result)
-            dataStore.setCurrenciesDate(Date().time)
+            val date = Date().time
+            CurrencyParser().getExchanges(result, date)
+            dataStore.setCurrenciesDate(date)
         }
     }
 

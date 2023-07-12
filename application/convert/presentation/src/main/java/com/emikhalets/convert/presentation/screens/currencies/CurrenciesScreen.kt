@@ -31,6 +31,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -103,7 +104,7 @@ private fun ScreenContent(
     onCurrencyCodeChanged: (String) -> Unit,
     onCurrencySaveClick: (String) -> Unit,
     onCurrencyDeleteClick: (String) -> Unit,
-    onBaseValueChanged: (Double) -> Unit,
+    onBaseValueChanged: (String) -> Unit,
     onSetBaseCurrency: (String) -> Unit,
     onBackClick: () -> Unit,
 ) {
@@ -138,7 +139,7 @@ private fun ScreenContent(
                 item {
                     CurrencyBox(
                         code = code,
-                        value = value,
+                        value = if (code == state.baseCurrency) state.baseValue else value.toString(),
                         isBase = code == state.baseCurrency,
                         onBaseValueChanged = onBaseValueChanged,
                         onSetBaseCurrency = onSetBaseCurrency,
@@ -178,9 +179,9 @@ private fun ScreenContent(
 @Composable
 private fun CurrencyBox(
     code: String,
-    value: Double,
+    value: String,
     isBase: Boolean,
-    onBaseValueChanged: (Double) -> Unit,
+    onBaseValueChanged: (String) -> Unit,
     onSetBaseCurrency: (String) -> Unit,
     onDeleteCurrencyClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -208,8 +209,9 @@ private fun CurrencyBox(
                     .padding(16.dp)
             )
             AppTextField(
-                value = value.toString(),
-                onValueChange = { if (isBase) onBaseValueChanged(it.toDoubleOrNull() ?: 0.0) },
+                value = value,
+                onValueChange = { if (isBase) onBaseValueChanged(it) },
+                keyboardType = KeyboardType.Number,
                 fontSize = 20.sp,
                 modifier = Modifier
                     .fillMaxWidth()
