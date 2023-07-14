@@ -1,6 +1,7 @@
 package com.emikhalets.convert.data.database
 
 import android.content.Context
+import com.emikhalets.convert.data.database.table_currencies.CurrenciesDao
 import com.emikhalets.convert.data.database.table_exchanges.ExchangesDao
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,11 @@ object ConvertDatabaseModule {
     @Provides
     fun provideConvertDatabase(@ApplicationContext context: Context): ConvertDatabase {
         return ConvertDatabase.getInstance(context)
+    }
+
+    @Provides
+    fun providesCurrenciesDao(database: ConvertDatabase): CurrenciesDao {
+        return database.currenciesDao
     }
 
     @Provides

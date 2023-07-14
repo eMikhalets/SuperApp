@@ -5,14 +5,13 @@ import com.emikhalets.convert.domain.repository.ConvertRepository
 import com.emikhalets.core.common.AppResult
 import com.emikhalets.core.common.logi
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
 
 class GetExchangesUseCase @Inject constructor(
     private val convertRepository: ConvertRepository,
 ) {
 
-    suspend operator fun invoke(): AppResult<Flow<List<ExchangeEntity>>> {
+    suspend operator fun invoke(): AppResult<List<ExchangeEntity>> {
         logi("GetExchangesUC", "Invoke")
-        return convertRepository.getCurrenciesExchange()
+        return convertRepository.getExchanges()
     }
 }

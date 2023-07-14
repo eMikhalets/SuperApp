@@ -12,8 +12,7 @@ object ExchangesMapper {
         logi(TAG, "Db To Entity: entity = $entity")
         val result = ExchangeEntity(
             id = entity.id,
-            mainCurrency = entity.main,
-            secondaryCurrency = entity.secondary,
+            code = entity.code,
             value = entity.value,
             date = entity.date
         )
@@ -29,8 +28,7 @@ object ExchangesMapper {
         logi(TAG, "Entity To Db: entity = $entity")
         val result = ExchangeDb(
             id = entity.id,
-            main = entity.mainCurrency,
-            secondary = entity.secondaryCurrency,
+            code = entity.code,
             value = entity.value,
             date = entity.date
         )

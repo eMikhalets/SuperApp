@@ -10,22 +10,25 @@ class CurrencyParser : AppParser() {
 
     private val source = "https://tradingeconomics.com/currencies?base="
     private val currencyRowKey = "[data-symbol*=CUR]"
+    private val dataSymbolKey = "data-symbol"
 
-    suspend fun getExchanges(input: MutableList<ExchangeEntity>, date: Long) {
+    suspend fun replaceExchangesValues(
+        input: List<ExchangeEntity>,
+        date: Long,
+    ): List<ExchangeEntity> {
         logi(TAG, "Get exchanges: input = $input")
-        if (input.count() == 1 && input.first().secondaryCurrency.isBlank()) return
-        val codes = input.map { it.getRequestCode() }.toSet()
-        val valuesMap = codes
-            .mapNotNull { it.take(3).ifEmpty { null } }
-            .toSet()
+        val codes = input.map { it.code }
+        val newValues = input
+            .filter { it.isOldValue() }
+            .map { it.code.take(3) }.toSet()
             .map { parseSource("$source$it") }
             .flatMap { it.getElements(currencyRowKey) }
-            .filter { codes.contains(it.getElementsByAttribute("data-symbol").toString()) }
+            .filter { codes.containsDataSymbol(it) }
             .mapNotNull { convertData(it) }
             .associateBy({ it.first }, { it.second })
-        input.forEachIndexed { index, entity ->
-            val value = valuesMap[entity.getRequestCode()]
-            value?.let { input[index] = entity.withValue(it, date) }
+        return input.map { entity ->
+            val value = newValues[entity.code]
+            value?.let { entity.withValue(it, date) } ?: entity
         }
     }
 
@@ -36,6 +39,16 @@ class CurrencyParser : AppParser() {
         } catch (e: IndexOutOfBoundsException) {
             loge(TAG, e)
             null
+        }
+    }
+
+    private fun List<String>.containsDataSymbol(element: Element): Boolean {
+        return try {
+            val code = element.attr(dataSymbolKey).split(":").first()
+            contains(code)
+        } catch (e: IndexOutOfBoundsException) {
+            loge(TAG, e)
+            false
         }
     }
 

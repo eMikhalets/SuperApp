@@ -12,23 +12,24 @@ object CurrenciesContract {
     sealed class Action : UiAction {
 
         object DropError : Action()
+        object GetCurrencies : Action()
         object GetExchanges : Action()
-        class NewCurrencyShow(val visible: Boolean) : Action()
         class AddCurrency(val code: String) : Action()
         class DeleteCurrency(val code: String) : Action()
-        class NewCurrencyCode(val code: String) : Action()
         class Convert(val value: String) : Action()
-        class SetBase(val code: String) : Action()
+        class NewCurrencyShow(val visible: Boolean) : Action()
+        class NewCurrencyCode(val code: String) : Action()
+        class SetBaseCurrency(val code: String) : Action()
     }
 
     @Immutable
     data class State(
         val isLoading: Boolean = false,
-        val isOldValues: Boolean = false,
+        val exchanges: List<ExchangeEntity> = emptyList(),
+        val currencies: List<Pair<String, Double>> = emptyList(),
+        val isOldExchanges: Boolean = false,
         val isNewCurrencyVisible: Boolean = false,
         val newCurrencyCode: String = "",
-        val exchanges: List<ExchangeEntity> = emptyList(),
-        val currencies: Map<String, Double> = emptyMap(),
         val date: Long = 0,
         val baseCurrency: String = "",
         val baseValue: String = "0.0",

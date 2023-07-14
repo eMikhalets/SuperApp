@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExchangesDao {
@@ -21,11 +20,8 @@ interface ExchangesDao {
     @Update
     suspend fun update(list: List<ExchangeDb>)
 
-    @Query("DELETE FROM exchanges WHERE main = :code OR secondary = :code")
+    @Query("DELETE FROM exchanges WHERE code LIKE '%' + :code + '%'")
     suspend fun delete(code: String)
-
-    @Query("SELECT * FROM exchanges")
-    fun getAllFlow(): Flow<List<ExchangeDb>>
 
     @Query("SELECT * FROM exchanges")
     suspend fun getAll(): List<ExchangeDb>

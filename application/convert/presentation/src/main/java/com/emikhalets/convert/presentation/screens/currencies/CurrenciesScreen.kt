@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -21,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +45,6 @@ import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.asString
-import com.emikhalets.core.ui.component.AppButton
 import com.emikhalets.core.ui.component.AppButtonOk
 import com.emikhalets.core.ui.component.AppChildScreenBox
 import com.emikhalets.core.ui.component.AppTextField
@@ -62,6 +62,7 @@ fun CurrenciesScreen(
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.setAction(Action.GetCurrencies)
         viewModel.setAction(Action.GetExchanges)
     }
 
@@ -72,7 +73,7 @@ fun CurrenciesScreen(
         onCurrencySaveClick = { viewModel.setAction(Action.AddCurrency(it)) },
         onCurrencyDeleteClick = { viewModel.setAction(Action.DeleteCurrency(it)) },
         onBaseValueChanged = { viewModel.setAction(Action.Convert(it)) },
-        onSetBaseCurrency = { viewModel.setAction(Action.SetBase(it)) },
+        onSetBaseCurrency = { viewModel.setAction(Action.SetBaseCurrency(it)) },
         onBackClick = navigateBack
     )
 
@@ -109,68 +110,111 @@ private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
-
-    val date by remember { mutableStateOf(state.date.formatFullDate()) }
-
     AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            if (state.date > 0) {
-                item {
-                    Text(
-                        text = if (state.isOldValues) {
-                            stringResource(R.string.app_convert_old_values, date)
-                        } else {
-                            stringResource(R.string.app_convert_valid_values, date)
-                        },
-                        style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .background(
-                                if (state.isOldValues) MaterialTheme.colors.error
-                                else Color.Transparent
-                            )
-                            .padding(16.dp)
-                    )
-                }
+            item {
+                DateLoaderBox(
+                    timestamp = state.date,
+                    isLoading = state.isLoading,
+                    isOldExchanges = state.isOldExchanges
+                )
             }
-            state.currencies.forEach { (code, value) ->
-                item {
-                    CurrencyBox(
-                        code = code,
-                        value = if (code == state.baseCurrency) state.baseValue else value.toString(),
-                        isBase = code == state.baseCurrency,
-                        onBaseValueChanged = onBaseValueChanged,
-                        onSetBaseCurrency = onSetBaseCurrency,
-                        onDeleteCurrencyClick = onCurrencyDeleteClick,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+            items(state.currencies) { (code, value) ->
+                CurrencyBox(
+                    code = code,
+                    value = if (code == state.baseCurrency) state.baseValue else value.toString(),
+                    isBase = code == state.baseCurrency,
+                    onBaseValueChanged = onBaseValueChanged,
+                    onSetBaseCurrency = onSetBaseCurrency,
+                    onDeleteCurrencyClick = onCurrencyDeleteClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
             item {
-                if (state.isNewCurrencyVisible) {
-                    NewCurrencyBox(
-                        code = state.newCurrencyCode,
-                        onCodeChanged = onCurrencyCodeChanged,
-                        onSaveClick = onCurrencySaveClick,
-                        onCancelClick = { onNewCurrencyVisible(false) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                NewCurrencyBox(
+                    isNewCurrencyVisible = state.isNewCurrencyVisible,
+                    newCurrencyCode = state.newCurrencyCode,
+                    onCurrencyCodeChanged = onCurrencyCodeChanged,
+                    onCurrencySaveClick = onCurrencySaveClick,
+                    onNewCurrencyVisible = onNewCurrencyVisible,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DateLoaderBox(
+    timestamp: Long,
+    isLoading: Boolean,
+    isOldExchanges: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.DateLoaderBox", "Invoke: timestamp = $timestamp")
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        if (timestamp > 0) {
+            Text(
+                text = if (isOldExchanges) {
+                    stringResource(R.string.app_convert_old_values, timestamp.formatFullDate())
                 } else {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp)
-                    ) {
-                        AppButton(
-                            text = stringResource(R.string.app_convert_add),
-                            onClick = { onNewCurrencyVisible(true) },
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                }
+                    stringResource(R.string.app_convert_valid_values, timestamp.formatFullDate())
+                },
+                style = MaterialTheme.typography.body2,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        if (isOldExchanges) MaterialTheme.colors.error else Color.Transparent
+                    )
+                    .padding(8.dp)
+            )
+        }
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun NewCurrencyBox(
+    isNewCurrencyVisible: Boolean,
+    newCurrencyCode: String,
+    onCurrencyCodeChanged: (String) -> Unit,
+    onCurrencySaveClick: (String) -> Unit,
+    onNewCurrencyVisible: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.NewCurrencyBox", "Invoke")
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp)
+            .padding(16.dp, 8.dp)
+            .clickable { onNewCurrencyVisible(true) }
+    ) {
+        if (isNewCurrencyVisible) {
+            NewCurrencyEditBox(
+                code = newCurrencyCode,
+                onCodeChanged = onCurrencyCodeChanged,
+                onSaveClick = onCurrencySaveClick,
+                onCancelClick = { onNewCurrencyVisible(false) },
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = stringResource(R.string.app_convert_add),
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
     }
@@ -187,17 +231,25 @@ private fun CurrencyBox(
     modifier: Modifier = Modifier,
 ) {
     logi("$TAG.CurrencyBox", "Invoke: code = $code, value = $value, isBase = $isBase")
+
+    val focusRequester = remember { FocusRequester() }
+
     Card(
         backgroundColor = if (isBase) {
-            MaterialTheme.colors.secondary.copy(alpha = 0.1f)
+            MaterialTheme.colors.secondary
         } else {
             MaterialTheme.colors.surface
         },
-        modifier = modifier.padding(16.dp, 8.dp)
+        modifier = modifier
+            .padding(16.dp, 8.dp)
+            .clickable {
+                focusRequester.requestFocus()
+                onSetBaseCurrency(code)
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxSize()
         ) {
             Text(
                 text = code,
@@ -216,37 +268,30 @@ private fun CurrencyBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f)
+                    .focusRequester(focusRequester)
                     .onFocusChanged {
                         if (it.hasFocus) onSetBaseCurrency(code)
                     }
-            )
-            Icon(
-                imageVector = Icons.Rounded.Delete,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(32.dp)
-                    .clickable { onDeleteCurrencyClick(code) }
             )
         }
     }
 }
 
 @Composable
-private fun NewCurrencyBox(
+private fun NewCurrencyEditBox(
     code: String,
     onCodeChanged: (String) -> Unit,
     onSaveClick: (String) -> Unit,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    logi("$TAG.NewCurrencyBox", "Invoke: code = $code")
+    logi("$TAG.NewCurrencyEditBox", "Invoke: code = $code")
 
     val focusRequester = remember { FocusRequester() }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = Modifier.fillMaxSize()
     ) {
         AppTextField(
             value = code,
@@ -286,9 +331,9 @@ private fun Preview() {
     AppTheme {
         ScreenContent(
             state = CurrenciesContract.State(
-                currencies = mapOf("USD" to 123.45, "RUB" to 123.45, "VND" to 123.4),
+                currencies = listOf("USD" to 123.45, "RUB" to 123.45, "VND" to 123.4),
                 baseCurrency = "RUB",
-                date = Date().time.localDate().minusDays(2).timestamp()
+                date = Date().time.localDate().timestamp(),
             ),
             onNewCurrencyVisible = {},
             onCurrencyCodeChanged = {},

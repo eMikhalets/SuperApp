@@ -6,27 +6,24 @@ import java.util.Date
 
 data class ExchangeEntity(
     val id: Long,
-    val mainCurrency: String,
-    val secondaryCurrency: String,
+    val code: String,
     val value: Double,
     val date: Long,
 ) {
 
-    constructor(mainCurrency: String, secondaryCurrency: String) : this(
-        id = 0,
-        mainCurrency = mainCurrency,
-        secondaryCurrency = secondaryCurrency,
-        value = 0.0,
-        date = 0,
-    )
+    val main: String get() = code.take(3)
+    val secondary: String get() = code.takeLast(3)
 
-    fun withValue(value: Double, date: Long): ExchangeEntity {
-        return this.copy(value = value, date = date)
+    constructor(code: String) : this(0, code, 0.0, 0)
+
+    constructor(main: String, sub: String) : this(0, "$main$sub", 0.0, 0)
+
+    fun withValue(value: Double?, date: Long): ExchangeEntity {
+        return value?.let { this.copy(value = value, date = date) } ?: this
     }
 
-    fun getRequestCode(): String {
-        if (secondaryCurrency.isBlank()) return ""
-        return "$mainCurrency$secondaryCurrency"
+    fun addCode(code: String): ExchangeEntity {
+        return this.copy(code = "${this.code}$code")
     }
 
     fun isOldValue(): Boolean {
@@ -38,14 +35,19 @@ data class ExchangeEntity(
         return startOfNextDay < Date().time
     }
 
-    fun isCurrency(base: String, currency: String): Boolean {
-        return mainCurrency == base && secondaryCurrency == currency
-                || mainCurrency == currency && secondaryCurrency == base
+    fun containsPair(base: String, currency: String): Boolean {
+        return (main == base && secondary == currency) || (main == currency && secondary == base)
+    }
+
+    fun calculate(base: String, value: Double): Double {
+        return when (base) {
+            main -> value * this.value
+            secondary -> value * (1 / this.value)
+            else -> 0.0
+        }
     }
 }
 
-fun List<ExchangeEntity>.getCurrencies(): Set<String> {
-    val mainSet = map { it.mainCurrency }.toSet()
-    val secondarySet = mapNotNull { it.secondaryCurrency.ifEmpty { null } }.toSet()
-    return mainSet + secondarySet
+fun List<ExchangeEntity>.filterNeedUpdate(): List<ExchangeEntity> {
+    return filter { item -> (item.code.count() > 3) && item.isOldValue() }
 }
