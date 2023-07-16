@@ -2,6 +2,7 @@ package com.emikhalets.convert.presentation.screens.currencies
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -114,7 +115,7 @@ fun CurrenciesScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ScreenContent(
     state: CurrenciesContract.State,
@@ -135,14 +136,16 @@ private fun ScreenContent(
                     isOldExchanges = state.isOldExchanges
                 )
             }
-            items(state.currencies) { (code, value) ->
+            items(state.currencies, key = { it.first }) { (code, value) ->
                 CurrencyBox(
                     code = code,
                     value = if (code == state.baseCurrency) state.baseValue else value.toString(),
                     isBase = code == state.baseCurrency,
                     onBaseCurrencyEvent = onBaseCurrencyEvent,
                     onDeleteCurrencyClick = onCurrencyDeleteClick,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItemPlacement()
                 )
             }
             item {
@@ -279,22 +282,23 @@ private fun CurrencyBox(
     logi("$TAG.CurrencyBox", "Invoke: code = $code, value = $value, isBase = $isBase")
 
     val focusRequester = remember { FocusRequester() }
-    val dismissState = rememberDismissState()
-
-    if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-        onDeleteCurrencyClick(code)
-    }
+    val dismissState = rememberDismissState(
+        confirmStateChange = {
+            if (it == DismissValue.DismissedToStart) {
+                onDeleteCurrencyClick(code)
+                return@rememberDismissState true
+            }
+            false
+        }
+    )
 
     SwipeToDismiss(
         state = dismissState,
         background = { CurrencySwipeBackBox(targetValue = dismissState.targetValue) },
         directions = setOf(DismissDirection.EndToStart),
-        dismissThresholds = { direction ->
-            val fraction = if (direction == DismissDirection.EndToStart) 0.2f else 0.05f
-            FractionalThreshold(fraction)
-        },
+        dismissThresholds = { FractionalThreshold(0.3f) },
         modifier = modifier
-            .padding(16.dp, 8.dp)
+            .padding(16.dp, 4.dp)
             .clip(MaterialTheme.shapes.medium)
     ) {
         Card(

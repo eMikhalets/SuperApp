@@ -20,7 +20,7 @@ interface ExchangesDao {
     @Update
     suspend fun update(list: List<ExchangeDb>)
 
-    @Query("DELETE FROM exchanges WHERE code LIKE '%' + :code + '%'")
+    @Query("DELETE FROM exchanges WHERE code LIKE '%' || :code || '%'")
     suspend fun delete(code: String)
 
     @Query("DELETE FROM exchanges")
