@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.UiString
@@ -25,7 +24,6 @@ import com.emikhalets.core.ui.theme.text
 fun AppErrorBox(
     message: UiString?,
     modifier: Modifier = Modifier,
-    hasBorder: Boolean = true,
     onDismiss: () -> Unit = {},
 ) {
     if (message == null) return
@@ -33,12 +31,7 @@ fun AppErrorBox(
     logi("ErrorBox", "Invoke: message = ${message.asString()}")
 
     AppDialog(onDismiss = onDismiss) {
-        AppCard(
-            shape = RectangleShape,
-            modifier = modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        ) {
+        Column(modifier = modifier.fillMaxWidth()) {
             Text(
                 text = message.asString(),
                 style = MaterialTheme.typography.text,

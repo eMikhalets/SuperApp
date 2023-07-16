@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -26,8 +23,7 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Save
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,11 +52,17 @@ import com.emikhalets.core.common.date.formatFullDate
 import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.ApplicationEntity.Convert.appNameRes
-import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.ui.ScreenPreview
+import com.emikhalets.core.ui.component.AppCard
+import com.emikhalets.core.ui.component.AppContent
 import com.emikhalets.core.ui.component.AppErrorBox
+import com.emikhalets.core.ui.component.AppFloatButtonBox
+import com.emikhalets.core.ui.component.AppLinearLoader
 import com.emikhalets.core.ui.component.AppTextField
+import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.text
 import java.util.Date
 
 private const val TAG = "Currencies"
@@ -93,13 +94,21 @@ fun CurrenciesScreen(
         onBackClick = navigateBack
     )
 
+    NewCurrencyBox(
+        newCurrencyCode = state.newCurrencyCode,
+        isVisible = state.newCurrencyVisible,
+        onNewCurrencyEvent = { code, visible ->
+            viewModel.setAction(Action.NewCurrencyEvent(code, visible))
+        },
+        onSaveClick = { viewModel.setAction(Action.AddCurrency(it)) }
+    )
+
     AppErrorBox(
         message = state.error,
         onDismiss = { viewModel.setAction(Action.DropError) }
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ScreenContent(
     state: CurrenciesContract.State,
@@ -112,36 +121,183 @@ private fun ScreenContent(
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
 
-    AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            item {
+    AppContent(ApplicationEntity.Convert.getName(), onBackClick) {
+        AppFloatButtonBox(
+            icon = Icons.Rounded.Add,
+            onClick = { onNewCurrencyEvent("", true) }
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
                 DateLoaderBox(
                     timestamp = state.date,
-                    isLoading = state.isLoading,
                     isOldExchanges = state.isOldExchanges
                 )
-            }
-            items(state.currencies, key = { it.first }) { (code, value) ->
-                CurrencyBox(
-                    code = code,
-                    value = if (code == state.baseCurrency) state.baseValue else value.toString(),
-                    isBase = code == state.baseCurrency,
-                    onBaseCurrencyEvent = onBaseCurrencyEvent,
-                    onDeleteCurrencyClick = onCurrencyDeleteClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItemPlacement()
+                AppLinearLoader(
+                    visible = state.isLoading
                 )
-            }
-            item {
-                NewCurrencyBox(
-                    isNewCurrencyVisible = state.newCurrencyVisible,
-                    newCurrencyCode = state.newCurrencyCode,
-                    onNewCurrencyEvent = onNewCurrencyEvent,
-                    onCurrencySaveClick = onCurrencySaveClick
+                CurrenciesList(
+                    currencies = state.currencies,
+                    baseValue = state.baseValue,
+                    baseCurrency = state.baseCurrency,
+                    onBaseCurrencyEvent = onBaseCurrencyEvent,
+                    onCurrencyDeleteClick = onCurrencyDeleteClick
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun DateLoaderBox(
+    timestamp: Long,
+    isOldExchanges: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.DateLoaderBox", "Invoke: timestamp = $timestamp, isOldExchanges = $isOldExchanges")
+
+    if (timestamp > 0) {
+        val dateText = if (isOldExchanges) {
+            stringResource(R.string.app_convert_old_values, timestamp.formatFullDate())
+        } else {
+            stringResource(R.string.app_convert_valid_values, timestamp.formatFullDate())
+        }
+
+        val backColor = if (isOldExchanges) MaterialTheme.colors.error else Color.Transparent
+
+        Text(
+            text = dateText,
+            style = MaterialTheme.typography.text,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(backColor)
+                .padding(8.dp)
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun CurrenciesList(
+    currencies: List<Pair<String, Long>>,
+    baseValue: String,
+    baseCurrency: String,
+    onBaseCurrencyEvent: (String, String) -> Unit,
+    onCurrencyDeleteClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.CurrenciesList", "Invoke: currencies = $currencies")
+
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        items(currencies, key = { it.first }) { (code, value) ->
+            CurrencyBox(
+                code = code,
+                value = if (code == baseCurrency) baseValue else value.toString(),
+                isBase = code == baseCurrency,
+                onBaseCurrencyEvent = onBaseCurrencyEvent,
+                onDeleteCurrencyClick = onCurrencyDeleteClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateItemPlacement()
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun CurrencyBox(
+    code: String,
+    value: String,
+    isBase: Boolean,
+    onBaseCurrencyEvent: (String, String) -> Unit,
+    onDeleteCurrencyClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.CurrencyBox", "Invoke: code = $code, value = $value, isBase = $isBase")
+
+    val focusRequester = remember { FocusRequester() }
+
+    val dismissState = rememberDismissState(
+        confirmStateChange = {
+            if (it == DismissValue.DismissedToStart) {
+                onDeleteCurrencyClick(code)
+                return@rememberDismissState true
+            }
+            false
+        }
+    )
+
+    val backColor = if (isBase) MaterialTheme.colors.secondary else MaterialTheme.colors.surface
+
+    SwipeToDismiss(
+        state = dismissState,
+        background = { CurrencySwipeBackBox(targetValue = dismissState.targetValue) },
+        directions = setOf(DismissDirection.EndToStart),
+        dismissThresholds = { FractionalThreshold(0.2f) },
+        modifier = modifier
+            .padding(16.dp, 4.dp)
+            .clip(MaterialTheme.shapes.medium)
+    ) {
+        AppCard(
+            backgroundColor = backColor,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    focusRequester.requestFocus()
+                    onBaseCurrencyEvent(code, "")
+                }
+        ) {
+            CurrencyTextValueBox(
+                code = code,
+                value = value,
+                isBase = isBase,
+                focusRequester = focusRequester,
+                onBaseCurrencyEvent = onBaseCurrencyEvent,
+                onDeleteCurrencyClick = onDeleteCurrencyClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun CurrencyTextValueBox(
+    code: String,
+    value: String,
+    isBase: Boolean,
+    focusRequester: FocusRequester,
+    onBaseCurrencyEvent: (String, String) -> Unit,
+    onDeleteCurrencyClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.CurrencyTextValueBox", "Invoke: code = $code, value = $value, isBase = $isBase")
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(
+            text = code,
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(16.dp)
+        )
+        AppTextField(
+            value = value,
+            onValueChange = { if (isBase) onBaseCurrencyEvent(code, it) },
+            keyboardType = KeyboardType.Number,
+            fontSize = 25.sp,
+            visualTransformation = CurrencyAmountInputVisualTransformation(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(3f)
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    if (it.hasFocus) onBaseCurrencyEvent(code, "")
+                }
+        )
     }
 }
 
@@ -177,209 +333,7 @@ private fun CurrencySwipeBackBox(
     }
 }
 
-@Composable
-private fun DateLoaderBox(
-    timestamp: Long,
-    isLoading: Boolean,
-    isOldExchanges: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    logi("$TAG.DateLoaderBox", "Invoke: timestamp = $timestamp")
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-        if (timestamp > 0) {
-            Text(
-                text = if (isOldExchanges) {
-                    stringResource(R.string.app_convert_old_values, timestamp.formatFullDate())
-                } else {
-                    stringResource(R.string.app_convert_valid_values, timestamp.formatFullDate())
-                },
-                style = MaterialTheme.typography.body2,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        if (isOldExchanges) MaterialTheme.colors.error else Color.Transparent
-                    )
-                    .padding(8.dp)
-            )
-        }
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(8.dp)
-            )
-        }
-    }
-}
-
-@Composable
-private fun NewCurrencyBox(
-    isNewCurrencyVisible: Boolean,
-    newCurrencyCode: String,
-    onNewCurrencyEvent: (String, Boolean) -> Unit,
-    onCurrencySaveClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    logi("$TAG.NewCurrencyBox", "Invoke")
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp)
-            .padding(16.dp, 8.dp)
-            .clip(MaterialTheme.shapes.medium)
-            .clickable { onNewCurrencyEvent("", true) }
-    ) {
-        if (isNewCurrencyVisible) {
-            NewCurrencyEditBox(
-                code = newCurrencyCode,
-                onCodeChanged = { onNewCurrencyEvent(it, true) },
-                onSaveClick = onCurrencySaveClick,
-                onCancelClick = { onNewCurrencyEvent("", false) },
-                modifier = Modifier.fillMaxWidth()
-            )
-        } else {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text(
-                    text = stringResource(R.string.app_convert_add),
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun CurrencyBox(
-    code: String,
-    value: String,
-    isBase: Boolean,
-    onBaseCurrencyEvent: (String, String) -> Unit,
-    onDeleteCurrencyClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    logi("$TAG.CurrencyBox", "Invoke: code = $code, value = $value, isBase = $isBase")
-
-    val focusRequester = remember { FocusRequester() }
-    val dismissState = rememberDismissState(
-        confirmStateChange = {
-            if (it == DismissValue.DismissedToStart) {
-                onDeleteCurrencyClick(code)
-                return@rememberDismissState true
-            }
-            false
-        }
-    )
-
-    SwipeToDismiss(
-        state = dismissState,
-        background = { CurrencySwipeBackBox(targetValue = dismissState.targetValue) },
-        directions = setOf(DismissDirection.EndToStart),
-        dismissThresholds = { FractionalThreshold(0.3f) },
-        modifier = modifier
-            .padding(16.dp, 4.dp)
-            .clip(MaterialTheme.shapes.medium)
-    ) {
-        Card(
-            backgroundColor = if (isBase) {
-                MaterialTheme.colors.secondary
-            } else {
-                MaterialTheme.colors.surface
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    focusRequester.requestFocus()
-                    onBaseCurrencyEvent(code, "")
-                }
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text(
-                    text = code,
-                    style = MaterialTheme.typography.h5,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(16.dp)
-                )
-                AppTextField(
-                    value = value,
-                    onValueChange = { if (isBase) onBaseCurrencyEvent(code, it) },
-                    keyboardType = KeyboardType.Number,
-                    fontSize = 25.sp,
-                    visualTransformation = CurrencyAmountInputVisualTransformation(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(3f)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged {
-                            if (it.hasFocus) onBaseCurrencyEvent(code, "")
-                        }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun NewCurrencyEditBox(
-    code: String,
-    onCodeChanged: (String) -> Unit,
-    onSaveClick: (String) -> Unit,
-    onCancelClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    logi("$TAG.NewCurrencyEditBox", "Invoke: code = $code")
-
-    val focusRequester = remember { FocusRequester() }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        AppTextField(
-            value = code,
-            onValueChange = onCodeChanged,
-            placeholder = stringResource(R.string.app_convert_code_help),
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .focusRequester(focusRequester)
-        )
-        Icon(
-            imageVector = Icons.Rounded.Close,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(32.dp)
-                .clickable { onCancelClick() }
-        )
-        Icon(
-            imageVector = Icons.Rounded.Save,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(24.dp)
-                .clickable { onSaveClick(code) }
-        )
-    }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-}
-
-@Preview(showBackground = true)
+@ScreenPreview
 @Composable
 private fun Preview() {
     AppTheme {
@@ -387,7 +341,9 @@ private fun Preview() {
             state = CurrenciesContract.State(
                 currencies = listOf("USD" to 1200, "RUB" to 100000, "VND" to 750000000),
                 baseCurrency = "RUB",
+                baseValue = "1200",
                 date = Date().time.localDate().timestamp(),
+                isLoading = true,
             ),
             onNewCurrencyEvent = { _, _ -> },
             onBaseCurrencyEvent = { _, _ -> },
