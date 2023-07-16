@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,21 +50,29 @@ fun MainScreen(
     navigateToNewWidget: () -> Unit,
 ) {
     logi(TAG, "Invoke")
+
+    val applications = remember { ApplicationEntity.values() }
+
     ScreenContent(
+        applications = applications,
         onApplicationClick = navigateToApp,
         onWidgetClick = navigateToWidget,
-        onAddWidgetClick = navigateToNewWidget,
+        onAddWidgetClick = navigateToNewWidget
     )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ScreenContent(
+    applications: List<ApplicationEntity>,
     onApplicationClick: (ApplicationEntity) -> Unit,
     onWidgetClick: (Int) -> Unit,
     onAddWidgetClick: () -> Unit,
 ) {
-    logi("$TAG.ScreenContent", "Invoke")
+    logi(
+        "$TAG.ScreenContent", "Invoke: " +
+                "applications = ${applications.joinToString(", ") { it::class.simpleName ?: "" }}"
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +86,7 @@ private fun ScreenContent(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                ApplicationEntity.values().forEach { application ->
+                applications.forEach { application ->
                     if (application.isVisible()) {
                         ApplicationButton(
                             application = application,
@@ -145,6 +155,36 @@ private fun MainHeaderText(
 }
 
 @Composable
+private fun ApplicationsBox(
+    applications: List<ApplicationEntity>,
+    onApplicationClick: (ApplicationEntity) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    logi(
+        "$TAG.ApplicationsBox", "Invoke: " +
+                "applications = ${applications.joinToString(", ") { it::class.simpleName ?: "" }}"
+    )
+    Column(modifier = modifier.fillMaxWidth()) {
+        applications.chunked(3).forEach { chunk ->
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                chunk.forEach { application ->
+                    if (application.isVisible()) {
+                        ApplicationButton(
+                            application = application,
+                            onClick = { onApplicationClick(application) }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun ApplicationButton(
     application: ApplicationEntity,
     onClick: (ApplicationEntity) -> Unit,
@@ -192,9 +232,10 @@ private fun ApplicationButton(
 private fun Preview() {
     AppTheme {
         ScreenContent(
+            applications = ApplicationEntity.values(),
             onApplicationClick = {},
             onWidgetClick = {},
-            onAddWidgetClick = {},
+            onAddWidgetClick = {}
         )
     }
 }

@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
         AppLogger.init()
 
         setContent {
-            logi(TAG, "setContent")
+            logi(TAG, "Set Content")
             val navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
             val systemUiController = rememberSystemUiController()
@@ -63,7 +63,7 @@ private fun Application(navHostController: NavHostController, scaffoldState: Sca
     val tag = "Application"
     logi(tag, "Invoke")
     val bottomBarList = remember { mutableStateListOf<AppBottomBarItem>() }
-    logi(tag, "Value bottomBarList = ${bottomBarList.joinToString(", ")}")
+    logi(tag, "Value bottomBarList = [${bottomBarList.joinToString(" ") { it.route }}]")
 
     AppTheme {
         Surface(
