@@ -53,14 +53,13 @@ import androidx.compose.ui.unit.sp
 import com.emikhalets.convert.domain.R
 import com.emikhalets.convert.presentation.CurrencyAmountInputVisualTransformation
 import com.emikhalets.convert.presentation.screens.currencies.CurrenciesContract.Action
-import com.emikhalets.core.ui.ApplicationEntity.Convert.appNameRes
 import com.emikhalets.core.common.date.formatFullDate
 import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.asString
-import com.emikhalets.core.ui.component.AppButtonOk
+import com.emikhalets.core.ui.ApplicationEntity.Convert.appNameRes
 import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.component.AppErrorBox
 import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.theme.AppTheme
 import java.util.Date
@@ -94,25 +93,10 @@ fun CurrenciesScreen(
         onBackClick = navigateBack
     )
 
-    if (state.error != null) {
-        logi(TAG, "Show error message")
-        Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // TODO: animate transition Y bottom to top
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = state.error.asString(),
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
-                AppButtonOk({ viewModel.setAction(Action.DropError) })
-            }
-        }
-    }
+    AppErrorBox(
+        message = state.error,
+        onDismiss = { viewModel.setAction(Action.DropError) }
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -127,6 +111,7 @@ private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
+
     AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {

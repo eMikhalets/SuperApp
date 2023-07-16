@@ -55,7 +55,7 @@ fun TaskDialog(
                     subtasks.add(SubtaskEntity(task.id, ""))
                     scope.launch {
                         delay(100)
-                        it.moveFocus(FocusDirection.Down)
+//                        it.moveFocus(FocusDirection.Down)
                     }
                 },
                 placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
@@ -73,11 +73,11 @@ fun TaskDialog(
                             subtasks.add(SubtaskEntity(task.id, ""))
                             scope.launch {
                                 delay(100)
-                                it.moveFocus(FocusDirection.Down)
+//                                it.moveFocus(FocusDirection.Down)
                             }
                         },
                         onBackspaceEvent = {
-                            it.moveFocus(FocusDirection.Up)
+//                            it.moveFocus(FocusDirection.Up)
                             if (item.content.isEmpty()) subtasks.removeAt(index)
                         },
                         placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
