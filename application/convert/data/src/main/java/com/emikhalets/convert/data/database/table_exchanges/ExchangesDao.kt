@@ -23,6 +23,9 @@ interface ExchangesDao {
     @Query("DELETE FROM exchanges WHERE code LIKE '%' + :code + '%'")
     suspend fun delete(code: String)
 
+    @Query("DELETE FROM exchanges")
+    suspend fun drop()
+
     @Query("SELECT * FROM exchanges")
     suspend fun getAll(): List<ExchangeDb>
 }

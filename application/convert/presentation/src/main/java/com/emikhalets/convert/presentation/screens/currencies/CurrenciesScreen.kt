@@ -1,26 +1,33 @@
 package com.emikhalets.convert.presentation.screens.currencies
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Save
+import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -38,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.convert.domain.R
@@ -80,6 +89,7 @@ fun CurrenciesScreen(
         },
         onCurrencySaveClick = { viewModel.setAction(Action.AddCurrency(it)) },
         onCurrencyDeleteClick = { viewModel.setAction(Action.DeleteCurrency(it)) },
+        onRefreshUpdate = { viewModel.setAction(Action.GetExchanges) },
         onBackClick = navigateBack
     )
 
@@ -104,6 +114,7 @@ fun CurrenciesScreen(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ScreenContent(
     state: CurrenciesContract.State,
@@ -111,6 +122,7 @@ private fun ScreenContent(
     onBaseCurrencyEvent: (String, String) -> Unit,
     onCurrencySaveClick: (String) -> Unit,
     onCurrencyDeleteClick: (String) -> Unit,
+    onRefreshUpdate: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
@@ -142,6 +154,38 @@ private fun ScreenContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun CurrencySwipeBackBox(
+    targetValue: DismissValue,
+    modifier: Modifier = Modifier,
+) {
+    logi("$TAG.CurrencySwipeBackBox", "Invoke")
+    val color by animateColorAsState(
+        when (targetValue) {
+            DismissValue.Default -> Color.White
+            else -> Color.Red
+        }
+    )
+
+    val scale by animateFloatAsState(
+        if (targetValue == DismissValue.Default) 0.75f else 1f
+    )
+
+    Box(
+        contentAlignment = Alignment.CenterEnd,
+        modifier = modifier
+            .fillMaxSize()
+            .background(color)
+            .padding(horizontal = Dp(20f))
+    ) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = null,
+            modifier = Modifier.scale(scale)
+        )
     }
 }
 
@@ -222,6 +266,7 @@ private fun NewCurrencyBox(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun CurrencyBox(
     code: String,
@@ -234,47 +279,65 @@ private fun CurrencyBox(
     logi("$TAG.CurrencyBox", "Invoke: code = $code, value = $value, isBase = $isBase")
 
     val focusRequester = remember { FocusRequester() }
+    val dismissState = rememberDismissState()
 
-    Card(
-        backgroundColor = if (isBase) {
-            MaterialTheme.colors.secondary
-        } else {
-            MaterialTheme.colors.surface
+    if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+        onDeleteCurrencyClick(code)
+    }
+
+    SwipeToDismiss(
+        state = dismissState,
+        background = { CurrencySwipeBackBox(targetValue = dismissState.targetValue) },
+        directions = setOf(DismissDirection.EndToStart),
+        dismissThresholds = { direction ->
+            val fraction = if (direction == DismissDirection.EndToStart) 0.2f else 0.05f
+            FractionalThreshold(fraction)
         },
         modifier = modifier
             .padding(16.dp, 8.dp)
-            .clickable {
-                focusRequester.requestFocus()
-                onBaseCurrencyEvent(code, "")
-            }
+            .clip(MaterialTheme.shapes.medium)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize()
+        Card(
+            backgroundColor = if (isBase) {
+                MaterialTheme.colors.secondary
+            } else {
+                MaterialTheme.colors.surface
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    focusRequester.requestFocus()
+                    onBaseCurrencyEvent(code, "")
+                }
         ) {
-            Text(
-                text = code,
-                style = MaterialTheme.typography.h5,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(16.dp)
-            )
-            AppTextField(
-                value = value,
-                onValueChange = { if (isBase) onBaseCurrencyEvent(code, it) },
-                keyboardType = KeyboardType.Number,
-                fontSize = 25.sp,
-                visualTransformation = CurrencyAmountInputVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(3f)
-                    .focusRequester(focusRequester)
-                    .onFocusChanged {
-                        if (it.hasFocus) onBaseCurrencyEvent(code, "")
-                    }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = code,
+                    style = MaterialTheme.typography.h5,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(16.dp)
+                )
+                AppTextField(
+                    value = value,
+                    onValueChange = { if (isBase) onBaseCurrencyEvent(code, it) },
+                    keyboardType = KeyboardType.Number,
+                    fontSize = 25.sp,
+                    visualTransformation = CurrencyAmountInputVisualTransformation(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(3f)
+                        .focusRequester(focusRequester)
+                        .onFocusChanged {
+                            if (it.hasFocus) onBaseCurrencyEvent(code, "")
+                        }
+                )
+            }
         }
     }
 }
@@ -341,6 +404,7 @@ private fun Preview() {
             onBaseCurrencyEvent = { _, _ -> },
             onCurrencySaveClick = {},
             onCurrencyDeleteClick = {},
+            onRefreshUpdate = {},
             onBackClick = {}
         )
     }

@@ -67,6 +67,7 @@ class ConvertRepositoryImpl @Inject constructor(
             val currencies = currenciesDao.getAll()
             if (currencies.count() == 1) {
                 val lastCode = currencies.first().code
+                exchangesDao.drop()
                 exchangesDao.insert(ExchangesMapper.mapEntityToDb(ExchangeEntity(lastCode)))
             }
         }

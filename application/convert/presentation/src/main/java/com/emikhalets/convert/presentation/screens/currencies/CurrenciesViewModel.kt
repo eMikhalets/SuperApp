@@ -115,8 +115,8 @@ class CurrenciesViewModel @Inject constructor(
         setNewCurrencyState("", false)
         if (code.isBlank()) return
         launchScope {
-            addCurrencyUseCase(code.uppercase())
-                .onSuccess { getExchanges() }
+            addCurrencyUseCase(code.take(3).uppercase())
+                .onSuccess {}
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }
@@ -125,6 +125,9 @@ class CurrenciesViewModel @Inject constructor(
         logd(TAG, "Delete currency: code = $code")
         if (code.isBlank()) return
         launchScope {
+            if (currentState.baseCurrency == code) {
+                setState { it.copy(baseCurrency = "") }
+            }
             deleteCurrencyUseCase(code)
                 .onSuccess {}
                 .onFailure { code, message -> handleFailure(code, message) }
