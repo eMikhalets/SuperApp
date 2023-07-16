@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.emikhalets.convert.app.AppConvertDestination
 import com.emikhalets.convert.app.applicationConvert
-import com.emikhalets.core.common.ApplicationEntity
+import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.fitness.navigation.AppFitnessDestination

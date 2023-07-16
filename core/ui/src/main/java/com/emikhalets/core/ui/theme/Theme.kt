@@ -1,13 +1,14 @@
 package com.emikhalets.core.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-val Color.text get() = AppColor.Grey900
+val Colors.bottomBarUnselect get() = AppColor.Grey800
 
 private val DarkColorPalette = darkColors(
 )
@@ -16,7 +17,7 @@ private val LightColorPalette = lightColors(
     primary = AppColor.Grey600,
     onPrimary = Color.White,
     secondary = AppColor.Grey400,
-    onSecondary = AppColor.Grey900,
+    onSecondary = AppColor.Grey400,
     surface = Color.White,
     onSurface = AppColor.Grey900,
     background = AppColor.LightBlue50,

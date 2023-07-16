@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.sp
 import com.emikhalets.convert.domain.R
 import com.emikhalets.convert.presentation.CurrencyAmountInputVisualTransformation
 import com.emikhalets.convert.presentation.screens.currencies.CurrenciesContract.Action
-import com.emikhalets.core.common.ApplicationEntity.Convert.appNameRes
+import com.emikhalets.core.ui.ApplicationEntity.Convert.appNameRes
 import com.emikhalets.core.common.date.formatFullDate
 import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp

@@ -33,9 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.common.ApplicationEntity
-import com.emikhalets.core.common.isEnabled
-import com.emikhalets.core.common.isVisible
+import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.ui.isEnabled
+import com.emikhalets.core.ui.isVisible
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.getIcon
 import com.emikhalets.core.ui.getName

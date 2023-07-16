@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.AppCode
-import com.emikhalets.core.common.ApplicationEntity.Notes.appNameRes
+import com.emikhalets.core.ui.ApplicationEntity.Notes.appNameRes
 import com.emikhalets.core.common.date.formatShortWithWeekDate
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.component.AppChildScreenBox
