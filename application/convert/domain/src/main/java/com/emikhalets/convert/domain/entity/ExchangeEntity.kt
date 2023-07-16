@@ -39,11 +39,11 @@ data class ExchangeEntity(
         return (main == base && secondary == currency) || (main == currency && secondary == base)
     }
 
-    fun calculate(base: String, value: Double): Double {
+    fun calculate(base: String, value: Long): Long {
         return when (base) {
-            main -> value * this.value
-            secondary -> value * (1 / this.value)
-            else -> 0.0
+            main -> (value * this.value).toLong()
+            secondary -> (value * (1 / this.value)).toLong()
+            else -> 0
         }
     }
 }

@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -38,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.convert.domain.R
+import com.emikhalets.convert.presentation.CurrencyAmountInputVisualTransformation
 import com.emikhalets.convert.presentation.screens.currencies.CurrenciesContract.Action
 import com.emikhalets.core.common.ApplicationEntity.Convert.appNameRes
 import com.emikhalets.core.common.date.formatFullDate
@@ -68,12 +72,14 @@ fun CurrenciesScreen(
 
     ScreenContent(
         state = state,
-        onNewCurrencyVisible = { viewModel.setAction(Action.NewCurrencyShow(it)) },
-        onCurrencyCodeChanged = { viewModel.setAction(Action.NewCurrencyCode(it)) },
+        onNewCurrencyEvent = { code, visible ->
+            viewModel.setAction(Action.NewCurrencyEvent(code, visible))
+        },
+        onBaseCurrencyEvent = { code, value ->
+            viewModel.setAction(Action.BaseCurrencyEvent(code, value))
+        },
         onCurrencySaveClick = { viewModel.setAction(Action.AddCurrency(it)) },
         onCurrencyDeleteClick = { viewModel.setAction(Action.DeleteCurrency(it)) },
-        onBaseValueChanged = { viewModel.setAction(Action.Convert(it)) },
-        onSetBaseCurrency = { viewModel.setAction(Action.SetBaseCurrency(it)) },
         onBackClick = navigateBack
     )
 
@@ -101,12 +107,10 @@ fun CurrenciesScreen(
 @Composable
 private fun ScreenContent(
     state: CurrenciesContract.State,
-    onNewCurrencyVisible: (Boolean) -> Unit,
-    onCurrencyCodeChanged: (String) -> Unit,
+    onNewCurrencyEvent: (String, Boolean) -> Unit,
+    onBaseCurrencyEvent: (String, String) -> Unit,
     onCurrencySaveClick: (String) -> Unit,
     onCurrencyDeleteClick: (String) -> Unit,
-    onBaseValueChanged: (String) -> Unit,
-    onSetBaseCurrency: (String) -> Unit,
     onBackClick: () -> Unit,
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
@@ -124,19 +128,17 @@ private fun ScreenContent(
                     code = code,
                     value = if (code == state.baseCurrency) state.baseValue else value.toString(),
                     isBase = code == state.baseCurrency,
-                    onBaseValueChanged = onBaseValueChanged,
-                    onSetBaseCurrency = onSetBaseCurrency,
+                    onBaseCurrencyEvent = onBaseCurrencyEvent,
                     onDeleteCurrencyClick = onCurrencyDeleteClick,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
             item {
                 NewCurrencyBox(
-                    isNewCurrencyVisible = state.isNewCurrencyVisible,
+                    isNewCurrencyVisible = state.newCurrencyVisible,
                     newCurrencyCode = state.newCurrencyCode,
-                    onCurrencyCodeChanged = onCurrencyCodeChanged,
-                    onCurrencySaveClick = onCurrencySaveClick,
-                    onNewCurrencyVisible = onNewCurrencyVisible,
+                    onNewCurrencyEvent = onNewCurrencyEvent,
+                    onCurrencySaveClick = onCurrencySaveClick
                 )
             }
         }
@@ -184,9 +186,8 @@ private fun DateLoaderBox(
 private fun NewCurrencyBox(
     isNewCurrencyVisible: Boolean,
     newCurrencyCode: String,
-    onCurrencyCodeChanged: (String) -> Unit,
+    onNewCurrencyEvent: (String, Boolean) -> Unit,
     onCurrencySaveClick: (String) -> Unit,
-    onNewCurrencyVisible: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     logi("$TAG.NewCurrencyBox", "Invoke")
@@ -195,14 +196,15 @@ private fun NewCurrencyBox(
             .fillMaxWidth()
             .padding(top = 24.dp)
             .padding(16.dp, 8.dp)
-            .clickable { onNewCurrencyVisible(true) }
+            .clip(MaterialTheme.shapes.medium)
+            .clickable { onNewCurrencyEvent("", true) }
     ) {
         if (isNewCurrencyVisible) {
             NewCurrencyEditBox(
                 code = newCurrencyCode,
-                onCodeChanged = onCurrencyCodeChanged,
+                onCodeChanged = { onNewCurrencyEvent(it, true) },
                 onSaveClick = onCurrencySaveClick,
-                onCancelClick = { onNewCurrencyVisible(false) },
+                onCancelClick = { onNewCurrencyEvent("", false) },
                 modifier = Modifier.fillMaxWidth()
             )
         } else {
@@ -225,8 +227,7 @@ private fun CurrencyBox(
     code: String,
     value: String,
     isBase: Boolean,
-    onBaseValueChanged: (String) -> Unit,
-    onSetBaseCurrency: (String) -> Unit,
+    onBaseCurrencyEvent: (String, String) -> Unit,
     onDeleteCurrencyClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -244,7 +245,7 @@ private fun CurrencyBox(
             .padding(16.dp, 8.dp)
             .clickable {
                 focusRequester.requestFocus()
-                onSetBaseCurrency(code)
+                onBaseCurrencyEvent(code, "")
             }
     ) {
         Row(
@@ -262,15 +263,16 @@ private fun CurrencyBox(
             )
             AppTextField(
                 value = value,
-                onValueChange = { if (isBase) onBaseValueChanged(it) },
+                onValueChange = { if (isBase) onBaseCurrencyEvent(code, it) },
                 keyboardType = KeyboardType.Number,
-                fontSize = 20.sp,
+                fontSize = 25.sp,
+                visualTransformation = CurrencyAmountInputVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(2f)
+                    .weight(3f)
                     .focusRequester(focusRequester)
                     .onFocusChanged {
-                        if (it.hasFocus) onSetBaseCurrency(code)
+                        if (it.hasFocus) onBaseCurrencyEvent(code, "")
                     }
             )
         }
@@ -303,7 +305,7 @@ private fun NewCurrencyEditBox(
                 .focusRequester(focusRequester)
         )
         Icon(
-            imageVector = Icons.Rounded.Delete,
+            imageVector = Icons.Rounded.Close,
             contentDescription = null,
             modifier = Modifier
                 .padding(8.dp)
@@ -331,16 +333,14 @@ private fun Preview() {
     AppTheme {
         ScreenContent(
             state = CurrenciesContract.State(
-                currencies = listOf("USD" to 123.45, "RUB" to 123.45, "VND" to 123.4),
+                currencies = listOf("USD" to 1200, "RUB" to 100000, "VND" to 750000000),
                 baseCurrency = "RUB",
                 date = Date().time.localDate().timestamp(),
             ),
-            onNewCurrencyVisible = {},
-            onCurrencyCodeChanged = {},
+            onNewCurrencyEvent = { _, _ -> },
+            onBaseCurrencyEvent = { _, _ -> },
             onCurrencySaveClick = {},
             onCurrencyDeleteClick = {},
-            onBaseValueChanged = {},
-            onSetBaseCurrency = {},
             onBackClick = {}
         )
     }

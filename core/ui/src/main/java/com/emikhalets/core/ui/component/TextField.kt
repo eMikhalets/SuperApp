@@ -17,15 +17,14 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -44,6 +43,7 @@ fun AppTextField(
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     singleLine: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     keyboardType: KeyboardType = KeyboardType.Text,
     onDoneClick: (KeyboardActionScope.() -> Unit)? = null,
@@ -70,6 +70,7 @@ fun AppTextField(
                         false
                     }
                 },
+            visualTransformation = visualTransformation,
             enabled = true,
             readOnly = false,
             textStyle = LocalTextStyle.current.copy(fontSize = fontSize),

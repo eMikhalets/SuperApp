@@ -17,6 +17,7 @@ import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
+import com.emikhalets.core.common.toIntOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Date
 import javax.inject.Inject
@@ -56,10 +57,8 @@ class CurrenciesViewModel @Inject constructor(
             Action.GetExchanges -> getExchanges()
             is Action.AddCurrency -> addCurrency(action.code)
             is Action.DeleteCurrency -> deleteCurrency(action.code)
-            is Action.Convert -> convert(action.value)
-            is Action.NewCurrencyShow -> setNewCurrencyState(action.visible)
-            is Action.NewCurrencyCode -> setState { it.copy(newCurrencyCode = action.code) }
-            is Action.SetBaseCurrency -> setNewCurrencyState(action.code)
+            is Action.NewCurrencyEvent -> setNewCurrencyState(action.code, action.visible)
+            is Action.BaseCurrencyEvent -> setBaseCurrencyState(action.code, action.value)
         }
     }
 
@@ -67,13 +66,29 @@ class CurrenciesViewModel @Inject constructor(
         setState { it.copy(error = null) }
     }
 
-    private fun setNewCurrencyState(visible: Boolean) {
-        setState { it.copy(isNewCurrencyVisible = visible, newCurrencyCode = "") }
+    private fun setNewCurrencyState(code: String, visible: Boolean) {
+        if (currentState.newCurrencyCode != code) {
+            setState { it.copy(newCurrencyCode = code) }
+        }
+        if (currentState.newCurrencyVisible != visible) {
+            setState { it.copy(newCurrencyVisible = visible) }
+        }
     }
 
-    private fun setNewCurrencyState(code: String) {
-        val newBase = if (code != currentState.baseCurrency) "" else currentState.baseValue
-        setState { it.copy(baseCurrency = code, baseValue = newBase) }
+    private fun setBaseCurrencyState(code: String, value: String) {
+        if (currentState.baseCurrency != code) {
+            setState { it.copy(baseCurrency = code) }
+        }
+        if (currentState.baseValue != value) {
+            setState { it.copy(baseValue = value.toIntOrNull()?.toString() ?: "") }
+            val valueLong = value.toLongOrNull() ?: 0
+            if (valueLong == 0L) {
+                val newCurrencies = currentState.currencies.map { it.copy(second = 0L) }
+                setState { it.copy(currencies = newCurrencies) }
+            } else {
+                convert(valueLong)
+            }
+        }
     }
 
     private fun getCurrencies() {
@@ -97,9 +112,9 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun addCurrency(code: String) {
         logd(TAG, "Add currency: code = $code")
+        setNewCurrencyState("", false)
         if (code.isBlank()) return
         launchScope {
-            setNewCurrencyState(false)
             addCurrencyUseCase(code.uppercase())
                 .onSuccess { getExchanges() }
                 .onFailure { code, message -> handleFailure(code, message) }
@@ -116,28 +131,24 @@ class CurrenciesViewModel @Inject constructor(
         }
     }
 
-    private fun convert(value: String) {
-        setState { it.copy(baseValue = value) }
-        if (value.isBlank()) return
+    private fun convert(baseValue: Long) {
         if (convertJob?.isActive == true) convertJob?.cancel()
         convertJob = launchScope {
             delay(200)
-            logd(TAG, "Convert value: base = ${currentState.baseCurrency}, value = $value")
-            value.toDoubleOrNull()?.let { convertedValue ->
-                val currencies = currentState.currencies
-                val exchanges = currentState.exchanges
-                convertCurrencyUseCase
-                    .invoke(currencies, exchanges, currentState.baseCurrency, convertedValue)
-                    .onSuccess { result -> setState { it.copy(currencies = result) } }
-                    .onFailure { code, message -> handleFailure(code, message) }
-            }
+            val currencies = currentState.currencies
+            val exchanges = currentState.exchanges
+            val baseCurrency = currentState.baseCurrency
+            logd(TAG, "Convert value: base = $baseCurrency, value = $baseValue")
+            convertCurrencyUseCase.invoke(currencies, exchanges, baseCurrency, baseValue)
+                .onSuccess { result -> setState { it.copy(currencies = result) } }
+                .onFailure { code, message -> handleFailure(code, message) }
         }
     }
 
     private suspend fun setCurrenciesFlow(flow: Flow<List<CurrencyEntity>>) {
         flow.collectLatest { list ->
             logd(TAG, "Collecting currencies: $list")
-            val currencies = list.map { Pair(it.code, 0.0) }
+            val currencies = list.map { Pair(it.code, 0L) }
             setState { it.copy(currencies = currencies) }
         }
     }
