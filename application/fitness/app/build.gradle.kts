@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
@@ -6,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.fitness"
+    namespace = "com.emikhalets.fitness.app"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
@@ -33,7 +35,9 @@ dependencies {
     implementation(project(":application:fitness:data"))
     implementation(project(":application:fitness:domain"))
     implementation(project(":application:fitness:presentation"))
+    implementation(project(":core:common"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

@@ -16,8 +16,8 @@ object AppNotesDestination : AppDestination {
     const val Settings: String = "app_notes_settings"
 
     const val NoteWithArgs: String = "$Note/{${AppNotesArgs.NoteId}}"
-    fun noteWithArgs(id: Long?): String = "$Note/${id ?: AppCode.NoId}"
+    fun noteWithArgs(id: Long?): String = "$Note/${id ?: AppCode.IdNull}"
     val noteArgsList = listOf(navArgument(AppNotesArgs.NoteId) { type = NavType.LongType })
     fun getNoteArgsId(entry: NavBackStackEntry) =
-        entry.arguments?.getLong(AppNotesArgs.NoteId) ?: AppCode.NoId
+        entry.arguments?.getLong(AppNotesArgs.NoteId) ?: AppCode.IdNull
 }

@@ -25,6 +25,7 @@ android {
 dependencies {
 
     implementation(project(":application:fitness:domain"))
+    implementation(project(":core:common"))
     implementation(project(":core:database"))
 
     kapt(libs.androidx.room.compiler)

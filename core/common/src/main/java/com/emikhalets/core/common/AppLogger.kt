@@ -26,19 +26,19 @@ object AppLogger {
         isLogsEnabled = true
     }
 
-    fun logd(tag: String, text: String) {
+    internal fun logd(tag: String, text: String) {
         if (isLogsEnabled) Log.d(tag, text)
     }
 
-    fun logi(tag: String, text: String) {
+    internal fun logi(tag: String, text: String) {
         if (isLogsEnabled) Log.i(tag, text)
     }
 
-    fun loge(tag: String, text: String, throwable: Throwable? = null) {
+    internal fun loge(tag: String, text: String, throwable: Throwable? = null) {
         if (isLogsEnabled) Log.e(tag, text, throwable)
     }
 
-    fun loge(tag: String, throwable: Throwable? = null) {
+    internal fun loge(tag: String, throwable: Throwable? = null) {
         if (isLogsEnabled) Log.e(tag, "", throwable)
     }
 }

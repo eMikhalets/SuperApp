@@ -9,7 +9,6 @@ import com.emikhalets.core.common.onSuccess
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.domain.usecase.NotesUseCase
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Action
-import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Effect
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Date
@@ -18,18 +17,22 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteItemViewModel @Inject constructor(
     private val notesUseCase: NotesUseCase,
-) : BaseViewModel<Action, Effect, State>() {
+) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
-        logd(TAG, "User event: $action")
+        logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
+            Action.DropError -> dropErrorState()
             Action.DeleteNote -> deleteNote()
-            Action.DeleteNoteDialog -> setEffect { Effect.DeleteNoteDialog }
             is Action.SaveNote -> updateNote(action.entity)
             is Action.GetNote -> getNote(action.id)
         }
+    }
+
+    private fun dropErrorState() {
+        setState { it.copy(error = null) }
     }
 
     private fun getNote(id: Long) {
@@ -51,7 +54,7 @@ class NoteItemViewModel @Inject constructor(
                     .onFailure { code, message -> handleFailure(code, message) }
             } else {
                 notesUseCase.update(entity.copy(updateTimestamp = Date().time))
-                    .onSuccess { setEffect { Effect.NoteSaved } }
+                    .onSuccess { setState { it.copy(isNoteSaved = true) } }
                     .onFailure { code, message -> handleFailure(code, message) }
             }
         }
@@ -63,7 +66,7 @@ class NoteItemViewModel @Inject constructor(
         entity ?: return
         launchScope {
             notesUseCase.delete(entity)
-                .onSuccess { setEffect { Effect.NoteDeleted } }
+                .onSuccess { setState { it.copy(isNoteDeleted = true) } }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }
@@ -75,8 +78,7 @@ class NoteItemViewModel @Inject constructor(
 
     private fun handleFailure(code: Int, message: UiString?) {
         logd(TAG, "Handle error: code = $code")
-        setState { it.copy(isLoading = false) }
-        setEffect { Effect.Error(message) }
+        setState { it.copy(isLoading = false, error = message) }
     }
 
     companion object {

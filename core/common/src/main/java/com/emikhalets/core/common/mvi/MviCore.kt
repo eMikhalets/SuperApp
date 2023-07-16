@@ -8,7 +8,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 interface UiAction
-interface UiEffect
 interface UiState
 
 fun ViewModel.launchScope(block: suspend CoroutineScope.() -> Unit): Job =

@@ -1,5 +1,6 @@
 package com.emikhalets.fitness.presentation.stages
 
+/*
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,9 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.fitness.domain.entity.WorkoutDoneType
 import com.emikhalets.fitness.domain.entity.WorkoutEntity
-import com.emikhalets.fitness.domain.entity.WorkoutType
 import com.emikhalets.ui.component.ChildScreenBox
 import com.emikhalets.ui.theme.AppTheme
 import java.util.Date
@@ -222,4 +221,4 @@ private fun Preview() {
             onDoneTypeChange = {}
         )
     }
-}
+}*/

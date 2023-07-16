@@ -11,7 +11,6 @@ import com.emikhalets.notes.domain.entity.TaskEntity
 import com.emikhalets.notes.domain.usecase.SubtasksUseCase
 import com.emikhalets.notes.domain.usecase.TasksUseCase
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Action
-import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.Effect
 import com.emikhalets.notes.presentation.screens.tasks.TasksListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,19 +21,23 @@ import kotlinx.coroutines.flow.collectLatest
 class TasksListViewModel @Inject constructor(
     private val tasksUseCase: TasksUseCase,
     private val subtasksUseCase: SubtasksUseCase,
-) : BaseViewModel<Action, Effect, State>() {
+) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
-        logd(TAG, "User event: $action")
+        logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
+            Action.DropError -> dropErrorState()
             Action.GetTask -> getTasks()
             is Action.DeleteTask -> deleteTask(action.task)
-            is Action.DeleteTaskDialog -> setEffect { Effect.DeleteTaskDialog(action.task) }
             is Action.CompleteTask -> updateTask(action.task, action.complete)
             is Action.CompleteSubtask -> updateSubtask(action.task, action.complete)
         }
+    }
+
+    private fun dropErrorState() {
+        setState { it.copy(error = null) }
     }
 
     private fun getTasks() {
@@ -92,8 +95,7 @@ class TasksListViewModel @Inject constructor(
 
     private fun handleFailure(code: Int, message: UiString?) {
         logd(TAG, "Handling error: code = $code")
-        setState { it.copy(isLoading = false) }
-        setEffect { Effect.Error(message) }
+        setState { it.copy(isLoading = false, error = message) }
     }
 
     companion object {

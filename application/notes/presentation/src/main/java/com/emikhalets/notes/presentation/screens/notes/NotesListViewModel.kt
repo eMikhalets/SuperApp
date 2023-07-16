@@ -9,7 +9,6 @@ import com.emikhalets.core.common.onSuccess
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.domain.usecase.NotesUseCase
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
-import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Effect
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -19,17 +18,21 @@ import kotlinx.coroutines.flow.collectLatest
 @HiltViewModel
 class NotesListViewModel @Inject constructor(
     private val notesUseCase: NotesUseCase,
-) : BaseViewModel<Action, Effect, State>() {
+) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
-        logd(TAG, "User event: $action")
+        logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
+            Action.DropError -> dropErrorState()
             Action.GetNotes -> getNotes()
             is Action.DeleteNote -> deleteNote(action.note)
-            is Action.DeleteNoteDialog -> setEffect { Effect.DeleteNoteDialog(action.note) }
         }
+    }
+
+    private fun dropErrorState() {
+        setState { it.copy(error = null) }
     }
 
     private fun getNotes() {
@@ -59,8 +62,7 @@ class NotesListViewModel @Inject constructor(
 
     private fun handleFailure(code: Int, message: UiString?) {
         logd(TAG, "Handle error: code = $code")
-        setState { it.copy(isLoading = false) }
-        setEffect { Effect.Error(message) }
+        setState { it.copy(isLoading = false, error = message) }
     }
 
     companion object {
