@@ -20,7 +20,6 @@ import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.core.ui.component.AppScaffold
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.core.ui.theme.Purple500
 import com.emikhalets.superapp.navigation.AppNavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,11 +37,12 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
             val systemUiController = rememberSystemUiController()
+            val systemUiColor = MaterialTheme.colors.primary
 
             SideEffect {
                 logi(TAG, "Set Android UI")
                 systemUiController.setStatusBarColor(
-                    color = Purple500,
+                    color = systemUiColor,
                     darkIcons = false
                 )
                 systemUiController.isNavigationBarVisible = false
