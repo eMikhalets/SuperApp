@@ -23,11 +23,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.emikhalets.core.common.classNames
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
-import com.emikhalets.core.navigation.classNames
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.core.ui.theme.bottomBarUnselect
 import com.emikhalets.superapp.navigation.AppNavHost
 
 private const val TAG = "App"
@@ -39,24 +38,22 @@ fun AppScreen() {
     val navController = rememberNavController()
     val bottomBarList = remember { mutableStateListOf<AppBottomBarItem>() }
 
-    AppTheme {
-        Scaffold(
-            backgroundColor = MaterialTheme.colors.background,
-            bottomBar = {
-                if (bottomBarList.isNotEmpty()) AppBottomBar(navController, bottomBarList)
-            }
-        ) {
-            Box(modifier = Modifier.padding(it)) {
-                AppNavHost(
-                    navController = navController,
-                    bottomBarList = { newList ->
-                        if (!bottomBarList.same(newList)) {
-                            bottomBarList.clear()
-                            bottomBarList.addAll(newList)
-                        }
+    Scaffold(
+        backgroundColor = MaterialTheme.colors.background,
+        bottomBar = {
+            if (bottomBarList.isNotEmpty()) AppBottomBar(navController, bottomBarList)
+        }
+    ) {
+        Box(modifier = Modifier.padding(it)) {
+            AppNavHost(
+                navController = navController,
+                bottomBarList = { newList ->
+                    if (!bottomBarList.same(newList)) {
+                        bottomBarList.clear()
+                        bottomBarList.addAll(newList)
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
@@ -66,7 +63,7 @@ private fun AppBottomBar(
     navController: NavHostController,
     bottomBarItems: List<AppBottomBarItem>,
 ) {
-    logi("$TAG.AppBottomBar", "Invoke: items = [${bottomBarItems.classNames()}]")
+    logi("$TAG.AppBottomBar", "Invoke: items = [${bottomBarItems.classNames}]")
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -76,7 +73,7 @@ private fun AppBottomBar(
             BottomNavigationItem(
                 icon = { Icon(imageVector = item.icon, contentDescription = null) },
                 selectedContentColor = MaterialTheme.colors.onPrimary,
-                unselectedContentColor = MaterialTheme.colors.bottomBarUnselect,
+                unselectedContentColor = MaterialTheme.colors.onSecondary,
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = {
                     navController.navigate(item.route) {

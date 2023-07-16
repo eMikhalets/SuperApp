@@ -1,11 +1,9 @@
 package com.emikhalets.core.navigation
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
-fun List<AppBottomBarItem>.classNames(): String {
-    return joinToString(", ") { it::class.simpleName ?: "-" }
-}
-
+@Immutable
 interface AppBottomBarItem {
 
     val route: String

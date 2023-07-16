@@ -2,7 +2,7 @@ package com.emikhalets.core.ui.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,10 +14,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.core.ui.BoxPreview
 import com.emikhalets.core.ui.R
 
 private val nunitoSans = FontFamily(
@@ -36,7 +36,7 @@ val Typography.text
         fontFamily = nunitoSans,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        letterSpacing = TextUnit.Unspecified,
+        letterSpacing = 0.5.sp
     )
 
 val Typography.textSub
@@ -44,15 +44,15 @@ val Typography.textSub
         fontFamily = nunitoSans,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        letterSpacing = TextUnit.Unspecified,
+        letterSpacing = 0.3.sp
     )
 
 val Typography.textTitle
     get() = TextStyle(
         fontFamily = nunitoSans,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
-        letterSpacing = TextUnit.Unspecified,
+        letterSpacing = 0.3.sp
     )
 
 val Typography.textHeader
@@ -60,7 +60,7 @@ val Typography.textHeader
         fontFamily = nunitoSans,
         fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp,
-        letterSpacing = TextUnit.Unspecified,
+        letterSpacing = 0.3.sp
     )
 
 val Typography.textLabel
@@ -68,16 +68,16 @@ val Typography.textLabel
         fontFamily = nunitoSans,
         fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
-        letterSpacing = TextUnit.Unspecified,
+        letterSpacing = 0.3.sp
     )
 
-@Preview(showBackground = true)
+@BoxPreview
 @Composable
 private fun Preview() {
     AppTheme {
         Column(
             Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(Color.White)
         ) {
             Text(

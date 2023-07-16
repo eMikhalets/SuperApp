@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.SideEffect
 import com.emikhalets.core.common.AppLogger
 import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.theme.AppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,20 +20,25 @@ class MainActivity : ComponentActivity() {
         AppLogger.init()
 
         setContent {
-            logi(TAG, "Set Content")
-            val systemUiController = rememberSystemUiController()
-            val systemUiColor = MaterialTheme.colors.primary
+            AppTheme {
+                logi(TAG, "Set Content")
+                val systemUiController = rememberSystemUiController()
+                val systemUiColor = MaterialTheme.colors.primary
 
-            SideEffect {
-                logi(TAG, "Set Android UI")
-                systemUiController.setStatusBarColor(
-                    color = systemUiColor,
-                    darkIcons = false
-                )
-                systemUiController.isNavigationBarVisible = false
+                SideEffect {
+                    logi(TAG, "Set Android UI")
+                    systemUiController.setStatusBarColor(
+                        color = systemUiColor,
+                        darkIcons = false
+                    )
+                    systemUiController.setNavigationBarColor(
+                        color = systemUiColor,
+                        darkIcons = false
+                    )
+                }
+
+                AppScreen()
             }
-
-            AppScreen()
         }
     }
 
