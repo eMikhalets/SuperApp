@@ -7,7 +7,10 @@ import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
 import com.emikhalets.notes.domain.entity.NoteEntity
-import com.emikhalets.notes.domain.usecase.NotesUseCase
+import com.emikhalets.notes.domain.usecase.notes.AddNoteUseCase
+import com.emikhalets.notes.domain.usecase.notes.DeleteNoteUseCase
+import com.emikhalets.notes.domain.usecase.notes.GetNoteUseCase
+import com.emikhalets.notes.domain.usecase.notes.UpdateNoteUseCase
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Action
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +19,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteItemViewModel @Inject constructor(
-    private val notesUseCase: NotesUseCase,
+    private val getNoteUseCase: GetNoteUseCase,
+    private val addNoteUseCase: AddNoteUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase,
+    private val updateNoteUseCase: UpdateNoteUseCase,
 ) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
@@ -55,7 +61,7 @@ class NoteItemViewModel @Inject constructor(
         if (id <= 0) return
         launchScope {
             setState { it.copy(isLoading = true) }
-            notesUseCase.getItem(id)
+            getNoteUseCase(id)
                 .onSuccess { item -> setNoteState(item) }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
@@ -66,7 +72,7 @@ class NoteItemViewModel @Inject constructor(
         logd(TAG, "Update note: entity = $entity")
         launchScope {
             if (entity == null) {
-                notesUseCase.insert(NoteEntity(currentState.title, currentState.content))
+                addNoteUseCase(NoteEntity(currentState.title, currentState.content))
                     .onFailure { code, message -> handleFailure(code, message) }
             } else {
                 val newEntity = entity.copy(
@@ -74,7 +80,7 @@ class NoteItemViewModel @Inject constructor(
                     content = currentState.content,
                     updateTimestamp = Date().time
                 )
-                notesUseCase.update(newEntity)
+                updateNoteUseCase(newEntity)
                     .onSuccess { setState { it.copy(isNoteSaved = true) } }
                     .onFailure { code, message -> handleFailure(code, message) }
             }
@@ -87,7 +93,7 @@ class NoteItemViewModel @Inject constructor(
         logd(TAG, "Delete note: entity = $entity")
         entity ?: return
         launchScope {
-            notesUseCase.delete(entity)
+            deleteNoteUseCase(entity)
                 .onSuccess { setState { it.copy(isNoteDeleted = true) } }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
