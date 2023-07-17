@@ -5,7 +5,7 @@ ext {
     extra["targetSdk"] = 33
     extra["minSdk"] = 26
     extra["versionCode"] = 1
-    extra["versionName"] = "1.0.0"
+    extra["versionName"] = "1.0.1"
     extra["java"] = JavaVersion.VERSION_17
 }
 plugins {
