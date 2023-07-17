@@ -56,10 +56,10 @@ import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppContent
-import com.emikhalets.core.ui.dialog.AppErrorDialog
 import com.emikhalets.core.ui.component.AppFloatButtonBox
 import com.emikhalets.core.ui.component.AppLinearLoader
 import com.emikhalets.core.ui.component.AppTextField
+import com.emikhalets.core.ui.dialog.AppErrorDialog
 import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.text
@@ -122,10 +122,7 @@ private fun ScreenContent(
     logi("$TAG.ScreenContent", "Invoke: state = $state")
 
     AppContent(ApplicationEntity.Convert.getName(), onBackClick) {
-        AppFloatButtonBox(
-            icon = Icons.Rounded.Add,
-            onClick = { onNewCurrencyEvent("", true) }
-        ) {
+        AppFloatButtonBox(Icons.Rounded.Add, { onNewCurrencyEvent("", true) }) {
             Column(modifier = Modifier.fillMaxSize()) {
                 DateLoaderBox(
                     timestamp = state.date,

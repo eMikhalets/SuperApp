@@ -12,7 +12,6 @@ object NotesListContract {
     sealed class Action : UiAction {
 
         object DropError : Action()
-        class DeleteNote(val note: NoteEntity?) : Action()
         object GetNotes : Action()
     }
 

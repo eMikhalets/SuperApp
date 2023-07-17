@@ -162,7 +162,6 @@ private fun NoteEditBox(
                 text = updateDate,
                 style = MaterialTheme.typography.textSub,
                 color = MaterialTheme.colors.secondary,
-                fontSize = 14.sp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colors.surface)

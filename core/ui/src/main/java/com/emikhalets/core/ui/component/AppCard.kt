@@ -13,11 +13,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emikhalets.core.ui.BoxPreview
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.stroke
@@ -28,17 +31,18 @@ import com.emikhalets.core.ui.theme.textHeader
 fun AppCard(
     modifier: Modifier = Modifier,
     header: String = "",
+    headerSize: TextUnit = 20.sp,
     hasBorder: Boolean = true,
     shape: Shape = MaterialTheme.shapes.medium,
     backgroundColor: Color = MaterialTheme.colors.surface,
     content: @Composable () -> Unit,
 ) {
     Card(
-        modifier = modifier,
         shape = shape,
         backgroundColor = backgroundColor,
         border = if (hasBorder) BorderStroke(1.dp, MaterialTheme.colors.stroke) else null,
         elevation = 0.dp,
+        modifier = modifier.clip(shape),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             if (header.isNotBlank()) {
@@ -46,6 +50,7 @@ fun AppCard(
                     text = header,
                     style = MaterialTheme.typography.textHeader,
                     maxLines = 1,
+                    fontSize = headerSize,
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier

@@ -7,7 +7,7 @@ import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
 import com.emikhalets.notes.domain.entity.NoteEntity
-import com.emikhalets.notes.domain.usecase.NotesUseCase
+import com.emikhalets.notes.domain.usecase.notes.GetNotesUseCase
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class NotesListViewModel @Inject constructor(
-    private val notesUseCase: NotesUseCase,
+    private val getNotesUseCase: GetNotesUseCase,
 ) : BaseViewModel<Action, State>() {
 
     override fun createInitialState() = State()
@@ -27,7 +27,6 @@ class NotesListViewModel @Inject constructor(
         when (action) {
             Action.DropError -> dropErrorState()
             Action.GetNotes -> getNotes()
-            is Action.DeleteNote -> deleteNote(action.note)
         }
     }
 
@@ -38,17 +37,8 @@ class NotesListViewModel @Inject constructor(
     private fun getNotes() {
         logd(TAG, "Get notes")
         launchScope {
-            notesUseCase.getAllFlow()
+            getNotesUseCase()
                 .onSuccess { flow -> setAllNotesState(flow) }
-                .onFailure { code, message -> handleFailure(code, message) }
-        }
-    }
-
-    private fun deleteNote(entity: NoteEntity?) {
-        logd(TAG, "Delete note: entity = $entity")
-        entity ?: return
-        launchScope {
-            notesUseCase.delete(entity)
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }

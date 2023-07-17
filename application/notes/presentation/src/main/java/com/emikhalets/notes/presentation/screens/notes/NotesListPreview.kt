@@ -8,11 +8,11 @@ fun getNotesListPreview(): List<NoteEntity> {
             "Note title",
             "Note content Note content Note content Note content Note content Note content Note content Note content Note content Note content Note content Note content Note content Note content Note content Note content"
         ),
-        NoteEntity("Note title", "Note content"),
-        NoteEntity("Note title", "Note content"),
-        NoteEntity("Note title", "Note content"),
-        NoteEntity("Note title", "Note content"),
-        NoteEntity("Note title", "Note content"),
-        NoteEntity("Note title", "Note content"),
+        NoteEntity("Note title 1", "Note content Note content Note content"),
+        NoteEntity("Note title 2", "Note content"),
+        NoteEntity("Note title 3", "Note content Note content"),
+        NoteEntity("Note title 4", "Note content"),
+        NoteEntity("Note title 5", "Note content"),
+        NoteEntity("Note title 6", "Note content Note content Note content Note content Note content"),
     )
 }

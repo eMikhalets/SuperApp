@@ -102,7 +102,7 @@ fun AppFloatButtonBox(
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         content()
