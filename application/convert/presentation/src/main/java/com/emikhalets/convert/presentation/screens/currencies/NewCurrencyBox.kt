@@ -56,6 +56,7 @@ fun NewCurrencyBox(
                 padding = PaddingValues(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .focusRequester(focusRequester)
             )
             Icon(
