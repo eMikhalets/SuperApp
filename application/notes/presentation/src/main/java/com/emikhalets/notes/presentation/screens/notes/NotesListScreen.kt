@@ -28,6 +28,7 @@ import com.emikhalets.core.common.AppCode
 import com.emikhalets.core.common.date.formatShortWithWeekDate
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppContent
 import com.emikhalets.core.ui.component.AppFloatButtonBox
@@ -139,7 +140,7 @@ private fun NoteBox(
     }
 }
 
-@Preview(showBackground = true)
+@ScreenPreview
 @Composable
 private fun Preview() {
     AppTheme {

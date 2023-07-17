@@ -10,9 +10,6 @@ import dagger.hilt.components.SingletonComponent
 abstract class UseCaseModule {
 
     @Binds
-    abstract fun bindsNotesUseCase(impl: NotesUseCaseImpl): NotesUseCase
-
-    @Binds
     abstract fun bindsTasksUseCase(impl: TasksUseCaseImpl): TasksUseCase
 
     @Binds

@@ -18,13 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.core.common.date.formatFullWithWeekDate
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppButton
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppContent
@@ -182,7 +182,7 @@ private fun NoteEditBox(
     }
 }
 
-@Preview(showBackground = true)
+@ScreenPreview
 @Composable
 private fun Preview() {
     AppTheme {
