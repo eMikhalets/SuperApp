@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -42,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,6 +66,7 @@ import com.emikhalets.core.ui.dialog.AppErrorDialog
 import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.text
+import com.emikhalets.core.ui.theme.textTitle
 import java.util.Date
 
 private const val TAG = "Currencies"
@@ -274,26 +278,25 @@ private fun CurrencyTextValueBox(
     ) {
         Text(
             text = code,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.textTitle,
             fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
                 .padding(16.dp)
+                .width(70.dp)
         )
         AppTextField(
             value = value,
             onValueChange = { if (isBase) onBaseCurrencyEvent(code, it) },
-            keyboardType = KeyboardType.Number,
-            fontSize = 25.sp,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            fontSize = 24.sp,
             visualTransformation = CurrencyAmountInputVisualTransformation(),
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(3f)
+                .align(Alignment.CenterVertically)
                 .focusRequester(focusRequester)
-                .onFocusChanged {
-                    if (it.hasFocus) onBaseCurrencyEvent(code, "")
-                }
+                .onFocusChanged { if (it.hasFocus) onBaseCurrencyEvent(code, "") }
         )
     }
 }

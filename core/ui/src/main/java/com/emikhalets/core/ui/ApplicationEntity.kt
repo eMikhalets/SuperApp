@@ -47,7 +47,7 @@ fun ApplicationEntity.isEnabled(): Boolean {
         ApplicationEntity.Convert -> true
         ApplicationEntity.Events -> false
         ApplicationEntity.Finances -> false
-        ApplicationEntity.Fitness -> true
+        ApplicationEntity.Fitness -> false
         ApplicationEntity.MediaLib -> false
         ApplicationEntity.Notes -> true
     }

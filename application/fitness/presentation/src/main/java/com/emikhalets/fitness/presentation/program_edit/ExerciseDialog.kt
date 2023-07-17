@@ -41,7 +41,7 @@ fun ExerciseDialog(
             AppTextField(
                 value = name,
                 onValueChange = { name = it },
-                onDoneClick = { onDoneClick(exercise.copy(name = name)) },
+//                onDoneClick = { onDoneClick(exercise.copy(name = name)) },
                 placeholder = stringResource(R.string.app_fitness_exercise_name),
                 modifier = Modifier
                     .fillMaxWidth()

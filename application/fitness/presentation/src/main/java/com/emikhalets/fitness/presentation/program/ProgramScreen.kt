@@ -161,19 +161,19 @@ private fun ExerciseBox(
                         }
                     },
 //                    onDoneClick = { onRepsChanged() },
-                    onBackspaceEvent = {
-                        if (rep == 0) {
-                        }
-                    }
+//                    onBackspaceEvent = {
+//                        if (rep == 0) {
+//                        }
+//                    }
                 )
             }
             AppTextField(
                 value = newRep,
                 onValueChange = { newRep = it },
-                onDoneClick = {
-                    reps.add(newRep.toIntOrNull() ?: 0)
-                    newRep = ""
-                }
+//                onDoneClick = {
+//                    reps.add(newRep.toIntOrNull() ?: 0)
+//                    newRep = ""
+//                }
             )
         }
     }

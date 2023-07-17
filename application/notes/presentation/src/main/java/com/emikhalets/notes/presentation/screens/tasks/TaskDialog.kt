@@ -1,8 +1,10 @@
 package com.emikhalets.notes.presentation.screens.tasks
 
+import android.view.KeyEvent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
 import androidx.compose.runtime.Composable
@@ -18,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,15 +57,15 @@ fun TaskDialog(
             AppTextField(
                 value = taskContent,
                 onValueChange = { taskContent = it },
-                onDoneClick = {
+                placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
+                leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
+                keyboardActions = KeyboardActions(onDone = {
                     subtasks.add(SubtaskEntity(task.id, ""))
                     scope.launch {
                         delay(100)
                         focusManager.moveFocus(FocusDirection.Down)
                     }
-                },
-                placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
-                leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
+                }),
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
@@ -72,22 +75,25 @@ fun TaskDialog(
                     AppTextField(
                         value = item.content,
                         onValueChange = { subtasks[index] = item.copy(content = it) },
-                        onDoneClick = {
+                        placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
+                        leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
+                        keyboardActions = KeyboardActions(onDone = {
                             subtasks.add(SubtaskEntity(task.id, ""))
                             scope.launch {
                                 delay(100)
                                 focusManager.moveFocus(FocusDirection.Down)
                             }
-                        },
-                        onBackspaceEvent = {
-                            focusManager.moveFocus(FocusDirection.Up)
-                            if (item.content.isEmpty()) subtasks.removeAt(index)
-                        },
-                        placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
-                        leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
+                        }),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 16.dp)
+                            .onKeyEvent {
+                                if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DEL) {
+                                    focusManager.moveFocus(FocusDirection.Up)
+                                    if (item.content.isEmpty()) subtasks.removeAt(index)
+                                }
+                                true
+                            }
                     )
                 }
             }

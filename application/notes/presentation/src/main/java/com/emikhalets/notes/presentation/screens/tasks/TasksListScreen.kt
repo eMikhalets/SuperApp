@@ -262,7 +262,9 @@ private fun TaskRow(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
     ) {
         Checkbox(
             checked = entity.isCompleted,

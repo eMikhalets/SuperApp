@@ -1,132 +1,200 @@
 package com.emikhalets.core.ui.component
 
-import android.view.KeyEvent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Android
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.core.ui.BoxPreview
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.textSub
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @NonRestartableComposable
 fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    errorMessage: String? = null,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
     placeholder: String? = null,
-    label: String? = null,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
-    singleLine: Boolean = true,
+    errorMessage: String? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    onDoneClick: (KeyboardActionScope.() -> Unit)? = null,
-    onBackspaceEvent: () -> Unit = {},
-    textColor: Color = MaterialTheme.colors.onSurface,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+        .copy(capitalization = KeyboardCapitalization.Sentences),
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    singleLine: Boolean = false,
+    shape: Shape = RectangleShape,
     fontSize: TextUnit = 16.sp,
+    textColor: Color = MaterialTheme.colors.onSurface,
+    padding: PaddingValues = PaddingValues(0.dp),
+    background: Color = Color.Transparent,
 ) {
-    Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
-        TextField(
+    val isError = errorMessage != null
+    val interactionSource = remember { MutableInteractionSource() }
+    val maxLines = if (singleLine) Int.MAX_VALUE else 1
+
+    val colors = TextFieldDefaults.textFieldColors(
+        textColor = textColor,
+        disabledTextColor = MaterialTheme.colors.secondary,
+        backgroundColor = background,
+        cursorColor = MaterialTheme.colors.onSurface,
+        errorCursorColor = MaterialTheme.colors.onSurface,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        disabledIndicatorColor = Color.Transparent,
+        errorIndicatorColor = Color.Transparent,
+        leadingIconColor = MaterialTheme.colors.onSurface,
+        disabledLeadingIconColor = MaterialTheme.colors.secondary,
+        errorLeadingIconColor = MaterialTheme.colors.onSurface,
+        trailingIconColor = MaterialTheme.colors.onSurface,
+        disabledTrailingIconColor = MaterialTheme.colors.onSurface,
+        errorTrailingIconColor = MaterialTheme.colors.onSurface,
+        placeholderColor = MaterialTheme.colors.secondary,
+        disabledPlaceholderColor = MaterialTheme.colors.secondary
+    )
+
+    Column(modifier = modifier.width(IntrinsicSize.Max)) {
+        BasicTextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.surface, RectangleShape)
-                .defaultMinSize(
-                    minWidth = TextFieldDefaults.MinWidth,
-                    minHeight = TextFieldDefaults.MinHeight
-                )
-                .onKeyEvent {
-                    if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DEL) {
-                        onBackspaceEvent()
-                        true
-                    } else {
-                        false
-                    }
-                },
+            textStyle = LocalTextStyle.current.copy(fontSize = fontSize, color = textColor),
+            enabled = enabled,
+            readOnly = readOnly,
+            cursorBrush = SolidColor(colors.cursorColor(isError).value),
             visualTransformation = visualTransformation,
-            enabled = true,
-            readOnly = false,
-            textStyle = LocalTextStyle.current.copy(fontSize = fontSize),
-            label = if (!label.isNullOrBlank()) {
-                { Text(label) }
-            } else null,
-            placeholder = if (!placeholder.isNullOrBlank()) {
-                { Text(placeholder, fontSize = fontSize) }
-            } else null,
-            leadingIcon = if (leadingIcon != null) {
-                { Icon(leadingIcon, contentDescription = null) }
-            } else null,
-            trailingIcon = if (trailingIcon != null) {
-                { Icon(trailingIcon, contentDescription = null) }
-            } else null,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            interactionSource = interactionSource,
             singleLine = singleLine,
-            isError = errorMessage != null,
-            shape = RectangleShape,
-            keyboardOptions = KeyboardOptions(
-                capitalization = capitalization,
-                keyboardType = keyboardType,
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = onDoneClick,
-            ),
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = textColor,
-                backgroundColor = MaterialTheme.colors.surface,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent,
-                errorLeadingIconColor = MaterialTheme.colors.onSurface
-                    .copy(alpha = TextFieldDefaults.IconOpacity),
-                errorTrailingIconColor = MaterialTheme.colors.onSurface
-                    .copy(alpha = TextFieldDefaults.IconOpacity),
-            ),
+            maxLines = maxLines,
+            minLines = 1,
+            modifier = modifier
+                .fillMaxWidth()
+                .background(background, shape),
+            decorationBox = @Composable { innerTextField ->
+                TextFieldDefaults.TextFieldDecorationBox(
+                    value = value,
+                    visualTransformation = visualTransformation,
+                    innerTextField = innerTextField,
+                    contentPadding = if (leadingIcon != null || trailingIcon != null) {
+                        PaddingValues(16.dp)
+                    } else {
+                        padding
+                    },
+                    placeholder = if (!placeholder.isNullOrBlank()) {
+                        { Text(placeholder, fontSize = fontSize) }
+                    } else null,
+                    leadingIcon = if (leadingIcon != null) {
+                        { Icon(leadingIcon, contentDescription = null) }
+                    } else null,
+                    trailingIcon = if (trailingIcon != null) {
+                        { Icon(trailingIcon, contentDescription = null) }
+                    } else null,
+                    singleLine = singleLine,
+                    enabled = enabled,
+                    isError = isError,
+                    interactionSource = interactionSource,
+                    colors = colors,
+                )
+            }
         )
         if (errorMessage != null) {
             Text(
                 text = errorMessage,
+                style = MaterialTheme.typography.textSub,
                 color = MaterialTheme.colors.error,
-                style = MaterialTheme.typography.caption,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .width(IntrinsicSize.Max)
                     .padding(horizontal = 8.dp)
-                    .padding(top = 4.dp)
+                    .padding(top = 0.dp, bottom = 4.dp)
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@BoxPreview
 @Composable
 private fun Preview() {
     AppTheme {
-        AppTextField("Test text", {}, Modifier.padding(8.dp))
+        Column(modifier = Modifier.fillMaxWidth()) {
+            AppTextField(
+                value = "Test text",
+                onValueChange = {},
+                modifier = Modifier.background(Color.LightGray)
+            )
+            AppTextField(
+                value = "",
+                onValueChange = {},
+                placeholder = "Test placeholder",
+                modifier = Modifier.background(Color.Gray)
+            )
+            AppTextField(
+                value = "Test text",
+                onValueChange = {},
+                leadingIcon = Icons.Default.Android,
+                trailingIcon = Icons.Default.Android,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray)
+            )
+            AppTextField(
+                value = "Test text",
+                onValueChange = {},
+                leadingIcon = Icons.Default.Android,
+                errorMessage = "Test error Test error Test error Test error Test error",
+                modifier = Modifier.background(Color.Gray)
+            )
+            AppTextField(
+                value = "Test text",
+                onValueChange = {},
+                leadingIcon = Icons.Default.Android,
+                trailingIcon = Icons.Default.Android,
+                fontSize = 24.sp,
+                textColor = Color.Blue,
+                modifier = Modifier.background(Color.LightGray)
+            )
+            AppTextField(
+                value = "123.45",
+                onValueChange = {},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                fontSize = 24.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
