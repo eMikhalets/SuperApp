@@ -2,6 +2,7 @@ package com.emikhalets.convert.presentation.screens.currencies
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,9 +53,9 @@ fun NewCurrencyBox(
                 value = newCurrencyCode,
                 onValueChange = { onNewCurrencyEvent(it, true) },
                 placeholder = stringResource(R.string.app_convert_code_help),
+                padding = PaddingValues(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
                     .focusRequester(focusRequester)
             )
             Icon(
