@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,15 +33,17 @@ import com.emikhalets.notes.domain.entity.TaskEntity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val TAG = "TaskDialog"
-
 @Composable
 fun TaskDialog(
-    task: TaskEntity,
-    onDismiss: () -> Unit,
+    task: TaskEntity?,
     onDoneClick: (TaskEntity) -> Unit,
+    onDismiss: () -> Unit = {},
 ) {
-    logi(TAG, "Invoke: task = $task")
+    if (task == null) return
+
+    logi("TaskDialog", "Invoke: task = $task")
+
+    val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
     var taskContent by remember { mutableStateOf(task.content) }
@@ -55,7 +58,7 @@ fun TaskDialog(
                     subtasks.add(SubtaskEntity(task.id, ""))
                     scope.launch {
                         delay(100)
-//                        it.moveFocus(FocusDirection.Down)
+                        focusManager.moveFocus(FocusDirection.Down)
                     }
                 },
                 placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
@@ -73,11 +76,11 @@ fun TaskDialog(
                             subtasks.add(SubtaskEntity(task.id, ""))
                             scope.launch {
                                 delay(100)
-//                                it.moveFocus(FocusDirection.Down)
+                                focusManager.moveFocus(FocusDirection.Down)
                             }
                         },
                         onBackspaceEvent = {
-//                            it.moveFocus(FocusDirection.Up)
+                            focusManager.moveFocus(FocusDirection.Up)
                             if (item.content.isEmpty()) subtasks.removeAt(index)
                         },
                         placeholder = stringResource(R.string.app_notes_tap_enter_subtask),
@@ -109,7 +112,12 @@ fun TaskDialog(
 private fun ScreenPreview() {
     AppTheme {
         TaskDialog(
-            task = TaskEntity(content = "Some task content"),
+            task = TaskEntity(
+                content = "Some task content",
+                subtasks = listOf(
+                    SubtaskEntity(0, "asd")
+                )
+            ),
             onDismiss = {},
             onDoneClick = {}
         )

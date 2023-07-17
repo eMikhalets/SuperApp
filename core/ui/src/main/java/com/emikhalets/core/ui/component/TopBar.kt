@@ -89,7 +89,7 @@ fun AppTopBar(
 @NonRestartableComposable
 fun AppContent(
     text: String,
-    onBackClick: () -> Unit,
+    onBackClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -150,7 +150,7 @@ fun AppContentLazyScroll(
 @NonRestartableComposable
 private fun ContentTopBox(
     text: String,
-    onBackClick: () -> Unit,
+    onBackClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -160,17 +160,19 @@ private fun ContentTopBox(
             .background(Color.Transparent)
             .height(52.dp)
     ) {
-        Icon(
-            imageVector = Icons.Rounded.ArrowBack,
-            contentDescription = null,
-            tint = MaterialTheme.colors.onBackground,
-            modifier = Modifier
-                .padding(start = 6.dp)
-                .fillMaxHeight()
-                .aspectRatio(1f)
-                .clickable { onBackClick() }
-                .padding(10.dp)
-        )
+        if (onBackClick != null) {
+            Icon(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onBackground,
+                modifier = Modifier
+                    .padding(start = 6.dp)
+                    .fillMaxHeight()
+                    .aspectRatio(1f)
+                    .clickable { onBackClick() }
+                    .padding(10.dp)
+            )
+        }
         Text(
             text = text,
             style = MaterialTheme.typography.textTitle,
@@ -189,7 +191,10 @@ private fun ContentTopBox(
 @Composable
 private fun Preview() {
     AppTheme {
-        AppContent(text = "jadsgjadsghjkljadsghjkljadsghjklhjkl", {}) {
+        AppContent(
+            text = "jadsgjadsghjkljadsghjkljadsghjklhjkl",
+            onBackClick = {}
+        ) {
             Text("jadsghjkl")
         }
     }

@@ -12,6 +12,7 @@ object NoteItemContract {
     sealed class Action : UiAction {
 
         object DropError : Action()
+        object DropDeleting : Action()
         object SetDeletedEntity : Action()
         object SaveNote : Action()
         class GetNote(val id: Long) : Action()

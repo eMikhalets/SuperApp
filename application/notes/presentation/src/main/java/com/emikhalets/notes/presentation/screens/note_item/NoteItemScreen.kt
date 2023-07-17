@@ -66,7 +66,8 @@ fun NoteItemScreen(
 
     AppDialogDelete(
         entity = state.deletedEntity,
-        onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) }
+        onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) },
+        onDismiss = {viewModel.setAction(Action.DropDeleting)}
     )
 
     AppErrorDialog(

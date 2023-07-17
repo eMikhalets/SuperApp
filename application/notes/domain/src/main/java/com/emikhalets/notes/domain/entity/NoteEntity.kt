@@ -10,6 +10,14 @@ data class NoteEntity(
     val updateTimestamp: Long,
 ) {
 
+    constructor(id: Long, title: String, content: String) : this(
+        id = id,
+        title = title,
+        content = content,
+        createTimestamp = Date().time,
+        updateTimestamp = Date().time
+    )
+
     constructor(title: String, content: String) : this(
         id = 0,
         title = title,

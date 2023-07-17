@@ -30,7 +30,8 @@ class NoteItemViewModel @Inject constructor(
     override fun handleEvent(action: Action) {
         logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
-            Action.DropError -> dropErrorState()
+            Action.DropError -> setState { it.copy(error = null) }
+            Action.DropDeleting -> setState { it.copy(deletedEntity = null) }
             Action.SetDeletedEntity -> setDeletedEntityState()
             Action.SaveNote -> updateNote()
             is Action.DeleteNote -> deleteNote()
@@ -38,10 +39,6 @@ class NoteItemViewModel @Inject constructor(
             is Action.SetContent -> setContentState(action.value)
             is Action.SetTitle -> setTitleState(action.value)
         }
-    }
-
-    private fun dropErrorState() {
-        setState { it.copy(error = null) }
     }
 
     private fun setTitleState(value: String) {

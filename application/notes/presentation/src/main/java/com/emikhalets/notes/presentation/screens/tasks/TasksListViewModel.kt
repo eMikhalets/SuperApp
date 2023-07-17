@@ -28,16 +28,17 @@ class TasksListViewModel @Inject constructor(
     override fun handleEvent(action: Action) {
         logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
-            Action.DropError -> dropErrorState()
+            Action.DropError -> setState { it.copy(error = null) }
+            Action.SwitchCheckedExpand -> switchCheckedTasksExpand()
             Action.GetTask -> getTasks()
-            is Action.DeleteTask -> deleteTask(action.task)
-            is Action.CompleteTask -> updateTask(action.task, action.complete)
-            is Action.CompleteSubtask -> updateSubtask(action.task, action.complete)
+            is Action.SetEditingTask -> setState { it.copy(editingTask = action.task) }
+            is Action.CheckTask -> updateTask(action.task, action.check)
+            is Action.CheckSubtask -> updateSubtask(action.subtask, action.check)
         }
     }
 
-    private fun dropErrorState() {
-        setState { it.copy(error = null) }
+    private fun switchCheckedTasksExpand() {
+        setState { it.copy(isCheckedTasksExpanded = !currentState.isCheckedTasksExpanded) }
     }
 
     private fun getTasks() {
@@ -45,15 +46,6 @@ class TasksListViewModel @Inject constructor(
         launchScope {
             tasksUseCase.getAllFlow()
                 .onSuccess { flow -> setAllTasksState(flow) }
-                .onFailure { code, message -> handleFailure(code, message) }
-        }
-    }
-
-    private fun deleteTask(entity: TaskEntity?) {
-        logd(TAG, "Delete task: entity = $entity")
-        entity ?: return
-        launchScope {
-            tasksUseCase.delete(entity)
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }
