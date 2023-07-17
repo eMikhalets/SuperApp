@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.core.ui.theme.textHeader
+import com.emikhalets.core.ui.theme.textTitle
 
 @Deprecated("Use new AppContent")
 @Composable
@@ -173,13 +173,13 @@ private fun ContentTopBox(
         )
         Text(
             text = text,
-            style = MaterialTheme.typography.textHeader,
+            style = MaterialTheme.typography.textTitle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 32.dp)
                 .align(Alignment.CenterVertically)
         )
     }

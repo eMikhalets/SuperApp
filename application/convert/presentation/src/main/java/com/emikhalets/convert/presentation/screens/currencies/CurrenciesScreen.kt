@@ -56,7 +56,7 @@ import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppContent
-import com.emikhalets.core.ui.component.AppErrorBox
+import com.emikhalets.core.ui.dialog.AppErrorDialog
 import com.emikhalets.core.ui.component.AppFloatButtonBox
 import com.emikhalets.core.ui.component.AppLinearLoader
 import com.emikhalets.core.ui.component.AppTextField
@@ -103,7 +103,7 @@ fun CurrenciesScreen(
         onSaveClick = { viewModel.setAction(Action.AddCurrency(it)) }
     )
 
-    AppErrorBox(
+    AppErrorDialog(
         message = state.error,
         onDismiss = { viewModel.setAction(Action.DropError) }
     )

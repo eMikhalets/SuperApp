@@ -25,9 +25,12 @@ class NoteItemViewModel @Inject constructor(
         logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
             Action.DropError -> dropErrorState()
-            Action.DeleteNote -> deleteNote()
-            is Action.SaveNote -> updateNote(action.entity)
+            Action.SetDeletedEntity -> setDeletedEntityState()
+            Action.SaveNote -> updateNote()
+            is Action.DeleteNote -> deleteNote()
             is Action.GetNote -> getNote(action.id)
+            is Action.SetContent -> setContentState(action.value)
+            is Action.SetTitle -> setTitleState(action.value)
         }
     }
 
@@ -35,25 +38,43 @@ class NoteItemViewModel @Inject constructor(
         setState { it.copy(error = null) }
     }
 
+    private fun setTitleState(value: String) {
+        setState { it.copy(title = value, isNeedSave = true) }
+    }
+
+    private fun setContentState(value: String) {
+        setState { it.copy(title = value, isNeedSave = true) }
+    }
+
+    private fun setDeletedEntityState() {
+        setState { it.copy(deletedEntity = currentState.noteEntity) }
+    }
+
     private fun getNote(id: Long) {
         logd(TAG, "Get note: id = $id")
         if (id <= 0) return
         launchScope {
+            setState { it.copy(isLoading = true) }
             notesUseCase.getItem(id)
                 .onSuccess { item -> setNoteState(item) }
                 .onFailure { code, message -> handleFailure(code, message) }
         }
     }
 
-    private fun updateNote(entity: NoteEntity?) {
+    private fun updateNote() {
+        val entity = currentState.noteEntity
         logd(TAG, "Update note: entity = $entity")
-        entity ?: return
         launchScope {
-            if (entity.id == 0L) {
-                notesUseCase.insert(entity)
+            if (entity == null) {
+                notesUseCase.insert(NoteEntity(currentState.title, currentState.content))
                     .onFailure { code, message -> handleFailure(code, message) }
             } else {
-                notesUseCase.update(entity.copy(updateTimestamp = Date().time))
+                val newEntity = entity.copy(
+                    title = currentState.title,
+                    content = currentState.content,
+                    updateTimestamp = Date().time
+                )
+                notesUseCase.update(newEntity)
                     .onSuccess { setState { it.copy(isNoteSaved = true) } }
                     .onFailure { code, message -> handleFailure(code, message) }
             }
@@ -62,6 +83,7 @@ class NoteItemViewModel @Inject constructor(
 
     private fun deleteNote() {
         val entity = currentState.noteEntity
+        setState { it.copy(deletedEntity = null) }
         logd(TAG, "Delete note: entity = $entity")
         entity ?: return
         launchScope {
@@ -73,7 +95,15 @@ class NoteItemViewModel @Inject constructor(
 
     private fun setNoteState(item: NoteEntity) {
         logd(TAG, "Set note state: entity = $item")
-        setState { it.copy(isLoading = false, noteEntity = item) }
+        setState {
+            it.copy(
+                isLoading = false,
+                noteEntity = item,
+                title = item.title,
+                content = item.content,
+                date = item.updateTimestamp
+            )
+        }
     }
 
     private fun handleFailure(code: Int, message: UiString?) {

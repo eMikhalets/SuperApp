@@ -4,18 +4,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.R
+import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.component.AppTextButton
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.text
 
 @Composable
 fun <T> AppDialogDelete(
@@ -23,33 +23,30 @@ fun <T> AppDialogDelete(
     onDeleteClick: (entity: T?) -> Unit,
     onDismiss: () -> Unit = {},
 ) {
-    AppDialog(onDismiss = onDismiss) {
+    if (entity == null) return
+
+    logi("DeleteDialog", "Invoke: entity = $entity")
+
+    AppDialog(
+        header = stringResource(R.string.app_dialog_delete_title),
+        onDismiss = onDismiss
+    ) {
         Text(
-            text = stringResource(R.string.app_dialog_delete_title),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h6,
+            text = stringResource(R.string.app_dialog_delete_message),
+            style = MaterialTheme.typography.text,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         )
-        Text(
-            text = stringResource(R.string.app_dialog_delete_message),
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-        Divider(modifier = Modifier.padding(16.dp))
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
             AppTextButton(
                 text = stringResource(R.string.app_cancel),
+                bold = true,
                 onClick = { onDismiss() },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 16.dp)
             )
@@ -57,8 +54,6 @@ fun <T> AppDialogDelete(
                 text = stringResource(R.string.app_delete),
                 onClick = { onDeleteClick(entity) },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 16.dp)
             )
