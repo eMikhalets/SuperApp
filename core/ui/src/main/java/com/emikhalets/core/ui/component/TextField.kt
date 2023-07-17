@@ -5,8 +5,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -19,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.remember
@@ -88,7 +92,11 @@ fun AppTextField(
         disabledPlaceholderColor = MaterialTheme.colors.secondary
     )
 
-    Column(modifier = modifier.width(IntrinsicSize.Max)) {
+    Column(
+        modifier = modifier
+            .width(IntrinsicSize.Max)
+            .height(IntrinsicSize.Min)
+    ) {
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
@@ -139,7 +147,6 @@ fun AppTextField(
                 style = MaterialTheme.typography.textSub,
                 color = MaterialTheme.colors.error,
                 modifier = Modifier
-                    .width(IntrinsicSize.Max)
                     .padding(horizontal = 8.dp)
                     .padding(top = 0.dp, bottom = 4.dp)
             )
@@ -188,13 +195,24 @@ private fun Preview() {
                 textColor = Color.Blue,
                 modifier = Modifier.background(Color.LightGray)
             )
-            AppTextField(
-                value = "123.45",
-                onValueChange = {},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                fontSize = 24.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row(Modifier.fillMaxWidth()) {
+                AppTextField(
+                    value = "123.45",
+                    onValueChange = {},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(32.dp)
+                )
+            }
         }
     }
 }
