@@ -1,0 +1,10 @@
+{
+  "id": "0",
+  "name": "String",
+  "bodyPart": "Traps",
+  "equipment": "EquipmentType",
+  "difficulty": "DifficultyType",
+  "technique": "",
+  "videoUrl": "String",
+  "reps": ""
+}

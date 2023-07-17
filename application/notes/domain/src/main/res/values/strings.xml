@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_notes_saved">Note saved!</string>
+    <string name="app_notes_deleted">Note deleted!</string>
+    <string name="app_notes_save">Save note</string>
+    <string name="app_notes_title">Title</string>
+    <string name="app_notes_content">Content</string>
+    <string name="app_notes_completed">Completed %d</string>
+    <string name="app_notes_done">Done</string>
+    <string name="app_notes_counter">%d / %d</string>
+    <string name="app_notes_tap_enter_subtask">Tap \"Enter\" to create subtask</string>
+    <string name="app_notes_task_deleted">Task deleted!</string>
+</resources>

@@ -3,44 +3,47 @@ package com.emikhalets.superapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.emikhalets.superapp.ui.theme.SuperAppTheme
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.SideEffect
+import com.emikhalets.core.common.AppLogger
+import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.theme.AppTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        logi(TAG, "Created")
+        AppLogger.init()
+
         setContent {
-            SuperAppTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+            AppTheme {
+                logi(TAG, "Set Content")
+                val systemUiController = rememberSystemUiController()
+                val systemUiColor = MaterialTheme.colors.primary
+
+                SideEffect {
+                    logi(TAG, "Set Android UI")
+                    systemUiController.setStatusBarColor(
+                        color = systemUiColor,
+                        darkIcons = false
+                    )
+                    systemUiController.setNavigationBarColor(
+                        color = systemUiColor,
+                        darkIcons = false
+                    )
                 }
+
+                AppScreen()
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    companion object {
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SuperAppTheme {
-        Greeting("Android")
+        private const val TAG = "MainActivity"
     }
 }
