@@ -13,10 +13,11 @@ object TasksListContract {
     sealed class Action : UiAction {
 
         object DropError : Action()
-        class DeleteTask(val task: TaskEntity?) : Action()
-        class CompleteTask(val task: TaskEntity?, val complete: Boolean) : Action()
-        class CompleteSubtask(val task: SubtaskEntity?, val complete: Boolean) : Action()
+        object SwitchCheckedExpand : Action()
         object GetTask : Action()
+        class SetEditingTask(val task: TaskEntity = TaskEntity("")) : Action()
+        class CheckTask(val task: TaskEntity?, val check: Boolean) : Action()
+        class CheckSubtask(val subtask: SubtaskEntity?, val check: Boolean) : Action()
     }
 
     @Immutable
@@ -25,6 +26,8 @@ object TasksListContract {
         val isTaskDeleted: Boolean = false,
         val tasksList: List<TaskEntity> = emptyList(),
         val checkedList: List<TaskEntity> = emptyList(),
+        val editingTask: TaskEntity? = null,
+        val isCheckedTasksExpanded: Boolean = false,
         val error: UiString? = null,
     ) : UiState
 }

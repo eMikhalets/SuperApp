@@ -52,6 +52,7 @@ fun NavGraphBuilder.applicationNotes(
         }
         composable(AppNotesDestination.Notes) {
             logi(TAG, "Composable NotesListScreen")
+            bottomBarList(bottomBarItems)
             NotesListScreen(
                 navigateToNote = { id ->
                     logi(TAG, "Navigate to note: id = $id")

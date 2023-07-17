@@ -1,26 +1,23 @@
 package com.emikhalets.core.ui.dialog
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.emikhalets.core.ui.component.AppCard
 
 @Composable
 fun AppDialog(
     modifier: Modifier = Modifier,
+    header: String = "",
     onDismiss: () -> Unit = {},
     cancelable: Boolean = false,
-    content: @Composable ColumnScope.(FocusManager) -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Dialog(
         onDismissRequest = { onDismiss() },
@@ -30,17 +27,15 @@ fun AppDialog(
             usePlatformDefaultWidth = false
         )
     ) {
-        val focusManager = LocalFocusManager.current
-        Column(
-            content = { content(focusManager) },
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(32.dp)
-                .background(
-                    color = MaterialTheme.colors.surface,
-                    shape = MaterialTheme.shapes.medium
-                )
-                .wrapContentHeight()
-        )
+        Box(modifier = modifier.fillMaxSize()) {
+            AppCard(
+                content = { content() },
+                header = header,
+                shape = RectangleShape,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+            )
+        }
     }
 }

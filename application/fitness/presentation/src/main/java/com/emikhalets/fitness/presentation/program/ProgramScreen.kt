@@ -18,7 +18,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.emikhalets.core.common.ApplicationEntity.Fitness.appNameRes
+import com.emikhalets.core.ui.ApplicationEntity.Fitness.appNameRes
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.common.toIntOrNull
 import com.emikhalets.core.ui.AppToast
@@ -161,19 +161,19 @@ private fun ExerciseBox(
                         }
                     },
 //                    onDoneClick = { onRepsChanged() },
-                    onBackspaceEvent = {
-                        if (rep == 0) {
-                        }
-                    }
+//                    onBackspaceEvent = {
+//                        if (rep == 0) {
+//                        }
+//                    }
                 )
             }
             AppTextField(
                 value = newRep,
                 onValueChange = { newRep = it },
-                onDoneClick = {
-                    reps.add(newRep.toIntOrNull() ?: 0)
-                    newRep = ""
-                }
+//                onDoneClick = {
+//                    reps.add(newRep.toIntOrNull() ?: 0)
+//                    newRep = ""
+//                }
             )
         }
     }

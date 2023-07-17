@@ -14,28 +14,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.core.common.ApplicationEntity.Notes.appNameRes
 import com.emikhalets.core.common.date.formatFullWithWeekDate
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.AppToast
+import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppButton
-import com.emikhalets.core.ui.component.AppChildScreenBox
+import com.emikhalets.core.ui.component.AppCard
+import com.emikhalets.core.ui.component.AppContent
+import com.emikhalets.core.ui.component.AppLinearLoader
 import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.dialog.AppDialogDelete
-import com.emikhalets.core.ui.dialog.AppDialogMessage
+import com.emikhalets.core.ui.dialog.AppErrorDialog
+import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.textSub
 import com.emikhalets.notes.domain.R
-import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.note_item.NoteItemContract.Action
+import java.util.Date
 
 private const val TAG = "NoteItem"
 
@@ -46,61 +48,32 @@ fun NoteItemScreen(
     noteId: Long,
 ) {
     logi(TAG, "Invoke: id = $noteId")
-    val state by viewModel.state.collectAsState()
 
-    var title by remember { mutableStateOf("") }
-    var updateDate by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
-    var isNeedSave by remember { mutableStateOf(false) }
-    var deletedEntity by remember { mutableStateOf(false) }
+    val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetNote(noteId))
     }
 
-    LaunchedEffect(state.noteEntity) {
-        title = state.noteEntity?.title ?: ""
-        updateDate = state.noteEntity?.updateTimestamp.formatFullWithWeekDate()
-        content = state.noteEntity?.content ?: ""
-    }
-
     ScreenContent(
-        title = title,
-        updateDate = updateDate,
-        content = content,
-        isNeedSave = isNeedSave,
-        onTitleChanged = {
-            isNeedSave = true
-            title = it
-        },
-        onContentChanged = {
-            isNeedSave = true
-            content = it
-        },
-        onDeleteNoteClick = { deletedEntity = true },
-        onSaveNoteClick = {
-            val newEntity = state.noteEntity?.copy(title = title, content = content)
-                ?: NoteEntity(title, content)
-            viewModel.setAction(Action.SaveNote(newEntity))
-        },
+        state = state,
+        onTitleChanged = { viewModel.setAction(Action.SetTitle(it)) },
+        onContentChanged = { viewModel.setAction(Action.SetContent(it)) },
+        onDeleteNoteClick = { viewModel.setAction(Action.SetDeletedEntity) },
+        onSaveNoteClick = { viewModel.setAction(Action.SaveNote) },
         onBackClick = navigateBack
     )
 
-    if (!deletedEntity) {
-        logi(TAG, "Show delete task dialog")
-        AppDialogDelete(
-            entity = null,
-            onDeleteClick = {
-                deletedEntity = false
-                viewModel.setAction(Action.DeleteNote)
-            }
-        )
-    }
+    AppDialogDelete(
+        entity = state.deletedEntity,
+        onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) },
+        onDismiss = {viewModel.setAction(Action.DropDeleting)}
+    )
 
-    if (state.error != null) {
-        logi(TAG, "Show error dialog")
-        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
-    }
+    AppErrorDialog(
+        message = state.error,
+        onDismiss = { viewModel.setAction(Action.DropError) }
+    )
 
     if (state.isNoteDeleted) {
         logi(TAG, "Note deleted")
@@ -117,10 +90,7 @@ fun NoteItemScreen(
 
 @Composable
 private fun ScreenContent(
-    title: String,
-    updateDate: String,
-    content: String,
-    isNeedSave: Boolean,
+    state: NoteItemContract.State,
     onTitleChanged: (String) -> Unit,
     onContentChanged: (String) -> Unit,
     onDeleteNoteClick: () -> Unit,
@@ -129,22 +99,23 @@ private fun ScreenContent(
 ) {
     logi(
         "${TAG}.ScreenContent", "Invoke:\n" +
-                "title = $title,\n" +
-                "updateDate = $updateDate,\n" +
-                "content = $content,\n" +
-                "isNeedSave = $isNeedSave"
+                "title = ${state.title},\n" +
+                "updateDate = ${state.date},\n" +
+                "content = ${state.content},\n" +
+                "isNeedSave = ${state.isNeedSave}"
     )
-    AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
+
+    AppContent(ApplicationEntity.Notes.getName(), onBackClick) {
         Box(modifier = Modifier.fillMaxSize()) {
+            AppLinearLoader(visible = state.isLoading)
             NoteEditBox(
-                title = title,
-                updateDate = updateDate,
-                content = content,
+                title = state.title,
+                updateDate = state.date.formatFullWithWeekDate(),
+                content = state.content,
                 onTitleChanged = onTitleChanged,
-                onContentChanged = onContentChanged,
-                modifier = Modifier.fillMaxSize()
+                onContentChanged = onContentChanged
             )
-            if (isNeedSave) {
+            if (state.isNeedSave) {
                 AppButton(
                     text = stringResource(R.string.app_notes_save),
                     onClick = onSaveNoteClick,
@@ -172,44 +143,57 @@ private fun NoteEditBox(
                 "updateDate = $updateDate,\n" +
                 "content = $content"
     )
-    Column(modifier = modifier) {
-        AppTextField(
-            value = title,
-            onValueChange = onTitleChanged,
-            fontSize = 20.sp,
-            placeholder = stringResource(R.string.app_notes_title),
-            modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            text = updateDate,
-            style = MaterialTheme.typography.subtitle1,
-            color = MaterialTheme.colors.secondary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.surface)
-                .padding(16.dp)
-        )
-        AppTextField(
-            value = content,
-            onValueChange = onContentChanged,
-            placeholder = stringResource(R.string.app_notes_content),
-            singleLine = false,
-            modifier = Modifier
-                .fillMaxSize()
-                .height(IntrinsicSize.Max)
-        )
+
+    AppCard(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Column(modifier = modifier.fillMaxSize()) {
+            AppTextField(
+                value = title,
+                onValueChange = onTitleChanged,
+                fontSize = 20.sp,
+                placeholder = stringResource(R.string.app_notes_title),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+            )
+            Text(
+                text = updateDate,
+                style = MaterialTheme.typography.textSub,
+                color = MaterialTheme.colors.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.surface)
+                    .padding(16.dp)
+            )
+            AppTextField(
+                value = content,
+                onValueChange = onContentChanged,
+                fontSize = 16.sp,
+                placeholder = stringResource(R.string.app_notes_content),
+                singleLine = false,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(IntrinsicSize.Max)
+                    .clip(MaterialTheme.shapes.medium)
+            )
+        }
     }
 }
 
-@Preview(showBackground = true)
+@ScreenPreview
 @Composable
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            title = "Test title",
-            updateDate = "Test update date",
-            content = "Test content",
-            isNeedSave = true,
+            state = NoteItemContract.State(
+                title = "Test title",
+                date = Date().time,
+                content = "Test content",
+                isNeedSave = true,
+            ),
             onTitleChanged = {},
             onContentChanged = {},
             onSaveNoteClick = {},

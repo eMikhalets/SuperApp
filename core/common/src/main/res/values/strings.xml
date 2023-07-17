@@ -4,6 +4,7 @@
     <string name="app_save">Save</string>
     <string name="app_delete">Delete</string>
     <string name="app_cancel">Cancel</string>
+    <string name="app_error">Error</string>
 
     <string name="application_convert">Convert</string>
     <string name="application_events">Events</string>

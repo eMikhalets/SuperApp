@@ -2,7 +2,6 @@ package com.emikhalets.notes.app
 
 import com.emikhalets.core.common.AppResult
 import com.emikhalets.notes.domain.entity.NoteEntity
-import com.emikhalets.notes.domain.usecase.NotesUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

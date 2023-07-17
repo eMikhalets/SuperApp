@@ -1,16 +1,16 @@
 package com.emikhalets.notes.presentation.screens.notes
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Card
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -19,25 +19,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emikhalets.core.common.AppCode
-import com.emikhalets.core.common.ApplicationEntity.Notes.appNameRes
 import com.emikhalets.core.common.date.formatShortWithWeekDate
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.component.AppChildScreenBox
-import com.emikhalets.core.ui.component.AppFloatButton
-import com.emikhalets.core.ui.dialog.AppDialogDelete
-import com.emikhalets.core.ui.dialog.AppDialogMessage
+import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.ui.ScreenPreview
+import com.emikhalets.core.ui.component.AppCard
+import com.emikhalets.core.ui.component.AppContent
+import com.emikhalets.core.ui.component.AppFloatButtonBox
+import com.emikhalets.core.ui.dialog.AppErrorDialog
+import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.text
+import com.emikhalets.core.ui.theme.textSub
 import com.emikhalets.notes.domain.entity.NoteEntity
 import com.emikhalets.notes.presentation.screens.notes.NotesListContract.Action
 
@@ -50,126 +49,108 @@ fun NotesListScreen(
     viewModel: NotesListViewModel,
 ) {
     logi(TAG, "Invoke")
-    val state by viewModel.state.collectAsState()
 
-    var deletedEntity by remember { mutableStateOf<NoteEntity?>(null) }
+    val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.setAction(Action.GetNotes)
     }
 
     ScreenContent(
-        notesList = state.notesList,
-        onNoteClick = { navigateToNote(it) },
-        onDeleteNoteClick = { deletedEntity = it },
+        state = state,
+        onNoteClick = { navigateToNote(it.id) },
         onAddNoteClick = { navigateToNote(AppCode.IdNull) },
         onBackClick = navigateBack
     )
 
-    if (state.error != null) {
-        logi(TAG, "Show error dialog")
-        AppDialogMessage(state.error, { viewModel.setAction(Action.DropError) })
-    }
-
-    val deleted = deletedEntity
-    if (deleted != null) {
-        logi(TAG, "Show delete note dialog: entity = $deleted")
-        AppDialogDelete(
-            entity = deleted,
-            onDeleteClick = { viewModel.setAction(Action.DeleteNote(it)) }
-        )
-    }
+    AppErrorDialog(
+        message = state.error,
+        onDismiss = { viewModel.setAction(Action.DropError) }
+    )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ScreenContent(
-    notesList: List<NoteEntity>,
-    onNoteClick: (Long) -> Unit,
-    onDeleteNoteClick: (NoteEntity) -> Unit,
+    state: NotesListContract.State,
+    onNoteClick: (NoteEntity) -> Unit,
     onAddNoteClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    logi("${TAG}.ScreenContent", "Invoke: list = $notesList")
-    AppChildScreenBox(onBackClick, stringResource(appNameRes)) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+    logi("${TAG}.ScreenContent", "Invoke: state = $state")
+
+    AppContent(ApplicationEntity.Notes.getName(), onBackClick) {
+        AppFloatButtonBox(Icons.Rounded.Add, onAddNoteClick) {
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                items(notesList) { entity ->
+                items(state.notesList) { entity ->
                     NoteBox(
                         entity = entity,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(8.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .clickable { onNoteClick(entity.id) }
+                        onNoteClick = onNoteClick
                     )
                 }
             }
-            AppFloatButton(
-                icon = Icons.Rounded.Add,
-                onClick = { onAddNoteClick() },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-            )
         }
     }
 }
 
 @Composable
-private fun NoteBox(entity: NoteEntity, modifier: Modifier = Modifier) {
+private fun NoteBox(
+    entity: NoteEntity,
+    onNoteClick: (NoteEntity) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     logi("${TAG}.NoteBox", "Invoke: entity = $entity")
-    Card(
-        elevation = 0.dp,
-        modifier = modifier
+
+    AppCard(
+        header = entity.title,
+        headerSize = 18.sp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onNoteClick(entity) }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp)
+                .padding(horizontal = 12.dp)
+                .padding(bottom = 12.dp)
         ) {
             Text(
-                text = entity.title,
-                style = MaterialTheme.typography.body2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
                 text = entity.content,
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.secondaryVariant,
+                style = MaterialTheme.typography.text,
+                maxLines = 5,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
-                    .weight(1f)
+                    .height(IntrinsicSize.Max)
+                    .padding(vertical = 8.dp)
             )
             Text(
                 text = entity.updateTimestamp.formatShortWithWeekDate(),
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.textSub,
                 color = MaterialTheme.colors.secondary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp)
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@ScreenPreview
 @Composable
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            notesList = getNotesListPreview(),
+            state = NotesListContract.State(
+                notesList = getNotesListPreview(),
+                isLoading = true
+            ),
             onNoteClick = {},
             onAddNoteClick = {},
-            onDeleteNoteClick = {},
             onBackClick = {}
         )
     }

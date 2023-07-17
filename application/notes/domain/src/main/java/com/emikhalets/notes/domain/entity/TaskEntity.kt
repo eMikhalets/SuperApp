@@ -17,9 +17,16 @@ data class TaskEntity(
     constructor(
         content: String,
         isCompleted: Boolean = false,
-        subtasks: List<SubtaskEntity> = emptyList()
+        subtasks: List<SubtaskEntity> = emptyList(),
+    ) : this(0, content, isCompleted, subtasks)
+
+    constructor(
+        id: Long,
+        content: String,
+        isCompleted: Boolean = false,
+        subtasks: List<SubtaskEntity> = emptyList(),
     ) : this(
-        id = 0,
+        id = id,
         content = content,
         isCompleted = isCompleted,
         createTimestamp = Date().time,
