@@ -2,7 +2,9 @@ package com.emikhalets.core.database.finance.table_category
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import com.emikhalets.core.database.AppDao
+import com.emikhalets.core.database.finance.embedded.CategoryFullDb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,6 +21,10 @@ interface CategoriesDao : AppDao<CategoryDb> {
 
     @Query("SELECT * FROM categories WHERE type=:type")
     fun getAllFlow(type: String): Flow<List<CategoryDb>>
+
+    @Transaction
+    @Query("SELECT * FROM categories")
+    suspend fun getAllFullFlow(): Flow<List<CategoryFullDb>>
 
     @Query("SELECT * FROM categories WHERE id = :id")
     suspend fun getItem(id: Long): CategoryDb

@@ -2,7 +2,9 @@ package com.emikhalets.core.database.finance.table_transactions
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import com.emikhalets.core.database.AppDao
+import com.emikhalets.core.database.finance.embedded.TransactionFullDb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,6 +18,10 @@ interface TransactionsDao : AppDao<TransactionDb> {
 
     @Query("SELECT * FROM transactions")
     fun getAllFlow(): Flow<List<TransactionDb>>
+
+    @Transaction
+    @Query("SELECT * FROM transactions")
+    suspend fun getAllFullFlow(): Flow<List<TransactionFullDb>>
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getItem(id: Long): TransactionDb

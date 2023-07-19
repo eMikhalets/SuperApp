@@ -1,13 +1,13 @@
-package com.emikhalets.data.database.table.embedded
+package com.emikhalets.core.database.finance.embedded
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.emikhalets.data.database.table.CategoryDb
-import com.emikhalets.data.database.table.CurrencyDb
-import com.emikhalets.data.database.table.TransactionDb
-import com.emikhalets.data.database.table.WalletDb
+import com.emikhalets.core.database.finance.table_category.CategoryDb
+import com.emikhalets.core.database.finance.table_currencies.CurrencyDb
+import com.emikhalets.core.database.finance.table_transactions.TransactionDb
+import com.emikhalets.core.database.finance.table_wallets.WalletDb
 
-data class ComplexTransactionDb(
+data class TransactionFullDb(
     @Embedded
     val transaction: TransactionDb,
     @Relation(parentColumn = "category_id", entityColumn = "id")
