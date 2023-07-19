@@ -1,22 +1,18 @@
-package com.emikhalets.medialib.data.database.serials
+package com.emikhalets.core.database.media.table_movies
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.emikhalets.medialib.data.database.converters.CrewConverters
-import com.emikhalets.medialib.data.database.converters.GenresConverters
-import com.emikhalets.medialib.data.database.converters.RatingsConverters
-import com.emikhalets.medialib.domain.entities.crew.CrewEntity
-import com.emikhalets.medialib.domain.entities.genres.GenreEntity
-import com.emikhalets.medialib.domain.entities.ratings.RatingEntity
-import com.emikhalets.medialib.domain.entities.serials.SerialWatchStatus
+import com.emikhalets.core.database.media.type_converter.CrewConverters
+import com.emikhalets.core.database.media.type_converter.GenresConverters
+import com.emikhalets.core.database.media.type_converter.RatingsConverters
 import java.util.*
 
-@Entity(tableName = "serials_table")
-data class SerialDbEntity(
+@Entity(tableName = "movies")
+data class MovieDb(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "serial_id") val id: Long,
+    @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "title_ru") val titleRu: String,
     @ColumnInfo(name = "overview") val overview: String,
@@ -26,13 +22,13 @@ data class SerialDbEntity(
     @ColumnInfo(name = "last_update_timestamp") val lastUpdateTimestamp: Long,
     @ColumnInfo(name = "comment") val comment: String,
     @ColumnInfo(name = "rating") val rating: Int,
-    @ColumnInfo(name = "watch_status") val watchStatus: SerialWatchStatus,
+    @ColumnInfo(name = "watch_status") val watchStatus: String,
     @TypeConverters(GenresConverters::class)
-    @ColumnInfo(name = "genres") val genres: List<GenreEntity>,
+    @ColumnInfo(name = "genres") val genres: List<String>,
     @TypeConverters(RatingsConverters::class)
-    @ColumnInfo(name = "ratings", defaultValue = "") val ratings: List<RatingEntity>,
+    @ColumnInfo(name = "ratings", defaultValue = "") val ratings: List<String>,
     @ColumnInfo(name = "runtime", defaultValue = "") val runtime: String,
     @TypeConverters(CrewConverters::class)
-    @ColumnInfo(name = "crew", defaultValue = "") val crew: List<CrewEntity>,
+    @ColumnInfo(name = "crew", defaultValue = "") val crew: List<String>,
     @ColumnInfo(name = "awards", defaultValue = "") val awards: String,
 )
