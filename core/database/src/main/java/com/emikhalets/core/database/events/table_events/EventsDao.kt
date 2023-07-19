@@ -12,10 +12,16 @@ interface EventsDao : AppDao<EventDb> {
     suspend fun drop()
 
     @Query("SELECT * FROM events")
-    fun getAllEntities(): Flow<List<EventDb>>
+    suspend fun getAll(): List<EventDb>
+
+    @Query("SELECT * FROM events")
+    fun getAllFlow(): Flow<List<EventDb>>
 
     @Query("SELECT * FROM events WHERE id = :id")
-    suspend fun getEntityById(id: Long): EventDb
+    suspend fun getItem(id: Long): EventDb
+
+    @Query("SELECT * FROM events WHERE id = :id")
+    fun getItemFlow(id: Long): Flow<EventDb>
 
     @Query("SELECT * FROM events WHERE group_id = :id")
     fun getAllByGroupId(id: Long): Flow<List<EventDb>>

@@ -12,11 +12,14 @@ interface GroupsDao : AppDao<GroupDb> {
     suspend fun drop()
 
     @Query("SELECT * FROM groups")
-    fun getAllEntities(): Flow<List<GroupDb>>
+    suspend fun getAll(): List<GroupDb>
 
-    @Query("SELECT * FROM groups WHERE id = :id ORDER BY name ASC")
-    fun getEntityByIdFlow(id: Long): Flow<GroupDb>
+    @Query("SELECT * FROM groups")
+    fun getAllFlow(): Flow<List<GroupDb>>
 
     @Query("SELECT * FROM groups WHERE id = :id")
-    suspend fun getEntityById(id: Long): GroupDb
+    suspend fun getItem(id: Long): GroupDb
+
+    @Query("SELECT * FROM groups WHERE id = :id")
+    fun getItemFlow(id: Long): Flow<GroupDb>
 }

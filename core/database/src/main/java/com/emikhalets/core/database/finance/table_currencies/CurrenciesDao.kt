@@ -11,12 +11,18 @@ interface CurrenciesDao : AppDao<CurrencyDb> {
     @Query("DELETE FROM currencies")
     suspend fun drop()
 
-    @Query("SELECT EXISTS(SELECT * FROM currencies WHERE code = :code)")
-    suspend fun isExist(code: String): Boolean
-
     @Query("SELECT * FROM currencies")
     suspend fun getAll(): List<CurrencyDb>
 
     @Query("SELECT * FROM currencies")
     fun getAllFlow(): Flow<List<CurrencyDb>>
+
+    @Query("SELECT * FROM currencies WHERE id = :id")
+    suspend fun getItem(id: Long): CurrencyDb
+
+    @Query("SELECT * FROM currencies WHERE id = :id")
+    fun getItemFlow(id: Long): Flow<CurrencyDb>
+
+    @Query("SELECT EXISTS(SELECT * FROM currencies WHERE code = :code)")
+    suspend fun isCodeExist(code: String): Boolean
 }
