@@ -1,8 +1,11 @@
 package com.emikhalets.core.database.finance
 
 import android.content.Context
+import com.emikhalets.core.database.finance.table_category.CategoriesDao
 import com.emikhalets.core.database.finance.table_currencies.CurrenciesDao
 import com.emikhalets.core.database.finance.table_exchanges.ExchangesDao
+import com.emikhalets.core.database.finance.table_transactions.TransactionsDao
+import com.emikhalets.core.database.finance.table_wallets.WalletsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +22,11 @@ object FinanceDatabaseModule {
     }
 
     @Provides
+    fun providesCategoriesDao(database: FinanceDatabase): CategoriesDao {
+        return database.categoriesDao
+    }
+
+    @Provides
     fun providesCurrenciesDao(database: FinanceDatabase): CurrenciesDao {
         return database.currenciesDao
     }
@@ -26,5 +34,15 @@ object FinanceDatabaseModule {
     @Provides
     fun providesExchangesDao(database: FinanceDatabase): ExchangesDao {
         return database.exchangesDao
+    }
+
+    @Provides
+    fun providesTransactionsDao(database: FinanceDatabase): TransactionsDao {
+        return database.transactionsDao
+    }
+
+    @Provides
+    fun providesWalletsDao(database: FinanceDatabase): WalletsDao {
+        return database.walletsDao
     }
 }
