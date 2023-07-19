@@ -22,6 +22,11 @@ dependencyResolutionManagement {
 }
 rootProject.name = "SuperApp"
 include(":app")
+//include(":domain")
+
+//include(":application:finance")
+
+//include(":data:finance")
 
 include(":application:convert:app")
 include(":application:convert:data")
