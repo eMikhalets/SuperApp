@@ -6,6 +6,8 @@ import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.FitnessCenter
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.runtime.Composable
@@ -37,6 +39,13 @@ fun UiString?.asString(): String = when (this) {
     is UiString.Message -> value ?: Resources.getSystem().getString(R.string.error_internal)
     is UiString.Resource -> stringResource(resId, *args)
     else -> Resources.getSystem().getString(R.string.error_internal)
+}
+
+@Composable
+fun setExpandedIcon(expanded: Boolean) = if (expanded) {
+    Icons.Rounded.KeyboardArrowDown
+} else {
+    Icons.Rounded.KeyboardArrowUp
 }
 
 @Preview(name = "Gray Theme", showBackground = true, showSystemUi = true)

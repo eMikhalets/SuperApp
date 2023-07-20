@@ -23,12 +23,12 @@ data class SerialDb(
     @ColumnInfo(name = "comment") val comment: String,
     @ColumnInfo(name = "rating") val rating: Int,
     @ColumnInfo(name = "watch_status") val watchStatus: String,
-    @TypeConverters(GenresConverters::class)
-    @ColumnInfo(name = "genres") val genres: List<String>,
-    @TypeConverters(RatingsConverters::class)
-    @ColumnInfo(name = "ratings", defaultValue = "") val ratings: List<String>,
+//    @TypeConverters(GenresConverters::class)
+    @ColumnInfo(name = "genres") val genres: String,
+//    @TypeConverters(RatingsConverters::class)
+    @ColumnInfo(name = "ratings", defaultValue = "") val ratings: String,
     @ColumnInfo(name = "runtime", defaultValue = "") val runtime: String,
-    @TypeConverters(CrewConverters::class)
-    @ColumnInfo(name = "crew", defaultValue = "") val crew: List<String>,
+//    @TypeConverters(CrewConverters::class)
+    @ColumnInfo(name = "crew", defaultValue = "") val crew: String,
     @ColumnInfo(name = "awards", defaultValue = "") val awards: String,
 )

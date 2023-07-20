@@ -21,7 +21,7 @@ interface TransactionsDao : AppDao<TransactionDb> {
 
     @Transaction
     @Query("SELECT * FROM transactions")
-    suspend fun getAllFullFlow(): Flow<List<TransactionFullDb>>
+    fun getAllFullFlow(): Flow<List<TransactionFullDb>>
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getItem(id: Long): TransactionDb

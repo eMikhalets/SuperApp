@@ -21,7 +21,7 @@ interface WalletsDao : AppDao<WalletDb> {
 
     @Transaction
     @Query("SELECT * FROM wallets")
-    suspend fun getAllFullFlow(): Flow<List<WalletFullDb>>
+    fun getAllFullFlow(): Flow<List<WalletFullDb>>
 
     @Query("SELECT * FROM wallets WHERE id = :id")
     suspend fun getItem(id: Long): WalletDb

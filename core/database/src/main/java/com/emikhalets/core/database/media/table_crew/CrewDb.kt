@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "crew")
 data class CrewDb(
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "type") val type: String,
 )

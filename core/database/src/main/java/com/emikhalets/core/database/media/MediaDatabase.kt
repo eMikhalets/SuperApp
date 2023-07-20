@@ -29,7 +29,7 @@ import com.emikhalets.core.database.media.type_converter.RatingsConverters
     version = 1,
     exportSchema = true
 )
-@TypeConverters(GenresConverters::class, RatingsConverters::class, CrewConverters::class)
+//@TypeConverters(GenresConverters::class, RatingsConverters::class, CrewConverters::class)
 abstract class MediaDatabase : RoomDatabase() {
 
     abstract val crewDao: CrewDao

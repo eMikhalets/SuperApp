@@ -1,0 +1,12 @@
+<resources>
+    <string name="feature_tasks_title">Title</string>
+    <string name="feature_tasks_tap_enter_subtask">Tap \"Enter\" to create subtask</string>
+    <string name="feature_tasks_task_deleted">Task deleted!</string>
+    <string name="feature_tasks_saved">Note saved!</string>
+    <string name="feature_tasks_deleted">Note deleted!</string>
+    <string name="feature_tasks_save">Save note</string>
+    <string name="feature_tasks_content">Content</string>
+    <string name="feature_tasks_completed">Completed %d</string>
+    <string name="feature_tasks_done">Done</string>
+    <string name="feature_tasks_counter">%d / %d</string>
+</resources>

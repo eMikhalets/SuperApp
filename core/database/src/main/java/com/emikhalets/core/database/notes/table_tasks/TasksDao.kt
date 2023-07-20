@@ -20,8 +20,8 @@ interface TasksDao : AppDao<TaskDb> {
     fun getAllFlow(): Flow<List<TaskDb>>
 
     @Transaction
-    @Query("SELECT * FROM tasks ORDER BY create_date DESC")
-    fun getAllFlowOrderCreateDateDesc(): Flow<List<TaskFullDb>>
+    @Query("SELECT * FROM tasks ORDER BY update_date DESC")
+    fun getAllFlowOrderUpdateDateDesc(): Flow<List<TaskFullDb>>
 
     @Query("SELECT * FROM tasks WHERE id = :id")
     suspend fun getItem(id: Long): TaskDb

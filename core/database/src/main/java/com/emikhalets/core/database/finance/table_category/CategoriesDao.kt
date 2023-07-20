@@ -24,7 +24,7 @@ interface CategoriesDao : AppDao<CategoryDb> {
 
     @Transaction
     @Query("SELECT * FROM categories")
-    suspend fun getAllFullFlow(): Flow<List<CategoryFullDb>>
+    fun getAllFullFlow(): Flow<List<CategoryFullDb>>
 
     @Query("SELECT * FROM categories WHERE id = :id")
     suspend fun getItem(id: Long): CategoryDb
