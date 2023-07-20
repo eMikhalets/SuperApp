@@ -17,8 +17,8 @@ interface NotesDao : AppDao<NoteDb> {
     @Query("SELECT * FROM notes")
     fun getAllFlow(): Flow<List<NoteDb>>
 
-    @Query("SELECT * FROM notes ORDER BY create_date DESC")
-    fun getAllFlowOrderCreateDateDesc(): Flow<List<NoteDb>>
+    @Query("SELECT * FROM notes ORDER BY update_date DESC")
+    fun getAllFlowOrderUpdateDateDesc(): Flow<List<NoteDb>>
 
     @Query("SELECT * FROM notes WHERE id = :id")
     suspend fun getItem(id: Long): NoteDb

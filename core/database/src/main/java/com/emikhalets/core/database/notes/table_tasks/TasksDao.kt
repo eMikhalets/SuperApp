@@ -19,6 +19,7 @@ interface TasksDao : AppDao<TaskDb> {
     @Query("SELECT * FROM tasks")
     fun getAllFlow(): Flow<List<TaskDb>>
 
+    // TODO: request tasks and completed tasks separate. sort by update_date DESC, completed ASC
     @Transaction
     @Query("SELECT * FROM tasks ORDER BY update_date DESC")
     fun getAllFlowOrderUpdateDateDesc(): Flow<List<TaskFullDb>>
