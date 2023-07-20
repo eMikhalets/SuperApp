@@ -26,7 +26,7 @@ fun TaskFullDb.toModel(): TaskModel = TaskModel(
     completed = task.completed,
     createDate = task.createDate,
     updateDate = task.updateDate,
-    subtasks = subtasks.map { it.toModel() }
+    subtasks = subtasks.toModelList()
 )
 
 fun TaskDb.toModel(subtasks: List<TaskModel> = emptyList()): TaskModel = TaskModel(
