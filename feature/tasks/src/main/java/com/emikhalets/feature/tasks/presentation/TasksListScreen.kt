@@ -33,13 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppContent
 import com.emikhalets.core.ui.component.AppFloatButtonBox
 import com.emikhalets.core.ui.dialog.AppErrorDialog
-import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.setExpandedIcon
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.text
@@ -85,7 +83,7 @@ private fun ScreenContent(
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
 
-    AppContent(ApplicationEntity.Notes.getName(), onBackClick) {
+    AppContent(R.string.feature_tasks, onBackClick) {
         AppFloatButtonBox(Icons.Rounded.Add, { onActionSent(Action.TaskClicked()) }) {
             TasksList(
                 tasksList = state.tasksList,

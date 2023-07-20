@@ -24,17 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.core.common.date.formatShortWithWeekDate
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppContent
 import com.emikhalets.core.ui.component.AppFloatButtonBox
 import com.emikhalets.core.ui.dialog.AppDialogDelete
 import com.emikhalets.core.ui.dialog.AppErrorDialog
-import com.emikhalets.core.ui.getName
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.text
 import com.emikhalets.core.ui.theme.textSub
+import com.emikhalets.feature.notes.R
 import com.emikhalets.feature.notes.data.NoteModel
 import com.emikhalets.feature.notes.presentation.NotesListContract.Action
 
@@ -63,7 +62,7 @@ private fun ScreenContent(
 ) {
     logi("$TAG.ScreenContent", "Invoke: state = $state")
 
-    AppContent(ApplicationEntity.Notes.getName(), onBackClick) {
+    AppContent(R.string.feature_notes, onBackClick) {
         AppFloatButtonBox(Icons.Rounded.Add, { onActionSent(Action.NoteClicked()) }) {
             NotesList(
                 notesList = state.notesList,

@@ -6,7 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.emikhalets.convert.app.AppConvertDestination
 import com.emikhalets.convert.app.applicationConvert
-import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.fitness.navigation.AppFitnessDestination
 import com.emikhalets.fitness.navigation.applicationFitness
@@ -15,22 +14,19 @@ import com.emikhalets.notes.applicationNotesGraph
 import com.emikhalets.superapp.screen.MainScreen
 
 @Composable
-fun AppNavHost(
-    navController: NavHostController,
-    bottomBarList: (List<AppBottomBarItem>) -> Unit,
-) {
+fun AppNavHost(navController: NavHostController) {
+
     NavHost(navController, AppMainDestination.Main) {
         composable(AppMainDestination.Main) {
-            bottomBarList(emptyList())
             MainScreen(
                 navigateToApp = { type -> navController.navigateApp(type) },
                 navigateToWidget = { id -> },
                 navigateToNewWidget = {},
             )
         }
-        applicationConvert(navController, bottomBarList)
-        applicationFitness(navController, bottomBarList)
-        applicationNotesGraph(navController, bottomBarList)
+        applicationConvert(navController) {}
+        applicationFitness(navController) {}
+        applicationNotesGraph(navController)
     }
 }
 

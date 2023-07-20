@@ -11,13 +11,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Task
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -26,7 +27,11 @@ import androidx.navigation.compose.rememberNavController
 import com.emikhalets.core.common.classNames
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
+import com.emikhalets.core.ui.BoxPreview
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.notes.AppNotesDestination
+import com.emikhalets.notes.applicationNotesBottomBar
+import com.emikhalets.superapp.navigation.AppMainDestination
 import com.emikhalets.superapp.navigation.AppNavHost
 
 private const val TAG = "App"
@@ -36,37 +41,57 @@ fun AppScreen() {
     logi(TAG, "Invoke")
 
     val navController = rememberNavController()
-    val bottomBarList = remember { mutableStateListOf<AppBottomBarItem>() }
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
+        scaffoldState = scaffoldState,
         backgroundColor = MaterialTheme.colors.background,
-        bottomBar = {
-            if (bottomBarList.isNotEmpty()) AppBottomBar(navController, bottomBarList)
-        }
+        bottomBar = { AppBottomBarBox(navController) }
     ) {
         Box(modifier = Modifier.padding(it)) {
-            AppNavHost(
-                navController = navController,
-                bottomBarList = { newList ->
-                    if (!bottomBarList.same(newList)) {
-                        bottomBarList.clear()
-                        bottomBarList.addAll(newList)
-                    }
-                }
-            )
+            AppNavHost(navController = navController)
         }
+    }
+}
+
+@Composable
+private fun AppBottomBarBox(navController: NavHostController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    val bottomBarItems = remember { mutableStateListOf<AppBottomBarItem>() }
+
+    LaunchedEffect(navBackStackEntry) {
+        when (navBackStackEntry?.destination?.route) {
+            AppMainDestination.Main -> {
+                if (bottomBarItems.isNotEmpty()) bottomBarItems.clear()
+            }
+
+            AppNotesDestination.BottomBarTrigger -> {
+                if (bottomBarItems != applicationNotesBottomBar) {
+                    bottomBarItems.clear()
+                    bottomBarItems.addAll(applicationNotesBottomBar)
+                }
+            }
+        }
+    }
+
+    if (bottomBarItems.isNotEmpty()) {
+        AppBottomBar(
+            navController = navController,
+            currentDestination = currentDestination,
+            bottomBarItems = bottomBarItems
+        )
     }
 }
 
 @Composable
 private fun AppBottomBar(
     navController: NavHostController,
+    currentDestination: NavDestination?,
     bottomBarItems: List<AppBottomBarItem>,
 ) {
-    logi("$TAG.AppBottomBar", "Invoke: items = [${bottomBarItems.classNames}]")
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    logi("$TAG.AppBottomBar", "Invoke: items = ${bottomBarItems.classNames}")
 
     BottomNavigation {
         bottomBarItems.forEach { item ->
@@ -88,30 +113,18 @@ private fun AppBottomBar(
     }
 }
 
-private fun List<AppBottomBarItem>.same(list: List<AppBottomBarItem>): Boolean {
-    return this.containsAll(list) && list.containsAll(this)
-}
-
-@Preview(showBackground = true)
+@BoxPreview
 @Composable
 private fun PreviewBottomBar() {
     AppTheme {
         AppBottomBar(
             navController = rememberNavController(),
+            currentDestination = rememberNavController().currentDestination,
             bottomBarItems = listOf(
-                object : AppBottomBarItem {
-                    override val route: String = "tasks"
-                    override val icon: ImageVector = Icons.Rounded.Task
-                },
-                object : AppBottomBarItem {
-                    override val route: String = "notes"
-                    override val icon: ImageVector = Icons.Rounded.EditNote
-                },
-                object : AppBottomBarItem {
-                    override val route: String = "settings"
-                    override val icon: ImageVector = Icons.Rounded.Settings
-                }
-            )
+                AppBottomBarItem.getInstance("tasks", Icons.Rounded.Task),
+                AppBottomBarItem.getInstance("notes", Icons.Rounded.EditNote),
+                AppBottomBarItem.getInstance("settings", Icons.Rounded.Settings),
+            ),
         )
     }
 }

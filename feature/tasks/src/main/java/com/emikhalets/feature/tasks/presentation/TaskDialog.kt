@@ -4,6 +4,7 @@ import android.view.KeyEvent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
@@ -54,10 +55,15 @@ fun TaskEditDialog(
     val subtasks = remember { task?.subtasks?.toMutableStateList() ?: mutableStateListOf() }
 
     AppDialog(onDismiss = onDismiss, cancelable = true) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .wrapContentHeight()
+        ) {
             AppTextField(
                 value = taskContent,
                 onValueChange = { taskContent = it },
+                singleLine = true,
                 placeholder = stringResource(R.string.feature_tasks_tap_enter_subtask),
                 leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
                 keyboardActions = KeyboardActions(onDone = {
@@ -76,6 +82,7 @@ fun TaskEditDialog(
                     AppTextField(
                         value = item.content,
                         onValueChange = { subtasks[index] = item.copy(content = it) },
+                        singleLine = true,
                         placeholder = stringResource(R.string.feature_tasks_tap_enter_subtask),
                         leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
                         keyboardActions = KeyboardActions(onDone = {

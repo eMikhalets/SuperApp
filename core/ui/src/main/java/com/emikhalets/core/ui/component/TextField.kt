@@ -95,7 +95,7 @@ fun AppTextField(
     Column(
         modifier = modifier
             .width(IntrinsicSize.Max)
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Max)
     ) {
         BasicTextField(
             value = value,
@@ -185,6 +185,13 @@ private fun Preview() {
                 leadingIcon = Icons.Default.Android,
                 errorMessage = "Test error Test error Test error Test error Test error",
                 modifier = Modifier.background(Color.Gray)
+            )
+            AppTextField(
+                value = "Test Height",
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Green)
             )
             AppTextField(
                 value = "Test text",

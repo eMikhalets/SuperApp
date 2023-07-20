@@ -9,7 +9,7 @@ import com.emikhalets.feature.tasks.presentation.TasksListScreen
 
 private const val TAG = "GraphFeatureTasks"
 
-fun NavGraphBuilder.featureTasksGraph(navController: NavHostController) {
+fun NavGraphBuilder.featureTasksComposable(navController: NavHostController) {
     composable(FeatureTasksDestination.Tasks) {
         logi(TAG, "Composable TasksListScreen")
         TasksListScreen(

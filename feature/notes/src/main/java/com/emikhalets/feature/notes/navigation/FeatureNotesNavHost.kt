@@ -9,7 +9,7 @@ import com.emikhalets.feature.notes.presentation.NotesListScreen
 
 private const val TAG = "GraphFeatureNotes"
 
-fun NavGraphBuilder.featureNotesGraph(navController: NavHostController) {
+fun NavGraphBuilder.featureNotesComposable(navController: NavHostController) {
     composable(FeatureNotesDestination.Notes) {
         logi(TAG, "Composable NotesListScreen")
         NotesListScreen(
