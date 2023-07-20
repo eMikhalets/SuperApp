@@ -1,4 +1,4 @@
-package com.emikhalets.superapp
+package com.emikhalets.superapp.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +40,7 @@ import com.emikhalets.core.ui.isVisible
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.text
 import com.emikhalets.core.ui.theme.textHeader
+import com.emikhalets.superapp.R
 
 private const val TAG = "Main"
 

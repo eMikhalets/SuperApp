@@ -10,9 +10,9 @@ import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.fitness.navigation.AppFitnessDestination
 import com.emikhalets.fitness.navigation.applicationFitness
-import com.emikhalets.notes.app.AppNotesDestination
-import com.emikhalets.notes.app.applicationNotes
-import com.emikhalets.superapp.MainScreen
+import com.emikhalets.notes.AppNotesDestination
+import com.emikhalets.notes.applicationNotesGraph
+import com.emikhalets.superapp.screen.MainScreen
 
 @Composable
 fun AppNavHost(
@@ -30,7 +30,7 @@ fun AppNavHost(
         }
         applicationConvert(navController, bottomBarList)
         applicationFitness(navController, bottomBarList)
-        applicationNotes(navController, bottomBarList)
+        applicationNotesGraph(navController, bottomBarList)
     }
 }
 

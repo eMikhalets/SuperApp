@@ -1,4 +1,4 @@
-package com.emikhalets.superapp
+package com.emikhalets.superapp.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding

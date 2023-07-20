@@ -8,4 +8,14 @@ interface AppBottomBarItem {
 
     val route: String
     val icon: ImageVector
+
+    companion object {
+
+        fun getInstance(route: String, icon: ImageVector): AppBottomBarItem {
+            return object : AppBottomBarItem {
+                override val route: String = route
+                override val icon: ImageVector = icon
+            }
+        }
+    }
 }

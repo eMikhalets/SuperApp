@@ -8,6 +8,7 @@ import androidx.compose.runtime.SideEffect
 import com.emikhalets.core.common.AppLogger
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.superapp.screen.AppScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
