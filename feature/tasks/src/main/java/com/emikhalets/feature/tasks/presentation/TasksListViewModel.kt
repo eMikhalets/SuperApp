@@ -30,9 +30,8 @@ class TasksListViewModel @Inject constructor(
     override fun createInitialState() = State()
 
     override fun handleEvent(action: Action) {
-        logd(TAG, "User event: ${action.javaClass.simpleName}")
         when (action) {
-            Action.DropTaskDialog -> dropTasksDialog()
+            Action.DropTaskDialog -> dropTaskDialog()
             Action.DropError -> setState { it.copy(error = null) }
             Action.SwitchCheckedExpand -> switchCheckedTasksExpand()
             is Action.TaskClicked -> setEditTaskState(action.task)
@@ -41,7 +40,7 @@ class TasksListViewModel @Inject constructor(
         }
     }
 
-    private fun dropTasksDialog() {
+    private fun dropTaskDialog() {
         setState { it.copy(showTaskDialog = false) }
     }
 
@@ -55,18 +54,15 @@ class TasksListViewModel @Inject constructor(
 
     private fun saveTask(task: TaskModel) {
         logd(TAG, "Save task: $task")
+        dropTaskDialog()
         launchScope {
-            if (task.id == 0L) {
-                repository.insertTask(task)
-            } else {
-                repository.updateTask(task)
-            }
+            if (task.id == 0L) repository.insertTask(task)
+            else repository.updateTask(task)
         }
     }
 
     private fun updateTask(task: TaskModel, complete: Boolean) {
         logd(TAG, "Update task: task = $task, complete = $complete")
-        dropTasksDialog()
         launchScope {
             repository.updateTask(task.copy(completed = complete))
         }

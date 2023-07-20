@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.AppToast
 import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
@@ -76,12 +75,6 @@ fun TasksListScreen(
         message = state.error,
         onDismiss = { viewModel.setAction(Action.DropError) }
     )
-
-    if (state.isTaskDeleted) {
-        logi(TAG, "Task deleted")
-        AppToast(R.string.feature_tasks_task_deleted)
-        navigateBack()
-    }
 }
 
 @Composable

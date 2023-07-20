@@ -10,8 +10,9 @@ data class NoteModel(
     val updateDate: Long,
 ) {
 
-    constructor(title: String, content: String)
-            : this(0, title, content, Date().time, Date().time)
+    constructor() : this("", "")
+
+    constructor(title: String, content: String) : this(0, title, content)
 
     constructor(id: Long, title: String, content: String)
             : this(id, title, content, Date().time, Date().time)

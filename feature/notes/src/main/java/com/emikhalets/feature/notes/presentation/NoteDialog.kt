@@ -1,0 +1,142 @@
+package com.emikhalets.feature.notes.presentation
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.emikhalets.core.common.date.formatFullWithWeekDate
+import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.component.AppTextButton
+import com.emikhalets.core.ui.component.AppTextField
+import com.emikhalets.core.ui.dialog.AppDialog
+import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.ui.theme.textSub
+import com.emikhalets.feature.notes.R
+import com.emikhalets.feature.notes.data.NoteModel
+import java.util.Date
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private const val TAG = "TaskEdit"
+
+@Composable
+fun NoteEditDialog(
+    note: NoteModel?,
+    onDoneClick: (NoteModel) -> Unit,
+    onDismiss: () -> Unit = {},
+) {
+    logi(TAG, "Invoke: note = $note")
+
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
+
+    var title by remember { mutableStateOf(note?.title ?: "") }
+    var content by remember { mutableStateOf(note?.content ?: "") }
+    var needSave by remember { mutableStateOf(false) }
+
+    val date by remember {
+        val result = (note?.updateDate ?: Date().time).formatFullWithWeekDate()
+        mutableStateOf(result)
+    }
+
+    AppDialog(onDismiss = onDismiss, cancelable = true) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            AppTextField(
+                value = title,
+                onValueChange = {
+                    title = it
+                    needSave = true
+                },
+                placeholder = stringResource(R.string.feature_notes_title),
+                keyboardActions = KeyboardActions(
+                    onDone = { focusManager.moveNoteFocus(scope, FocusDirection.Down) }
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+            )
+            Text(
+                text = date,
+                style = MaterialTheme.typography.textSub,
+                color = MaterialTheme.colors.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+            AppTextField(
+                value = content,
+                onValueChange = {
+                    content = it
+                    needSave = true
+                },
+                placeholder = stringResource(R.string.feature_notes_content),
+                keyboardActions = KeyboardActions(
+                    onDone = { onDoneClick(note.getNewModel(title, content)) }
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max)
+                    .focusRequester(focusRequester)
+            )
+            AppTextButton(
+                text = stringResource(id = R.string.feature_notes_done),
+                enabled = content.isNotBlank(),
+                onClick = { onDoneClick(note.getNewModel(title, content)) },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 32.dp)
+            )
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+}
+
+private fun NoteModel?.getNewModel(title: String, content: String): NoteModel {
+    return this?.copy(title = title, content = content, updateDate = Date().time)
+        ?: NoteModel(title, content)
+}
+
+private fun FocusManager.moveNoteFocus(scope: CoroutineScope, direction: FocusDirection) {
+    scope.launch {
+        delay(100)
+        moveFocus(direction)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ScreenPreview() {
+    AppTheme {
+        NoteEditDialog(
+            note = NoteModel("Some note title", "Some note content"),
+            onDismiss = {},
+            onDoneClick = {}
+        )
+    }
+}

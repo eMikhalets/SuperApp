@@ -22,7 +22,6 @@ object TasksListContract {
     @Immutable
     data class State(
         val isLoading: Boolean = false,
-        val isTaskDeleted: Boolean = false,
         val tasksList: List<TaskModel> = emptyList(),
         val checkedList: List<TaskModel> = emptyList(),
         val editingTask: TaskModel? = null,
