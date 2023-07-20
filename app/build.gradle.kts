@@ -98,7 +98,7 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.google.accompanist)
+    implementation(libs.google.accompanist.systemUi)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

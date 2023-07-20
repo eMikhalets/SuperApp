@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -130,13 +131,12 @@ private fun NoteBox(
     AppCard(
         header = model.title,
         headerSize = 18.sp,
-        modifier = Modifier
+        onClick = { onNoteClick(model) },
+        onDoubleClick = { onDeleteNote(model) },
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .combinedClickable(
-                onClick = { onNoteClick(model) },
-                onDoubleClick = { onDeleteNote(model) }
-            )
+            .clip(MaterialTheme.shapes.medium)
     ) {
         Column(
             modifier = Modifier

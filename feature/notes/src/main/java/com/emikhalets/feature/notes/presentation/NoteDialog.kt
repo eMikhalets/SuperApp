@@ -3,7 +3,6 @@ package com.emikhalets.feature.notes.presentation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -20,6 +19,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.date.formatFullWithWeekDate
@@ -65,6 +65,7 @@ fun NoteEditDialog(
                 singleLine = true,
                 placeholder = stringResource(R.string.feature_notes_title),
                 keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
                     capitalization = KeyboardCapitalization.Sentences
                 ),
@@ -88,11 +89,8 @@ fun NoteEditDialog(
                 },
                 placeholder = stringResource(R.string.feature_notes_content),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Sentences
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { onDoneClick(note.getNewModel(title, content)) }
                 ),
                 modifier = Modifier.fillMaxWidth()
             )

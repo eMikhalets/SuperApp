@@ -2,6 +2,7 @@ package com.emikhalets.superapp.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -46,7 +47,8 @@ fun AppScreen() {
     Scaffold(
         scaffoldState = scaffoldState,
         backgroundColor = MaterialTheme.colors.background,
-        bottomBar = { AppBottomBarBox(navController) }
+        bottomBar = { AppBottomBarBox(navController) },
+        modifier = Modifier.safeDrawingPadding()
     ) {
         Box(modifier = Modifier.padding(it)) {
             AppNavHost(navController = navController)

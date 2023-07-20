@@ -1,6 +1,8 @@
 package com.emikhalets.core.ui.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +29,7 @@ import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.stroke
 import com.emikhalets.core.ui.theme.textHeader
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @NonRestartableComposable
 fun AppCard(
@@ -36,6 +39,9 @@ fun AppCard(
     hasBorder: Boolean = true,
     shape: Shape = MaterialTheme.shapes.medium,
     backgroundColor: Color = MaterialTheme.colors.surface,
+    onClick: (() -> Unit)? = null,
+    onDoubleClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
@@ -43,7 +49,15 @@ fun AppCard(
         backgroundColor = backgroundColor,
         border = if (hasBorder) BorderStroke(1.dp, MaterialTheme.colors.stroke) else null,
         elevation = 0.dp,
-        modifier = modifier.clip(shape),
+        modifier = modifier
+            .clip(shape)
+            .combinedClickable(
+                // TODO: block click block any types
+//                enabled = onClick != null || onDoubleClick != null || onLongClick != null,
+                onClick = { onClick?.invoke() },
+                onDoubleClick = { onDoubleClick?.invoke() },
+                onLongClick = { onLongClick?.invoke() },
+            ),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             if (header.isNotBlank()) {

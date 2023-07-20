@@ -70,7 +70,7 @@ fun AppTextField(
 ) {
     val isError = errorMessage != null
     val interactionSource = remember { MutableInteractionSource() }
-    val maxLines = if (singleLine) Int.MAX_VALUE else 1
+    val maxLines = if (singleLine) 1 else Int.MAX_VALUE
 
     val colors = TextFieldDefaults.textFieldColors(
         textColor = textColor,
@@ -159,6 +159,13 @@ fun AppTextField(
 private fun Preview() {
     AppTheme {
         Column(modifier = Modifier.fillMaxWidth()) {
+            AppTextField(
+                value = "Test textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest text",
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Green)
+            )
             AppTextField(
                 value = "Test text",
                 onValueChange = {},

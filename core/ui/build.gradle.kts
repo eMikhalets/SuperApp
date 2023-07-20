@@ -45,6 +45,8 @@ dependencies {
     api(libs.androidx.compose.material.icons)
     api(libs.androidx.compose.material.icons.ext)
 
+    api(libs.google.accompanist.insets)
+
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
 }
