@@ -33,7 +33,7 @@ android {
 
 dependencies {
 
-//    implementation(project(":feature:currencies_convert"))
+    implementation(project(":feature:currencies_convert"))
     implementation(project(":core:common"))
     implementation(project(":core:navigation"))
     implementation(project(":core:ui"))

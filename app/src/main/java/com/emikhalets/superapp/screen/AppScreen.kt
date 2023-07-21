@@ -25,6 +25,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.emikhalets.convert.AppConvertDestination
+import com.emikhalets.convert.applicationConvertBottomBar
 import com.emikhalets.core.common.classNames
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
@@ -67,6 +69,13 @@ private fun AppBottomBarBox(navController: NavHostController) {
         when (navBackStackEntry?.destination?.route) {
             AppMainDestination.Main -> {
                 if (bottomBarItems.isNotEmpty()) bottomBarItems.clear()
+            }
+
+            AppConvertDestination.BottomBarTrigger -> {
+                if (bottomBarItems != applicationConvertBottomBar) {
+                    bottomBarItems.clear()
+                    bottomBarItems.addAll(applicationConvertBottomBar)
+                }
             }
 
             AppNotesDestination.BottomBarTrigger -> {

@@ -2,30 +2,18 @@ package com.emikhalets.convert
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigation
 import com.emikhalets.core.navigation.AppBottomBarItem
-
-private const val TAG = "AppConvertGraph"
+import com.emikhalets.feature.currencies_convert.navigation.FeatureCurrenciesConvertDestination
+import com.emikhalets.feature.currencies_convert.navigation.featureCurrenciesConvertComposable
 
 val applicationConvertBottomBar: List<AppBottomBarItem> = listOf()
 
 fun NavGraphBuilder.applicationConvertGraph(navController: NavHostController) {
-//    navigation(
-////        startDestination = FeatureTasksDestination.Tasks,
-////        route = AppNotesDestination.NavGraph
-//    ) {
-//        featureNotesComposable(navController)
-//        featureTasksComposable(navController)
-//    }
-//    navigation(AppConvertDestination.Currencies, AppConvertDestination.NavGraph) {
-//        composable(AppConvertDestination.Currencies) {
-//            logi(TAG, "Composable CurrenciesScreen")
-//            CurrenciesScreen(
-//                navigateBack = {
-//                    logi(TAG, "Navigate back")
-//                    navController.popBackStack()
-//                },
-//                viewModel = hiltViewModel()
-//            )
-//        }
-//    }
+    navigation(
+        startDestination = FeatureCurrenciesConvertDestination.Currencies,
+        route = AppConvertDestination.NavGraph
+    ) {
+        featureCurrenciesConvertComposable(navController)
+    }
 }
