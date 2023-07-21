@@ -31,8 +31,9 @@ fun AppErrorDialog(
 
     logi("ErrorDialog", "Invoke: message = ${message.asString()}")
 
-    AppDialog(
+    AppDialogBottom(
         header = stringResource(R.string.app_error),
+        cancelable = true,
         onDismiss = onDismiss
     ) {
         Column(modifier = modifier.fillMaxWidth()) {

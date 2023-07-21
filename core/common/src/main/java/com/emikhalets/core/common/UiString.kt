@@ -12,10 +12,9 @@ sealed class UiString {
     companion object {
 
         fun create(): UiString = Resource(R.string.error_internal)
-
         fun create(message: String?): UiString = Message(message)
-
         fun create(stringRes: Int): UiString = Resource(stringRes)
+        fun create(throwable: Throwable): UiString = Message(throwable.message)
     }
 }
 

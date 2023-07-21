@@ -1,5 +1,6 @@
 package com.emikhalets.core.ui.component
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -83,6 +85,17 @@ fun AppTopBar(
             )
         }
     }
+}
+
+@Composable
+@NonRestartableComposable
+fun AppContent(
+    @StringRes textRes: Int,
+    onBackClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    AppContent(stringResource(textRes), onBackClick, modifier, content)
 }
 
 @Composable

@@ -91,14 +91,14 @@ dependencies {
 
     implementation(project(":application:convert:app"))
     implementation(project(":application:fitness:app"))
-    implementation(project(":application:notes:app"))
+    implementation(project(":application:notes"))
 
     implementation(project(":core:common"))
     implementation(project(":core:navigation"))
     implementation(project(":core:ui"))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.google.accompanist)
+    implementation(libs.google.accompanist.systemUi)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

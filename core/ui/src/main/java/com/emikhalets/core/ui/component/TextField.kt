@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -52,7 +51,6 @@ fun AppTextField(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
-    textStyle: TextStyle = LocalTextStyle.current,
     placeholder: String? = null,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
@@ -62,6 +60,7 @@ fun AppTextField(
         .copy(capitalization = KeyboardCapitalization.Sentences),
     keyboardActions: KeyboardActions = KeyboardActions(),
     singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
     shape: Shape = RectangleShape,
     fontSize: TextUnit = 16.sp,
     textColor: Color = MaterialTheme.colors.onSurface,
@@ -70,7 +69,6 @@ fun AppTextField(
 ) {
     val isError = errorMessage != null
     val interactionSource = remember { MutableInteractionSource() }
-    val maxLines = if (singleLine) Int.MAX_VALUE else 1
 
     val colors = TextFieldDefaults.textFieldColors(
         textColor = textColor,
@@ -95,7 +93,7 @@ fun AppTextField(
     Column(
         modifier = modifier
             .width(IntrinsicSize.Max)
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Max)
     ) {
         BasicTextField(
             value = value,
@@ -160,6 +158,13 @@ private fun Preview() {
     AppTheme {
         Column(modifier = Modifier.fillMaxWidth()) {
             AppTextField(
+                value = "Test textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest textTest text",
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Green)
+            )
+            AppTextField(
                 value = "Test text",
                 onValueChange = {},
                 modifier = Modifier.background(Color.LightGray)
@@ -185,6 +190,13 @@ private fun Preview() {
                 leadingIcon = Icons.Default.Android,
                 errorMessage = "Test error Test error Test error Test error Test error",
                 modifier = Modifier.background(Color.Gray)
+            )
+            AppTextField(
+                value = "Test Height",
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Green)
             )
             AppTextField(
                 value = "Test text",

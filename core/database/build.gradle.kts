@@ -31,6 +31,8 @@ android {
 
 dependencies {
 
+    implementation(project(":core:common"))
+
     api(libs.androidx.room.runtime)
     api(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)

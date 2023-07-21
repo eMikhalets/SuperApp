@@ -5,9 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.SideEffect
+import androidx.core.view.WindowCompat
 import com.emikhalets.core.common.AppLogger
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.superapp.screen.AppScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         logi(TAG, "Created")
         AppLogger.init()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             AppTheme {
