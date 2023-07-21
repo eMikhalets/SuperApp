@@ -36,7 +36,7 @@ import com.emikhalets.core.ui.component.AppTextButton
 import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.feature.tasks.R
-import com.emikhalets.feature.tasks.data.TaskModel
+import com.emikhalets.feature.tasks.domain.TaskModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -135,11 +135,8 @@ private fun getKeyboardOptions(): KeyboardOptions {
 }
 
 private fun MutableList<TaskModel>.createSubtask(index: Int = -1) {
-    if (index >= 0) {
-        if (getOrNull(index + 1) == null) add(TaskModel())
-    } else {
-        if (isEmpty()) add(TaskModel())
-    }
+    if (index < -1) return
+    add(index + 1, TaskModel())
 }
 
 private fun FocusManager.moveFocusDown(scope: CoroutineScope) {

@@ -1,6 +1,6 @@
 package com.emikhalets.feature.tasks.presentation
 
-import com.emikhalets.feature.tasks.data.TaskModel
+import com.emikhalets.feature.tasks.domain.TaskModel
 
 fun getTasksListPreview(): List<TaskModel> {
     return listOf(

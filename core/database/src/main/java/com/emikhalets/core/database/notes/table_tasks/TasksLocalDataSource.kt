@@ -14,7 +14,7 @@ class TasksLocalDataSource @Inject constructor(
         return dao.getAllFlowOrderUpdateDateDesc()
     }
 
-    suspend fun insertTask(model: TaskDb) {
+    suspend fun insertTask(model: TaskDb): Long {
         logi(TAG, "Insert item: $model")
         return dao.insert(model)
     }

@@ -42,7 +42,7 @@ import com.emikhalets.core.ui.setExpandedIcon
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.text
 import com.emikhalets.feature.tasks.R
-import com.emikhalets.feature.tasks.data.TaskModel
+import com.emikhalets.feature.tasks.domain.TaskModel
 import com.emikhalets.feature.tasks.presentation.TasksListContract.Action
 
 private const val TAG = "TasksList"

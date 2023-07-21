@@ -7,7 +7,7 @@ import androidx.room.Update
 interface AppDao<T> {
 
     @Insert
-    suspend fun insert(item: T)
+    suspend fun insert(item: T): Long
 
     @Insert
     suspend fun insert(list: List<T>)

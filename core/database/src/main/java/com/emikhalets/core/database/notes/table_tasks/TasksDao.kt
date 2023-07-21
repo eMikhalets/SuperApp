@@ -21,7 +21,7 @@ interface TasksDao : AppDao<TaskDb> {
 
     // TODO: request tasks and completed tasks separate. sort by update_date DESC, completed ASC
     @Transaction
-    @Query("SELECT * FROM tasks ORDER BY update_date DESC")
+    @Query("SELECT * FROM tasks WHERE parent_id == 0 ORDER BY update_date DESC")
     fun getAllFlowOrderUpdateDateDesc(): Flow<List<TaskFullDb>>
 
     @Query("SELECT * FROM tasks WHERE id = :id")

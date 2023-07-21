@@ -13,7 +13,7 @@ class NotesLocalDataSource @Inject constructor(
         return dao.getAllFlowOrderUpdateDateDesc()
     }
 
-    suspend fun insertNote(model: NoteDb) {
+    suspend fun insertNote(model: NoteDb): Long {
         logi(TAG, "Insert item: $model")
         return dao.insert(model)
     }

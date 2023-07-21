@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.mvi.UiAction
 import com.emikhalets.core.common.mvi.UiState
-import com.emikhalets.feature.tasks.data.TaskModel
+import com.emikhalets.feature.tasks.domain.TaskModel
 
 object TasksListContract {
 

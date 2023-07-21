@@ -1,4 +1,4 @@
-package com.emikhalets.feature.tasks.data
+package com.emikhalets.feature.tasks.domain
 
 import java.util.Date
 

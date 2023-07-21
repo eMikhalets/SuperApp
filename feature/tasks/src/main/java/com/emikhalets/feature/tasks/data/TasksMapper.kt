@@ -2,6 +2,7 @@ package com.emikhalets.feature.tasks.data
 
 import com.emikhalets.core.database.notes.embeded.TaskFullDb
 import com.emikhalets.core.database.notes.table_tasks.TaskDb
+import com.emikhalets.feature.tasks.domain.TaskModel
 
 fun List<TaskModel>.toDbList(parentId: Long): List<TaskDb> = map { it.toDb(parentId) }
 

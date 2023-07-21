@@ -4,8 +4,10 @@ import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
 import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
-import com.emikhalets.feature.tasks.data.Repository
-import com.emikhalets.feature.tasks.data.TaskModel
+import com.emikhalets.feature.tasks.domain.TaskModel
+import com.emikhalets.feature.tasks.domain.AddTaskUseCase
+import com.emikhalets.feature.tasks.domain.DeleteTaskUseCase
+import com.emikhalets.feature.tasks.domain.GetTasksUseCase
 import com.emikhalets.feature.tasks.presentation.TasksListContract.Action
 import com.emikhalets.feature.tasks.presentation.TasksListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +17,15 @@ import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class TasksListViewModel @Inject constructor(
-    private val repository: Repository,
+    private val getTasksUseCase: GetTasksUseCase,
+    private val addTaskUseCase: AddTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
 ) : BaseViewModel<Action, State>() {
 
     init {
         logd(TAG, "Get tasks")
         launchScope {
-            repository.getTasks()
+            getTasksUseCase()
                 .catch { handleFailure(it) }
                 .collectLatest { setTasksList(it) }
         }
@@ -54,17 +58,16 @@ class TasksListViewModel @Inject constructor(
 
     private fun saveTask(task: TaskModel) {
         logd(TAG, "Save task: $task")
-        dropTaskDialog()
         launchScope {
-            if (task.id == 0L) repository.insertTask(task)
-            else repository.updateTask(task)
+            dropTaskDialog()
+            addTaskUseCase(task)
         }
     }
 
     private fun updateTask(task: TaskModel, complete: Boolean) {
         logd(TAG, "Update task: task = $task, complete = $complete")
         launchScope {
-            repository.updateTask(task.copy(completed = complete))
+            addTaskUseCase(task.copy(completed = complete))
         }
     }
 
