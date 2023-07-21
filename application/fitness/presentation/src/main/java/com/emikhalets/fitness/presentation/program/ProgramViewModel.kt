@@ -33,6 +33,10 @@ class ProgramViewModel @Inject constructor(
         }
     }
 
+    override fun handleError(message: String?) {
+        setState { it.copy(error = UiString.create(message)) }
+    }
+
     private fun dropErrorState() {
         setState { it.copy(error = null) }
     }

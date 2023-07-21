@@ -45,6 +45,10 @@ class NotesListViewModel @Inject constructor(
         }
     }
 
+    override fun handleError(message: String?) {
+        setState { it.copy(error = UiString.create(message)) }
+    }
+
     private fun dropDeletingDialog() {
         setState { it.copy(deletingNote = null) }
     }

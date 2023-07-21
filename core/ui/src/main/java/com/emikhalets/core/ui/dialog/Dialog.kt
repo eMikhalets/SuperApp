@@ -1,5 +1,7 @@
 package com.emikhalets.core.ui.dialog
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
@@ -65,6 +68,41 @@ fun AppDialog(
     }
 }
 
+@Composable
+fun AppDialogBottom(
+    header: String = "",
+    onDismiss: () -> Unit = {},
+    cancelable: Boolean = false,
+    content: @Composable () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = { onDismiss() },
+        properties = DialogProperties(
+            dismissOnBackPress = cancelable,
+            dismissOnClickOutside = cancelable,
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null
+                ) { onDismiss() }
+                .padding(top = 40.dp)
+        ) {
+            AppCard(
+                content = { content() },
+                header = header,
+                shape = RectangleShape,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
 @ScreenPreview
 @Composable
 private fun ScreenPreview() {
@@ -72,7 +110,7 @@ private fun ScreenPreview() {
         AppDialog(onDismiss = {}) {
             Column(modifier = Modifier.padding(16.dp)) {
                 AppTextField(
-                    value = "",
+                    value = "fdhsdhfd",
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth()
                 )

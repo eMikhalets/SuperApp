@@ -5,6 +5,7 @@ import com.emikhalets.core.database.notes.table_notes.NoteDb
 import com.emikhalets.core.database.notes.table_notes.NotesDao
 import com.emikhalets.core.database.notes.table_tasks.TaskDb
 import com.emikhalets.core.database.notes.table_tasks.TasksDao
+import java.lang.RuntimeException
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
@@ -38,6 +39,7 @@ class LocalNotesDataSource @Inject constructor(
     }
 
     suspend fun insertTask(model: TaskDb): Long {
+        throw RuntimeException("aboba")
         return tasksDao.insert(model)
     }
 

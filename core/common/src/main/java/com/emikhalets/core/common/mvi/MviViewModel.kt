@@ -1,7 +1,10 @@
 package com.emikhalets.core.common.mvi
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,6 +24,12 @@ abstract class BaseViewModel<A : UiAction, S : UiState> : ViewModel() {
 
     val currentState: S get() = state.value
 
+    private val handler = CoroutineExceptionHandler { _, exception ->
+        handleError(exception.message)
+    }
+
+    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + handler)
+
     init {
         subscribeEvents()
     }
@@ -28,10 +37,14 @@ abstract class BaseViewModel<A : UiAction, S : UiState> : ViewModel() {
     abstract fun createInitialState(): S
 
     protected abstract fun handleEvent(action: A)
+    protected abstract fun handleError(message: String?)
 
-    fun setAction(action: A) = viewModelScope.launch { _action.emit(action) }
-
+    fun setAction(action: A) = scope.launch { _action.emit(action) }
     protected fun setState(reduce: (S) -> S) = _state.update { reduce(it) }
+    private fun subscribeEvents() = scope.launch { action.collect { handleEvent(it) } }
 
-    private fun subscribeEvents() = viewModelScope.launch { action.collect { handleEvent(it) } }
+    override fun onCleared() {
+        scope.cancel()
+        super.onCleared()
+    }
 }

@@ -4,10 +4,10 @@ import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
 import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
-import com.emikhalets.feature.tasks.domain.TaskModel
 import com.emikhalets.feature.tasks.domain.AddTaskUseCase
 import com.emikhalets.feature.tasks.domain.DeleteTaskUseCase
 import com.emikhalets.feature.tasks.domain.GetTasksUseCase
+import com.emikhalets.feature.tasks.domain.TaskModel
 import com.emikhalets.feature.tasks.presentation.TasksListContract.Action
 import com.emikhalets.feature.tasks.presentation.TasksListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,6 +42,10 @@ class TasksListViewModel @Inject constructor(
             is Action.CheckTask -> updateTask(action.task, action.check)
             is Action.SaveTask -> saveTask(action.task)
         }
+    }
+
+    override fun handleError(message: String?) {
+        setState { it.copy(error = UiString.create(message)) }
     }
 
     private fun dropTaskDialog() {
