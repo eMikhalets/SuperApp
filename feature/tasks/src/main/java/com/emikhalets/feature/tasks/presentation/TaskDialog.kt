@@ -4,8 +4,8 @@ import android.view.KeyEvent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
 import androidx.compose.runtime.Composable
@@ -20,20 +20,24 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.component.AppBottomBox
 import com.emikhalets.core.ui.component.AppTextButton
 import com.emikhalets.core.ui.component.AppTextField
-import com.emikhalets.core.ui.dialog.AppDialog
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.feature.tasks.R
 import com.emikhalets.feature.tasks.data.TaskModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -54,25 +58,21 @@ fun TaskEditDialog(
     var taskContent by remember { mutableStateOf(task?.content ?: "") }
     val subtasks = remember { task?.subtasks?.toMutableStateList() ?: mutableStateListOf() }
 
-    AppDialog(onDismiss = onDismiss, cancelable = true) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .wrapContentHeight()
-        ) {
+    AppBottomBox(onDismiss = onDismiss) {
+        Column(modifier = Modifier.padding(16.dp)) {
             AppTextField(
                 value = taskContent,
                 onValueChange = { taskContent = it },
                 singleLine = true,
                 placeholder = stringResource(R.string.feature_tasks_tap_enter_subtask),
                 leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
-                keyboardActions = KeyboardActions(onDone = {
-                    if (subtasks.isEmpty()) subtasks.add(TaskModel())
-                    scope.launch {
-                        delay(100)
-                        focusManager.moveFocus(FocusDirection.Down)
+                keyboardOptions = getKeyboardOptions(),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        subtasks.createSubtask()
+                        focusManager.moveFocusDown(scope)
                     }
-                }),
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
@@ -85,15 +85,13 @@ fun TaskEditDialog(
                         singleLine = true,
                         placeholder = stringResource(R.string.feature_tasks_tap_enter_subtask),
                         leadingIcon = Icons.Rounded.CheckBoxOutlineBlank,
-                        keyboardActions = KeyboardActions(onDone = {
-                            val isNextExist = subtasks.getOrNull(index + 1)
-                                ?.let { true } ?: false
-                            if (isNextExist) subtasks.add(TaskModel())
-                            scope.launch {
-                                delay(100)
-                                focusManager.moveFocus(FocusDirection.Down)
+                        keyboardOptions = getKeyboardOptions(),
+                        keyboardActions = KeyboardActions(
+                            onNext = {
+                                subtasks.createSubtask(index)
+                                focusManager.moveFocusDown(scope)
                             }
-                        }),
+                        ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 16.dp)
@@ -112,10 +110,7 @@ fun TaskEditDialog(
             AppTextButton(
                 text = stringResource(id = R.string.feature_tasks_done),
                 enabled = taskContent.isNotBlank(),
-                onClick = {
-                    task?.copy(content = taskContent, subtasks = subtasks)
-                        ?: TaskModel(taskContent).run(onDoneClick)
-                },
+                onClick = { onDoneClick(task.getTaskModel(taskContent, subtasks)) },
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(top = 32.dp)
@@ -125,6 +120,32 @@ fun TaskEditDialog(
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+}
+
+private fun TaskModel?.getTaskModel(content: String, subs: List<TaskModel>): TaskModel {
+    return this?.copy(content = content, subtasks = subs) ?: TaskModel(content, subs)
+}
+
+private fun getKeyboardOptions(): KeyboardOptions {
+    return KeyboardOptions(
+        capitalization = KeyboardCapitalization.Sentences,
+        imeAction = ImeAction.Next
+    )
+}
+
+private fun MutableList<TaskModel>.createSubtask(index: Int = -1) {
+    if (index >= 0) {
+        if (getOrNull(index + 1) == null) add(TaskModel())
+    } else {
+        if (isEmpty()) add(TaskModel())
+    }
+}
+
+private fun FocusManager.moveFocusDown(scope: CoroutineScope) {
+    scope.launch {
+        delay(100)
+        moveFocus(FocusDirection.Down)
     }
 }
 
