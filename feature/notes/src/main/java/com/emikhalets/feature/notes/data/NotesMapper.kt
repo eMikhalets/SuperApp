@@ -1,6 +1,7 @@
 package com.emikhalets.feature.notes.data
 
 import com.emikhalets.core.database.notes.table_notes.NoteDb
+import com.emikhalets.feature.notes.domain.NoteModel
 
 fun List<NoteModel>.toDbList(): List<NoteDb> = map { it.toDb() }
 

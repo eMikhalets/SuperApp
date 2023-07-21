@@ -1,6 +1,6 @@
 package com.emikhalets.feature.notes.presentation
 
-import com.emikhalets.feature.notes.data.NoteModel
+import com.emikhalets.feature.notes.domain.NoteModel
 
 fun getNotesListPreview(): List<NoteModel> {
     return listOf(

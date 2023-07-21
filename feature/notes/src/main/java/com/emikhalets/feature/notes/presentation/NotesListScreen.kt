@@ -1,7 +1,6 @@
 package com.emikhalets.feature.notes.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +34,7 @@ import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.text
 import com.emikhalets.core.ui.theme.textSub
 import com.emikhalets.feature.notes.R
-import com.emikhalets.feature.notes.data.NoteModel
+import com.emikhalets.feature.notes.domain.NoteModel
 import com.emikhalets.feature.notes.presentation.NotesListContract.Action
 
 private const val TAG = "NotesList"

@@ -4,8 +4,10 @@ import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
 import com.emikhalets.core.common.mvi.BaseViewModel
 import com.emikhalets.core.common.mvi.launchScope
-import com.emikhalets.feature.notes.data.NoteModel
-import com.emikhalets.feature.notes.data.Repository
+import com.emikhalets.feature.notes.domain.AddNoteUseCase
+import com.emikhalets.feature.notes.domain.DeleteNoteUseCase
+import com.emikhalets.feature.notes.domain.GetNotesUseCase
+import com.emikhalets.feature.notes.domain.NoteModel
 import com.emikhalets.feature.notes.presentation.NotesListContract.Action
 import com.emikhalets.feature.notes.presentation.NotesListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +17,15 @@ import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class NotesListViewModel @Inject constructor(
-    private val repository: Repository,
+    private val getNotesUseCase: GetNotesUseCase,
+    private val addNoteUseCase: AddNoteUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase,
 ) : BaseViewModel<Action, State>() {
 
     init {
         logd(TAG, "Get Notes")
         launchScope {
-            repository.getNotes()
+            getNotesUseCase()
                 .catch { handleFailure(it) }
                 .collectLatest { setNotesList(it) }
         }
@@ -61,8 +65,7 @@ class NotesListViewModel @Inject constructor(
         setState { it.copy(showNoteDialog = false) }
         logd(TAG, "Save note: $note")
         launchScope {
-            if (note.id == 0L) repository.insertNote(note)
-            else repository.updateNote(note)
+            addNoteUseCase(note)
         }
     }
 
@@ -71,7 +74,7 @@ class NotesListViewModel @Inject constructor(
         val model = currentState.deletingNote ?: return
         logd(TAG, "Delete note: $model")
         launchScope {
-            repository.deleteNote(model)
+            deleteNoteUseCase(model)
         }
     }
 

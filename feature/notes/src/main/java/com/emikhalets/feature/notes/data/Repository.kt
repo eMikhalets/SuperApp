@@ -2,6 +2,7 @@ package com.emikhalets.feature.notes.data
 
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.database.notes.table_notes.NotesLocalDataSource
+import com.emikhalets.feature.notes.domain.NoteModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

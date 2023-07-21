@@ -1,4 +1,4 @@
-package com.emikhalets.feature.notes.data
+package com.emikhalets.feature.notes.domain
 
 import java.util.Date
 

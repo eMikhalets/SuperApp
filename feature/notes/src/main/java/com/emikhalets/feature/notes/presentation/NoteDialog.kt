@@ -34,7 +34,7 @@ import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.core.ui.theme.textSub
 import com.emikhalets.feature.notes.R
-import com.emikhalets.feature.notes.data.NoteModel
+import com.emikhalets.feature.notes.domain.NoteModel
 import java.util.Date
 import kotlinx.coroutines.launch
 
