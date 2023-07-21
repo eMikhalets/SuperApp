@@ -103,11 +103,12 @@ private fun AppBottomBar(
                 unselectedContentColor = MaterialTheme.colors.onSecondary,
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                        launchSingleTop = true
-                        // TODO: commented restore state in bottom bar
-                        // restoreState = true
+                    if (item.route != currentDestination?.route) {
+                        navController.navigate(item.route) {
+                            val id = navController.graph.findStartDestination().id
+                            popUpTo(id) { saveState = true }
+                            launchSingleTop = true
+                        }
                     }
                 }
             )

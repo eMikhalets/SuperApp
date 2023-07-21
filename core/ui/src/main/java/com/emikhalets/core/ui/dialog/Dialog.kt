@@ -1,7 +1,5 @@
 package com.emikhalets.core.ui.dialog
 
-import android.content.res.Configuration
-import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.UiMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppTextField
 import com.emikhalets.core.ui.theme.AppTheme
@@ -68,7 +65,7 @@ fun AppDialog(
     }
 }
 
-@Preview(showBackground = true)
+@ScreenPreview
 @Composable
 private fun ScreenPreview() {
     AppTheme {
