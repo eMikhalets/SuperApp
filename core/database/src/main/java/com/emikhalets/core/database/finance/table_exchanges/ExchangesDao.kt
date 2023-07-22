@@ -22,4 +22,7 @@ interface ExchangesDao : AppDao<ExchangeDb> {
 
     @Query("SELECT * FROM exchanges WHERE id = :id")
     fun getItemFlow(id: Long): Flow<ExchangeDb>
+
+    @Query("DELETE FROM exchanges WHERE code LIKE '%' || :code || '%'")
+    suspend fun deleteByCode(code: String)
 }

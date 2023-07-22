@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.convert.app.AppConvertDestination
-import com.emikhalets.convert.app.applicationConvert
+import com.emikhalets.convert.AppConvertDestination
+import com.emikhalets.convert.applicationConvertGraph
 import com.emikhalets.core.ui.ApplicationEntity
 import com.emikhalets.fitness.navigation.AppFitnessDestination
 import com.emikhalets.fitness.navigation.applicationFitness
@@ -24,7 +24,7 @@ fun AppNavHost(navController: NavHostController) {
                 navigateToNewWidget = {},
             )
         }
-        applicationConvert(navController) {}
+        applicationConvertGraph(navController)
         applicationFitness(navController) {}
         applicationNotesGraph(navController)
     }

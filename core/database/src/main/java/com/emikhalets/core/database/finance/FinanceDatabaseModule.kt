@@ -2,6 +2,7 @@ package com.emikhalets.core.database.finance
 
 import android.content.Context
 import com.emikhalets.core.database.finance.table_category.CategoriesDao
+import com.emikhalets.core.database.finance.table_convert_currencies.ConvertCurrenciesDao
 import com.emikhalets.core.database.finance.table_currencies.CurrenciesDao
 import com.emikhalets.core.database.finance.table_exchanges.ExchangesDao
 import com.emikhalets.core.database.finance.table_transactions.TransactionsDao
@@ -24,6 +25,11 @@ object FinanceDatabaseModule {
     @Provides
     fun providesCategoriesDao(database: FinanceDatabase): CategoriesDao {
         return database.categoriesDao
+    }
+
+    @Provides
+    fun providesConvertCurrenciesDao(database: FinanceDatabase): ConvertCurrenciesDao {
+        return database.convertCurrenciesDao
     }
 
     @Provides

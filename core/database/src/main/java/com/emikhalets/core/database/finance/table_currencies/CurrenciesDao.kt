@@ -25,4 +25,7 @@ interface CurrenciesDao : AppDao<CurrencyDb> {
 
     @Query("SELECT EXISTS(SELECT * FROM currencies WHERE code = :code)")
     suspend fun isCodeExist(code: String): Boolean
+
+    @Query("DELETE FROM currencies WHERE code == :code")
+    suspend fun deleteByCode(code: String)
 }

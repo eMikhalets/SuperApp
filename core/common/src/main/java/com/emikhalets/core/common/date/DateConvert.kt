@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 
-private val timezone = ZoneId.systemDefault()
+internal val timezone = ZoneId.systemDefault()
 
 fun Long?.localDate(): LocalDate {
     val instant = Instant.ofEpochMilli(this ?: Date().time)
