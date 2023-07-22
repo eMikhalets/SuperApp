@@ -8,8 +8,7 @@ import androidx.room.PrimaryKey
 data class ExchangeDb(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long,
-    @ColumnInfo(name = "currency_main_id") val currencyMainId: Long,
-    @ColumnInfo(name = "currency_sub_id") val currencySubId: Long,
+    @ColumnInfo(name = "code") val code: String,
     @ColumnInfo(name = "value") val value: Double,
     @ColumnInfo(name = "date") val date: Long,
 )
