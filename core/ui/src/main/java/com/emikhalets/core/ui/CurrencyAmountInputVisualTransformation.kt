@@ -1,4 +1,4 @@
-package com.emikhalets.convert.presentation;
+package com.emikhalets.core.ui;
 
 import android.icu.text.DecimalFormat
 import androidx.compose.ui.text.AnnotatedString
