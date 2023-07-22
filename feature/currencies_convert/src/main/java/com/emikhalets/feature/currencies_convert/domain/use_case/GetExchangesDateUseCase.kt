@@ -2,12 +2,13 @@ package com.emikhalets.feature.currencies_convert.domain.use_case
 
 import com.emikhalets.feature.currencies_convert.data.Repository
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
-class AddCurrencyUseCase @Inject constructor(
+class GetExchangesDateUseCase @Inject constructor(
     private val repository: Repository,
 ) {
 
-    suspend operator fun invoke(code: String) {
-        return repository.insertCurrency(code)
+    operator fun invoke(): Flow<Long> {
+        return repository.getExchangesDate()
     }
 }

@@ -1,7 +1,6 @@
 package com.emikhalets.feature.currencies_convert.domain.use_case
 
 import com.emikhalets.feature.currencies_convert.data.Repository
-import com.emikhalets.feature.currencies_convert.domain.model.CurrencyModel
 import javax.inject.Inject
 
 class DeleteCurrencyUseCase @Inject constructor(
@@ -9,6 +8,6 @@ class DeleteCurrencyUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(code: String) {
-        return repository.deleteCurrency(CurrencyModel(code))
+        return repository.deleteCurrency(code)
     }
 }

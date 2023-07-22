@@ -1,6 +1,8 @@
 package com.emikhalets.feature.currencies_convert.data
 
 import com.emikhalets.core.database.finance.FinanceLocalDataSource
+import com.emikhalets.core.database.finance.table_convert_currencies.ConvertCurrencyDb
+import com.emikhalets.core.database.finance.table_exchanges.ExchangeDb
 import com.emikhalets.core.datastore.FinancePrefsDataSource
 import com.emikhalets.core.network.CurrencyRemoteDataSource
 import com.emikhalets.feature.currencies_convert.domain.model.CurrencyModel
@@ -44,52 +46,37 @@ class Repository @Inject constructor(
         return localDataSource.getCurrencies().toModelFlow()
     }
 
-//    override suspend fun insertCurrency(code: String): AppResult<Unit> {
-//        logi(TAG, "Insert currency: code = $code")
-//        return execute {
-//            if (!currenciesDao.isExist(code)) {
-//                val currency = CurrenciesMapper.mapEntityToDb(CurrencyEntity(code))
-//                currenciesDao.insert(currency)
-//
-//                val currencies = currenciesDao.getAll()
-//                val exchanges = exchangesDao.getAll()
-//                when (currencies.count()) {
-//                    0 -> {
-//                    }
-//
-//                    1 -> {
-//                        val entity = ExchangesMapper.mapEntityToDb(ExchangeEntity(code))
-//                        exchangesDao.insert(entity)
-//                    }
-//
-//                    2 -> {
-//                        val entity = exchanges.first()
-//                        val newEntity = entity.copy(code = "${entity.code}$code")
-//                        exchangesDao.update(newEntity)
-//                    }
-//
-//                    else -> {
-//                        val newExchanges = currencies
-//                            .dropLast(1)
-//                            .map { ExchangesMapper.mapEntityToDb(ExchangeEntity(it.code, code)) }
-//                        exchangesDao.insert(newExchanges)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    override suspend fun deleteCurrency(code: String): AppResult<Unit> {
-//        logi(TAG, "Delete currency: code = $code")
-//        return execute {
-//            currenciesDao.delete(code)
-//            exchangesDao.delete(code)
-//            val currencies = currenciesDao.getAll()
-//            if (currencies.count() == 1) {
-//                val lastCode = currencies.first().code
-//                exchangesDao.drop()
-//                exchangesDao.insert(ExchangesMapper.mapEntityToDb(ExchangeEntity(lastCode)))
-//            }
-//        }
-//    }
+    suspend fun insertCurrency(code: String) {
+        if (!localDataSource.isCurrencyExist(code)) {
+            val currency = CurrencyModel(code).toDb()
+            localDataSource.insertCurrency(currency)
+            val currencies = localDataSource.getCurrenciesSync()
+            val exchanges = localDataSource.getExchangesSync()
+            when (currencies.count()) {
+                0 -> Unit
+                1 -> localDataSource.insertExchange(ExchangeModel(code).toDb())
+                2 -> localDataSource.updateExchange(exchanges.getFirstWithNewCode(code))
+                else -> localDataSource.insertExchanges(currencies.createNewExchanges(code))
+            }
+        }
+    }
+
+    private fun List<ExchangeDb>.getFirstWithNewCode(code: String): ExchangeDb {
+        return first().copy(code = "${first().code}$code")
+    }
+
+    private fun List<ConvertCurrencyDb>.createNewExchanges(code: String): List<ExchangeDb> {
+        return dropLast(1).map { ExchangeModel(it.code, code).toDb() }
+    }
+
+    suspend fun deleteCurrency(code: String) {
+        localDataSource.deleteCurrency(code)
+        localDataSource.deleteExchanges(code)
+        val currencies = localDataSource.getCurrenciesSync()
+        if (currencies.count() == 1) {
+            val lastCode = currencies.first().code
+            localDataSource.dropExchanges()
+            localDataSource.insertExchange(ExchangeModel(lastCode).toDb())
+        }
+    }
 }

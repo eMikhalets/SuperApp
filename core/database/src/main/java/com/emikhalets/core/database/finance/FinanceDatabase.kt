@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import com.emikhalets.core.common.logi
 import com.emikhalets.core.database.finance.table_category.CategoriesDao
 import com.emikhalets.core.database.finance.table_category.CategoryDb
+import com.emikhalets.core.database.finance.table_convert_currencies.ConvertCurrenciesDao
+import com.emikhalets.core.database.finance.table_convert_currencies.ConvertCurrencyDb
 import com.emikhalets.core.database.finance.table_currencies.CurrenciesDao
 import com.emikhalets.core.database.finance.table_currencies.CurrencyDb
 import com.emikhalets.core.database.finance.table_exchanges.ExchangeDb
@@ -19,6 +21,7 @@ import com.emikhalets.core.database.finance.table_wallets.WalletsDao
 @Database(
     entities = [
         CategoryDb::class,
+        ConvertCurrencyDb::class,
         CurrencyDb::class,
         ExchangeDb::class,
         TransactionDb::class,
@@ -31,6 +34,7 @@ import com.emikhalets.core.database.finance.table_wallets.WalletsDao
 abstract class FinanceDatabase : RoomDatabase() {
 
     abstract val categoriesDao: CategoriesDao
+    abstract val convertCurrenciesDao: ConvertCurrenciesDao
     abstract val currenciesDao: CurrenciesDao
     abstract val exchangesDao: ExchangesDao
     abstract val transactionsDao: TransactionsDao
