@@ -1,14 +1,14 @@
 package com.emikhalets.feature.notes.data
 
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.database.notes.LocalNotesDataSource
+import com.emikhalets.core.database.notes.NotesLocalDataSource
 import com.emikhalets.feature.notes.domain.NoteModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class Repository @Inject constructor(
-    private val localDataSource: LocalNotesDataSource,
+    private val localDataSource: NotesLocalDataSource,
 ) {
 
     suspend fun insertNote(model: NoteModel) {

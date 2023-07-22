@@ -8,7 +8,7 @@ import com.emikhalets.core.database.notes.table_tasks.TasksDao
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class LocalNotesDataSource @Inject constructor(
+class NotesLocalDataSource @Inject constructor(
     private val notesDao: NotesDao,
     private val tasksDao: TasksDao,
 ) {
