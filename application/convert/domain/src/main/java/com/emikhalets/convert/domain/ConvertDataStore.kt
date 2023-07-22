@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.emikhalets.core.common.retrieve
-import com.emikhalets.core.common.store
+import com.emikhalets.core.datastore.retrieve
+import com.emikhalets.core.datastore.store
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

@@ -1,8 +1,6 @@
 package com.emikhalets.core.network
 
-import com.emikhalets.convert.domain.entity.ExchangeEntity
 import com.emikhalets.core.common.loge
-import com.emikhalets.core.common.logi
 import org.jsoup.nodes.Element
 
 class CurrencyParser : AppParser() {
@@ -11,31 +9,28 @@ class CurrencyParser : AppParser() {
     private val currencyRowKey = "[data-symbol*=CUR]"
     private val dataSymbolKey = "data-symbol"
 
-    suspend fun replaceExchangesValues(
-        input: List<ExchangeEntity>,
-        date: Long,
-    ): List<ExchangeEntity> {
-        logi(TAG, "Get exchanges: input = $input")
-        val codes = input.map { it.code }
-        val newValues = input
-            .filter { it.isOldValue() }
-            .map { it.code.take(3) }.toSet()
+    suspend fun loadExchangesValues(codes: List<String>): List<Pair<String, Double>> {
+        return codes
+            .map { it.take(3) }.toSet()
             .map { parseSource("$source$it") }
             .flatMap { it.getElements(currencyRowKey) }
             .filter { codes.containsDataSymbol(it) }
             .mapNotNull { convertData(it) }
             .associateBy({ it.first }, { it.second })
-        return input.map { entity ->
-            val value = newValues[entity.code]
-            value?.let { entity.withValue(it, date) } ?: entity
-        }
+            .toList()
     }
 
-    private fun convertData(element: Element): Pair<String, Double?>? {
+    private fun convertData(element: Element): Pair<String, Double>? {
         return try {
             val data = element.text().split(" ")
-            Pair(data[0], data[1].toDoubleOrNull())
+            val code = data[0]
+            val value = data[1].toDoubleOrNull()
+            checkNotNull(value)
+            Pair(code, value)
         } catch (e: IndexOutOfBoundsException) {
+            loge(TAG, e)
+            null
+        } catch (e: IllegalStateException) {
             loge(TAG, e)
             null
         }

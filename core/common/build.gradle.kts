@@ -28,7 +28,6 @@ dependencies {
 
     api(libs.androidx.core.ktx)
     api(libs.androidx.lifecycle.viewmodel.ktx)
-    api(libs.androidx.datastore)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

@@ -8,12 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.feature.currencies_convert"
+    namespace = "com.emikhalets.core.datastore"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
         minSdk = rootProject.extra["minSdk"] as Int
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -23,28 +22,14 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
 }
 
 dependencies {
 
     implementation(project(":core:common"))
-    implementation(project(":core:database"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:network"))
-    implementation(project(":core:ui"))
+
+    implementation(libs.androidx.datastore)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.junit.ext)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

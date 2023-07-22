@@ -2,6 +2,14 @@ package com.emikhalets.feature.currencies_convert.data
 
 import com.emikhalets.core.database.finance.table_exchanges.ExchangeDb
 import com.emikhalets.feature.currencies_convert.domain.model.ExchangeModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
+@JvmName("toExchangesDbFlow")
+fun Flow<List<ExchangeModel>>.toDbFlow(): Flow<List<ExchangeDb>> = map { it.toDbList() }
+
+@JvmName("toExchangesDbFlow")
+fun Flow<List<ExchangeDb>>.toModelFlow(): Flow<List<ExchangeModel>> = map { it.toModelList() }
 
 @JvmName("toExchangesDbList")
 fun List<ExchangeModel>.toDbList(): List<ExchangeDb> = map { it.toDb() }

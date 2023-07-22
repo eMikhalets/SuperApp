@@ -1,47 +1,48 @@
 package com.emikhalets.feature.currencies_convert.data
 
+import com.emikhalets.core.database.finance.FinanceLocalDataSource
+import com.emikhalets.core.datastore.FinancePrefsDataSource
 import com.emikhalets.core.network.CurrencyRemoteDataSource
 import com.emikhalets.feature.currencies_convert.domain.model.CurrencyModel
 import com.emikhalets.feature.currencies_convert.domain.model.ExchangeModel
+import com.emikhalets.feature.currencies_convert.domain.model.filterNeedUpdate
+import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onEach
 
 class Repository @Inject constructor(
-//    private val localDataSource: NotesLocalDataSource,
+    private val localDataSource: FinanceLocalDataSource,
     private val remoteDataSource: CurrencyRemoteDataSource,
+    private val financePrefsSource: FinancePrefsDataSource,
 ) {
 
-    suspend fun parseExchanges(currencies: List<String>) {
-//        localDataSource.insertNote(model.toDb())
-    }
-
-    suspend fun insertCurrency(model: CurrencyModel) {
-//        localDataSource.insertNote(model.toDb())
-    }
-
-    suspend fun deleteCurrency(model: CurrencyModel) {
-    }
-
-    suspend fun insertExchange(model: ExchangeModel) {
-//        localDataSource.insertNote(model.toDb())
-    }
-
-    suspend fun updateExchange(model: ExchangeModel) {
-//        localDataSource.insertNote(model.toDb())
-    }
-
-    suspend fun deleteExchange(model: ExchangeModel) {
+    fun getExchangesDate(): Flow<Long> {
+        return financePrefsSource.getExchangesDate()
     }
 
     fun getExchanges(): Flow<List<ExchangeModel>> {
-        return flowOf()
+        return localDataSource.getExchanges()
+            .toModelFlow()
+            .onEach { invokeUpdatingExchanges(it) }
+    }
+
+    private suspend fun invokeUpdatingExchanges(list: List<ExchangeModel>) {
+        val date = Date().time
+        val updatedValues = list.filterNeedUpdate()
+            .parseCurrencies()
+            .mapIndexed { index, item -> list[index].withValue(item.second, date) }
+        localDataSource.updateExchanges(updatedValues.toDbList())
+        financePrefsSource.setExchangesDate(date)
+    }
+
+    private suspend fun List<ExchangeModel>.parseCurrencies(): List<Pair<String, Double>> {
+        return remoteDataSource.parseCurrencies(this.map { it.code })
     }
 
     fun getCurrencies(): Flow<List<CurrencyModel>> {
-        return flowOf()
+        return localDataSource.getCurrencies().toModelFlow()
     }
-
 
 //    override suspend fun insertCurrency(code: String): AppResult<Unit> {
 //        logi(TAG, "Insert currency: code = $code")
@@ -90,36 +91,5 @@ class Repository @Inject constructor(
 //                exchangesDao.insert(ExchangesMapper.mapEntityToDb(ExchangeEntity(lastCode)))
 //            }
 //        }
-//    }
-//
-//    override suspend fun getCurrencies(): AppResult<Flow<List<CurrencyEntity>>> {
-//        logi(TAG, "Get currencies")
-//        return execute {
-//            currenciesDao.getAllFlow()
-//                .map { CurrenciesMapper.mapDbListToEntityList(it).toMutableList() }
-//        }
-//    }
-//
-//    override suspend fun getExchanges(): AppResult<List<ExchangeEntity>> {
-//        logi(TAG, "Get exchanges")
-//        return execute {
-//            val exchanges = exchangesDao.getAll()
-//            val result = ExchangesMapper.mapDbListToEntityList(exchanges).toMutableList()
-//            val needUpdateList = result.filterNeedUpdate()
-//            if (needUpdateList.isNotEmpty()) {
-//                updateExchanges(result)
-//            } else {
-//                result
-//            }
-//        }
-//    }
-//
-//    private suspend fun updateExchanges(list: List<ExchangeEntity>): List<ExchangeEntity> {
-//        logi(TAG, "Update exchanges")
-//        val date = Date().time
-//        val result = CurrencyParser().replaceExchangesValues(list, date)
-//        dataStore.setCurrenciesDate(date)
-//        exchangesDao.update(ExchangesMapper.mapEntityListToDbList(result))
-//        return result
 //    }
 }

@@ -1,13 +1,15 @@
-package com.emikhalets.core.common
+package com.emikhalets.core.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
+import com.emikhalets.core.common.AppCode
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-suspend fun DataStore<Preferences>.retrieve(key: String, block: (Long) -> Unit) {
-    data.map { it[longPreferencesKey(key)] ?: -1 }.collect { block(it) }
+fun DataStore<Preferences>.retrieve(key: String): Flow<Long> {
+    return data.map { it[longPreferencesKey(key)] ?: AppCode.IdNull }
 }
 
 suspend fun DataStore<Preferences>.store(key: String, value: Long) {

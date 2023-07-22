@@ -26,7 +26,7 @@ data class ExchangeModel(
         return this.copy(code = "${this.code}$code")
     }
 
-    fun isOldValue(): Boolean {
+    fun hasOldValue(): Boolean {
         val startOfNextDay = date
             .localDate()
             .atStartOfDay()
@@ -48,6 +48,10 @@ data class ExchangeModel(
     }
 }
 
+fun List<ExchangeModel>.hasOldValues(): Boolean {
+    return any { item -> (item.code.count() <= 3) || item.hasOldValue() }
+}
+
 fun List<ExchangeModel>.filterNeedUpdate(): List<ExchangeModel> {
-    return filter { item -> (item.code.count() > 3) && item.isOldValue() }
+    return filter { item -> (item.code.count() > 3) && item.hasOldValue() }
 }
