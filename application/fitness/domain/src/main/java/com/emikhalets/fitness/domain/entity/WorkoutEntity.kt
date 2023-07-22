@@ -2,12 +2,9 @@ package com.emikhalets.fitness.domain.entity
 
 data class WorkoutEntity(
     val id: Long,
-    val stage: Int,
-    val date: Long,
-    val type: WorkoutType,
-    val doneType: WorkoutDoneType,
-    val reps: List<Int>,
+    val name: String,
+    val exercises: List<ExerciseEntity>,
 ) {
 
-    val repsCount: Int = reps.sumOf { it }
+    constructor() : this(0, "", emptyList())
 }

@@ -5,5 +5,8 @@
 
     <style name="Theme" parent="App" />
 
-    <style name="App.Theme.SuperApp" parent="Theme" />
+    <style name="App.Theme.SuperApp" parent="Theme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 </resources>

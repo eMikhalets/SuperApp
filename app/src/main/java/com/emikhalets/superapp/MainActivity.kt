@@ -3,18 +3,13 @@ package com.emikhalets.superapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.emikhalets.superapp.navigation.AppNavHost
-import com.emikhalets.ui.theme.AppTheme
-import com.emikhalets.ui.theme.Purple500
+import androidx.core.view.WindowCompat
+import com.emikhalets.core.common.AppLogger
+import com.emikhalets.core.common.logi
+import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.superapp.screen.AppScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,35 +18,35 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        logi(TAG, "Created")
+        AppLogger.init()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val navController = rememberNavController()
-            val systemUiController = rememberSystemUiController()
+            AppTheme {
+                logi(TAG, "Set Content")
+                val systemUiController = rememberSystemUiController()
+                val systemUiColor = MaterialTheme.colors.primary
 
-            SideEffect {
-                systemUiController.setStatusBarColor(
-                    color = Purple500,
-                    darkIcons = false
-                )
-                systemUiController.setNavigationBarColor(
-                    color = Color.Black,
-                    darkIcons = false
-                )
+                SideEffect {
+                    logi(TAG, "Set Android UI")
+                    systemUiController.setStatusBarColor(
+                        color = systemUiColor,
+                        darkIcons = false
+                    )
+                    systemUiController.setNavigationBarColor(
+                        color = systemUiColor,
+                        darkIcons = false
+                    )
+                }
+
+                AppScreen()
             }
-
-            Application(navController)
         }
     }
-}
 
-@Composable
-fun Application(navHostController: NavHostController) {
-    AppTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ) {
-            AppNavHost(navHostController)
-        }
+    companion object {
+
+        private const val TAG = "MainActivity"
     }
 }

@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_events">Events</string>
-    <string name="app_finances">Finances</string>
-    <string name="app_fitness">Fitness</string>
-    <string name="app_media_lib">MediaLib</string>
-    <string name="app_notes">Notes</string>
-    <string name="app_applications">Applications</string>
-    <string name="app_menu_widgets">Widgets</string>
+    <string name="app_main_header_applications">Applications</string>
+    <string name="app_main_header_widgets">Widgets</string>
 </resources>
