@@ -19,6 +19,9 @@ object ProgramsContract {
 
     @Immutable
     sealed class Effect : UiEffect {
+
+        object NavigateToNewProgram : Effect()
+        class NavigateToProgram(val id: Long) : Effect()
     }
 
     @Immutable

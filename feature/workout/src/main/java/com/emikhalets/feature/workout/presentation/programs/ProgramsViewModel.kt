@@ -31,8 +31,8 @@ class ProgramsViewModel @Inject constructor(
     override fun handleEvent(action: Action) {
         when (action) {
             Action.DropError -> dropErrorState()
-            Action.AddProgramClick -> TODO()
-            is Action.ProgramClick -> TODO()
+            Action.AddProgramClick -> setEffect { Effect.NavigateToNewProgram }
+            is Action.ProgramClick -> setEffect { Effect.NavigateToProgram(action.id) }
         }
     }
 

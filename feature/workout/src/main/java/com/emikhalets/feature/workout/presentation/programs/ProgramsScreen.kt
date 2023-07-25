@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -26,14 +27,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.common.AppCode
-import com.emikhalets.core.common.logi
 import com.emikhalets.core.ui.component.AppContent
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.feature.workout.R
 import com.emikhalets.feature.workout.domain.model.ProgramModel
 import com.emikhalets.feature.workout.presentation.programs.ProgramsContract.Action
-import com.emikhalets.fitness.domain.entity.ProgramEntity
-import com.emikhalets.fitness.presentation.programs.getProgramsPreview
+import com.emikhalets.feature.workout.presentation.programs.ProgramsContract.Effect
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ProgramsScreen(
@@ -43,17 +44,33 @@ fun ProgramsScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.setAction(Action.GetPrograms)
-    }
-
     ScreenContent(
         state = state,
         onActionSent = viewModel::setAction,
-        onProgramClick = { entity -> navigateToProgram(entity.id) },
-        onAddProgramClick = { navigateToProgram(AppCode.IdNull) },
         onBackClick = navigateBack
     )
+
+    CollectingEffect(
+        flow = viewModel.effect,
+        navigateToProgram = navigateToProgram,
+        navigateBack = navigateBack
+    )
+}
+
+@Composable
+private fun CollectingEffect(
+    flow: Flow<Effect>,
+    navigateToProgram: (id: Long) -> Unit,
+    navigateBack: () -> Unit,
+) {
+    LaunchedEffect(Unit) {
+        flow.collectLatest { effect ->
+            when (effect) {
+                Effect.NavigateToNewProgram -> navigateToProgram(AppCode.IdNull)
+                is Effect.NavigateToProgram -> navigateToProgram(effect.id)
+            }
+        }
+    }
 }
 
 @Composable
@@ -68,26 +85,6 @@ private fun ScreenContent(
             onProgramClick = { onActionSent(Action.ProgramClick(it.id)) },
             onAddProgramClick = { onActionSent(Action.AddProgramClick) }
         )
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(programs, key = { it.id }) { entity ->
-                ProgramBox(
-                    entity = entity,
-                    onProgramClick = onProgramClick,
-                    modifier = Modifier.padding(8.dp, 4.dp)
-                )
-            }
-            if (programs.isNotEmpty()) {
-                item {
-                    Divider(modifier = Modifier.padding(8.dp))
-                }
-            }
-            item {
-                AddProgramBox(
-                    onClick = onAddProgramClick,
-                    modifier = Modifier.padding(8.dp, 4.dp)
-                )
-            }
-        }
     }
 }
 
@@ -97,37 +94,34 @@ private fun ProgramsList(
     onProgramClick: (ProgramModel) -> Unit,
     onAddProgramClick: () -> Unit,
 ) {
-    AppContent(R.string.feature_workout, onBackClick) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(programs, key = { it.id }) { entity ->
-                ProgramBox(
-                    entity = entity,
-                    onProgramClick = onProgramClick,
-                    modifier = Modifier.padding(8.dp, 4.dp)
-                )
-            }
-            if (programs.isNotEmpty()) {
-                item {
-                    Divider(modifier = Modifier.padding(8.dp))
-                }
-            }
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(programs, key = { it.id }) { entity ->
+            ProgramBox(
+                entity = entity,
+                onProgramClick = onProgramClick,
+                modifier = Modifier.padding(8.dp, 4.dp)
+            )
+        }
+        if (programs.isNotEmpty()) {
             item {
-                AddProgramBox(
-                    onClick = onAddProgramClick,
-                    modifier = Modifier.padding(8.dp, 4.dp)
-                )
+                Divider(modifier = Modifier.padding(8.dp))
             }
+        }
+        item {
+            AddProgramBox(
+                onClick = onAddProgramClick,
+                modifier = Modifier.padding(8.dp, 4.dp)
+            )
         }
     }
 }
 
 @Composable
 private fun ProgramBox(
-    entity: ProgramEntity,
-    onProgramClick: (ProgramEntity) -> Unit,
+    entity: ProgramModel,
+    onProgramClick: (ProgramModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    logi("$TAG.ProgramBox", "Invoke: entity = $entity")
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -154,7 +148,6 @@ private fun AddProgramBox(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    logi("$TAG.AddProgramBox", "Invoke")
     Card(
         elevation = 0.dp,
         modifier = modifier
@@ -177,7 +170,7 @@ private fun AddProgramBox(
                     .size(24.dp)
             )
             Text(
-                text = stringResource(R.string.app_fitness_add_program),
+                text = stringResource(R.string.feature_workout_add_program),
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -190,9 +183,10 @@ private fun AddProgramBox(
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            programs = getProgramsPreview(),
-            onProgramClick = {},
-            onAddProgramClick = {},
+            state = ProgramsContract.State(
+                programs = getProgramsPreview()
+            ),
+            onActionSent = {},
             onBackClick = {}
         )
     }

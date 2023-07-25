@@ -1,3 +1,4 @@
 <resources>
     <string name="feature_workout">Workout</string>
+    <string name="feature_workout_add_program">Add workout program</string>
 </resources>

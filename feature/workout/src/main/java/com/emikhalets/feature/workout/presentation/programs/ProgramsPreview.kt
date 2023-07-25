@@ -1,24 +1,17 @@
-package com.emikhalets.fitness.presentation.programs
+package com.emikhalets.feature.workout.presentation.programs
 
-import com.emikhalets.fitness.domain.entity.ProgramEntity
-import com.emikhalets.fitness.domain.entity.enums.ProgramType
+import com.emikhalets.feature.workout.domain.model.ProgramModel
+import com.emikhalets.feature.workout.domain.model.ProgramType
 
-fun getProgramsPreview(): List<ProgramEntity> {
+fun getProgramsPreview(): List<ProgramModel> {
     return listOf(
-        ProgramEntity(
-            1, "Program name", emptyList(), ProgramType.Dynamic
-        ),
-        ProgramEntity(
-            2, "Program name longer longer", emptyList(), ProgramType.Dynamic
-        ),
-        ProgramEntity(
-            3, "Program name longer longer longer longer",
-            emptyList(), ProgramType.Dynamic
-        ),
-        ProgramEntity(
+        ProgramModel(1, "Program name", ProgramType.Dynamic),
+        ProgramModel(2, "Program name longer longer", ProgramType.Dynamic),
+        ProgramModel(3, "Program name longer longer longer longer", ProgramType.Dynamic),
+        ProgramModel(
             4,
             "Program name longer longer longer longer longer longer longer longer longer longer",
-            emptyList(), ProgramType.Dynamic
+            ProgramType.Dynamic
         ),
     )
 }

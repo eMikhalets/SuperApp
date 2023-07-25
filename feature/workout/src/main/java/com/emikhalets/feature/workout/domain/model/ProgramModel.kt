@@ -11,4 +11,6 @@ data class ProgramModel(
 
     constructor(name: String, type: ProgramType, workouts: List<WorkoutModel>)
             : this(0, name, type, workouts)
+
+    constructor(id: Long, name: String, type: ProgramType) : this(id, name, type, emptyList())
 }
