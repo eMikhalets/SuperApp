@@ -40,7 +40,7 @@ include(":core:ui")
 include(":feature:currencies_convert")
 include(":feature:notes")
 include(":feature:tasks")
-include(":feature:workout_program")
+include(":feature:workout")
 
 include(":application:fitness:app")
 include(":application:fitness:data")
