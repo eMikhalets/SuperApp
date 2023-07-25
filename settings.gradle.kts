@@ -41,8 +41,3 @@ include(":feature:currencies_convert")
 include(":feature:notes")
 include(":feature:tasks")
 include(":feature:workout")
-
-include(":application:fitness:app")
-include(":application:fitness:data")
-include(":application:fitness:domain")
-include(":application:fitness:presentation")

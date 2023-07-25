@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "55f1dd352baaf88dd70e914246bc72dc",
+    "identityHash": "a0653dbc7f9a589b9698d415583910bd",
     "entities": [
       {
         "tableName": "categories",
@@ -23,6 +23,32 @@
           {
             "fieldPath": "type",
             "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "convert_currencies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -76,7 +102,7 @@
       },
       {
         "tableName": "exchanges",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currency_main_id` INTEGER NOT NULL, `currency_sub_id` INTEGER NOT NULL, `value` REAL NOT NULL, `date` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `value` REAL NOT NULL, `date` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -85,15 +111,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "currencyMainId",
-            "columnName": "currency_main_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "currencySubId",
-            "columnName": "currency_sub_id",
-            "affinity": "INTEGER",
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -228,7 +248,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '55f1dd352baaf88dd70e914246bc72dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a0653dbc7f9a589b9698d415583910bd')"
     ]
   }
 }
