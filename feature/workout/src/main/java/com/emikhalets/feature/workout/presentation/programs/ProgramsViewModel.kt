@@ -1,11 +1,12 @@
 package com.emikhalets.feature.workout.presentation.programs
 
 import com.emikhalets.core.common.UiString
-import com.emikhalets.core.common.mvi.BaseViewModel
+import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.feature.workout.domain.GetProgramsUseCase
 import com.emikhalets.feature.workout.domain.model.ProgramModel
 import com.emikhalets.feature.workout.presentation.programs.ProgramsContract.Action
+import com.emikhalets.feature.workout.presentation.programs.ProgramsContract.Effect
 import com.emikhalets.feature.workout.presentation.programs.ProgramsContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 @HiltViewModel
 class ProgramsViewModel @Inject constructor(
     private val getProgramsUseCase: GetProgramsUseCase,
-) : BaseViewModel<Action, State>() {
+) : MviViewModel<Action, Effect, State>() {
 
     init {
         launchScope {
@@ -30,6 +31,8 @@ class ProgramsViewModel @Inject constructor(
     override fun handleEvent(action: Action) {
         when (action) {
             Action.DropError -> dropErrorState()
+            Action.AddProgramClick -> TODO()
+            is Action.ProgramClick -> TODO()
         }
     }
 

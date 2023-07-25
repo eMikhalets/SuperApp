@@ -2,7 +2,7 @@ package com.emikhalets.fitness.presentation.program
 
 import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
-import com.emikhalets.core.common.mvi.BaseViewModel
+import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
@@ -10,6 +10,7 @@ import com.emikhalets.fitness.domain.entity.ProgramEntity
 import com.emikhalets.fitness.domain.usecase.DeleteProgramUseCase
 import com.emikhalets.fitness.domain.usecase.GetProgramFlowUseCase
 import com.emikhalets.fitness.presentation.program.ProgramContract.Action
+import com.emikhalets.fitness.presentation.program.ProgramContract.Effect
 import com.emikhalets.fitness.presentation.program.ProgramContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 class ProgramViewModel @Inject constructor(
     private val getProgramFlowUseCase: GetProgramFlowUseCase,
     private val deleteProgramUseCase: DeleteProgramUseCase,
-) : BaseViewModel<Action, State>() {
+) : MviViewModel<Action, Effect, State>() {
 
     override fun createInitialState() = State()
 

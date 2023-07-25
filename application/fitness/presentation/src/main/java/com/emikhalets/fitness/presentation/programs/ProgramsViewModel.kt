@@ -2,7 +2,7 @@ package com.emikhalets.fitness.presentation.programs
 
 import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
-import com.emikhalets.core.common.mvi.BaseViewModel
+import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.onFailure
 import com.emikhalets.core.common.onSuccess
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 @HiltViewModel
 class ProgramsViewModel @Inject constructor(
     private val getProgramsFlowUseCase: GetProgramsFlowUseCase,
-) : BaseViewModel<Action, State>() {
+) : MviViewModel<Action, State>() {
 
     override fun createInitialState() = State()
 
