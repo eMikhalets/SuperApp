@@ -26,6 +26,7 @@ import com.emikhalets.core.common.AppCode
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.component.AppContent
 import com.emikhalets.core.ui.component.AppDivider
+import com.emikhalets.core.ui.dialog.AppErrorDialog
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.feature.workout.R
 import com.emikhalets.feature.workout.domain.model.ProgramModel
@@ -84,6 +85,8 @@ private fun ScreenContent(
             onAddProgramClick = { onActionSent(Action.AddProgramClick) }
         )
     }
+
+    AppErrorDialog(message = state.error)
 }
 
 @Composable
