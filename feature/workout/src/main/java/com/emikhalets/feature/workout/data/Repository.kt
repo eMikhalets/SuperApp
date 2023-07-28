@@ -2,17 +2,17 @@ package com.emikhalets.feature.workout.data
 
 import com.emikhalets.core.database.workout.WorkoutLocalDataSource
 import com.emikhalets.feature.workout.domain.model.ProgramModel
+import com.emikhalets.feature.workout.domain.model.ProgramModel.Companion.toDb
+import com.emikhalets.feature.workout.domain.model.ProgramModel.Companion.toModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class Repository @Inject constructor(
     private val localDataSource: WorkoutLocalDataSource,
 ) {
 
     fun getPrograms(): Flow<List<ProgramModel>> {
-        return localDataSource.getPrograms()
-            .map { it.toModelList() }
+        return localDataSource.getPrograms().toModel()
     }
 
     suspend fun insertProgram(model: ProgramModel) {

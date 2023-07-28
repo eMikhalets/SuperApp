@@ -7,8 +7,8 @@ import androidx.navigation.compose.composable
 import com.emikhalets.convert.AppConvertDestination
 import com.emikhalets.convert.applicationConvertGraph
 import com.emikhalets.core.ui.ApplicationEntity
-import com.emikhalets.fitness.navigation.AppFitnessDestination
-import com.emikhalets.fitness.navigation.applicationFitness
+import com.emikhalets.fitness.AppFitnessDestination
+import com.emikhalets.fitness.applicationFitnessGraph
 import com.emikhalets.notes.AppNotesDestination
 import com.emikhalets.notes.applicationNotesGraph
 import com.emikhalets.superapp.screen.MainScreen
@@ -25,7 +25,7 @@ fun AppNavHost(navController: NavHostController) {
             )
         }
         applicationConvertGraph(navController)
-        applicationFitness(navController) {}
+        applicationFitnessGraph(navController)
         applicationNotesGraph(navController)
     }
 }

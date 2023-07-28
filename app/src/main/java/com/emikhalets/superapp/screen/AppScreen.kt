@@ -32,6 +32,7 @@ import com.emikhalets.core.common.logi
 import com.emikhalets.core.navigation.AppBottomBarItem
 import com.emikhalets.core.ui.BoxPreview
 import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.fitness.AppFitnessDestination
 import com.emikhalets.notes.AppNotesDestination
 import com.emikhalets.notes.applicationNotesBottomBar
 import com.emikhalets.superapp.navigation.AppMainDestination
@@ -76,6 +77,10 @@ private fun AppBottomBarBox(navController: NavHostController) {
                     bottomBarItems.clear()
                     bottomBarItems.addAll(applicationConvertBottomBar)
                 }
+            }
+
+            AppFitnessDestination.BottomBarTrigger -> {
+                if (bottomBarItems.isNotEmpty()) bottomBarItems.clear()
             }
 
             AppNotesDestination.BottomBarTrigger -> {

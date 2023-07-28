@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 @JvmName("toCurrenciesDbFlow")
 fun Flow<List<CurrencyModel>>.toDbFlow(): Flow<List<ConvertCurrencyDb>> = map { it.toDbList() }
 
-@JvmName("toCurrenciesDbFlow")
+@JvmName("toCurrenciesModelFlow")
 fun Flow<List<ConvertCurrencyDb>>.toModelFlow(): Flow<List<CurrencyModel>> =
     map { it.toModelList() }
 

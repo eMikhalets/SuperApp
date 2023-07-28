@@ -4,12 +4,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.emikhalets.feature.tasks.presentation.TasksListScreen
-
+import com.emikhalets.feature.workout.presentation.programs.ProgramsScreen
 
 fun NavGraphBuilder.featureWorkoutComposable(navController: NavHostController) {
     composable(FeatureWorkoutDestination.Programs) {
-        TasksListScreen(
+        ProgramsScreen(
+            navigateToProgram = {},
             navigateBack = navController::popBackStack,
             viewModel = hiltViewModel()
         )

@@ -9,7 +9,7 @@ class GetProgramUseCase @Inject constructor(
     private val repository: Repository,
 ) {
 
-    operator fun invoke(id: Long): Flow<ProgramModel> {
-        return repository.getProgram(id)
-    }
+//    operator fun invoke(id: Long): Flow<ProgramModel> {
+//        return repository.getProgram(id)
+//    }
 }

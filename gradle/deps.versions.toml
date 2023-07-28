@@ -1,19 +1,19 @@
 [versions]
-androidxComposeBom = '2023.04.01'
-androidxComposeNavigation = '2.5.3'
+androidxComposeBom = '2023.06.01'
+androidxComposeNavigation = '2.6.0'
 androidxComposeHilt = '1.0.0'
 androidxCore = '1.10.1'
 androidxDatastore = '1.0.0'
 androidxLifecycle = '2.6.1'
-androidxRoom = '2.5.1'
+androidxRoom = '2.5.2'
 agp = "8.0.2"
 composeCompiler = "1.4.5"
 googleAccompanist = "0.30.1"
-googleHilt = "2.44.2"
+googleHilt = "2.46.1"
 gradle = "8.1.1"
 jetBrainsKotlin = "1.8.20"
 junit = "4.13.2"
-junitExt = "1.1.4"
+junitExt = "1.1.5"
 jsoup = "1.16.1"
 
 [libraries]

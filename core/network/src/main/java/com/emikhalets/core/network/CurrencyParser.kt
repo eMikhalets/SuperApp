@@ -1,9 +1,10 @@
 package com.emikhalets.core.network
 
 import com.emikhalets.core.common.loge
+import javax.inject.Inject
 import org.jsoup.nodes.Element
 
-class CurrencyParser : AppParser() {
+class CurrencyParser @Inject constructor() : AppParser() {
 
     private val source = "https://tradingeconomics.com/currencies?base="
     private val currencyRowKey = "[data-symbol*=CUR]"
