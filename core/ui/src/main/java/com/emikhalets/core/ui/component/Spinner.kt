@@ -1,7 +1,7 @@
 package com.emikhalets.core.ui.component
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -23,23 +23,20 @@ fun <T> AppSpinner(
     items: List<T>,
     onSelect: (T) -> Unit,
     nameGetter: @Composable (T) -> String,
+    padding: PaddingValues = PaddingValues(0.dp),
     modifier: Modifier = Modifier,
     selected: T = items.first(),
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(padding)) {
         Text(
             text = nameGetter(selected),
-            style = MaterialTheme.typography.text,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            style = MaterialTheme.typography.text
         )
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxWidth()
+            onDismissRequest = { expanded = false }
         ) {
             items.forEach { item ->
                 DropdownMenuItem(

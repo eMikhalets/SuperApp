@@ -1,12 +1,13 @@
 package com.emikhalets.feature.workout.presentation.program_add
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,7 +18,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emikhalets.core.ui.component.AppCard
+import com.emikhalets.core.ui.component.AppCardColumn
 import com.emikhalets.core.ui.component.AppContent
 import com.emikhalets.core.ui.component.AppSpinner
 import com.emikhalets.core.ui.component.AppTextField
@@ -47,7 +50,6 @@ import kotlinx.coroutines.flow.collectLatest
 fun ProgramAddScreen(
     navigateBack: () -> Unit,
     viewModel: ProgramAddViewModel,
-    programId: Long,
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -117,19 +119,19 @@ private fun WorkoutsList(
             AppTextField(
                 value = name,
                 onValueChange = onNameChanged,
+                padding = PaddingValues(12.dp),
                 placeholder = stringResource(R.string.feature_workout_name),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.fillMaxWidth()
             )
         }
         item {
             AppSpinner(
                 items = ProgramType.getList(),
                 selected = type,
+                padding = PaddingValues(12.dp),
                 onSelect = { onTypeChanged(it) },
-                nameGetter = { it.getName() },
-                modifier = Modifier.padding(8.dp, 4.dp)
+                nameGetter = { it.getName() }
             )
         }
         itemsIndexed(workouts, key = { _, item -> item.name }) { index, item ->
@@ -189,24 +191,28 @@ private fun WorkoutBox(
     onRemoveExerciseClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AppCard(
+    AppCardColumn(
+        innerPadding = PaddingValues(12.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp, 4.dp)
     ) {
-        Column(modifier = modifier.fillMaxWidth()) {
-            AppTextField(
-                value = model.name,
-                onValueChange = {},
-                placeholder = stringResource(R.string.feature_workout_name),
-                modifier = Modifier.fillMaxWidth()
-            )
+        AppTextField(
+            value = model.name,
+            onValueChange = {},
+            placeholder = stringResource(R.string.feature_workout_name),
+            fontSize = 18.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        if (model.exercises.isNotEmpty()) {
             ExercisesList(
                 list = model.exercises,
                 onDeleteExerciseClick = onRemoveExerciseClick,
             )
-            AddExerciseBox(onAddExerciseClick)
+            Spacer(modifier = Modifier.height(8.dp))
         }
+        AddExerciseBox(onAddExerciseClick)
     }
 }
 
@@ -222,6 +228,7 @@ private fun ExercisesList(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(start = 24.dp)
                     .padding(8.dp, 4.dp)
             ) {
                 Text(
@@ -232,10 +239,9 @@ private fun ExercisesList(
                         .weight(1f)
                 )
                 Icon(
-                    imageVector = Icons.Rounded.Delete,
+                    imageVector = Icons.Rounded.Close,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(8.dp)
                         .size(24.dp)
                         .clickable { onDeleteExerciseClick(index) }
                 )
@@ -251,11 +257,9 @@ private fun AddExerciseBox(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(8.dp)
     ) {
         Icon(
             imageVector = Icons.Rounded.Add,
