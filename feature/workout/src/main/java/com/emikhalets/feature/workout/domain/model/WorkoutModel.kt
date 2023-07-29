@@ -9,5 +9,10 @@ data class WorkoutModel(
     val exercises: List<ExerciseModel>,
 ) {
 
-    constructor() : this(0, "", Date().time, emptyList())
+    constructor() : this(0, "")
+
+    constructor(id: Long, name: String) : this(id, name, Date().time, emptyList())
+
+    constructor(id: Long, name: String, exercises: List<ExerciseModel>)
+            : this(id, name, Date().time, exercises)
 }
