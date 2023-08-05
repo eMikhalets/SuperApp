@@ -27,6 +27,7 @@ include(":app")
 
 include(":application:convert")
 //include(":application:fitness")
+include(":application:finance")
 include(":application:notes")
 
 include(":core:common")
