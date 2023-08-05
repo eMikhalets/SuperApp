@@ -1,0 +1,11 @@
+<resources>
+    <string name="feature_workout">Workout</string>
+    <string name="feature_workout_add_program">Add workout program</string>
+    <string name="feature_workout_name">Name</string>
+    <string name="feature_workout_program_dynamic">Dynamic</string>
+    <string name="feature_workout_program_static">Static</string>
+    <string name="feature_workout_add_workout">Add workout</string>
+    <string name="feature_workout_add_exercise">Add exercise</string>
+    <string name="feature_workout_tap_enter_exercise">Tap \"Enter\" to create exercise</string>
+    <string name="feature_workout_save">Save</string>
+</resources>

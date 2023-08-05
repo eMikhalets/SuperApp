@@ -3,7 +3,7 @@ package com.emikhalets.feature.currencies_convert.presentation
 import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.date.startOfNextDay
 import com.emikhalets.core.common.logd
-import com.emikhalets.core.common.mvi.BaseViewModel
+import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.core.common.toIntOrNull
 import com.emikhalets.feature.currencies_convert.domain.model.CurrencyModel
@@ -15,6 +15,7 @@ import com.emikhalets.feature.currencies_convert.domain.use_case.GetCurrenciesUs
 import com.emikhalets.feature.currencies_convert.domain.use_case.GetExchangesDateUseCase
 import com.emikhalets.feature.currencies_convert.domain.use_case.GetExchangesUseCase
 import com.emikhalets.feature.currencies_convert.presentation.CurrenciesContract.Action
+import com.emikhalets.feature.currencies_convert.presentation.CurrenciesContract.Effect
 import com.emikhalets.feature.currencies_convert.presentation.CurrenciesContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Date
@@ -33,7 +34,7 @@ class CurrenciesViewModel @Inject constructor(
     private val deleteCurrencyUseCase: DeleteCurrencyUseCase,
     private val convertCurrencyUseCase: ConvertCurrencyUseCase,
     private val getExchangesDateUseCase: GetExchangesDateUseCase,
-) : BaseViewModel<Action, State>() {
+) : MviViewModel<Action, Effect, State>() {
 
     private var convertJob: Job? = null
 

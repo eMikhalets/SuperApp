@@ -6,20 +6,21 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 interface UiAction
+interface UiEffect
 interface UiState
 
-fun <A : UiAction, S : UiState> BaseViewModel<A, S>.launchScope(
+fun <A : UiAction, E : UiEffect, S : UiState> MviViewModel<A, E, S>.launchScope(
     block: suspend CoroutineScope.() -> Unit,
 ): Job = scope.launch { block() }
 
-fun <A : UiAction, S : UiState> BaseViewModel<A, S>.launchMainScope(
+fun <A : UiAction, E : UiEffect, S : UiState> MviViewModel<A, E, S>.launchMainScope(
     block: suspend CoroutineScope.() -> Unit,
 ): Job = scope.launch(Dispatchers.Main) { block() }
 
-fun <A : UiAction, S : UiState> BaseViewModel<A, S>.launchDefaultScope(
+fun <A : UiAction, E : UiEffect, S : UiState> MviViewModel<A, E, S>.launchDefaultScope(
     block: suspend CoroutineScope.() -> Unit,
 ): Job = scope.launch(Dispatchers.Default) { block() }
 
-fun <A : UiAction, S : UiState> BaseViewModel<A, S>.launchIOScope(
+fun <A : UiAction, E : UiEffect, S : UiState> MviViewModel<A, E, S>.launchIOScope(
     block: suspend CoroutineScope.() -> Unit,
 ): Job = scope.launch(Dispatchers.IO) { block() }

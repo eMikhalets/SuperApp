@@ -2,13 +2,14 @@ package com.emikhalets.feature.notes.presentation
 
 import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
-import com.emikhalets.core.common.mvi.BaseViewModel
+import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.feature.notes.domain.AddNoteUseCase
 import com.emikhalets.feature.notes.domain.DeleteNoteUseCase
 import com.emikhalets.feature.notes.domain.GetNotesUseCase
 import com.emikhalets.feature.notes.domain.NoteModel
 import com.emikhalets.feature.notes.presentation.NotesListContract.Action
+import com.emikhalets.feature.notes.presentation.NotesListContract.Effect
 import com.emikhalets.feature.notes.presentation.NotesListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class NotesListViewModel @Inject constructor(
     private val getNotesUseCase: GetNotesUseCase,
     private val addNoteUseCase: AddNoteUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase,
-) : BaseViewModel<Action, State>() {
+) : MviViewModel<Action, Effect, State>() {
 
     init {
         logd(TAG, "Get Notes")

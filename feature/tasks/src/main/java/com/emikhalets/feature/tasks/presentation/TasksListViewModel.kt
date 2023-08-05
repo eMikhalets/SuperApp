@@ -2,13 +2,14 @@ package com.emikhalets.feature.tasks.presentation
 
 import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.logd
-import com.emikhalets.core.common.mvi.BaseViewModel
+import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launchScope
 import com.emikhalets.feature.tasks.domain.AddTaskUseCase
 import com.emikhalets.feature.tasks.domain.DeleteTaskUseCase
 import com.emikhalets.feature.tasks.domain.GetTasksUseCase
 import com.emikhalets.feature.tasks.domain.TaskModel
 import com.emikhalets.feature.tasks.presentation.TasksListContract.Action
+import com.emikhalets.feature.tasks.presentation.TasksListContract.Effect
 import com.emikhalets.feature.tasks.presentation.TasksListContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class TasksListViewModel @Inject constructor(
     private val getTasksUseCase: GetTasksUseCase,
     private val addTaskUseCase: AddTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
-) : BaseViewModel<Action, State>() {
+) : MviViewModel<Action, Effect, State>() {
 
     init {
         logd(TAG, "Get tasks")

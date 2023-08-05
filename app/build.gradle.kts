@@ -90,7 +90,7 @@ android {
 dependencies {
 
     implementation(project(":application:convert"))
-    implementation(project(":application:fitness:app"))
+//    implementation(project(":application:fitness"))
     implementation(project(":application:notes"))
 
     implementation(project(":core:common"))

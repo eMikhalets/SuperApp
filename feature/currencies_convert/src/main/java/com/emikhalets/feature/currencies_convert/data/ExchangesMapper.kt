@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 @JvmName("toExchangesDbFlow")
 fun Flow<List<ExchangeModel>>.toDbFlow(): Flow<List<ExchangeDb>> = map { it.toDbList() }
 
-@JvmName("toExchangesDbFlow")
+@JvmName("toExchangesModelFlow")
 fun Flow<List<ExchangeDb>>.toModelFlow(): Flow<List<ExchangeModel>> = map { it.toModelList() }
 
 @JvmName("toExchangesDbList")

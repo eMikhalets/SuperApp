@@ -78,6 +78,10 @@ private fun AppBottomBarBox(navController: NavHostController) {
                 }
             }
 
+//            AppFitnessDestination.BottomBarTrigger -> {
+//                if (bottomBarItems.isNotEmpty()) bottomBarItems.clear()
+//            }
+
             AppNotesDestination.BottomBarTrigger -> {
                 if (bottomBarItems != applicationNotesBottomBar) {
                     bottomBarItems.clear()

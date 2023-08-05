@@ -3,6 +3,7 @@ package com.emikhalets.feature.tasks.presentation
 import androidx.compose.runtime.Immutable
 import com.emikhalets.core.common.UiString
 import com.emikhalets.core.common.mvi.UiAction
+import com.emikhalets.core.common.mvi.UiEffect
 import com.emikhalets.core.common.mvi.UiState
 import com.emikhalets.feature.tasks.domain.TaskModel
 
@@ -17,6 +18,10 @@ object TasksListContract {
         class TaskClicked(val task: TaskModel = TaskModel()) : Action()
         class CheckTask(val task: TaskModel, val check: Boolean) : Action()
         class SaveTask(val task: TaskModel) : Action()
+    }
+
+    @Immutable
+    sealed class Effect : UiEffect {
     }
 
     @Immutable
