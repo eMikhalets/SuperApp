@@ -11,6 +11,9 @@ data class WorkoutModel(
 
     constructor() : this(0, "")
 
+    constructor(name: String, exercises: List<ExerciseModel>)
+            : this(0, name, Date().time, exercises)
+
     constructor(id: Long, name: String) : this(id, name, Date().time, emptyList())
 
     constructor(id: Long, name: String, exercises: List<ExerciseModel>)

@@ -16,10 +16,12 @@ object ProgramAddContract {
 
         object DropError : Action()
         object AddProgram : Action()
+        object AddWorkout : Action()
         class NameChanged(val name: String) : Action()
         class TypeChanged(val type: ProgramType) : Action()
-        class ChangeWorkouts(val index: Int = UndefinedIndex) : Action()
-        class ChangeExercises(val parentIndex: Int, val index: Int = UndefinedIndex) : Action()
+        class SetWorkoutEdit(val model: WorkoutModel) : Action()
+        class RemoveWorkout(val model: WorkoutModel) : Action()
+        class UpdateWorkout(val model: WorkoutModel) : Action()
     }
 
     @Immutable
@@ -35,6 +37,7 @@ object ProgramAddContract {
         val name: String = "",
         val type: ProgramType = ProgramType.Dynamic,
         val workouts: List<WorkoutModel> = emptyList(),
+        val workoutEdit: WorkoutModel? = null,
         val error: UiString? = null,
     ) : UiState
 }

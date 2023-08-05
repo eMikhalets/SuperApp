@@ -44,6 +44,10 @@ class ProgramsViewModel @Inject constructor(
         setState { it.copy(error = null) }
     }
 
+    private fun addNewProgram(list: List<ProgramModel>) {
+        setState { it.copy(isLoading = false, programs = list) }
+    }
+
     private fun setProgramsList(list: List<ProgramModel>) {
         setState { it.copy(isLoading = false, programs = list) }
     }

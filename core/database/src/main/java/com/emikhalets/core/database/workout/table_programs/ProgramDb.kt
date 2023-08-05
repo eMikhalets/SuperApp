@@ -9,5 +9,6 @@ data class ProgramDb(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "size") val size: Int,
     @ColumnInfo(name = "type") val type: String,
 )

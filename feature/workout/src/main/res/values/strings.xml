@@ -6,4 +6,6 @@
     <string name="feature_workout_program_static">Static</string>
     <string name="feature_workout_add_workout">Add workout</string>
     <string name="feature_workout_add_exercise">Add exercise</string>
+    <string name="feature_workout_tap_enter_exercise">Tap \"Enter\" to create exercise</string>
+    <string name="feature_workout_save">Save</string>
 </resources>

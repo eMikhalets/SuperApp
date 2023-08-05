@@ -1,6 +1,7 @@
 package com.emikhalets.feature.workout.presentation.program_add
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -92,10 +93,9 @@ private fun ScreenContent(
             workouts = state.workouts,
             onNameChanged = { onActionSent(Action.NameChanged(it)) },
             onTypeChanged = { onActionSent(Action.TypeChanged(it)) },
-            onAddWorkoutClick = { onActionSent(Action.ChangeWorkouts()) },
-            onRemoveWorkoutClick = { onActionSent(Action.ChangeWorkouts(it)) },
-            onAddExerciseClick = { onActionSent(Action.ChangeExercises(it)) },
-            onRemoveExerciseClick = { p, i -> onActionSent(Action.ChangeExercises(p, i)) },
+            onAddWorkoutClick = { onActionSent(Action.AddWorkout) },
+            onRemoveWorkoutClick = { onActionSent(Action.RemoveWorkout(it)) },
+            onWorkoutClick = { onActionSent(Action.SetWorkoutEdit(it)) },
         )
     }
 
@@ -110,9 +110,8 @@ private fun WorkoutsList(
     onNameChanged: (String) -> Unit,
     onTypeChanged: (ProgramType) -> Unit,
     onAddWorkoutClick: () -> Unit,
-    onRemoveWorkoutClick: (Int) -> Unit,
-    onAddExerciseClick: (Int) -> Unit,
-    onRemoveExerciseClick: (Int, Int) -> Unit,
+    onRemoveWorkoutClick: (WorkoutModel) -> Unit,
+    onWorkoutClick: (WorkoutModel) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
@@ -137,9 +136,8 @@ private fun WorkoutsList(
         itemsIndexed(workouts, key = { _, item -> item.name }) { index, item ->
             WorkoutBox(
                 model = item,
-                onRemoveWorkoutClick = { onRemoveWorkoutClick(index) },
-                onAddExerciseClick = { onAddExerciseClick(index) },
-                onRemoveExerciseClick = { onRemoveExerciseClick(index, it) },
+                onRemoveWorkoutClick = onRemoveWorkoutClick,
+                onWorkoutClick = onWorkoutClick
             )
         }
         item {
@@ -186,33 +184,49 @@ private fun AddWorkoutBox(
 @Composable
 private fun WorkoutBox(
     model: WorkoutModel,
-    onRemoveWorkoutClick: (Int) -> Unit,
-    onAddExerciseClick: () -> Unit,
-    onRemoveExerciseClick: (Int) -> Unit,
+    onRemoveWorkoutClick: (WorkoutModel) -> Unit,
+    onWorkoutClick: (WorkoutModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AppCardColumn(
         innerPadding = PaddingValues(12.dp),
+        onClick = { onWorkoutClick(model) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp, 4.dp)
     ) {
-        AppTextField(
-            value = model.name,
-            onValueChange = {},
-            placeholder = stringResource(R.string.feature_workout_name),
-            fontSize = 18.sp,
+        Row(
+            horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        if (model.exercises.isNotEmpty()) {
-            ExercisesList(
-                list = model.exercises,
-                onDeleteExerciseClick = onRemoveExerciseClick,
+        ) {
+            AppTextField(
+                value = model.name,
+                onValueChange = {},
+                placeholder = stringResource(R.string.feature_workout_name),
+                fontSize = 18.sp,
+                modifier = Modifier.fillMaxWidth()
             )
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+                imageVector = Icons.Rounded.Close,
+                contentDescription = null,
+                modifier = Modifier.clickable { onRemoveWorkoutClick(model) }
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        model.exercises.forEachIndexed { index, exercise ->
+            Text(
+                text = "${index + 1}. ${exercise.name}",
+                style = MaterialTheme.typography.text,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp)
+                    .padding(8.dp, 4.dp)
+            )
+        }
+        if (model.exercises.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
         }
-        AddExerciseBox(onAddExerciseClick)
     }
 }
 

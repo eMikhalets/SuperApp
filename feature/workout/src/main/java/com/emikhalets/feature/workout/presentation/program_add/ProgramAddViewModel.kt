@@ -39,6 +39,7 @@ class ProgramAddViewModel @Inject constructor(
     }
 
     private fun changeWorkoutsSize(index: Int) {
+        if (currentState.workouts.any { it.name.isBlank() }) return
         val newList = currentState.workouts.changeList(index, WorkoutModel())
         setState { it.copy(workouts = newList) }
     }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 data class ProgramModel(
     val id: Long,
     val name: String,
+    val size: Int,
     val type: ProgramType,
     val workouts: List<WorkoutModel>,
 ) {
@@ -14,9 +15,10 @@ data class ProgramModel(
     constructor(type: ProgramType) : this("", type, emptyList())
 
     constructor(name: String, type: ProgramType, workouts: List<WorkoutModel>)
-            : this(0, name, type, workouts)
+            : this(0, name, workouts.size, type, workouts)
 
-    constructor(id: Long, name: String, type: ProgramType) : this(id, name, type, emptyList())
+    constructor(id: Long, name: String, type: ProgramType)
+            : this(id, name, 0, type, emptyList())
 
     companion object {
 
@@ -27,6 +29,7 @@ data class ProgramModel(
         fun ProgramModel.toDb(): ProgramDb = ProgramDb(
             id = id,
             name = name,
+            size = size,
             type = type.toString(),
         )
 
@@ -37,6 +40,7 @@ data class ProgramModel(
         fun ProgramDb.toModel(): ProgramModel = ProgramModel(
             id = id,
             name = name,
+            size = size,
             type = ProgramType.valueOf(type),
             workouts = emptyList()
         )
