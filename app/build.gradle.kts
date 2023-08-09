@@ -14,14 +14,14 @@ plugins {
 
 android {
     namespace = "com.emikhalets.superapp"
-    compileSdk = extra["compileSdk"] as Int
+    compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
         applicationId = "com.emikhalets.superapp"
-        minSdk = extra["minSdk"] as Int
-        targetSdk = extra["targetSdk"] as Int
-        versionCode = extra["versionCode"] as Int
-        versionName = extra["versionName"] as String
+        minSdk = rootProject.extra["minSdk"] as Int
+        targetSdk = rootProject.extra["targetSdk"] as Int
+        versionCode = rootProject.extra["versionCode"] as Int
+        versionName = rootProject.extra["versionName"] as String
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -66,11 +66,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = extra["java"] as JavaVersion
-        targetCompatibility = extra["java"] as JavaVersion
+        sourceCompatibility = rootProject.extra["java"] as JavaVersion
+        targetCompatibility = rootProject.extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = extra["java"].toString()
+        jvmTarget = rootProject.extra["java"].toString()
     }
     buildFeatures {
         compose = true

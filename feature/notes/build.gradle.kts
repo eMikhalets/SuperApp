@@ -7,19 +7,19 @@ plugins {
 
 android {
     namespace = "com.emikhalets.feature.notes"
-    compileSdk = extra["compileSdk"] as Int
+    compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
-        minSdk = extra["minSdk"] as Int
+        minSdk = rootProject.extra["minSdk"] as Int
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
-        sourceCompatibility = extra["java"] as JavaVersion
-        targetCompatibility = extra["java"] as JavaVersion
+        sourceCompatibility = rootProject.extra["java"] as JavaVersion
+        targetCompatibility = rootProject.extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = extra["java"].toString()
+        jvmTarget = rootProject.extra["java"].toString()
     }
     buildFeatures {
         compose = true
