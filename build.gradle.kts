@@ -1,5 +1,3 @@
-@file:Suppress("COMPATIBILITY_WARNING")
-
 ext {
     extra["compileSdk"] = 33
     extra["targetSdk"] = 33

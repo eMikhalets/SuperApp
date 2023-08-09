@@ -1,27 +1,25 @@
-@file:Suppress("UnstableApiUsage")
-
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.kapt.get().pluginId)
-    id(libs.plugins.hilt.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.emikhalets.finance"
-    compileSdk = rootProject.extra["compileSdk"] as Int
+    compileSdk = extra["compileSdk"] as Int
 
     defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
+        minSdk = extra["minSdk"] as Int
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = extra["java"] as JavaVersion
+        targetCompatibility = extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = extra["java"].toString()
     }
     buildFeatures {
         compose = true

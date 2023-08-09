@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -8,22 +6,22 @@ val keystoreProperties: Properties = Properties()
 keystorePropertiesFile?.let { keystoreProperties.load(FileInputStream(it)) }
 
 plugins {
-    id(libs.plugins.android.application.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.kapt.get().pluginId)
-    id(libs.plugins.hilt.get().pluginId)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.emikhalets.superapp"
-    compileSdk = rootProject.extra["compileSdk"] as Int
+    compileSdk = extra["compileSdk"] as Int
 
     defaultConfig {
         applicationId = "com.emikhalets.superapp"
-        minSdk = rootProject.extra["minSdk"] as Int
-        targetSdk = rootProject.extra["targetSdk"] as Int
-        versionCode = rootProject.extra["versionCode"] as Int
-        versionName = rootProject.extra["versionName"] as String
+        minSdk = extra["minSdk"] as Int
+        targetSdk = extra["targetSdk"] as Int
+        versionCode = extra["versionCode"] as Int
+        versionName = extra["versionName"] as String
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -68,11 +66,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = extra["java"] as JavaVersion
+        targetCompatibility = extra["java"] as JavaVersion
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = extra["java"].toString()
     }
     buildFeatures {
         compose = true
