@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -22,25 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "SuperApp"
-
 include(":app")
-
-include(":application:convert")
-//include(":application:fitness")
-include(":application:finance")
-include(":application:notes")
-
-include(":core:background")
-include(":core:common")
-include(":core:database")
-include(":core:datastore")
-include(":core:di")
-include(":core:navigation")
-include(":core:network")
-include(":core:ui")
-
-include(":feature:currencies_convert")
-include(":feature:notes")
-include(":feature:tasks")
-include(":feature:transactions")
-//include(":feature:workout")
+include(":core")

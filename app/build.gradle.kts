@@ -86,17 +86,7 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":application:convert"))
-//    implementation(project(":application:fitness"))
-    implementation(project(":application:notes"))
-
-    implementation(project(":core:common"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:ui"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.google.accompanist.systemUi)
+    implementation(project(":core"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
