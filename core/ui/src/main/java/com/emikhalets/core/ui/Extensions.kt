@@ -22,7 +22,7 @@ fun ApplicationEntity.getIcon(): ImageVector {
     return when (this) {
         ApplicationEntity.Convert -> Icons.Rounded.Repeat
         ApplicationEntity.Events -> Icons.Rounded.Event
-        ApplicationEntity.Finances -> Icons.Rounded.AccountBalanceWallet
+        ApplicationEntity.Finance -> Icons.Rounded.AccountBalanceWallet
         ApplicationEntity.Fitness -> Icons.Rounded.FitnessCenter
         ApplicationEntity.MediaLib -> Icons.Rounded.AttachMoney
         ApplicationEntity.Notes -> Icons.Rounded.Notes
