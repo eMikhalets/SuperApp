@@ -30,6 +30,7 @@ include(":application:convert")
 include(":application:finance")
 include(":application:notes")
 
+include(":core:background")
 include(":core:common")
 include(":core:database")
 include(":core:datastore")

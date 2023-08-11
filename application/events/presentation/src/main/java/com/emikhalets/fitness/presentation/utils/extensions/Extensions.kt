@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.emikhalets.events.domain.entity.EventEntity
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventEntity
 

@@ -1,68 +1,77 @@
-package com.emikhalets.simpleevents.presentation.screens.events_list
+package com.emikhalets.fitness.presentation.screens.events_list
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.events.domain.use_case.events.GetEventsUseCase
-import com.emikhalets.simpleevents.utils.BaseViewModel
-import com.emikhalets.simpleevents.utils.extensions.getMonthEdges
+import com.emikhalets.common.onFailure
+import com.emikhalets.common.onSuccess
+import com.emikhalets.events.domain.entity.EventEntity
+import com.emikhalets.events.domain.usecase.events.EventsGetUseCase
+import com.emikhalets.fitness.presentation.screens.events_list.EventsListContract.Action
+import com.emikhalets.fitness.presentation.screens.events_list.EventsListContract.Effect
+import com.emikhalets.fitness.presentation.screens.events_list.EventsListContract.State
+import com.emikhalets.ui.BaseViewModel
+import com.emikhalets.ui.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class EventsListViewModel @Inject constructor(
-    private val getEventsUseCase: GetEventsUseCase,
-) : BaseViewModel<EventsListState, EventsListAction>() {
+    private val eventsGetUseCase: EventsGetUseCase,
+) : BaseViewModel<State, Effect, Action>() {
 
     private var searchJob: Job? = null
-    private var eventsList = listOf<EventEntity>()
 
-    override fun createInitialState() = EventsListState()
+    override fun createInitialState() = State()
 
-    override fun handleEvent(action: EventsListAction) {
+    override fun handleEvent(action: Action) {
         when (action) {
-            EventsListAction.GetEvents -> getEvents()
-            EventsListAction.AcceptError -> resetError()
-            is EventsListAction.SearchEvents -> searchEvents(action.query)
+            Action.GetEvents -> getEvents()
+            is Action.SearchEvents -> searchEvents(action.query)
         }
     }
 
-    private fun resetError() = setState { it.copy(error = null) }
-
     private fun getEvents() {
-        launchIO {
-            setState { it.copy(loading = true) }
-            getEventsUseCase()
-                .onSuccess { result ->
-                    result.collectLatest { list ->
-                        setState { it.copy(loading = false, eventsMap = mapEventsList(list)) }
-                    }
-                }
-                .onFailure { error ->
-                    val uiError = UiString.Message(error.message)
-                    setState { it.copy(loading = false, error = uiError) }
-                }
+        launchIOScope {
+            setState { it.copy(isLoading = true) }
+            eventsGetUseCase.invoke()
+                .onSuccess { flow -> handleSuccess(flow) }
+                .onFailure { code, message -> handleError(code, message) }
         }
     }
 
     private fun searchEvents(query: String) {
-        if (searchJob != null && searchJob?.isActive == true) searchJob?.cancel()
-        searchJob = launchIO {
-            delay(500)
-            if (query.isEmpty()) {
-                setState { it.copy(eventsMap = mapEventsList(eventsList)) }
-            } else {
-                val newList = eventsList.filter { it.name.lowercase().contains(query) }
-                setState { it.copy(eventsMap = mapEventsList(newList)) }
+        cancelJob(searchJob)
+        setState { it.copy(searchQuery = query) }
+        searchJob = launchIOScope {
+            val list = eventsGetUseCase.invoke(query, currentState.savedEvents)
+            setState { it.copy(events = list) }
+        }
+    }
+
+    private suspend fun handleSuccess(flow: Flow<List<EventEntity>>) {
+        flow.collectLatest { list ->
+            val events = prepareEventsList(list)
+            setState {
+                it.copy(
+                    isLoading = false,
+                    savedEvents = events,
+                    events = events
+                )
             }
         }
     }
 
-    private fun mapEventsList(events: List<EventEntity>): Map<Long, List<EventEntity>> {
-        return events
-            .sortedBy { event -> event.days }
-            .also { eventsList = it }
-            .groupBy { it.date.getMonthEdges().first }
+    private fun handleError(code: Int, message: String) {
+        setState { it.copy(isLoading = false) }
+        setEffect { Effect.ErrorDialog(UiString.create(message)) }
+    }
+
+    private suspend fun prepareEventsList(list: List<EventEntity>): List<EventEntity> {
+        return withContext(Dispatchers.IO) {
+            list.sortedBy { event -> event.days }
+        }
     }
 }

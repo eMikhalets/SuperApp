@@ -1,57 +1,75 @@
-package com.emikhalets.simpleevents.presentation.screens.event_item
+package com.emikhalets.fitness.presentation.screens.event_item
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.events.domain.use_case.events.DeleteEventUseCase
-import com.emikhalets.events.domain.use_case.events.GetEventsUseCase
-import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
-import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.common.AppError
+import com.emikhalets.common.onFailure
+import com.emikhalets.common.onSuccess
+import com.emikhalets.events.domain.usecase.events.EventsDeleteUseCase
+import com.emikhalets.events.domain.usecase.events.EventsGetUseCase
+import com.emikhalets.fitness.presentation.screens.event_item.EventItemContract.Action
+import com.emikhalets.fitness.presentation.screens.event_item.EventItemContract.Effect
+import com.emikhalets.fitness.presentation.screens.event_item.EventItemContract.State
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
+import com.emikhalets.ui.BaseViewModel
+import com.emikhalets.ui.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class EventItemViewModel @Inject constructor(
-    private val getEventsUseCase: GetEventsUseCase,
-    private val deleteEventUseCase: DeleteEventUseCase,
-) : BaseViewModel<EventItemState, EventsListAction>() {
+    private val eventsGetUseCase: EventsGetUseCase,
+    private val eventsDeleteUseCase: EventsDeleteUseCase,
+) : BaseViewModel<State, Effect, Action>() {
 
-    override fun createInitialState(): EventItemState = EventItemState()
+    override fun createInitialState() = State()
 
-    override fun handleEvent(action: EventsListAction) {
-    }
-
-    fun resetError() = setState { it.copy(error = null) }
-
-    fun loadEvent(id: Long) {
-        launchIO {
-            setState { it.copy(loading = true) }
-            getEventsUseCase(id)
-                .onSuccess { result ->
-                    val event = result.calculateEventData()
-                    setState { it.copy(loading = false, event = event) }
-                }
-                .onFailure { error ->
-                    val uiError = UiString.Message(error.message)
-                    setState { it.copy(loading = false, error = uiError) }
-                }
+    override fun handleEvent(action: Action) {
+        when (action) {
+            is Action.GetEvent -> getEvent(action.id)
+            Action.DeleteEvent -> deleteEvent()
         }
     }
 
-    fun deleteEvent(entity: EventEntity?) {
+    private fun getEvent(id: Long?) {
+        if (id != null) {
+            launchIOScope {
+                setState { it.copy(isLoading = true) }
+                eventsGetUseCase.invoke(id)
+                    .onSuccess { result ->
+                        val event = result.calculateEventData()
+                        setState { it.copy(loading = false, event = event) }
+                    }
+                    .onFailure { code, message -> handleError(code, message) }
+            }
+        } else {
+            handleError(AppError.Internal)
+        }
+    }
+
+    fun deleteEvent() {
+        val entity = currentState.event
         if (entity == null) {
-            setState { it.copy(error = UiString.internal) }
+            handleError(AppError.Internal)
             return
         }
 
-        launchIO {
-            deleteEventUseCase(entity)
-                .onSuccess {
-                    setState { it.copy(deleted = true) }
-                }
-                .onFailure { error ->
-                    val uiError = UiString.Message(error.message)
-                    setState { it.copy(deleted = false, error = uiError) }
-                }
+        launchIOScope {
+            eventsDeleteUseCase.invoke(entity)
+                .onSuccess { handleDeleted() }
+                .onFailure { code, message -> handleError(code, message) }
         }
+    }
+
+    private fun handleDeleted() {
+        setState { it.copy(isDeleted = true) }
+    }
+
+    private fun handleError(code: Int, message: String) {
+        setState { it.copy(isLoading = false) }
+        setEffect { Effect.ErrorDialog(UiString.create(message)) }
+    }
+
+    private fun handleError(error: AppError) {
+        setState { it.copy(isLoading = false) }
+        setEffect { Effect.ErrorDialog(UiString.create(error)) }
     }
 }

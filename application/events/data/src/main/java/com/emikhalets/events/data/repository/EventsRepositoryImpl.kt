@@ -55,7 +55,7 @@ class EventsRepositoryImpl @Inject constructor(
         }.onFailure { it.printStackTrace() }
     }
 
-    override suspend fun getAllEvents(): Result<Flow<List<EventEntity>>> {
+    override suspend fun getAllEventsFlow(): Result<Flow<List<EventEntity>>> {
         return runCatching {
             eventsDao.getAllEntities().map {
                 EventMapper.mapDbListToList(it)
@@ -74,61 +74,6 @@ class EventsRepositoryImpl @Inject constructor(
         return runCatching {
             eventsDao.getAllByGroupId(entity.id).map {
                 EventMapper.mapDbListToList(it)
-            }
-        }.onFailure { it.printStackTrace() }
-    }
-
-    override suspend fun insertEventAlarm(entity: AlarmEntity): Result<Long> {
-        return runCatching {
-            val isNameExist = eventAlarmsDao.isNotificationNameExist(entity.nameEn)
-            val isDaysExist = eventAlarmsDao.isNotificationDaysExist(entity.days)
-            if (isNameExist || isDaysExist) {
-                throw RuntimeException("This name or days already exists")
-            } else {
-                val dbEntity = AlarmMapper.mapEntityToDb(entity)
-                eventAlarmsDao.insert(dbEntity)
-            }
-        }.onFailure { it.printStackTrace() }
-    }
-
-    override suspend fun insertEventAlarm(list: List<AlarmEntity>): Result<List<Long>> {
-        return runCatching {
-            val dbList = AlarmMapper.mapListToDbList(list)
-            eventAlarmsDao.insert(dbList)
-        }.onFailure { it.printStackTrace() }
-    }
-
-    override suspend fun updateEventAlarm(entity: AlarmEntity): Result<Int> {
-        return runCatching {
-            var isNameExist = false
-            var isDaysExist = false
-            val oldNotification = eventAlarmsDao.getItem(entity.id)
-            if (entity.nameEn != oldNotification.nameEn) {
-                isNameExist = eventAlarmsDao.isNotificationNameExist(entity.nameEn)
-            }
-            if (entity.days != oldNotification.days) {
-                isDaysExist = eventAlarmsDao.isNotificationDaysExist(entity.days)
-            }
-            if (isNameExist || isDaysExist) {
-                throw RuntimeException("This name or days already exists")
-            } else {
-                val dbEntity = AlarmMapper.mapEntityToDb(entity)
-                eventAlarmsDao.update(dbEntity)
-            }
-        }.onFailure { it.printStackTrace() }
-    }
-
-    override suspend fun deleteEventAlarm(entity: AlarmEntity): Result<Int> {
-        return runCatching {
-            val dbEntity = AlarmMapper.mapEntityToDb(entity)
-            eventAlarmsDao.delete(dbEntity)
-        }.onFailure { it.printStackTrace() }
-    }
-
-    override suspend fun getAllEventsAlarm(): Result<Flow<List<AlarmEntity>>> {
-        return runCatching {
-            eventAlarmsDao.getAllFlow().map {
-                AlarmMapper.mapDbListToList(it)
             }
         }.onFailure { it.printStackTrace() }
     }

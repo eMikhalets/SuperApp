@@ -10,5 +10,5 @@ data class AlarmDb(
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "enabled") val enabled: Boolean,
-    @ColumnInfo(name = "days") val days: Int,
+    @ColumnInfo(name = "milliseconds") val milliseconds: Long,
 )

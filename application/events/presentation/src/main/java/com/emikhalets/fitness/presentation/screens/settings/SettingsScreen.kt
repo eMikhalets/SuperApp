@@ -29,11 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.AlarmEntity
-import com.emikhalets.simpleevents.presentation.components.AppButton
-import com.emikhalets.simpleevents.presentation.components.AppIcon
-import com.emikhalets.simpleevents.presentation.components.AppIconButton
-import com.emikhalets.simpleevents.presentation.components.AppText
-import com.emikhalets.simpleevents.presentation.components.TimePicker
+import com.emikhalets.ui.component.AppButton
+import com.emikhalets.ui.component.AppIcon
+import com.emikhalets.ui.component.AppIconButton
+import com.emikhalets.ui.component.AppText
+import com.emikhalets.ui.component.TimePicker
 import com.emikhalets.simpleevents.presentation.components.dialogs.EditNotificationDialog
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppColors

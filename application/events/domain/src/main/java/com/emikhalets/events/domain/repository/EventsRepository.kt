@@ -1,40 +1,29 @@
 package com.emikhalets.events.domain.repository
 
-import android.net.Uri
-import com.emikhalets.events.domain.entity.AlarmEntity
+import com.emikhalets.common.AppResult
 import com.emikhalets.events.domain.entity.EventEntity
 import com.emikhalets.events.domain.entity.GroupEntity
 import kotlinx.coroutines.flow.Flow
 
 interface EventsRepository {
 
-    /** Backups */
+    suspend fun insertEvent(entity: EventEntity): AppResult<Long>
 
-    suspend fun importEvents(uri: Uri): Result<List<EventEntity>>
-    suspend fun exportEvents(uri: Uri, events: List<EventEntity>): Result<Boolean>
+    suspend fun insertEvents(entities: List<EventEntity>): AppResult<List<Long>>
 
-    /** Events Dao */
+    suspend fun updateEvent(entity: EventEntity): AppResult<Int>
 
-    suspend fun insertEvent(entity: EventEntity): Result<Long>
-    suspend fun updateEvent(entity: EventEntity): Result<Int>
-    suspend fun deleteEvent(entity: EventEntity): Result<Int>
-    suspend fun getAllEvents(): Result<Flow<List<EventEntity>>>
-    suspend fun getEventById(eventId: Long): Result<EventEntity>
-    suspend fun getEventsByGroup(entity: GroupEntity): Result<Flow<List<EventEntity>>>
+    suspend fun deleteEvent(entity: EventEntity): AppResult<Int>
 
-    /** Event Alarms Dao */
+    suspend fun getAllEventsFlow(): AppResult<Flow<List<EventEntity>>>
 
-    suspend fun insertEventAlarm(entity: AlarmEntity): Result<Long>
-    suspend fun insertEventAlarm(list: List<AlarmEntity>): Result<List<Long>>
-    suspend fun updateEventAlarm(entity: AlarmEntity): Result<Int>
-    suspend fun deleteEventAlarm(entity: AlarmEntity): Result<Int>
-    suspend fun getAllEventsAlarm(): Result<Flow<List<AlarmEntity>>>
+    suspend fun getEventById(eventId: Long): AppResult<EventEntity>
 
-    /** Event Groups Dao */
+    suspend fun getEventsByGroup(entity: GroupEntity): AppResult<Flow<List<EventEntity>>>
 
-    suspend fun insertGroup(entity: GroupEntity): Result<Long>
-    suspend fun updateGroup(entity: GroupEntity): Result<Int>
-    suspend fun deleteGroup(entity: GroupEntity): Result<Int>
-    suspend fun getAllGroups(): Result<Flow<List<GroupEntity>>>
-    suspend fun getGroupById(id: Long): Result<Flow<GroupEntity>>
+//    suspend fun insertGroup(entity: GroupEntity): Result<Long>
+//    suspend fun updateGroup(entity: GroupEntity): Result<Int>
+//    suspend fun deleteGroup(entity: GroupEntity): Result<Int>
+//    suspend fun getAllGroups(): Result<Flow<List<GroupEntity>>>
+//    suspend fun getGroupById(id: Long): Result<Flow<GroupEntity>>
 }

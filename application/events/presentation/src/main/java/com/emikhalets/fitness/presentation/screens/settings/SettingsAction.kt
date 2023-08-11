@@ -2,9 +2,9 @@ package com.emikhalets.simpleevents.presentation.screens.settings
 
 import android.net.Uri
 import com.emikhalets.simpleevents.domain.entity.AlarmEntity
-import com.emikhalets.simpleevents.utils.AppAction
+import com.emikhalets.ui.UiAction
 
-sealed class SettingsAction : AppAction {
+sealed class SettingsAction : UiAction {
     class ExportClick(val uri: Uri) : SettingsAction()
     class ImportClick(val uri: Uri) : SettingsAction()
     class SwitchAlarm(val entity: AlarmEntity, val enabled: Boolean) : SettingsAction()

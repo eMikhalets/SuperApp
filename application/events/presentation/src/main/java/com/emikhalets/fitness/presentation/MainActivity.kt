@@ -7,7 +7,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.simpleevents.presentation.components.AppScaffold
+import com.emikhalets.ui.component.AppScaffold
 import com.emikhalets.simpleevents.presentation.navigation.AppNavHost
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint

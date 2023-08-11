@@ -33,6 +33,7 @@ android {
 dependencies {
 
     implementation(project(":application:events:domain"))
+    implementation(project(":core:background"))
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
 

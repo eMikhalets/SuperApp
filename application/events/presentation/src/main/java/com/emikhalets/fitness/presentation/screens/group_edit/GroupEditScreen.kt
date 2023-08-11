@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.presentation.components.AppButton
-import com.emikhalets.simpleevents.presentation.components.AppTextField
+import com.emikhalets.ui.component.AppButton
+import com.emikhalets.ui.component.AppTextField
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 

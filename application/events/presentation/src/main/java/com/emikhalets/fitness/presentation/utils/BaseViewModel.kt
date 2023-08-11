@@ -2,6 +2,8 @@ package com.emikhalets.simpleevents.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emikhalets.ui.UiAction
+import com.emikhalets.ui.UiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,7 +17,7 @@ import kotlinx.coroutines.launch
 interface AppState
 interface AppAction
 
-abstract class BaseViewModel<S : AppState, A : AppAction> : ViewModel() {
+abstract class BaseViewModel<S : UiState, A : UiAction> : ViewModel() {
 
     private val initialState: S by lazy { createInitialState() }
 

@@ -6,6 +6,7 @@ androidxCore = '1.10.1'
 androidxDatastore = '1.0.0'
 androidxLifecycle = '2.6.1'
 androidxRoom = '2.5.2'
+androidxWork = '2.7.1'
 agp = "8.0.2"
 composeCompiler = "1.4.5"
 googleAccompanist = "0.30.1"
@@ -37,6 +38,8 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 google-accompanist-systemUi = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "googleAccompanist" }
 google-accompanist-insets = { group = "com.google.accompanist", name = "accompanist-insets", version.ref = "googleAccompanist" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
+google-accompanist = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "googleAccompanist" }
 google-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "googleHilt" }
 google-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "googleHilt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

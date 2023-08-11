@@ -1,9 +1,9 @@
 package com.emikhalets.simpleevents.presentation.screens.groups
 
 import com.emikhalets.simpleevents.domain.entity.GroupEntity
-import com.emikhalets.events.domain.use_case.groups.AddGroupUseCase
-import com.emikhalets.events.domain.use_case.groups.GetGroupsUseCase
-import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.events.domain.usecase.groups.AddGroupUseCase
+import com.emikhalets.events.domain.usecase.groups.GetGroupsUseCase
+import com.emikhalets.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject

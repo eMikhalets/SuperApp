@@ -4,24 +4,24 @@ import android.net.Uri
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.AlarmEntity
 import com.emikhalets.simpleevents.domain.usecase.alarms.AddAlarmUseCase
-import com.emikhalets.events.domain.use_case.alarms.DeleteAlarmUseCase
-import com.emikhalets.events.domain.use_case.alarms.GetAlarmsUseCase
-import com.emikhalets.events.domain.use_case.backups.ExportEventsUseCase
-import com.emikhalets.events.domain.use_case.backups.ImportEventsUseCase
-import com.emikhalets.events.domain.use_case.events.GetEventsUseCase
-import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.events.domain.usecase.alarms.AlarmsDeleteUseCase
+import com.emikhalets.events.domain.usecase.alarms.AlarmsGetUseCase
+import com.emikhalets.events.domain.usecase.backups.ExportEventsUseCase
+import com.emikhalets.events.domain.usecase.backups.ImportEventsUseCase
+import com.emikhalets.events.domain.usecase.events.EventsGetUseCase
+import com.emikhalets.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val getAlarmsUseCase: GetAlarmsUseCase,
+    private val getAlarmsUseCase: AlarmsGetUseCase,
     private val addAlarmsUseCase: AddAlarmUseCase,
-    private val deleteAlarmUseCase: DeleteAlarmUseCase,
+    private val deleteAlarmUseCase: AlarmsDeleteUseCase,
     private val importEventsUseCase: ImportEventsUseCase,
     private val exportEventsUseCase: ExportEventsUseCase,
-    private val getEventsUseCase: GetEventsUseCase,
+    private val getEventsUseCase: EventsGetUseCase,
 ) : BaseViewModel<SettingsState, SettingsAction>() {
 
     override fun createInitialState(): SettingsState = SettingsState()
