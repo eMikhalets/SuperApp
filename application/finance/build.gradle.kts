@@ -6,11 +6,12 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.core.network"
+    namespace = "com.emikhalets.finance"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
         minSdk = rootProject.extra["minSdk"] as Int
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -20,14 +21,25 @@ android {
     kotlinOptions {
         jvmTarget = rootProject.extra["java"].toString()
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
 
     implementation(project(":core:common"))
-
-    api(libs.jsoup)
+    implementation(project(":core:navigation"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

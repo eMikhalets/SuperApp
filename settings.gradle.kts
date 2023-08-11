@@ -27,6 +27,7 @@ include(":app")
 
 include(":application:convert")
 //include(":application:fitness")
+include(":application:finance")
 include(":application:notes")
 
 include(":core:common")
@@ -40,4 +41,5 @@ include(":core:ui")
 include(":feature:currencies_convert")
 include(":feature:notes")
 include(":feature:tasks")
+include(":feature:transactions")
 //include(":feature:workout")

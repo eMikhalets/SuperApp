@@ -32,7 +32,7 @@ private fun NavHostController.navigateApp(type: ApplicationEntity) {
     when (type) {
         ApplicationEntity.Convert -> navigate(AppConvertDestination.NavGraph)
         ApplicationEntity.Events -> Unit
-        ApplicationEntity.Finances -> Unit
+        ApplicationEntity.Finance -> Unit
         ApplicationEntity.Fitness -> Unit //navigate(AppFitnessDestination.NavGraph)
         ApplicationEntity.MediaLib -> Unit
         ApplicationEntity.Notes -> navigate(AppNotesDestination.NavGraph)

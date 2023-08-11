@@ -16,7 +16,7 @@ sealed class ApplicationEntity(
     object Events : ApplicationEntity(R.string.application_events)
 
     @Immutable
-    object Finances : ApplicationEntity(R.string.application_finances)
+    object Finance : ApplicationEntity(R.string.application_finances)
 
     @Immutable
     object Fitness : ApplicationEntity(R.string.application_fitness)
@@ -33,7 +33,7 @@ sealed class ApplicationEntity(
             val list = mutableListOf<ApplicationEntity>()
             if (Convert.isVisible()) list.add(Convert)
             if (Events.isVisible()) list.add(Events)
-            if (Finances.isVisible()) list.add(Finances)
+            if (Finance.isVisible()) list.add(Finance)
             if (Fitness.isVisible()) list.add(Fitness)
             if (MediaLib.isVisible()) list.add(MediaLib)
             if (Notes.isVisible()) list.add(Notes)
@@ -46,7 +46,7 @@ fun ApplicationEntity.isEnabled(): Boolean {
     return when (this) {
         ApplicationEntity.Convert -> true
         ApplicationEntity.Events -> false
-        ApplicationEntity.Finances -> false
+        ApplicationEntity.Finance -> false
         ApplicationEntity.Fitness -> false
         ApplicationEntity.MediaLib -> false
         ApplicationEntity.Notes -> true
@@ -57,7 +57,7 @@ fun ApplicationEntity.isVisible(): Boolean {
     return when (this) {
         ApplicationEntity.Convert -> true
         ApplicationEntity.Events -> true
-        ApplicationEntity.Finances -> true
+        ApplicationEntity.Finance -> true
         ApplicationEntity.Fitness -> true
         ApplicationEntity.MediaLib -> true
         ApplicationEntity.Notes -> true

@@ -6,11 +6,12 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.core.ui"
+    namespace = "com.emikhalets.feature.finance_summary"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {
         minSdk = rootProject.extra["minSdk"] as Int
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -31,20 +32,17 @@ android {
 dependencies {
 
     implementation(project(":core:common"))
+    implementation(project(":core:database"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:navigation"))
-
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
-    api(libs.androidx.compose.ui)
-    api(libs.androidx.compose.ui.graphics)
-    api(libs.androidx.compose.ui.tooling)
-    api(libs.androidx.compose.ui.tooling.preview)
-    api(libs.androidx.compose.material)
-    api(libs.androidx.compose.material.icons)
-    api(libs.androidx.compose.material.icons.ext)
-
-    api(libs.google.accompanist.insets)
+    implementation(project(":core:network"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
