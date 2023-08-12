@@ -25,7 +25,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
     }
 }
 
@@ -37,7 +37,7 @@ dependencies {
     kapt(libs.google.hilt.compiler)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.compose.ui.test.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

@@ -1,6 +1,6 @@
 ext {
-    extra["compileSdk"] = 33
-    extra["targetSdk"] = 33
+    extra["compileSdk"] = 34
+    extra["targetSdk"] = 34
     extra["minSdk"] = 26
     extra["versionCode"] = 1
     extra["versionName"] = "1.0.2"

@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Task
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,37 +24,37 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.convert.AppConvertDestination
-import com.emikhalets.convert.applicationConvertBottomBar
-import com.emikhalets.core.common.classNames
-import com.emikhalets.core.common.logi
-import com.emikhalets.core.navigation.AppBottomBarItem
-import com.emikhalets.core.ui.BoxPreview
+import com.emikhalets.convert.navigation.AppConvertRoute
+import com.emikhalets.convert.navigation.appConvertBottomBar
+import com.emikhalets.core.ui.BottomBarModel
+import com.emikhalets.core.ui.extentions.BoxPreview
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.notes.AppNotesDestination
-import com.emikhalets.notes.applicationNotesBottomBar
-import com.emikhalets.superapp.navigation.AppMainDestination
+import com.emikhalets.events.navigation.AppEventsRoute
+import com.emikhalets.events.navigation.appEventsBottomBar
+import com.emikhalets.finance.navigation.AppFinanceRoute
+import com.emikhalets.finance.navigation.appFinanceBottomBar
+import com.emikhalets.fitness.navigation.AppFitnessRoute
+import com.emikhalets.fitness.navigation.appFitnessBottomBar
+import com.emikhalets.medialib.navigation.AppMediaLibRoute
+import com.emikhalets.medialib.navigation.appMediaLibBottomBar
+import com.emikhalets.notes.navigation.AppNotesRoute
+import com.emikhalets.notes.navigation.appNotesBottomBar
 import com.emikhalets.superapp.navigation.AppNavHost
-
-private const val TAG = "App"
+import com.emikhalets.superapp.navigation.AppRoute
+import com.emikhalets.superapp.navigation.appBottomBar
 
 @Composable
-fun AppScreen() {
-    logi(TAG, "Invoke")
-
-    val navController = rememberNavController()
-    val scaffoldState = rememberScaffoldState()
-
+fun AppScreen(navController: NavHostController) {
     Scaffold(
-        scaffoldState = scaffoldState,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.surface,
         bottomBar = { AppBottomBarBox(navController) },
-        modifier = Modifier.safeDrawingPadding()
-    ) {
-        Box(modifier = Modifier.padding(it)) {
-            AppNavHost(navController = navController)
+        modifier = Modifier.safeDrawingPadding(),
+        content = {
+            Box(modifier = Modifier.padding(it)) {
+                AppNavHost(navController = navController)
+            }
         }
-    }
+    )
 }
 
 @Composable
@@ -63,31 +62,17 @@ private fun AppBottomBarBox(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val bottomBarItems = remember { mutableStateListOf<AppBottomBarItem>() }
+    val bottomBarItems = remember { mutableStateListOf<BottomBarModel>() }
 
     LaunchedEffect(navBackStackEntry) {
         when (navBackStackEntry?.destination?.route) {
-            AppMainDestination.Main -> {
-                if (bottomBarItems.isNotEmpty()) bottomBarItems.clear()
-            }
-
-            AppConvertDestination.BottomBarTrigger -> {
-                if (bottomBarItems != applicationConvertBottomBar) {
-                    bottomBarItems.clear()
-                    bottomBarItems.addAll(applicationConvertBottomBar)
-                }
-            }
-
-//            AppFitnessDestination.BottomBarTrigger -> {
-//                if (bottomBarItems.isNotEmpty()) bottomBarItems.clear()
-//            }
-
-            AppNotesDestination.BottomBarTrigger -> {
-                if (bottomBarItems != applicationNotesBottomBar) {
-                    bottomBarItems.clear()
-                    bottomBarItems.addAll(applicationNotesBottomBar)
-                }
-            }
+            AppRoute.BottomBarTrigger -> bottomBarItems.update(appBottomBar)
+            AppConvertRoute.BottomBarTrigger -> bottomBarItems.update(appConvertBottomBar)
+            AppEventsRoute.BottomBarTrigger -> bottomBarItems.update(appEventsBottomBar)
+            AppFinanceRoute.BottomBarTrigger -> bottomBarItems.update(appFinanceBottomBar)
+            AppFitnessRoute.BottomBarTrigger -> bottomBarItems.update(appFitnessBottomBar)
+            AppMediaLibRoute.BottomBarTrigger -> bottomBarItems.update(appMediaLibBottomBar)
+            AppNotesRoute.BottomBarTrigger -> bottomBarItems.update(appNotesBottomBar)
         }
     }
 
@@ -104,16 +89,12 @@ private fun AppBottomBarBox(navController: NavHostController) {
 private fun AppBottomBar(
     navController: NavHostController,
     currentDestination: NavDestination?,
-    bottomBarItems: List<AppBottomBarItem>,
+    bottomBarItems: List<BottomBarModel>,
 ) {
-    logi("$TAG.AppBottomBar", "Invoke: items = ${bottomBarItems.classNames}")
-
     BottomNavigation {
         bottomBarItems.forEach { item ->
             BottomNavigationItem(
                 icon = { Icon(imageVector = item.icon, contentDescription = null) },
-                selectedContentColor = MaterialTheme.colors.onPrimary,
-                unselectedContentColor = MaterialTheme.colors.onSecondary,
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = {
                     if (item.route != currentDestination?.route) {
@@ -129,6 +110,16 @@ private fun AppBottomBar(
     }
 }
 
+private fun MutableList<BottomBarModel>.update(items: List<BottomBarModel>) {
+    when {
+        items.isEmpty() -> this.clear()
+        this != items -> {
+            this.clear()
+            this.addAll(items)
+        }
+    }
+}
+
 @BoxPreview
 @Composable
 private fun PreviewBottomBar() {
@@ -137,9 +128,9 @@ private fun PreviewBottomBar() {
             navController = rememberNavController(),
             currentDestination = rememberNavController().currentDestination,
             bottomBarItems = listOf(
-                AppBottomBarItem.getInstance("tasks", Icons.Rounded.Task),
-                AppBottomBarItem.getInstance("notes", Icons.Rounded.EditNote),
-                AppBottomBarItem.getInstance("settings", Icons.Rounded.Settings),
+                BottomBarModel("tasks", Icons.Rounded.Task),
+                BottomBarModel("notes", Icons.Rounded.EditNote),
+                BottomBarModel("settings", Icons.Rounded.Settings),
             ),
         )
     }

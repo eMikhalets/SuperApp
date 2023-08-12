@@ -1,19 +1,14 @@
 package com.emikhalets.superapp
 
 import android.app.Application
-import com.emikhalets.core.common.logi
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        logi(TAG, "Created")
-    }
-
-    companion object {
-
-        private const val TAG = "App"
+        Timber.plant(Timber.DebugTree())
     }
 }

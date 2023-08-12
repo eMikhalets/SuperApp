@@ -76,7 +76,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
     }
     packaging {
         resources {
@@ -86,6 +86,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":application:convert"))
+    implementation(project(":application:events"))
+    implementation(project(":application:finance"))
+    implementation(project(":application:fitness"))
+    implementation(project(":application:medialib"))
+    implementation(project(":application:notes"))
     implementation(project(":core"))
 
     implementation(libs.google.hilt.android)
