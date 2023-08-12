@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.emikhalets.convert.AppConvertDestination
 import com.emikhalets.convert.applicationConvertGraph
-import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.oldcode.ui.ApplicationEntity
 import com.emikhalets.notes.AppNotesDestination
 import com.emikhalets.notes.applicationNotesGraph
 import com.emikhalets.superapp.screen.MainScreen

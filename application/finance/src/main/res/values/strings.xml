@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_currencies_convert_add">Add currency</string>
+    <string name="feature_currencies_convert_code_help">Currency code, like USB, RUB…</string>
+    <string name="feature_currencies_convert_old_values">Calculation of currencies is carried out at outdated exchange rates - %s</string>
+    <string name="feature_currencies_convert_valid_values">Exchange rates are valid for %s</string>
+
+    <string name="error_internal">Произошла непредвиденная ошибка</string>
+    <string name="error_delete_default_category">Нельзя удалить категорию по умолчанию</string>
+    <string name="error_delete_default_wallet">Нельзя удалить кошелек по умолчанию</string>
+    <string name="error_delete_default_currency">Нельзя удалить валюту по умолчанию</string>
+
+    <!--  Screen titles  -->
+    <string name="title_transactions">Транзакции</string>
+    <string name="title_categories">Категории</string>
+    <string name="title_wallets">Кошельки</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_category_edit">Редактирование</string>
+    <string name="title_wallet_edit">Редактирование</string>
+    <string name="title_currency_edit">Редактирование</string>
+    <string name="title_transaction_edit">Редактирование</string>
+
+    <!--  Dialogs  -->
+    <string name="dialog_ok">OK</string>
+
+    <!--  Transactions Screen  -->
+    <string name="transactions_income">Доходы</string>
+    <string name="transactions_expenses">Расходы</string>
+    <string name="transactions_total">Итого</string>
+
+    <!--  Main Screen  -->
+    <string name="main_categories">Категории</string>
+    <string name="main_wallets">Кошельки</string>
+    <string name="main_currencies">Валюты</string>
+    <string name="main_expenses">Расходы</string>
+    <string name="main_incomes">Доходы</string>
+    <string name="main_last_transactions">Последние транзакции</string>
+
+    <!--  Categories Screen  -->
+    <string name="categories_expenses_tab">Расходы</string>
+    <string name="categories_incomes_tab">Доходы</string>
+    <string name="categories_add_new">Добавить</string>
+
+    <!--  Wallets Screen  -->
+    <string name="wallets_header">Кошельки</string>
+    <string name="wallets_add">Добавить</string>
+    <string name="wallets_delete">Удалить</string>
+</resources>

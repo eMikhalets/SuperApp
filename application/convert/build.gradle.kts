@@ -31,10 +31,7 @@ android {
 
 dependencies {
 
-    implementation(project(":feature:currencies_convert"))
-    implementation(project(":core:common"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:ui"))
+    implementation(project(":core"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

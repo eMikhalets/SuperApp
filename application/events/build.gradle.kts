@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.fitness"
+    namespace = "com.emikhalets.events"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     defaultConfig {

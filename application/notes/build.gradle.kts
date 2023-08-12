@@ -31,12 +31,13 @@ android {
 
 dependencies {
 
-    implementation(project(":feature:notes"))
-    implementation(project(":feature:tasks"))
-    implementation(project(":core:common"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:ui"))
+    implementation(project(":core"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

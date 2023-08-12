@@ -30,16 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.core.common.classNames
 import com.emikhalets.core.common.logi
-import com.emikhalets.core.ui.ApplicationEntity
+import com.emikhalets.core.oldcode.ui.ApplicationEntity
 import com.emikhalets.core.ui.ScreenPreview
 import com.emikhalets.core.ui.component.AppCard
 import com.emikhalets.core.ui.getIcon
 import com.emikhalets.core.ui.getName
-import com.emikhalets.core.ui.isEnabled
-import com.emikhalets.core.ui.isVisible
+import com.emikhalets.core.oldcode.ui.isEnabled
+import com.emikhalets.core.oldcode.ui.isVisible
 import com.emikhalets.core.ui.theme.AppTheme
-import com.emikhalets.core.ui.theme.text
-import com.emikhalets.core.ui.theme.textHeader
+import com.emikhalets.core.oldcode.ui.theme.text
+import com.emikhalets.core.oldcode.ui.theme.textHeader
 import com.emikhalets.superapp.R
 
 private const val TAG = "Main"
