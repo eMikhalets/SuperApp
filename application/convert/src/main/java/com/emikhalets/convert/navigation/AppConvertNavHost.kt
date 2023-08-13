@@ -1,19 +1,21 @@
 package com.emikhalets.convert.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.emikhalets.convert.presentation.screens.AppConvertScreen
+import com.emikhalets.convert.presentation.screens.CurrenciesScreen
 import com.emikhalets.core.ui.BottomBarModel
 
 val appConvertBottomBar: List<BottomBarModel> = listOf()
 
 fun NavGraphBuilder.appConvertNavGraph(navController: NavHostController) {
-    navigation(AppConvertRoute.Root, AppConvertRoute.NavGraph) {
-        composable(AppConvertRoute.Root) {
-            AppConvertScreen(
-                onBackClick = navController::popBackStack
+    navigation(AppConvertRoute.Currencies, AppConvertRoute.NavGraph) {
+        composable(AppConvertRoute.Currencies) {
+            CurrenciesScreen(
+                navigateBack = navController::popBackStack,
+                viewModel = hiltViewModel(),
             )
         }
     }

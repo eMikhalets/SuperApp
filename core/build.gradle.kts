@@ -46,6 +46,7 @@ dependencies {
     api(platform(libs.androidx.compose.bom))
 
     api(libs.androidx.core)
+    api(libs.androidx.hilt.navigation)
     api(libs.androidx.navigation.compose)
     api(libs.jakewharton.timber)
     debugApi(libs.androidx.compose.ui.tooling)
