@@ -1,6 +1,7 @@
 <resources>
-    <string name="feature_currencies_convert_add">Add currency</string>
-    <string name="feature_currencies_convert_code_help">Currency code, like USB, RUB…</string>
-    <string name="feature_currencies_convert_old_values">Calculation of currencies is carried out at outdated exchange rates - %s</string>
-    <string name="feature_currencies_convert_valid_values">Exchange rates are valid for %s</string>
+    <string name="app_convert_title">Converting</string>
+    <string name="app_convert_code_help">Currency code, like USB, RUB…</string>
+    <string name="app_convert_convert_add">Add currency</string>
+    <string name="app_convert_convert_old_values">Calculation of currencies is carried out at outdated exchange rates - %s</string>
+    <string name="app_convert_convert_valid_values">Exchange rates are valid for %s</string>
 </resources>

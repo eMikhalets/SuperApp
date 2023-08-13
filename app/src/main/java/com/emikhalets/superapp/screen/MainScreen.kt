@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.core.ui.components.AppHeaderCardColumn
+import com.emikhalets.core.ui.component.AppHeaderCardColumn
 import com.emikhalets.core.ui.extentions.ScreenPreview
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.superapp.ApplicationType

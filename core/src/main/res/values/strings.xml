@@ -1,3 +1,5 @@
 <resources>
+    <string name="core_common_ok">OK</string>
+    <string name="core_common_error">Error</string>
     <string name="core_common_error_internal">Internal error!</string>
 </resources>

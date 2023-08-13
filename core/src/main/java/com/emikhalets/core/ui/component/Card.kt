@@ -1,4 +1,4 @@
-package com.emikhalets.core.ui.components
+package com.emikhalets.core.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -17,7 +17,7 @@ import com.emikhalets.core.ui.extentions.BoxPreview
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
-private fun AppCard(
+fun AppCard(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
