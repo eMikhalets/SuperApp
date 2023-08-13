@@ -165,7 +165,7 @@ private fun CurrenciesList(
                         fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
+                            .weight(2f)
                     )
                     Text(
                         text = formatValue(value),
@@ -195,7 +195,10 @@ private fun BaseCurrencyBox(
         CurrenciesChooser(
             currencies = currencies,
             baseCode = baseCode,
-            onBaseCodeClick = onBaseCodeClick,
+            onBaseCodeClick = {
+                onBaseCodeClick(it)
+                onBaseValueChange("")
+            },
             modifier = Modifier.fillMaxSize()
         )
         OutlinedTextField(
@@ -249,7 +252,6 @@ private fun CurrenciesChooser(
 private fun formatValue(value: Long): String {
     val firstPart = value / 100
     val secondPart = value % 100
-    val valueText = value.toString()
     return "$firstPart.$secondPart"
 }
 

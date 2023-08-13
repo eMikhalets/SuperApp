@@ -1,5 +1,6 @@
 package com.emikhalets.core.ui.component
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
@@ -13,7 +14,7 @@ fun LinearLoader(
     visible: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    LinearProgressIndicator(modifier = modifier)
+    LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 }
 
 @Preview(showBackground = true)

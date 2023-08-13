@@ -60,17 +60,17 @@ fun NewCurrencyBox(
                 imageVector = Icons.Rounded.Save,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(8.dp)
                     .size(24.dp)
                     .clickable { onSaveClick(code) }
+                    .padding(8.dp)
             )
             Icon(
                 imageVector = Icons.Rounded.Close,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(8.dp)
                     .size(32.dp)
                     .clickable { onVisibleChange(false) }
+                    .padding(8.dp)
             )
         }
     }

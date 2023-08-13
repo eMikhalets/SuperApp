@@ -20,7 +20,7 @@ class ConvertCurrencyUseCase @Inject constructor() {
                         ?.let { Pair(pair.first, it.calculate(baseCode, baseValue)) }
                         ?: Pair(pair.first, 0)
                 } else {
-                    pair
+                    Pair(pair.first, baseValue)
                 }
             }
         }

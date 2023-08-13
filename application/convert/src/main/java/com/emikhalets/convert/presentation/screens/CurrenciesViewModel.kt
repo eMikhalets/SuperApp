@@ -40,9 +40,6 @@ class CurrenciesViewModel @Inject constructor(
 
     init {
         launch {
-            getExchangesDateUseCase()
-                .catch { setFailureState(it) }
-                .collectLatest { setExchangesDateState(it) }
             getCurrenciesUseCase()
                 .catch { setFailureState(it) }
                 .collectLatest { setCurrenciesState(it) }
@@ -50,6 +47,9 @@ class CurrenciesViewModel @Inject constructor(
                 .onEach { setState { it.copy(isLoading = true) } }
                 .catch { setFailureState(it) }
                 .collectLatest { setExchangesState(it) }
+            getExchangesDateUseCase()
+                .catch { setFailureState(it) }
+                .collectLatest { setExchangesDateState(it) }
         }
     }
 
