@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -65,8 +65,11 @@ private fun ScreenContent(
     onActionSent: (Action) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    ChildScreenColumn(R.string.app_convert_title) {
-        FloatingButtonBox(onClick = { onActionSent(Action.Input.NewCurrencyVisible(true)) }) {
+    ChildScreenColumn(R.string.app_convert_title, onBackClick) {
+        FloatingButtonBox(
+            onClick = { onActionSent(Action.Input.NewCurrencyVisible(true)) },
+            modifier = Modifier.weight(1f)
+        ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 ExchangesDateBox(
                     timestamp = state.date,
@@ -82,17 +85,17 @@ private fun ScreenContent(
                         .fillMaxSize()
                         .weight(1f)
                 )
-                BaseCurrencyBox(
-                    currencies = state.currencies,
-                    baseCode = state.baseCode,
-                    baseValue = state.baseValue,
-                    onAddCurrencyClick = { onActionSent(Action.AddCurrency) },
-                    onBaseCodeClick = { onActionSent(Action.Input.BaseCurrencyClick(it)) },
-                    onBaseCodeChange = { onActionSent(Action.Input.BaseCurrencyChange(it)) },
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
+        BaseCurrencyBox(
+            currencies = state.currencies,
+            baseCode = state.baseCode,
+            baseValue = state.baseValue,
+            onAddCurrencyClick = { onActionSent(Action.AddCurrency) },
+            onBaseCodeClick = { onActionSent(Action.Input.BaseCodeClick(it)) },
+            onBaseValueChange = { onActionSent(Action.Input.BaseValueChange(it)) },
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 
     NewCurrencyBox(
@@ -145,24 +148,31 @@ private fun CurrenciesList(
 ) {
     Column(modifier = modifier) {
         LinearLoader(visible = isLoading)
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
             items(currencies, key = { it.first }) { (code, value) ->
-                AppSwipeToDelete(onLeftSwiped = { onCurrencyDeleteClick(code) }) {
+                AppSwipeToDelete(
+                    onDeleteClick = { onCurrencyDeleteClick(code) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     val isBase = code == baseCode
                     Text(
                         text = "$code :",
-                        fontSize = 20.sp,
-                        fontWeight = if (isBase) FontWeight.SemiBold else FontWeight.Normal,
+                        fontSize = 24.sp,
+                        fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                     )
                     Text(
-                        text = value.toString(),
-                        fontSize = 20.sp,
+                        text = formatValue(value),
+                        fontSize = 24.sp,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(2f)
+                            .weight(3f)
                     )
                 }
             }
@@ -176,7 +186,7 @@ private fun BaseCurrencyBox(
     baseValue: String,
     baseCode: String,
     onBaseCodeClick: (String) -> Unit,
-    onBaseCodeChange: (String) -> Unit,
+    onBaseValueChange: (String) -> Unit,
     onAddCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -190,7 +200,7 @@ private fun BaseCurrencyBox(
         )
         OutlinedTextField(
             value = baseValue,
-            onValueChange = { onBaseCodeChange(it) },
+            onValueChange = { onBaseValueChange(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = CurrencyVisualTransformation(),
             modifier = Modifier
@@ -212,24 +222,35 @@ private fun CurrenciesChooser(
     modifier: Modifier = Modifier,
 ) {
     FlowRow(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp, 2.dp)
     ) {
         currencies.forEach { (code, _) ->
             val backColor = if (code == baseCode) {
-                MaterialTheme.colors.secondary.copy(alpha = 0.3f)
-            } else {
                 MaterialTheme.colors.secondary.copy(alpha = 0.7f)
+            } else {
+                MaterialTheme.colors.secondary.copy(alpha = 0.3f)
             }
             Text(
                 text = code,
+                fontSize = 12.sp,
+                fontWeight = if (code == baseCode) FontWeight.SemiBold else FontWeight.Normal,
                 modifier = Modifier
-                    .padding(4.dp)
-                    .background(backColor, CircleShape)
+                    .padding(4.dp, 2.dp)
+                    .background(backColor, RoundedCornerShape(40))
                     .padding(4.dp)
                     .clickable { onBaseCodeClick(code) }
             )
         }
     }
+}
+
+private fun formatValue(value: Long): String {
+    val firstPart = value / 100
+    val secondPart = value % 100
+    val valueText = value.toString()
+    return "$firstPart.$secondPart"
 }
 
 @ScreenPreview

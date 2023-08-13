@@ -17,8 +17,8 @@ object CurrenciesContract {
         class DeleteCurrency(val code: String) : Action()
 
         sealed class Input : Action() {
-            class BaseCurrencyClick(val code: String) : Input()
-            class BaseCurrencyChange(val value: String) : Input()
+            class BaseCodeClick(val code: String) : Input()
+            class BaseValueChange(val value: String) : Input()
             class NewCurrencyChange(val value: String) : Input()
             class NewCurrencyVisible(val visible: Boolean) : Input()
         }

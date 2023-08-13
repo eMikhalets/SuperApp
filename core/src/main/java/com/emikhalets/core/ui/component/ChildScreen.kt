@@ -11,17 +11,15 @@ import androidx.compose.ui.res.stringResource
 @Composable
 fun ChildScreenColumn(
     @StringRes titleRes: Int,
-    modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    ChildScreenColumn(stringResource(titleRes), modifier, onBackClick, content)
+    ChildScreenColumn(stringResource(titleRes), onBackClick, content)
 }
 
 @Composable
 fun ChildScreenColumn(
     title: String,
-    modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {

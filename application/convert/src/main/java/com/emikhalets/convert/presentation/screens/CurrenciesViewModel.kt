@@ -62,8 +62,8 @@ class CurrenciesViewModel @Inject constructor(
             is Action.DeleteCurrency -> deleteCurrency(action.code)
             is Action.Input -> {
                 when (action) {
-                    is Action.Input.BaseCurrencyClick -> setBaseCode(action.code)
-                    is Action.Input.BaseCurrencyChange -> setBaseValue(action.value)
+                    is Action.Input.BaseCodeClick -> setBaseCode(action.code)
+                    is Action.Input.BaseValueChange -> setBaseValue(action.value)
                     is Action.Input.NewCurrencyChange -> setNewCurrencyCode(action.value)
                     is Action.Input.NewCurrencyVisible -> setNewCurrencyVisible(action.visible)
                 }

@@ -34,7 +34,9 @@ private fun AppTopBarIcon(onBackClick: () -> Unit) {
     Icon(
         imageVector = Icons.Rounded.ArrowBack,
         contentDescription = null,
-        modifier = Modifier.clickable { onBackClick() }
+        modifier = Modifier
+            .clickable { onBackClick() }
+            .padding(8.dp)
     )
 }
 
@@ -44,6 +46,7 @@ private fun Preview() {
     AppTheme {
         AppTopBar(
             title = "Test title",
+            onBackClick = {},
             modifier = Modifier.padding(16.dp)
         )
     }

@@ -15,9 +15,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FloatingButtonBox(
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         content()
         FloatingActionButton(
             onClick = onClick,
