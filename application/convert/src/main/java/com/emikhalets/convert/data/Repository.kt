@@ -1,22 +1,25 @@
 package com.emikhalets.convert.data
 
-import com.emikhalets.core.database.finance.FinanceLocalDataSource
-import com.emikhalets.core.database.finance.table_convert_currencies.ConvertCurrencyDb
-import com.emikhalets.core.database.finance.table_exchanges.ExchangeDb
-import com.emikhalets.core.datastore.FinancePrefsDataSource
-import com.emikhalets.core.network.CurrencyRemoteDataSource
 import com.emikhalets.convert.domain.model.CurrencyModel
+import com.emikhalets.convert.domain.model.CurrencyModel.Companion.toDb
+import com.emikhalets.convert.domain.model.CurrencyModel.Companion.toModelFlow
 import com.emikhalets.convert.domain.model.ExchangeModel
+import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toDb
+import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toDbList
+import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toModelFlow
 import com.emikhalets.convert.domain.model.filterNeedUpdate
-import com.emikhalets.feature.currencies_convert.data.toDb
-import com.emikhalets.feature.currencies_convert.data.toDbList
+import com.emikhalets.core.database.convert.CurrenciesLocalDataSource
+import com.emikhalets.core.database.convert.table_currencies.CurrencyDb
+import com.emikhalets.core.database.convert.table_exchanges.ExchangeDb
+import com.emikhalets.core.datastore.convert.FinancePrefsDataSource
+import com.emikhalets.core.network.CurrencyRemoteDataSource
 import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 
 class Repository @Inject constructor(
-    private val localDataSource: FinanceLocalDataSource,
+    private val localDataSource: CurrenciesLocalDataSource,
     private val remoteDataSource: CurrencyRemoteDataSource,
     private val financePrefsSource: FinancePrefsDataSource,
 ) {
@@ -67,7 +70,7 @@ class Repository @Inject constructor(
         return first().copy(code = "${first().code}$code")
     }
 
-    private fun List<ConvertCurrencyDb>.createNewExchanges(code: String): List<ExchangeDb> {
+    private fun List<CurrencyDb>.createNewExchanges(code: String): List<ExchangeDb> {
         return dropLast(1).map { ExchangeModel(it.code, code).toDb() }
     }
 

@@ -2,7 +2,10 @@ package com.emikhalets.convert.domain.model
 
 import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
+import com.emikhalets.core.database.convert.table_exchanges.ExchangeDb
 import java.util.Date
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 data class ExchangeModel(
     val id: Long,
@@ -44,6 +47,43 @@ data class ExchangeModel(
             main -> (value * this.value).toLong()
             secondary -> (value * (1 / this.value)).toLong()
             else -> 0
+        }
+    }
+
+    companion object {
+
+        fun ExchangeModel.toDb(): ExchangeDb {
+            return ExchangeDb(
+                id = id,
+                code = code,
+                value = value,
+                date = date
+            )
+        }
+
+        fun List<ExchangeModel>.toDbList(): List<ExchangeDb> {
+            return map { it.toDb() }
+        }
+
+        fun Flow<List<ExchangeModel>>.toDbFlow(): Flow<List<ExchangeDb>> {
+            return map { it.toDbList() }
+        }
+
+        fun ExchangeDb.toModel(): ExchangeModel {
+            return ExchangeModel(
+                id = id,
+                code = code,
+                value = value,
+                date = date
+            )
+        }
+
+        fun List<ExchangeDb>.toModelList(): List<ExchangeModel> {
+            return map { it.toModel() }
+        }
+
+        fun Flow<List<ExchangeDb>>.toModelFlow(): Flow<List<ExchangeModel>> {
+            return map { it.toModelList() }
         }
     }
 }
