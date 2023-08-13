@@ -8,8 +8,8 @@ import com.emikhalets.core.common.StringEmpty
 
 sealed class StringValue {
 
-    data object Empty : StringValue()
-    data object InternalError : StringValue()
+    object Empty : StringValue()
+    object InternalError : StringValue()
     class Message(val text: String?) : StringValue()
     class Error(val throwable: Throwable) : StringValue()
     class Resource(val resId: Int, vararg val args: Any) : StringValue()

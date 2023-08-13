@@ -10,14 +10,14 @@ interface AppDao<T> {
     suspend fun insert(item: T): Long
 
     @Insert
-    suspend fun insert(list: List<T>)
+    suspend fun insert(list: List<T>): List<Long>
 
     @Update
-    suspend fun update(item: T)
+    suspend fun update(item: T): Int
 
     @Update
-    suspend fun update(list: List<T>)
+    suspend fun update(list: List<T>): Int
 
     @Delete
-    suspend fun delete(item: T)
+    suspend fun delete(item: T): Int
 }

@@ -39,22 +39,20 @@ dependencies {
     implementation(libs.androidx.work.runtime)
     implementation(libs.google.hilt.android)
     implementation(libs.jsoup)
+    implementation(libs.bundles.androidx.room)
 
     kapt(libs.androidx.room.compiler)
     kapt(libs.google.hilt.compiler)
 
     api(platform(libs.androidx.compose.bom))
-
     api(libs.androidx.core)
     api(libs.androidx.hilt.navigation)
     api(libs.androidx.navigation.compose)
     api(libs.jakewharton.timber)
     debugApi(libs.androidx.compose.ui.tooling)
-
     api(libs.bundles.androidx.compose)
     api(libs.bundles.androidx.coroutines)
     api(libs.bundles.androidx.lifecycle)
-    api(libs.bundles.androidx.room)
     api(libs.bundles.google.accompanist)
 
     testImplementation(libs.junit)

@@ -21,7 +21,7 @@ class CurrenciesLocalDataSource @Inject constructor(
     }
 
     suspend fun updateExchanges(list: List<ExchangeDb>) {
-        return exchangesDao.update(list)
+        exchangesDao.update(list)
     }
 
     suspend fun isCurrencyExist(code: String): Boolean {

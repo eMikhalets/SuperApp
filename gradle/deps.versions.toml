@@ -1,9 +1,9 @@
 [versions]
 # General
 agp = "8.1.0"
-kotlin = "1.9.0"
+kotlin = "1.8.22"
 androidxCore = '1.10.1'
-androidxCompose = "1.5.1"
+androidxCompose = "1.4.8"
 androidxComposeBom = '2023.08.00'
 androidxDatastore = '1.0.0'
 androidxHiltNavigation = '1.0.0'

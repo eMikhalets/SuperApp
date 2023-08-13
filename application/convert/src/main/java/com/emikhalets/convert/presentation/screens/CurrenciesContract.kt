@@ -12,8 +12,8 @@ object CurrenciesContract {
     @Immutable
     sealed class Action : UiAction {
 
-        data object AddCurrency : Action()
-        data object DropError : Action()
+        object AddCurrency : Action()
+        object DropError : Action()
         class DeleteCurrency(val code: String) : Action()
 
         sealed class Input : Action() {
