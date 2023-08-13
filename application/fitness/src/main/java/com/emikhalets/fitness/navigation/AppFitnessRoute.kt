@@ -3,6 +3,6 @@ package com.emikhalets.fitness.navigation
 object AppFitnessRoute {
 
     const val NavGraph: String = "app_fitness_graph"
-    const val Programs: String = "app_fitness_programs"
-    const val BottomBarTrigger: String = Programs
+    internal const val Root: String = "app_fitness_root"
+    const val BottomBarTrigger: String = Root
 }

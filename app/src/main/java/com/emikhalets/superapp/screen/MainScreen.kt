@@ -4,14 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -62,16 +61,15 @@ private fun ScreenContent(
             header = stringResource(R.string.app_applications),
             content = { ApplicationsBox(applications, onApplicationClick) },
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(bottom = 8.dp)
                 .padding(horizontal = 8.dp)
-                .weight(1f)
         )
     }
 }
 
 @Composable
-private fun ColumnScope.WidgetsBox(
+private fun WidgetsBox(
     modifier: Modifier = Modifier,
 ) {
     Text(
@@ -81,19 +79,20 @@ private fun ColumnScope.WidgetsBox(
 }
 
 @Composable
-private fun ColumnScope.ApplicationsBox(
+private fun ApplicationsBox(
     applications: List<ApplicationType>,
     onApplicationClick: (ApplicationType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyHorizontalGrid(
-        rows = GridCells.Fixed(3),
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
         modifier = modifier.fillMaxWidth()
     ) {
         items(applications) { application ->
             ApplicationButton(
                 application = application,
-                onClick = { onApplicationClick(application) }
+                onClick = { onApplicationClick(application) },
+                modifier = modifier.fillMaxWidth()
             )
         }
     }
@@ -108,21 +107,24 @@ private fun ApplicationButton(
     Column(
         verticalArrangement = Arrangement.Bottom,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(4.dp)
+            .padding(6.dp)
             .background(color = MaterialTheme.colors.primary)
             .clickable { onClick(application) }
     ) {
         Icon(
             imageVector = application.getIcon(),
             contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            tint = MaterialTheme.colors.onPrimary,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .align(Alignment.CenterHorizontally)
         )
         Text(
             text = application.getName(),
+            color = MaterialTheme.colors.onPrimary,
             fontSize = 14.sp,
             modifier = Modifier
-                .padding(4.dp, 8.dp)
+                .padding(4.dp)
                 .align(Alignment.CenterHorizontally)
         )
     }

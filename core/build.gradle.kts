@@ -43,11 +43,12 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     kapt(libs.google.hilt.compiler)
 
+    api(platform(libs.androidx.compose.bom))
+
     api(libs.androidx.core)
     api(libs.androidx.navigation.compose)
     api(libs.jakewharton.timber)
-
-    api(platform(libs.androidx.compose.bom))
+    debugApi(libs.androidx.compose.ui.tooling)
 
     api(libs.bundles.androidx.compose)
     api(libs.bundles.androidx.coroutines)
