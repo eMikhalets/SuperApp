@@ -1,59 +1,42 @@
 package com.emikhalets.convert.presentation.screens
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.DismissDirection
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.convert.R
 import com.emikhalets.convert.presentation.screens.CurrenciesContract.Action
-import com.emikhalets.core.common.StringEmpty
 import com.emikhalets.core.common.date.formatFullDate
 import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
-import com.emikhalets.core.ui.CurrencyAmountInputVisualTransformation
-import com.emikhalets.core.ui.component.AppCard
-import com.emikhalets.core.ui.component.AppTextField
+import com.emikhalets.core.ui.CurrencyVisualTransformation
+import com.emikhalets.core.ui.component.AppSwipeToDelete
 import com.emikhalets.core.ui.component.ChildScreenColumn
 import com.emikhalets.core.ui.component.DialogError
 import com.emikhalets.core.ui.component.FloatingButtonBox
@@ -95,9 +78,12 @@ private fun ScreenContent(
                     baseCode = state.baseCode,
                     isLoading = state.isLoading,
                     onCurrencyDeleteClick = { onActionSent(Action.DeleteCurrency(it)) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
                 )
                 BaseCurrencyBox(
+                    currencies = state.currencies,
                     baseCode = state.baseCode,
                     baseValue = state.baseValue,
                     onAddCurrencyClick = { onActionSent(Action.AddCurrency) },
@@ -158,18 +144,27 @@ private fun CurrenciesList(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        LinearLoader(
-            visible = isLoading
-        )
+        LinearLoader(visible = isLoading)
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(currencies, key = { it.first }) { (code, value) ->
-                CurrencyBox(
-                    code = code,
-                    value = value.toString(),
-                    isBase = code == baseCode,
-                    onDeleteCurrencyClick = onCurrencyDeleteClick,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                AppSwipeToDelete(onLeftSwiped = { onCurrencyDeleteClick(code) }) {
+                    val isBase = code == baseCode
+                    Text(
+                        text = "$code :",
+                        fontSize = 20.sp,
+                        fontWeight = if (isBase) FontWeight.SemiBold else FontWeight.Normal,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                    Text(
+                        text = value.toString(),
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(2f)
+                    )
+                }
             }
         }
     }
@@ -177,6 +172,7 @@ private fun CurrenciesList(
 
 @Composable
 private fun BaseCurrencyBox(
+    currencies: List<Pair<String, Long>>,
     baseValue: String,
     baseCode: String,
     onBaseCodeClick: (String) -> Unit,
@@ -185,109 +181,54 @@ private fun BaseCurrencyBox(
     modifier: Modifier = Modifier,
 ) {
     val focusRequester = remember { FocusRequester() }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            text = code,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .padding(16.dp)
-                .width(70.dp)
+    Column {
+        CurrenciesChooser(
+            currencies = currencies,
+            baseCode = baseCode,
+            onBaseCodeClick = onBaseCodeClick,
+            modifier = Modifier.fillMaxSize()
         )
-        AppTextField(
-            value = value,
-            onValueChange = { if (isBase) onBaseCurrencyEvent(code, it) },
+        OutlinedTextField(
+            value = baseValue,
+            onValueChange = { onBaseCodeChange(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            fontSize = 24.sp,
-            visualTransformation = CurrencyAmountInputVisualTransformation(),
+            visualTransformation = CurrencyVisualTransformation(),
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.CenterVertically)
                 .focusRequester(focusRequester)
-                .onFocusChanged { if (it.hasFocus) onBaseCurrencyEvent(code, "") }
         )
+    }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun CurrencyBox(
-    code: String,
-    value: String,
-    isBase: Boolean,
-    onDeleteCurrencyClick: (String) -> Unit,
+private fun CurrenciesChooser(
+    currencies: List<Pair<String, Long>>,
+    baseCode: String,
+    onBaseCodeClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val dismissState = rememberDismissState(
-        confirmStateChange = {
-            if (it == DismissValue.DismissedToStart) {
-                onDeleteCurrencyClick(code)
-                return@rememberDismissState true
+    FlowRow(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        currencies.forEach { (code, _) ->
+            val backColor = if (code == baseCode) {
+                MaterialTheme.colors.secondary.copy(alpha = 0.3f)
+            } else {
+                MaterialTheme.colors.secondary.copy(alpha = 0.7f)
             }
-            false
-        }
-    )
-    SwipeToDismiss(
-        state = dismissState,
-        background = { CurrencySwipeBackBox(targetValue = dismissState.targetValue) },
-        directions = setOf(DismissDirection.EndToStart),
-        dismissThresholds = { FractionalThreshold(0.2f) },
-        modifier = modifier
-            .padding(16.dp, 4.dp)
-            .clip(MaterialTheme.shapes.medium)
-    ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text =,
-                fontSi,
-                modifier = Modifier.fillMaxWidth()
+                text = code,
+                modifier = Modifier
+                    .padding(4.dp)
+                    .background(backColor, CircleShape)
+                    .padding(4.dp)
+                    .clickable { onBaseCodeClick(code) }
             )
         }
-        AppCard(modifier = Modifier.fillMaxWidth()) {
-            CurrencyTextValueBox(
-                code = code,
-                value = value,
-                isBase = isBase,
-                focusRequester = focusRequester,
-                onBaseCurrencyEvent = onBaseCurrencyEvent,
-                onDeleteCurrencyClick = onDeleteCurrencyClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun CurrencySwipeBackBox(
-    targetValue: DismissValue,
-    modifier: Modifier = Modifier,
-) {
-    val color by animateColorAsState(
-        when (targetValue) {
-            DismissValue.Default -> Color.White
-            else -> Color.Red
-        }, label = StringEmpty
-    )
-
-    val scale by animateFloatAsState(
-        if (targetValue == DismissValue.Default) 0.75f else 1f, label = StringEmpty
-    )
-
-    Box(
-        contentAlignment = Alignment.CenterEnd,
-        modifier = modifier
-            .fillMaxSize()
-            .background(color)
-            .padding(horizontal = Dp(20f))
-    ) {
-        Icon(
-            imageVector = Icons.Default.Delete,
-            contentDescription = null,
-            modifier = Modifier.scale(scale)
-        )
     }
 }
 
