@@ -10,36 +10,34 @@ import kotlinx.coroutines.flow.map
 
 data class ExchangeModel(
     val id: Long,
-    val code: String,
+    val main: String,
+    val sub: String,
     val value: Double,
     val date: Long,
 ) {
 
-    val main: String get() = code.take(3)
-    val secondary: String get() = code.takeLast(3)
+    constructor(main: String) : this(0, main, "", 0.0, 0)
 
-    constructor(code: String) : this(0, code, 0.0, 0)
+    constructor(main: String, sub: String) : this(0, main, sub, 0.0, 0)
 
-    constructor(main: String, sub: String) : this(0, "$main$sub", 0.0, 0)
-
-    fun withValue(value: Double?, date: Long): ExchangeModel {
-        return value?.let { this.copy(value = value, date = date) } ?: this
+    fun getCode(): String {
+        return "$main$sub"
     }
 
     fun containsPair(base: String, currency: String): Boolean {
-        return (main == base && secondary == currency) || (main == currency && secondary == base)
+        return (main == base && sub == currency) || (main == currency && sub == base)
     }
 
     fun calculate(base: String, value: Long): Long {
         return when (base) {
             main -> (value * this.value).toLong()
-            secondary -> (value * (1 / this.value)).toLong()
+            sub -> (value * (1 / this.value)).toLong()
             else -> 0
         }
     }
 
     fun isNeedUpdate(): Boolean {
-        if (code.isEmpty() || code.length == 3) return false
+        if (sub.isEmpty()) return false
         if (date == LongZero) return true
         val startOfNextDay = date
             .localDate()
@@ -54,7 +52,8 @@ data class ExchangeModel(
         fun ExchangeModel.toDb(): ExchangeDb {
             return ExchangeDb(
                 id = id,
-                code = code,
+                main = main,
+                sub = sub,
                 value = value,
                 date = date
             )
@@ -71,7 +70,8 @@ data class ExchangeModel(
         fun ExchangeDb.toModel(): ExchangeModel {
             return ExchangeModel(
                 id = id,
-                code = code,
+                main = main,
+                sub = sub,
                 value = value,
                 date = date
             )

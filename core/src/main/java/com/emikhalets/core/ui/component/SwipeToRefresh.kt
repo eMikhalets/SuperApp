@@ -28,15 +28,16 @@ fun AppSwipeToRefresh(
             .fillMaxSize()
             .pullRefresh(pullRefreshState)
     ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            content()
+        }
+        LinearLoader(visible = isLoading)
+
         PullRefreshIndicator(
             state = pullRefreshState,
             refreshing = isLoading,
             modifier = Modifier.align(Alignment.TopCenter)
         )
-        LinearLoader(visible = isLoading)
-        Column(modifier = Modifier.fillMaxSize()) {
-            content()
-        }
     }
 }
 

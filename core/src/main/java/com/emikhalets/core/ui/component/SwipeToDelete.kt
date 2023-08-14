@@ -1,5 +1,6 @@
 package com.emikhalets.core.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -57,6 +58,7 @@ fun AppSwipeToDelete(
             modifier = modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
+                .background(MaterialTheme.colors.background)
                 .clickable(isDeleteVisible) { isDeleteVisible = false }
         ) {
             Row(
@@ -67,7 +69,7 @@ fun AppSwipeToDelete(
                     .weight(1f)
                     .padding(8.dp)
             )
-            if (isDeleteVisible) {
+            AnimatedVisibility(visible = isDeleteVisible) {
                 Icon(
                     imageVector = Icons.Rounded.Delete,
                     contentDescription = null,
@@ -76,6 +78,7 @@ fun AppSwipeToDelete(
                         .fillMaxHeight()
                         .background(MaterialTheme.colors.error)
                         .padding(16.dp, 8.dp)
+                        .clickable { onDeleteClick() }
                 )
             }
         }

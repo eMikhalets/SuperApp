@@ -33,12 +33,17 @@ class Repository @Inject constructor(
 
     suspend fun updateExchanges(list: List<ExchangeModel>) {
         logd("updateExchanges(): $list")
-        val date = Date().time
-        val updatedValues = list
-            .filter { it.isNeedUpdate() }
-            .parseCurrencies()
-            .mapIndexed { index, item -> list[index].withValue(item.second, date) }
-        localDataSource.updateExchanges(updatedValues.toDbList())
+        val codes = list
+            // TODO: temp removed update filter
+//            .filter { it.isNeedUpdate() }
+            .map { it.getCode() }
+        val updatedValues = remoteDataSource.parseExchanges(codes)
+        val updatedDate = Date().time
+        val newList = list.map { item ->
+            updatedValues.find { it.first == item.getCode() }
+                ?.let { item.copy(value = it.second, date = updatedDate) } ?: item
+        }
+        localDataSource.updateExchanges(newList.toDbList())
     }
 
     suspend fun insertCurrency(code: String) {
@@ -50,7 +55,7 @@ class Repository @Inject constructor(
             when (currencies.count()) {
                 0 -> Unit
                 1 -> localDataSource.insertExchange(ExchangeModel(code).toDb())
-                2 -> localDataSource.updateExchange(exchanges.getFirstWithNewCode(code))
+                2 -> localDataSource.updateExchange(exchanges.first().copy(sub = code))
                 else -> localDataSource.insertExchanges(currencies.createNewExchanges(code))
             }
         }
@@ -65,14 +70,6 @@ class Repository @Inject constructor(
             localDataSource.dropExchanges()
             localDataSource.insertExchange(ExchangeModel(lastCode).toDb())
         }
-    }
-
-    private suspend fun List<ExchangeModel>.parseCurrencies(): List<Pair<String, Double>> {
-        return remoteDataSource.parseCurrencies(this.map { it.code })
-    }
-
-    private fun List<ExchangeDb>.getFirstWithNewCode(code: String): ExchangeDb {
-        return first().copy(code = "${first().code}$code")
     }
 
     private fun List<CurrencyDb>.createNewExchanges(code: String): List<ExchangeDb> {
