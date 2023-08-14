@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.emikhalets.core.ui.theme.AppTheme
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 SideEffect {
                     systemUiController.setStatusBarColor(systemUiColor, false)
-                    systemUiController.setNavigationBarColor(systemUiColor, false)
+                    systemUiController.setNavigationBarColor(Color.Black, false)
                 }
                 AppScreen(navController)
             }

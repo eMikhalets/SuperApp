@@ -46,7 +46,11 @@ private fun ScreenContent(
     applications: List<ApplicationType>,
     onApplicationClick: (ApplicationType) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+    ) {
         AppHeaderCardColumn(
             header = stringResource(R.string.app_widgets),
             content = { WidgetsBox() },

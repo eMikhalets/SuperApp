@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -135,6 +136,7 @@ private fun ExchangesDateBox(
 
         Text(
             text = dateText,
+            color = MaterialTheme.colors.onBackground,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -161,6 +163,7 @@ private fun CurrenciesList(
                 val isBase = code == baseCode
                 Text(
                     text = "$code :",
+                    color = MaterialTheme.colors.onBackground,
                     fontSize = 24.sp,
                     fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
                     modifier = Modifier
@@ -169,6 +172,7 @@ private fun CurrenciesList(
                 )
                 Text(
                     text = formatValue(value),
+                    color = MaterialTheme.colors.onBackground,
                     fontSize = 24.sp,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -205,6 +209,9 @@ private fun BaseCurrencyBox(
             onValueChange = { onBaseValueChange(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = CurrencyVisualTransformation(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = MaterialTheme.colors.onBackground,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
@@ -230,9 +237,9 @@ private fun CurrenciesChooser(
     ) {
         currencies.forEach { (code, _) ->
             val backColor = if (code == baseCode) {
-                MaterialTheme.colors.secondary.copy(alpha = 0.7f)
+                MaterialTheme.colors.secondary
             } else {
-                MaterialTheme.colors.secondary.copy(alpha = 0.3f)
+                MaterialTheme.colors.secondary.copy(alpha = 0.4f)
             }
             Text(
                 text = code,
