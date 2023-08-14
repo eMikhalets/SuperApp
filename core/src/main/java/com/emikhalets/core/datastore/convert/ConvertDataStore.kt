@@ -17,16 +17,19 @@ class ConvertDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
 
+    @Deprecated("Need to delete")
     fun getExchangesDate(): Flow<Long> {
         return context.dataStore.retrieve(EXCHANGES_UPDATE_DATE)
     }
 
+    @Deprecated("Need to delete")
     suspend fun setExchangesDate(value: Long) {
         context.dataStore.store(EXCHANGES_UPDATE_DATE, value)
     }
 
     companion object {
 
+        @Deprecated("Need to delete")
         private const val EXCHANGES_UPDATE_DATE = "EXCHANGES_UPDATE_DATE"
     }
 }

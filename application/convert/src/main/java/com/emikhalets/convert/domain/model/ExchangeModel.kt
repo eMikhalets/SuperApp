@@ -1,5 +1,6 @@
 package com.emikhalets.convert.domain.model
 
+import com.emikhalets.core.common.LongZero
 import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
 import com.emikhalets.core.database.convert.table_exchanges.ExchangeDb
@@ -25,19 +26,6 @@ data class ExchangeModel(
         return value?.let { this.copy(value = value, date = date) } ?: this
     }
 
-    fun addCode(code: String): ExchangeModel {
-        return this.copy(code = "${this.code}$code")
-    }
-
-    fun hasOldValue(): Boolean {
-        val startOfNextDay = date
-            .localDate()
-            .atStartOfDay()
-            .plusDays(1)
-            .timestamp()
-        return startOfNextDay < Date().time
-    }
-
     fun containsPair(base: String, currency: String): Boolean {
         return (main == base && secondary == currency) || (main == currency && secondary == base)
     }
@@ -48,6 +36,17 @@ data class ExchangeModel(
             secondary -> (value * (1 / this.value)).toLong()
             else -> 0
         }
+    }
+
+    fun isNeedUpdate(): Boolean {
+        if (code.isEmpty() || code.length == 3) return false
+        if (date == LongZero) return true
+        val startOfNextDay = date
+            .localDate()
+            .atStartOfDay()
+            .plusDays(1)
+            .timestamp()
+        return startOfNextDay < Date().time
     }
 
     companion object {
@@ -88,10 +87,6 @@ data class ExchangeModel(
     }
 }
 
-fun List<ExchangeModel>.hasOldValues(): Boolean {
-    return any { item -> (item.code.count() <= 3) || item.hasOldValue() }
-}
-
-fun List<ExchangeModel>.filterNeedUpdate(): List<ExchangeModel> {
-    return filter { item -> (item.code.count() > 3) && item.hasOldValue() }
+fun List<ExchangeModel>.getUpdatedDate(): Long {
+    return minOf { it.date }
 }

@@ -14,7 +14,7 @@ fun LinearLoader(
     visible: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    LinearProgressIndicator(modifier = modifier.fillMaxWidth())
+    if (visible) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 }
 
 @Preview(showBackground = true)

@@ -2,11 +2,14 @@ package com.emikhalets.convert.presentation.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
@@ -43,7 +46,9 @@ fun NewCurrencyBox(
     AppDialog(onDismiss = onDismiss) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
         ) {
             OutlinedTextField(
                 value = code,
@@ -60,17 +65,19 @@ fun NewCurrencyBox(
                 imageVector = Icons.Rounded.Save,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(24.dp)
+                    .fillMaxHeight()
+                    .aspectRatio(1f)
                     .clickable { onSaveClick(code) }
-                    .padding(8.dp)
+                    .padding(12.dp)
             )
             Icon(
                 imageVector = Icons.Rounded.Close,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(32.dp)
+                    .fillMaxHeight()
+                    .aspectRatio(1f)
                     .clickable { onVisibleChange(false) }
-                    .padding(8.dp)
+                    .padding(12.dp)
             )
         }
     }

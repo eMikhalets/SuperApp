@@ -14,6 +14,7 @@ object CurrenciesContract {
 
         object AddCurrency : Action()
         object DropError : Action()
+        object UpdateExchanges : Action()
         class DeleteCurrency(val code: String) : Action()
 
         sealed class Input : Action() {

@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -37,10 +38,10 @@ import com.emikhalets.core.common.date.localDate
 import com.emikhalets.core.common.date.timestamp
 import com.emikhalets.core.ui.CurrencyVisualTransformation
 import com.emikhalets.core.ui.component.AppSwipeToDelete
+import com.emikhalets.core.ui.component.AppSwipeToRefresh
 import com.emikhalets.core.ui.component.ChildScreenColumn
 import com.emikhalets.core.ui.component.DialogError
 import com.emikhalets.core.ui.component.FloatingButtonBox
-import com.emikhalets.core.ui.component.LinearLoader
 import com.emikhalets.core.ui.extentions.ScreenPreview
 import com.emikhalets.core.ui.theme.AppTheme
 import java.util.Date
@@ -66,36 +67,41 @@ private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
     ChildScreenColumn(R.string.app_convert_title, onBackClick) {
-        FloatingButtonBox(
-            onClick = { onActionSent(Action.Input.NewCurrencyVisible(true)) },
-            modifier = Modifier.weight(1f)
+        AppSwipeToRefresh(
+            isLoading = state.isLoading,
+            onRefresh = { onActionSent(Action.UpdateExchanges) }
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                ExchangesDateBox(
-                    timestamp = state.date,
-                    isOldExchanges = state.isOldExchanges,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                CurrenciesList(
-                    currencies = state.currencies,
-                    baseCode = state.baseCode,
-                    isLoading = state.isLoading,
-                    onCurrencyDeleteClick = { onActionSent(Action.DeleteCurrency(it)) },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
+            FloatingButtonBox(
+                onClick = { onActionSent(Action.Input.NewCurrencyVisible(true)) },
+                modifier = Modifier.weight(1f)
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    ExchangesDateBox(
+                        timestamp = state.date,
+                        isOldExchanges = state.isOldExchanges,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    CurrenciesList(
+                        currencies = state.currencies,
+                        baseCode = state.baseCode,
+                        isLoading = state.isLoading,
+                        onCurrencyDeleteClick = { onActionSent(Action.DeleteCurrency(it)) },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f)
+                    )
+                }
             }
+            BaseCurrencyBox(
+                currencies = state.currencies,
+                baseCode = state.baseCode,
+                baseValue = state.baseValue,
+                onAddCurrencyClick = { onActionSent(Action.AddCurrency) },
+                onBaseCodeClick = { onActionSent(Action.Input.BaseCodeClick(it)) },
+                onBaseValueChange = { onActionSent(Action.Input.BaseValueChange(it)) },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
-        BaseCurrencyBox(
-            currencies = state.currencies,
-            baseCode = state.baseCode,
-            baseValue = state.baseValue,
-            onAddCurrencyClick = { onActionSent(Action.AddCurrency) },
-            onBaseCodeClick = { onActionSent(Action.Input.BaseCodeClick(it)) },
-            onBaseValueChange = { onActionSent(Action.Input.BaseValueChange(it)) },
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 
     NewCurrencyBox(
@@ -146,35 +152,28 @@ private fun CurrenciesList(
     onCurrencyDeleteClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        LinearLoader(visible = isLoading)
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            items(currencies, key = { it.first }) { (code, value) ->
-                AppSwipeToDelete(
-                    onDeleteClick = { onCurrencyDeleteClick(code) },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    val isBase = code == baseCode
-                    Text(
-                        text = "$code :",
-                        fontSize = 24.sp,
-                        fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(2f)
-                    )
-                    Text(
-                        text = formatValue(value),
-                        fontSize = 24.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(3f)
-                    )
-                }
+    LazyColumn(modifier = modifier.padding(8.dp)) {
+        items(currencies, key = { it.first }) { (code, value) ->
+            AppSwipeToDelete(
+                onDeleteClick = { onCurrencyDeleteClick(code) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val isBase = code == baseCode
+                Text(
+                    text = "$code :",
+                    fontSize = 24.sp,
+                    fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(2f)
+                )
+                Text(
+                    text = formatValue(value),
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(3f)
+                )
             }
         }
     }
@@ -242,8 +241,9 @@ private fun CurrenciesChooser(
                 modifier = Modifier
                     .padding(4.dp, 2.dp)
                     .background(backColor, RoundedCornerShape(40))
-                    .padding(4.dp)
+                    .clip(RoundedCornerShape(40))
                     .clickable { onBaseCodeClick(code) }
+                    .padding(4.dp)
             )
         }
     }
