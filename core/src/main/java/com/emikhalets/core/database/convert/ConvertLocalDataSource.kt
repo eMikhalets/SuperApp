@@ -7,7 +7,7 @@ import com.emikhalets.core.database.convert.table_exchanges.ExchangesDao
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class CurrenciesLocalDataSource @Inject constructor(
+class ConvertLocalDataSource @Inject constructor(
     private val currenciesDao: CurrenciesDao,
     private val exchangesDao: ExchangesDao,
 ) {

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.emikhalets.core.datastore.retrieve
+import com.emikhalets.core.datastore.retrieveLong
 import com.emikhalets.core.datastore.store
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class ConvertDataStore @Inject constructor(
 
     @Deprecated("Need to delete")
     fun getExchangesDate(): Flow<Long> {
-        return context.dataStore.retrieve(EXCHANGES_UPDATE_DATE)
+        return context.dataStore.retrieveLong(EXCHANGES_UPDATE_DATE)
     }
 
     @Deprecated("Need to delete")

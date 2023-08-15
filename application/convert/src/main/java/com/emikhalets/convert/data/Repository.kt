@@ -8,7 +8,7 @@ import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toDb
 import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toDbList
 import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toModelFlow
 import com.emikhalets.core.common.extensions.logd
-import com.emikhalets.core.database.convert.CurrenciesLocalDataSource
+import com.emikhalets.core.database.convert.ConvertLocalDataSource
 import com.emikhalets.core.database.convert.table_currencies.CurrencyDb
 import com.emikhalets.core.database.convert.table_exchanges.ExchangeDb
 import com.emikhalets.core.network.CurrencyRemoteDataSource
@@ -17,7 +17,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
 class Repository @Inject constructor(
-    private val localDataSource: CurrenciesLocalDataSource,
+    private val localDataSource: ConvertLocalDataSource,
     private val remoteDataSource: CurrencyRemoteDataSource,
 ) {
 
