@@ -23,6 +23,6 @@ interface EventsDao : AppDao<EventDb> {
     @Query("SELECT * FROM events WHERE id = :id")
     fun getItemFlow(id: Long): Flow<EventDb>
 
-    @Query("SELECT * FROM events WHERE group_id = :id")
+    @Query("SELECT * FROM events WHERE id = :id")
     fun getAllByGroupId(id: Long): Flow<List<EventDb>>
 }

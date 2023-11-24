@@ -14,19 +14,15 @@ plugins {
 
 android {
     namespace = "com.emikhalets.superapp"
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
         applicationId = "com.emikhalets.superapp"
-        minSdk = rootProject.extra["minSdk"] as Int
-        targetSdk = rootProject.extra["targetSdk"] as Int
-        versionCode = rootProject.extra["versionCode"] as Int
-        versionName = rootProject.extra["versionName"] as String
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
+        vectorDrawables { useSupportLibrary = true }
     }
-
     signingConfigs {
         getByName("debug") {
             keyAlias = keystoreProperties["keyAlias"] as String
@@ -66,17 +62,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = JavaVersion.valueOf(libs.versions.java.get())
+        targetCompatibility = JavaVersion.valueOf(libs.versions.java.get())
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = JavaVersion.valueOf(libs.versions.java.get()).toString()
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
     packaging {
         resources {

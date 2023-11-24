@@ -7,25 +7,23 @@ plugins {
 
 android {
     namespace = "com.emikhalets.finance"
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
+        minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = JavaVersion.valueOf(libs.versions.java.get())
+        targetCompatibility = JavaVersion.valueOf(libs.versions.java.get())
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = JavaVersion.valueOf(libs.versions.java.get()).toString()
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 }
 

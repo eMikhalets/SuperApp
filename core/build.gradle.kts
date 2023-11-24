@@ -7,10 +7,9 @@ plugins {
 
 android {
     namespace = "com.emikhalets.core"
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
+        minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         kapt {
             arguments {
@@ -18,42 +17,51 @@ android {
             }
         }
     }
-
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = JavaVersion.valueOf(libs.versions.java.get())
+        targetCompatibility = JavaVersion.valueOf(libs.versions.java.get())
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = JavaVersion.valueOf(libs.versions.java.get()).toString()
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 }
 
 dependencies {
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.work.runtime)
     implementation(libs.google.hilt.android)
     implementation(libs.jsoup)
-    implementation(libs.bundles.androidx.room)
-
-    kapt(libs.androidx.room.compiler)
-    kapt(libs.google.hilt.compiler)
 
     api(platform(libs.androidx.compose.bom))
+    debugApi(libs.androidx.compose.ui.tooling)
     api(libs.androidx.core)
     api(libs.androidx.hilt.navigation)
     api(libs.androidx.navigation.compose)
     api(libs.jakewharton.timber)
-    debugApi(libs.androidx.compose.ui.tooling)
-    api(libs.bundles.androidx.compose)
-    api(libs.bundles.androidx.coroutines)
-    api(libs.bundles.androidx.lifecycle)
-    api(libs.bundles.google.accompanist)
+    api(libs.androidx.compose.ui)
+    api(libs.androidx.compose.ui.graphics)
+    api(libs.androidx.compose.ui.tooling.preview)
+    api(libs.androidx.compose.material)
+    api(libs.androidx.compose.material.icons)
+    api(libs.androidx.compose.material.icons.ext)
+    api(libs.jetbrains.coroutines.android)
+    api(libs.jetbrains.coroutines.core)
+    api(libs.androidx.lifecycle.runtime.compose)
+    api(libs.androidx.lifecycle.viewmodel)
+    api(libs.androidx.lifecycle.viewmodel.compose)
+    api(libs.google.accompanist.insets)
+    api(libs.google.accompanist.systemuicontroller)
+
+    kapt(libs.androidx.room.compiler)
+    kapt(libs.google.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
