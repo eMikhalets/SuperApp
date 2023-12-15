@@ -83,11 +83,11 @@ android {
 
 dependencies {
     implementation(project(":application:convert"))
-    implementation(project(":application:events"))
-    implementation(project(":application:finance"))
-    implementation(project(":application:fitness"))
-    implementation(project(":application:medialib"))
-    implementation(project(":application:notes"))
+//    implementation(project(":application:events"))
+//    implementation(project(":application:finance"))
+//    implementation(project(":application:fitness"))
+//    implementation(project(":application:medialib"))
+//    implementation(project(":application:notes"))
     implementation(project(":core"))
 
     implementation(libs.google.hilt.android)

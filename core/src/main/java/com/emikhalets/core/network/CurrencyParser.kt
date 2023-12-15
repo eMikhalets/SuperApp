@@ -1,8 +1,8 @@
 package com.emikhalets.core.network
 
-import com.emikhalets.core.common.extensions.loge
 import javax.inject.Inject
 import org.jsoup.nodes.Element
+import timber.log.Timber
 
 class CurrencyParser @Inject constructor() : AppParser() {
 
@@ -25,14 +25,13 @@ class CurrencyParser @Inject constructor() : AppParser() {
         return try {
             val data = element.text().split(" ")
             val code = data[0]
-            val value = data[1].toDoubleOrNull()
-            checkNotNull(value)
+            val value = data[1].toDouble()
             Pair(code, value)
         } catch (e: IndexOutOfBoundsException) {
-            loge(e)
+            Timber.e(e)
             null
         } catch (e: IllegalStateException) {
-            loge(e)
+            Timber.e(e)
             null
         }
     }
@@ -42,7 +41,7 @@ class CurrencyParser @Inject constructor() : AppParser() {
             val code = element.attr(dataSymbolKey).split(":").first()
             contains(code)
         } catch (e: IndexOutOfBoundsException) {
-            loge(e)
+            Timber.e(e)
             false
         }
     }

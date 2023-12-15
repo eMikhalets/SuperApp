@@ -49,7 +49,7 @@ dependencies {
     api(libs.androidx.compose.ui)
     api(libs.androidx.compose.ui.graphics)
     api(libs.androidx.compose.ui.tooling.preview)
-    api(libs.androidx.compose.material)
+    api(libs.androidx.compose.material3)
     api(libs.androidx.compose.material.icons)
     api(libs.androidx.compose.material.icons.ext)
     api(libs.jetbrains.coroutines.android)

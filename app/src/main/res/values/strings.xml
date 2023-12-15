@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SuperApp</string>
-
-    <string name="app_widgets">Widgets</string>
-    <string name="app_widgets_not_implemented">Widgets not implemented</string>
-    <string name="app_applications">Applications</string>
-
-    <string name="app_item_name_convert">Convert</string>
-    <string name="app_item_name_events">Events</string>
-    <string name="app_item_name_finance">Finance</string>
-    <string name="app_item_name_fitness">Fitness</string>
-    <string name="app_item_name_medialib">MediaLib</string>
-    <string name="app_item_name_notes">Notes</string>
 </resources>

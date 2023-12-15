@@ -8,8 +8,8 @@ import com.emikhalets.core.common.StringEmpty
 
 sealed class StringValue {
 
-    object Empty : StringValue()
-    object InternalError : StringValue()
+    data object Empty : StringValue()
+    data object InternalError : StringValue()
     class Message(val text: String?) : StringValue()
     class Error(val throwable: Throwable) : StringValue()
     class Resource(val resId: Int, vararg val args: Any) : StringValue()
@@ -24,7 +24,7 @@ sealed class StringValue {
 }
 
 fun StringValue?.asString(context: Context): String {
-    val internal = context.getString(R.string.core_common_error_internal)
+    val internal = context.getString(R.string.core_error_internal)
     return when (this) {
         StringValue.Empty -> StringEmpty
         StringValue.InternalError -> internal
@@ -37,7 +37,7 @@ fun StringValue?.asString(context: Context): String {
 
 @Composable
 fun StringValue?.asString(): String {
-    val internal = stringResource(R.string.core_common_error_internal)
+    val internal = stringResource(R.string.core_error_internal)
     return when (this) {
         StringValue.Empty -> internal
         StringValue.InternalError -> internal

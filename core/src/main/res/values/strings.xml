@@ -1,5 +1,11 @@
 <resources>
-    <string name="core_common_ok">OK</string>
-    <string name="core_common_error">Error</string>
-    <string name="core_common_error_internal">Internal error!</string>
+    <!--  General  -->
+    <string name="core_ok">OK</string>
+
+    <!--  Applications  -->
+    <string name="core_application_convert">Convert</string>
+
+    <!--  Error  -->
+    <string name="core_error">Error</string>
+    <string name="core_error_internal">Internal error!</string>
 </resources>
