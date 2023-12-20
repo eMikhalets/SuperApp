@@ -6,7 +6,7 @@ class CurrencyRemoteDataSource @Inject constructor(
     private val currencyParser: CurrencyParser,
 ) {
 
-    suspend fun parseExchanges(codes: List<String>): List<Pair<String, Double>> {
+    suspend fun parseExchanges(codes: List<String>): List<CurrencyPair> {
         return currencyParser.loadExchangesValues(codes)
     }
 }

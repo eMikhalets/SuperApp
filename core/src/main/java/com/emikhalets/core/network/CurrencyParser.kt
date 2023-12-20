@@ -10,23 +10,21 @@ class CurrencyParser @Inject constructor() : AppParser() {
     private val currencyRowKey = "[data-symbol*=CUR]"
     private val dataSymbolKey = "data-symbol"
 
-    suspend fun loadExchangesValues(codes: List<String>): List<Pair<String, Double>> {
+    suspend fun loadExchangesValues(codes: List<String>): List<CurrencyPair> {
         return codes
             .map { it.take(3) }.toSet()
             .map { parseSource("$source$it") }
             .flatMap { it.getElements(currencyRowKey) }
             .filter { codes.containsDataSymbol(it) }
             .mapNotNull { convertData(it) }
-            .associateBy({ it.first }, { it.second })
-            .toList()
     }
 
-    private fun convertData(element: Element): Pair<String, Double>? {
+    private fun convertData(element: Element): CurrencyPair? {
         return try {
             val data = element.text().split(" ")
             val code = data[0]
             val value = data[1].toDouble()
-            Pair(code, value)
+            CurrencyPair(code, value)
         } catch (e: IndexOutOfBoundsException) {
             Timber.e(e)
             null
@@ -46,4 +44,3 @@ class CurrencyParser @Inject constructor() : AppParser() {
         }
     }
 }
-

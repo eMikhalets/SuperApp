@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface ExchangesDao : AppDao<ExchangeDb> {
 
     @Query("DELETE FROM exchanges")
-    suspend fun drop(): Int
+    suspend fun drop()
 
     @Query("SELECT * FROM exchanges")
     suspend fun getAll(): List<ExchangeDb>

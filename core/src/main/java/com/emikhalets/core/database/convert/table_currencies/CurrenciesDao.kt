@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface CurrenciesDao : AppDao<CurrencyDb> {
 
     @Query("DELETE FROM currencies")
-    suspend fun drop(): Int
+    suspend fun drop()
 
     @Query("SELECT * FROM currencies")
     suspend fun getAll(): List<CurrencyDb>

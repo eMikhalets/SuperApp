@@ -1,78 +1,128 @@
 package com.emikhalets.convert.data
 
 import com.emikhalets.convert.domain.model.CurrencyModel
-import com.emikhalets.convert.domain.model.CurrencyModel.Companion.toDb
-import com.emikhalets.convert.domain.model.CurrencyModel.Companion.toModelFlow
 import com.emikhalets.convert.domain.model.ExchangeModel
-import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toDb
-import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toDbList
-import com.emikhalets.convert.domain.model.ExchangeModel.Companion.toModelFlow
-import com.emikhalets.core.common.extensions.logd
+import com.emikhalets.core.database.LocalResult
 import com.emikhalets.core.database.convert.ConvertLocalDataSource
 import com.emikhalets.core.database.convert.table_currencies.CurrencyDb
 import com.emikhalets.core.database.convert.table_exchanges.ExchangeDb
+import com.emikhalets.core.database.invokeLocal
+import com.emikhalets.core.database.map
+import com.emikhalets.core.network.CurrencyPair
 import com.emikhalets.core.network.CurrencyRemoteDataSource
-import java.util.Date
+import com.emikhalets.core.network.RemoteResult
+import com.emikhalets.core.network.invokeRemote
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 
 class Repository @Inject constructor(
     private val localDataSource: ConvertLocalDataSource,
     private val remoteDataSource: CurrencyRemoteDataSource,
 ) {
 
+    // Exchanges
+
     fun getExchanges(): Flow<List<ExchangeModel>> {
-        logd("getExchanges()")
-        return localDataSource.getExchanges().toModelFlow()
+        Timber.d("getExchanges()")
+        val result = localDataSource.getExchangesFlow()
+        return ExchangeMapper.toModelFlow(result)
     }
 
-    fun getCurrencies(): Flow<List<CurrencyModel>> {
-        logd("getCurrencies()")
-        return localDataSource.getCurrencies().toModelFlow()
+    suspend fun getExchangesSync(): LocalResult<List<ExchangeModel>> {
+        Timber.d("getExchangesSync()")
+        return invokeLocal { localDataSource.getExchanges() }
+            .map { ExchangeMapper.toModelList(it) }
     }
 
-    suspend fun updateExchanges(list: List<ExchangeModel>) {
-        logd("updateExchanges(): $list")
-        val codes = list
-            // TODO: temp removed update filter
-//            .filter { it.isNeedUpdate() }
-            .map { it.getCode() }
-        val updatedValues = remoteDataSource.parseExchanges(codes)
-        val updatedDate = Date().time
-        val newList = list.map { item ->
-            updatedValues.find { it.first == item.getCode() }
-                ?.let { item.copy(value = it.second, date = updatedDate) } ?: item
+    suspend fun insertExchanges(list: List<ExchangeModel>): LocalResult<List<Long>> {
+        Timber.d("insertExchanges($list)")
+        val mapped = ExchangeMapper.toDbList(list)
+        return invokeLocal { localDataSource.insertExchanges(mapped) }
+    }
+
+    suspend fun updateExchange(model: ExchangeModel): LocalResult<Long> {
+        Timber.d("updateExchange($model)")
+        val mapped = ExchangeMapper.toDb(model)
+        return invokeLocal { localDataSource.insertExchange(mapped) }
+    }
+
+    suspend fun updateExchanges(list: List<ExchangeModel>): LocalResult<Int> {
+        Timber.d("updateExchanges($list)")
+        return invokeLocal { localDataSource.updateExchanges(ExchangeMapper.toDbList(list)) }
+    }
+
+    suspend fun deleteExchanges(code: String): LocalResult<Unit> {
+        Timber.d("deleteExchanges($code)")
+        return invokeLocal { localDataSource.deleteExchanges(code) }
+    }
+
+    suspend fun insertFirstExchange(code: String): LocalResult<Unit> {
+        Timber.d("insertFirstExchange($code)")
+        return invokeLocal {
+            val exchange = ExchangeMapper.toDb(ExchangeModel(code))
+            localDataSource.dropExchanges()
+            localDataSource.insertExchange(exchange)
         }
-        localDataSource.updateExchanges(newList.toDbList())
     }
 
-    suspend fun insertCurrency(code: String) {
-        if (!localDataSource.isCurrencyExist(code)) {
-            val currency = CurrencyModel(code).toDb()
-            localDataSource.insertCurrency(currency)
-            val currencies = localDataSource.getCurrenciesSync()
-            val exchanges = localDataSource.getExchangesSync()
+    suspend fun parseExchanges(list: List<ExchangeModel>): RemoteResult<List<CurrencyPair>> {
+        Timber.d("parseExchanges($list)")
+        val codes = list.map { it.fullCode }
+        return invokeRemote { remoteDataSource.parseExchanges(codes) }
+    }
+
+    suspend fun checkExchangesPostInsert(code: String): LocalResult<Unit> {
+        Timber.d("checkExchangesPostInsert($code)")
+        return invokeLocal {
+            val currencies = localDataSource.getCurrencies()
+            val exchanges = localDataSource.getExchanges()
             when (currencies.count()) {
                 0 -> Unit
-                1 -> localDataSource.insertExchange(ExchangeModel(code).toDb())
-                2 -> localDataSource.updateExchange(exchanges.first().copy(sub = code))
-                else -> localDataSource.insertExchanges(currencies.createNewExchanges(code))
+                1 -> localDataSource.insertExchange(ExchangeMapper.toDb(ExchangeModel(code)))
+                2 -> localDataSource.updateExchange(exchanges.setFirstSubCode(code))
+                else -> localDataSource.insertExchanges(currencies.createExchanges(code))
             }
         }
     }
 
-    suspend fun deleteCurrency(code: String) {
-        localDataSource.deleteCurrency(code)
-        localDataSource.deleteExchanges(code)
-        val currencies = localDataSource.getCurrenciesSync()
-        if (currencies.count() == 1) {
-            val lastCode = currencies.first().code
-            localDataSource.dropExchanges()
-            localDataSource.insertExchange(ExchangeModel(lastCode).toDb())
-        }
+    // Currencies
+
+    fun getCurrencies(): Flow<List<CurrencyModel>> {
+        Timber.d("getCurrencies()")
+        val result = localDataSource.getCurrenciesFlow()
+        return CurrencyMapper.toModelFlow(result)
     }
 
-    private fun List<CurrencyDb>.createNewExchanges(code: String): List<ExchangeDb> {
-        return dropLast(1).map { ExchangeModel(it.code, code).toDb() }
+    suspend fun getCurrenciesSync(): LocalResult<List<CurrencyModel>> {
+        Timber.d("getCurrenciesSync()")
+        return invokeLocal { localDataSource.getCurrencies() }
+            .map { CurrencyMapper.toModelList(it) }
+    }
+
+    suspend fun isCodeExist(code: String): LocalResult<Boolean> {
+        Timber.d("isCodeExist($code)")
+        return invokeLocal { localDataSource.isCurrencyExist(code) }
+    }
+
+    suspend fun insertCode(code: String): LocalResult<Long> {
+        Timber.d("insertCode($code)")
+        val model = CurrencyMapper.toDb(CurrencyModel(code))
+        return invokeLocal { localDataSource.insertCurrency(model) }
+    }
+
+    suspend fun deleteCurrency(code: String): LocalResult<Unit> {
+        Timber.d("deleteCurrency($code)")
+        return invokeLocal { localDataSource.deleteCurrency(code) }
+    }
+
+    // Utils
+
+    private fun List<ExchangeDb>.setFirstSubCode(code: String): ExchangeDb {
+        return first().copy(sub = code)
+    }
+
+    private fun List<CurrencyDb>.createExchanges(code: String): List<ExchangeDb> {
+        return dropLast(1).map { ExchangeMapper.toDb(ExchangeModel(it.code, code)) }
     }
 }

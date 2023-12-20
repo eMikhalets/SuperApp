@@ -7,5 +7,9 @@
 
     <!--  Error  -->
     <string name="core_error">Error</string>
-    <string name="core_error_internal">Internal error!</string>
+    <string name="core_error_internal">Internal error</string>
+    <string name="core_error_insert">Error while insert in database</string>
+    <string name="core_error_update">Error while update in database</string>
+    <string name="core_error_delete">Error while delete in database</string>
+    <string name="core_error_get">Error get from database</string>
 </resources>

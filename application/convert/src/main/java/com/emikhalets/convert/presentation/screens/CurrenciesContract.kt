@@ -5,24 +5,19 @@ import com.emikhalets.convert.domain.model.ExchangeModel
 import com.emikhalets.core.common.mvi.UiAction
 import com.emikhalets.core.common.mvi.UiEffect
 import com.emikhalets.core.common.mvi.UiState
-import com.emikhalets.core.ui.StringValue
 
 object CurrenciesContract {
 
     @Immutable
     sealed class Action : UiAction {
 
-        object AddCurrency : Action()
-        object DropError : Action()
-        object UpdateExchanges : Action()
-        class DeleteCurrency(val code: String) : Action()
-
-        sealed class Input : Action() {
-            class BaseCodeClick(val code: String) : Input()
-            class BaseValueChange(val value: String) : Input()
-            class NewCurrencyChange(val value: String) : Input()
-            class NewCurrencyVisible(val visible: Boolean) : Input()
-        }
+        data object AddCurrency : Action()
+        data object UpdateExchanges : Action()
+        data class DeleteCurrency(val code: String) : Action()
+        data class SetBaseCode(val code: String) : Action()
+        data class SetBaseValue(val value: Long) : Action()
+        data class SetNewCurrencyVisible(val visible: Boolean) : Action()
+        data class SetNewCurrencyCode(val code: String) : Action()
     }
 
     @Immutable
@@ -30,15 +25,14 @@ object CurrenciesContract {
 
     @Immutable
     data class State(
-        val isLoading: Boolean = false,
+        val loading: Boolean = false,
         val exchanges: List<ExchangeModel> = emptyList(),
         val currencies: List<Pair<String, Long>> = emptyList(),
         val isOldExchanges: Boolean = false,
         val newCurrencyVisible: Boolean = false,
         val newCurrencyCode: String = "",
         val baseCode: String = "",
-        val baseValue: String = "",
+        val baseValue: Long = 0,
         val date: Long = 0,
-        val error: StringValue? = null,
     ) : UiState
 }

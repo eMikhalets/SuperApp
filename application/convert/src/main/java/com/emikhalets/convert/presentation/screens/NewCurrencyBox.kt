@@ -11,39 +11,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Save
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.convert.R
-import com.emikhalets.core.ui.component.AppDialog
 import com.emikhalets.core.ui.extentions.BoxPreview
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
-fun NewCurrencyBox(
+fun NewCurrencyDialog(
     code: String,
-    isVisible: Boolean,
-    onCodeChange: (String) -> Unit,
-    onVisibleChange: (Boolean) -> Unit,
+    onCodeChanged: (String) -> Unit,
     onSaveClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
 ) {
-    if (!isVisible) return
-    val focusRequester = remember { FocusRequester() }
-    AppDialog(onDismiss = onDismiss) {
+    Dialog(
+        onDismissRequest = { onDismiss() },
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false
+        )
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -52,14 +51,13 @@ fun NewCurrencyBox(
         ) {
             OutlinedTextField(
                 value = code,
-                onValueChange = onCodeChange,
-                placeholder = { Text(text = stringResource(R.string.app_convert_code_help)) },
+                onValueChange = onCodeChanged,
+                placeholder = { Text(text = stringResource(R.string.convert_code_hint)) },
                 singleLine = true,
                 keyboardActions = KeyboardActions(onDone = { onSaveClick(code) }),
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .focusRequester(focusRequester)
             )
             Icon(
                 imageVector = Icons.Rounded.Save,
@@ -76,14 +74,10 @@ fun NewCurrencyBox(
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f)
-                    .clickable { onVisibleChange(false) }
+                    .clickable { onDismiss() }
                     .padding(12.dp)
             )
         }
-    }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
     }
 }
 
@@ -92,13 +86,10 @@ fun NewCurrencyBox(
 private fun Preview() {
     AppTheme {
         Column(modifier = Modifier.fillMaxSize()) {
-            NewCurrencyBox(
+            NewCurrencyDialog(
                 code = "USD",
-                isVisible = true,
-                onCodeChange = {},
-                onVisibleChange = {},
+                onCodeChanged = {},
                 onSaveClick = {},
-                modifier = Modifier
             )
         }
     }

@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_convert_title">Converting</string>
-    <string name="app_convert_code_help">Currency code, like USB, RUB…</string>
-    <string name="app_convert_convert_add">Add currency</string>
-    <string name="app_convert_convert_old_values">Calculation of currencies is carried out at outdated exchange rates - %s</string>
-    <string name="app_convert_convert_valid_values">Exchange rates are valid for %s</string>
+    <string name="convert_title">Currency convert</string>
+    <string name="convert_add">Add currency</string>
+    <string name="convert_update">Update exchanges</string>
+    <string name="convert_value_hint">Currency value: 123.45</string>
+    <string name="convert_code_hint">Currency code: USB, RUB, etc.</string>
+    <string name="convert_exchanges_date">Exchange rates are current as of %s</string>
+    <string name="convert_parsing_error">Error while parsing exchanges</string>
 </resources>
