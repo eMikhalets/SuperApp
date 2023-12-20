@@ -1,8 +1,6 @@
 package com.emikhalets.convert.domain.use_case
 
 import com.emikhalets.convert.data.Repository
-import com.emikhalets.convert.domain.model.CurrencyModel
-import com.emikhalets.convert.domain.model.ExchangeModel
 import com.emikhalets.core.database.LocalResult
 import com.emikhalets.core.database.getOrTrue
 import com.emikhalets.core.ui.StringValue

@@ -29,24 +29,6 @@ class Repository @Inject constructor(
         return ExchangeMapper.toModelFlow(result)
     }
 
-    suspend fun getExchangesSync(): LocalResult<List<ExchangeModel>> {
-        Timber.d("getExchangesSync()")
-        return invokeLocal { localDataSource.getExchanges() }
-            .map { ExchangeMapper.toModelList(it) }
-    }
-
-    suspend fun insertExchanges(list: List<ExchangeModel>): LocalResult<List<Long>> {
-        Timber.d("insertExchanges($list)")
-        val mapped = ExchangeMapper.toDbList(list)
-        return invokeLocal { localDataSource.insertExchanges(mapped) }
-    }
-
-    suspend fun updateExchange(model: ExchangeModel): LocalResult<Long> {
-        Timber.d("updateExchange($model)")
-        val mapped = ExchangeMapper.toDb(model)
-        return invokeLocal { localDataSource.insertExchange(mapped) }
-    }
-
     suspend fun updateExchanges(list: List<ExchangeModel>): LocalResult<Int> {
         Timber.d("updateExchanges($list)")
         return invokeLocal { localDataSource.updateExchanges(ExchangeMapper.toDbList(list)) }

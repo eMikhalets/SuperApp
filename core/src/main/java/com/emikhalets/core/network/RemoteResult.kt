@@ -16,10 +16,6 @@ sealed class RemoteResult<out S> {
 
     companion object {
 
-        fun <S> RemoteResult<S>.isSuccess(): Boolean {
-            return this is Success
-        }
-
         fun <S> success(data: S, status: Int = CODE_SUCCESS): RemoteResult<S> {
             return Success(data, status)
         }
