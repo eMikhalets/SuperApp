@@ -6,7 +6,7 @@ compileSdk = "34"
 targetSdk = "34"
 minSdk = "26"
 versionCode = "1"
-versionName = "1.0.0"
+versionName = "1.0.2"
 java = "VERSION_17"
 # General
 androidx-core = '1.12.0'

@@ -146,7 +146,7 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun setExchangesState(list: List<ExchangeModel>) {
         val needUpdate = list.any { it.isNeedUpdate() }
-        val updatedDate = list.minBy { it.date }.date
+        val updatedDate = list.minByOrNull { it.date }?.date ?: 0
         setState { it.copy(exchanges = list, date = updatedDate, isOldExchanges = needUpdate) }
     }
 
