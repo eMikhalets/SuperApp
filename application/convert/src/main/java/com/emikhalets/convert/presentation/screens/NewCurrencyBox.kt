@@ -1,6 +1,5 @@
 package com.emikhalets.convert.presentation.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.convert.R
 import com.emikhalets.core.ui.extentions.BoxPreview
+import com.emikhalets.core.ui.extentions.clickableOnce
 import com.emikhalets.core.ui.theme.AppTheme
 
 @Composable
@@ -65,7 +65,7 @@ fun NewCurrencyDialog(
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f)
-                    .clickable { onSaveClick(code) }
+                    .clickableOnce { onSaveClick(code) }
                     .padding(12.dp)
             )
             Icon(
@@ -74,7 +74,7 @@ fun NewCurrencyDialog(
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f)
-                    .clickable { onDismiss() }
+                    .clickableOnce { onDismiss() }
                     .padding(12.dp)
             )
         }

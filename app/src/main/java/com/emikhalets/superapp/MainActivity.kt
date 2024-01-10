@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Settings
@@ -69,7 +68,6 @@ private fun HostScreen() {
 
     Scaffold(
         bottomBar = { AppNavigationBox(navController) },
-        modifier = Modifier.safeDrawingPadding(),
         content = {
             Box(modifier = Modifier.padding(it)) {
                 AppNavHost(navController = navController)

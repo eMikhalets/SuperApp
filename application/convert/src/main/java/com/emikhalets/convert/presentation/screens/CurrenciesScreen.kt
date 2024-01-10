@@ -1,10 +1,10 @@
 package com.emikhalets.convert.presentation.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,6 +41,7 @@ import com.emikhalets.core.ui.component.AppTopBar
 import com.emikhalets.core.ui.component.FloatingButtonBox
 import com.emikhalets.core.ui.component.LinearLoader
 import com.emikhalets.core.ui.extentions.ScreenPreview
+import com.emikhalets.core.ui.extentions.clickableOnce
 import com.emikhalets.core.ui.theme.AppTheme
 import java.util.Date
 
@@ -177,7 +178,7 @@ private fun CurrencyRow(
     baseCode: String,
     onDeleteClick: (String) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Row(modifier = Modifier.fillMaxWidth()) {
         val isBase = code == baseCode
         Text(
             text = "$code :",
@@ -199,7 +200,7 @@ private fun CurrencyRow(
         Icon(
             painter = painterResource(com.emikhalets.core.R.drawable.ic_round_delete_24),
             contentDescription = null,
-            modifier = Modifier.clickable { onDeleteClick(code) }
+            modifier = Modifier.clickableOnce { onDeleteClick(code) }
         )
     }
 }
@@ -261,7 +262,7 @@ private fun CurrenciesChooser(
                     .padding(4.dp, 2.dp)
                     .background(backColor, RoundedCornerShape(40))
                     .clip(RoundedCornerShape(40))
-                    .clickable { onBaseCodeClick(code) }
+                    .clickableOnce { onBaseCodeClick(code) }
                     .padding(4.dp)
             )
         }
@@ -284,7 +285,7 @@ private fun Preview() {
                 baseCode = "RUB",
                 baseValue = 120000,
                 date = Date().time.localDate().timestamp(),
-                loading = true,
+                loading = false,
             ),
             onSetAction = {},
             onBackClick = {}

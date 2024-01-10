@@ -1,6 +1,5 @@
 package com.emikhalets.core.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.core.ui.extentions.clickableOnce
 import com.emikhalets.core.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +30,7 @@ fun AppTopBar(
                     imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = null,
                     modifier = Modifier
-                        .clickable { onBackClick() }
+                        .clickableOnce { onBackClick() }
                         .padding(8.dp)
                 )
             }

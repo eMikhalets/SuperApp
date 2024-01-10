@@ -15,7 +15,7 @@ class UpdateExchangesUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(list: List<ExchangeModel>): Result {
-        val needUpdateList = list.filterNot { it.isNeedUpdate() }
+        val needUpdateList = list.filter { it.isNeedUpdate() }
         val parseError = R.string.convert_parsing_error
         return when (val result = repository.parseExchanges(needUpdateList)) {
             is RemoteResult.Failure -> Result.Failure(StringValue.create(parseError))
