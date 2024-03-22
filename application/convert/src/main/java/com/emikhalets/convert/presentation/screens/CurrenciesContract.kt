@@ -15,7 +15,7 @@ object CurrenciesContract {
         data object UpdateExchanges : Action()
         data class DeleteCurrency(val code: String) : Action()
         data class SetBaseCode(val code: String) : Action()
-        data class SetBaseValue(val value: Long) : Action()
+        data class SetBaseValue(val value: String) : Action()
         data class SetNewCurrencyVisible(val visible: Boolean) : Action()
         data class SetNewCurrencyCode(val code: String) : Action()
     }
@@ -26,13 +26,14 @@ object CurrenciesContract {
     @Immutable
     data class State(
         val loading: Boolean = false,
+        val pairList: List<Pair<String, String>> = emptyList(),
         val exchanges: List<ExchangeModel> = emptyList(),
-        val currencies: List<Pair<String, Long>> = emptyList(),
+        val currencies: List<String> = emptyList(),
         val isOldExchanges: Boolean = false,
         val newCurrencyVisible: Boolean = false,
         val newCurrencyCode: String = "",
         val baseCode: String = "",
-        val baseValue: Long = 0,
+        val baseValue: String = "",
         val date: Long = 0,
     ) : UiState
 }

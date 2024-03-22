@@ -1,6 +1,6 @@
 [versions]
 # Project
-agp = "8.2.0"
+agp = "8.2.1"
 kotlin = "1.9.20"
 compileSdk = "34"
 targetSdk = "34"
@@ -18,7 +18,7 @@ google-hilt = "2.48"
 # Secondary
 androidx-hilt-navigation = '1.1.0'
 androidx-junit = "1.1.5"
-androidx-lifecycle = '2.6.2'
+androidx-lifecycle = '2.7.0'
 androidx-navigation-compose = '2.7.6'
 androidx-work = '2.9.0'
 google-accompanist = "0.30.1"

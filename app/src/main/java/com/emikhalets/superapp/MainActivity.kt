@@ -1,10 +1,11 @@
 package com.emikhalets.superapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Settings
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun HostScreen() {
     val systemUiController = rememberSystemUiController()
@@ -68,12 +70,12 @@ private fun HostScreen() {
 
     Scaffold(
         bottomBar = { AppNavigationBox(navController) },
-        content = {
-            Box(modifier = Modifier.padding(it)) {
-                AppNavHost(navController = navController)
-            }
+        modifier = Modifier.safeDrawingPadding()
+    ) {
+        Box {
+            AppNavHost(navController = navController)
         }
-    )
+    }
 }
 
 @Composable
