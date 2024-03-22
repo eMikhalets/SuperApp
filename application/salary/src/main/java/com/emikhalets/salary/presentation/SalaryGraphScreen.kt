@@ -7,13 +7,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -73,13 +77,18 @@ private fun ScreenContent(
                 .padding(horizontal = 16.dp)
                 .padding(top = 24.dp)
         )
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp)
+        )
         ValueTextFieldBox(
             value = state.currentSalaryValue,
             onValueChange = { onSetAction(Action.SetCurrentSalaryValue(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 24.dp)
+                .padding(top = 8.dp)
         )
         DateChooserBox(
             timestamp = state.currentSalaryDate,
@@ -104,7 +113,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 8.dp)
+                .padding(top = 24.dp)
         )
     }
 }
@@ -178,6 +187,7 @@ private fun DateChooserBox(
         onValueChange = {},
         readOnly = true,
         singleLine = true,
+        leadingIcon = { Icon(Icons.Rounded.Update, contentDescription = null) },
         modifier = modifier
     )
 }
@@ -202,7 +212,6 @@ private fun TypeChooserBox(
             readOnly = true,
             label = { Text(stringResource(R.string.salary_app_date_label)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = modifier.menuAnchor(),
         )
         ExposedDropdownMenu(
@@ -249,7 +258,7 @@ private fun Preview() {
                     SalaryModel(15000000, DateHelper.timestampOf(10, 7, 2023), SalaryType.SALARY),
                     SalaryModel(176000000, DateHelper.timestampOf(10, 9, 2023), SalaryType.SALARY),
                 ),
-                currentSalaryValue = null,
+                currentSalaryValue = 12345,
                 currentSalaryDate = DateHelper.nowTimestamp,
                 currentSalaryType = SalaryType.SALARY,
                 showDateDialog = false,
