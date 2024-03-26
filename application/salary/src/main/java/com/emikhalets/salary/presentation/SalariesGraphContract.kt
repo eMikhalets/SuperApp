@@ -7,6 +7,7 @@ import com.emikhalets.core.common.mvi.UiEffect
 import com.emikhalets.core.common.mvi.UiState
 import com.emikhalets.salary.domain.model.SalaryModel
 import com.emikhalets.salary.domain.model.SalaryType
+import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 
 object SalariesGraphContract {
 
@@ -27,6 +28,7 @@ object SalariesGraphContract {
     @Immutable
     data class State(
         val salaryList: List<SalaryModel> = emptyList(),
+        val chartModelProducer: CartesianChartModelProducer = CartesianChartModelProducer.build(),
         val currentSalaryValue: Long? = null,
         val currentSalaryDate: Long = DateHelper.nowTimestamp,
         val currentSalaryType: SalaryType = SalaryType.SALARY,

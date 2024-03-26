@@ -11,8 +11,8 @@ import com.emikhalets.salary.presentation.SalariesGraphScreen
 val appSalaryBottomBar: List<BottomBarModel> = listOf()
 
 fun NavGraphBuilder.appSalaryNavGraph(navController: NavHostController) {
-    navigation(AppConvertRoute.SalaryGraph, AppConvertRoute.NavGraph) {
-        composable(AppConvertRoute.SalaryGraph) {
+    navigation(AppSalariesRoute.SalaryGraph, AppSalariesRoute.NavGraph) {
+        composable(AppSalariesRoute.SalaryGraph) {
             SalariesGraphScreen(
                 navigateBack = navController::popBackStack,
                 viewModel = hiltViewModel(),

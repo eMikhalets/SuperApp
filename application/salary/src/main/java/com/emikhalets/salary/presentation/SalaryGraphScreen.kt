@@ -1,10 +1,8 @@
 package com.emikhalets.salary.presentation
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -12,17 +10,18 @@ import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -43,6 +42,14 @@ import com.emikhalets.salary.domain.model.SalaryModel
 import com.emikhalets.salary.domain.model.SalaryType
 import com.emikhalets.salary.presentation.SalariesGraphContract.Action
 import com.emikhalets.salary.presentation.SalariesGraphContract.State
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
+import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
+import com.patrykandpatrick.vico.compose.chart.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
+import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
+import com.patrykandpatrick.vico.core.model.ExtraStore
+import com.patrykandpatrick.vico.core.model.columnSeries
 
 @Composable
 internal fun SalariesGraphScreen(
@@ -69,18 +76,19 @@ private fun ScreenContent(
             title = stringResource(R.string.salary_app_title),
             onBackClick = onBackClick
         )
-        GraphBox(
+        ChartBox(
+            modelProducer = state.chartModelProducer,
             list = state.salaryList,
             onDeleteClick = { onSetAction(Action.DeleteSalary(it)) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 8.dp)
                 .padding(top = 24.dp)
         )
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp)
+                .padding(top = 16.dp)
         )
         ValueTextFieldBox(
             value = state.currentSalaryValue,
@@ -119,17 +127,34 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun GraphBox(
+private fun ChartBox(
+    modelProducer: CartesianChartModelProducer,
     list: List<SalaryModel>,
     onDeleteClick: (SalaryModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val labelListKey = ExtraStore.Key<List<String>>()
+    LaunchedEffect(list) {
+        modelProducer.tryRunTransaction {
+            val yValues = list.map { it.value / 100 }
+            val datesMap = list.associate {
+                DateHelper.formatDate(it.timestamp, "M/yy") to it.timestamp
+            }
+            columnSeries { series(yValues) }
+            updateExtras { it[labelListKey] = datesMap.keys.toList() }
+        }
+    }
+    val chartState = rememberCartesianChart(
+        rememberColumnCartesianLayer(),
+        startAxis = rememberStartAxis(),
+        bottomAxis = rememberBottomAxis(
+            valueFormatter = { x, chartValues, _ ->
+                chartValues.model.extraStore[labelListKey][x.toInt()]
+            }
+        ),
+    )
     Column(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-        )
+        CartesianChartHost(chartState, modelProducer)
     }
 }
 
@@ -251,12 +276,15 @@ private fun Preview() {
     AppTheme {
         ScreenContent(
             state = State(
+                chartModelProducer = CartesianChartModelProducer.build(),
                 salaryList = listOf(
                     SalaryModel(4000000, DateHelper.timestampOf(10, 3, 2023), SalaryType.SALARY),
                     SalaryModel(6000000, DateHelper.timestampOf(10, 4, 2023), SalaryType.SALARY),
                     SalaryModel(10000000, DateHelper.timestampOf(10, 6, 2023), SalaryType.SALARY),
                     SalaryModel(15000000, DateHelper.timestampOf(10, 7, 2023), SalaryType.SALARY),
-                    SalaryModel(176000000, DateHelper.timestampOf(10, 9, 2023), SalaryType.SALARY),
+                    SalaryModel(17600000, DateHelper.timestampOf(10, 9, 2023), SalaryType.SALARY),
+                    SalaryModel(17600000, DateHelper.timestampOf(10, 10, 2023), SalaryType.SALARY),
+                    SalaryModel(17600000, DateHelper.timestampOf(10, 11, 2023), SalaryType.SALARY),
                 ),
                 currentSalaryValue = 12345,
                 currentSalaryDate = DateHelper.nowTimestamp,
