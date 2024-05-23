@@ -26,8 +26,8 @@ data class ExchangeModel(
 
     fun calculate(base: String, value: Long): Long {
         return when (base) {
-            main -> (value * this.value).toLong()
-            sub -> (value * (1 / this.value)).toLong()
+            main -> ((value / 100) * this.value).toLong()
+            sub -> ((value / 100) * (1 / this.value)).toLong()
             else -> 0
         }
     }

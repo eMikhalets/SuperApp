@@ -11,10 +11,15 @@ sealed class ApplicationItem(@StringRes val name: Int, @DrawableRes val icon: In
         icon = R.drawable.ic_round_currency_exchange_24
     )
 
+    data object Salaries : ApplicationItem(
+        name = R.string.core_application_salaries,
+        icon = R.drawable.ic_round_currency_exchange_24
+    )
+
     companion object {
 
         fun getAll(): List<ApplicationItem> {
-            return listOf(Convert)
+            return listOf(Convert, Salaries)
         }
     }
 }

@@ -65,7 +65,7 @@ private fun ScreenContent(
     onSetAction: (Action) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         AppTopBar(
             title = stringResource(R.string.convert_title),
             onBackClick = onBackClick
@@ -82,8 +82,8 @@ private fun ScreenContent(
                     onUpdateClick = { onSetAction(Action.UpdateExchanges) },
                     modifier = Modifier.fillMaxWidth()
                 )
-                CurrenciesList(
-                    currencies = state.currencies,
+                PairsList(
+                    pairs = state.pairList,
                     baseCode = state.baseCode,
                     onCurrencyDeleteClick = { onSetAction(Action.DeleteCurrency(it)) },
                     modifier = Modifier
@@ -153,15 +153,15 @@ private fun ExchangesDateBox(
 }
 
 @Composable
-private fun CurrenciesList(
-    currencies: List<Pair<String, Long>>,
+private fun PairsList(
+    pairs: List<Pair<String, String>>,
     baseCode: String,
     onCurrencyDeleteClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier.padding(8.dp)) {
-        items(currencies, key = { it.first }) { (code, value) ->
-            CurrencyRow(
+        items(pairs, key = { it.first }) { (code, value) ->
+            PairRow(
                 code = code,
                 value = value,
                 baseCode = baseCode,
@@ -172,9 +172,9 @@ private fun CurrenciesList(
 }
 
 @Composable
-private fun CurrencyRow(
+private fun PairRow(
     code: String,
-    value: Long,
+    value: String,
     baseCode: String,
     onDeleteClick: (String) -> Unit,
 ) {
@@ -190,12 +190,15 @@ private fun CurrencyRow(
                 .weight(2f)
         )
         Text(
-            text = formatValue(value),
+            text = formatPairValue(value),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 24.sp,
+            fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
+            textAlign = TextAlign.End,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(3f)
+                .padding(end = 32.dp)
         )
         Icon(
             painter = painterResource(com.emikhalets.core.R.drawable.ic_round_delete_24),
@@ -207,11 +210,11 @@ private fun CurrencyRow(
 
 @Composable
 private fun BaseCurrencyBox(
-    currencies: List<Pair<String, Long>>,
-    baseValue: Long,
+    currencies: List<String>,
+    baseValue: String,
     baseCode: String,
     onBaseCodeClick: (String) -> Unit,
-    onBaseValueChange: (Long) -> Unit,
+    onBaseValueChange: (String) -> Unit,
     onAddCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -221,13 +224,22 @@ private fun BaseCurrencyBox(
             baseCode = baseCode,
             onBaseCodeClick = {
                 onBaseCodeClick(it)
-                onBaseValueChange(0)
+                onBaseValueChange("")
             },
             modifier = Modifier.fillMaxSize()
         )
         OutlinedTextField(
-            value = baseValue.toString(),
-            onValueChange = { onBaseValueChange(it.toLong()) },
+            value = baseValue,
+            onValueChange = { onBaseValueChange(it) },
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(com.emikhalets.core.R.drawable.ic_round_close_24),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickableOnce { onBaseValueChange("") }
+                        .padding(8.dp)
+                )
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = CurrencyVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
@@ -238,7 +250,7 @@ private fun BaseCurrencyBox(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CurrenciesChooser(
-    currencies: List<Pair<String, Long>>,
+    currencies: List<String>,
     baseCode: String,
     onBaseCodeClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -248,7 +260,7 @@ private fun CurrenciesChooser(
             .fillMaxWidth()
             .padding(4.dp, 2.dp)
     ) {
-        currencies.forEach { (code, _) ->
+        currencies.forEach { code ->
             val backColor = if (code == baseCode) {
                 MaterialTheme.colorScheme.secondary
             } else {
@@ -256,6 +268,7 @@ private fun CurrenciesChooser(
             }
             Text(
                 text = code,
+                color = if (code == baseCode) Color.White else Color.Black,
                 fontSize = 12.sp,
                 fontWeight = if (code == baseCode) FontWeight.SemiBold else FontWeight.Normal,
                 modifier = Modifier
@@ -269,10 +282,21 @@ private fun CurrenciesChooser(
     }
 }
 
-private fun formatValue(value: Long): String {
-    val firstPart = value / 100
-    val secondPart = value % 100
-    return "$firstPart.$secondPart"
+private fun formatPairValue(value: String): String {
+    if (value.isBlank()) return ""
+    val parts = value.split(".")
+    val leftPart = parts.getOrNull(0) ?: ""
+    var spaceCounter = 0
+    val charList = leftPart.toMutableList()
+    for (i in leftPart.length downTo 0) {
+        if (spaceCounter == 3) {
+            spaceCounter = 0
+            charList.add(i, ' ')
+        }
+        spaceCounter++
+    }
+    val newLeftPart = charList.joinToString("").trim()
+    return "$newLeftPart.${parts.getOrNull(1) ?: "00"}"
 }
 
 @ScreenPreview
@@ -281,9 +305,10 @@ private fun Preview() {
     AppTheme {
         ScreenContent(
             state = State(
-                currencies = listOf("USD" to 1200, "RUB" to 100000, "VND" to 750000000),
+                pairList = listOf("USD" to "1200.00", "RUB" to "150000.00", "VND" to "7500000.00"),
+                currencies = listOf("USD", "RUB", "VND"),
                 baseCode = "RUB",
-                baseValue = 120000,
+                baseValue = "1200.00",
                 date = Date().time.localDate().timestamp(),
                 loading = false,
             ),

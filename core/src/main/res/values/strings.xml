@@ -4,6 +4,7 @@
 
     <!--  Applications  -->
     <string name="core_application_convert">Convert</string>
+    <string name="core_application_salaries">Salaries</string>
 
     <!--  Error  -->
     <string name="core_error">Error</string>

@@ -1,10 +1,12 @@
 package com.emikhalets.superapp
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Settings
@@ -49,14 +51,25 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             AppTheme {
-                HostScreen()
+                HostScreen(::setActivityPortrait)
             }
+        }
+    }
+
+    private fun setActivityPortrait(isPortrait: Boolean) {
+        requestedOrientation = if (isPortrait) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-private fun HostScreen() {
+private fun HostScreen(
+    onSetScreenPortrait: (Boolean) -> Unit,
+) {
     val systemUiController = rememberSystemUiController()
     val systemUiColor = MaterialTheme.colorScheme.primary
     val navController = rememberNavController()
@@ -68,12 +81,15 @@ private fun HostScreen() {
 
     Scaffold(
         bottomBar = { AppNavigationBox(navController) },
-        content = {
-            Box(modifier = Modifier.padding(it)) {
-                AppNavHost(navController = navController)
-            }
+        modifier = Modifier.safeDrawingPadding()
+    ) {
+        Box {
+            AppNavHost(
+                navController = navController,
+                onSetScreenPortrait = onSetScreenPortrait
+            )
         }
-    )
+    }
 }
 
 @Composable
@@ -143,6 +159,6 @@ private fun PreviewBottomBar() {
 @Composable
 private fun Preview() {
     AppTheme {
-        HostScreen()
+        HostScreen {}
     }
 }

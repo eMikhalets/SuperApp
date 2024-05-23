@@ -59,6 +59,7 @@ dependencies {
     api(libs.androidx.lifecycle.viewmodel.compose)
     api(libs.google.accompanist.insets)
     api(libs.google.accompanist.systemuicontroller)
+    api(libs.patrykandpatrick.vico)
 
     kapt(libs.androidx.room.compiler)
     kapt(libs.google.hilt.compiler)

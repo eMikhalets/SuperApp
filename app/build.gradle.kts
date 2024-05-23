@@ -83,6 +83,7 @@ android {
 
 dependencies {
     implementation(project(":application:convert"))
+    implementation(project(":application:salary"))
 //    implementation(project(":application:events"))
 //    implementation(project(":application:finance"))
 //    implementation(project(":application:fitness"))

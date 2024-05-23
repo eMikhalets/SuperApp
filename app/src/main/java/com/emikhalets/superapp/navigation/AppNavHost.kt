@@ -8,24 +8,32 @@ import com.emikhalets.convert.navigation.AppConvertRoute
 import com.emikhalets.convert.navigation.appConvertNavGraph
 import com.emikhalets.core.common.ApplicationItem
 import com.emikhalets.core.ui.BottomBarModel
+import com.emikhalets.salary.navigation.AppSalariesRoute
+import com.emikhalets.salary.navigation.appSalaryNavGraph
 import com.emikhalets.superapp.MainScreen
 
 val appBottomBar: List<BottomBarModel> = listOf()
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(
+    navController: NavHostController,
+    onSetScreenPortrait: (Boolean) -> Unit,
+) {
     NavHost(navController, AppRoute.Main) {
         composable(AppRoute.Main) {
+            onSetScreenPortrait(true)
             MainScreen(
                 navigateToApplication = { navigateApplication(navController, it) },
             )
         }
-        appConvertNavGraph(navController)
+        appConvertNavGraph(navController, onSetScreenPortrait)
+        appSalaryNavGraph(navController, onSetScreenPortrait)
     }
 }
 
 private fun navigateApplication(navController: NavHostController, application: ApplicationItem) {
     when (application) {
         ApplicationItem.Convert -> navController.navigate(AppConvertRoute.NavGraph)
+        ApplicationItem.Salaries -> navController.navigate(AppSalariesRoute.NavGraph)
     }
 }

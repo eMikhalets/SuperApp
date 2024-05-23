@@ -10,9 +10,13 @@ import com.emikhalets.core.ui.BottomBarModel
 
 val appConvertBottomBar: List<BottomBarModel> = listOf()
 
-fun NavGraphBuilder.appConvertNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.appConvertNavGraph(
+    navController: NavHostController,
+    onSetScreenPortrait: (Boolean) -> Unit,
+) {
     navigation(AppConvertRoute.Currencies, AppConvertRoute.NavGraph) {
         composable(AppConvertRoute.Currencies) {
+            onSetScreenPortrait(true)
             CurrenciesScreen(
                 navigateBack = navController::popBackStack,
                 viewModel = hiltViewModel(),

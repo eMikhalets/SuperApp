@@ -1,0 +1,8 @@
+<resources>
+    <string name="salary_app_title">Salary Graph</string>
+    <string name="salary_app_add_new">Add New Salary</string>
+    <string name="salary_app_date_cancel">Cancel</string>
+    <string name="salary_app_date_select">Select</string>
+    <string name="salary_app_value_label">Money value</string>
+    <string name="salary_app_date_label">Salary date</string>
+</resources>
