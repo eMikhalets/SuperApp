@@ -6,14 +6,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.emikhalets.core.ui.BottomBarModel
-import com.emikhalets.salary.presentation.SalariesGraphScreen
+import com.emikhalets.salary.presentation.chart.ChartScreen
 
 val appSalaryBottomBar: List<BottomBarModel> = listOf()
 
-fun NavGraphBuilder.appSalaryNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.appSalaryNavGraph(
+    navController: NavHostController,
+    onSetScreenPortrait: (Boolean) -> Unit,
+) {
     navigation(AppSalariesRoute.SalaryGraph, AppSalariesRoute.NavGraph) {
         composable(AppSalariesRoute.SalaryGraph) {
-            SalariesGraphScreen(
+            onSetScreenPortrait(false)
+            ChartScreen(
                 navigateBack = navController::popBackStack,
                 viewModel = hiltViewModel(),
             )

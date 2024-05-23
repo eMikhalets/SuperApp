@@ -1,6 +1,7 @@
 package com.emikhalets.superapp
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,15 +51,25 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             AppTheme {
-                HostScreen()
+                HostScreen(::setActivityPortrait)
             }
+        }
+    }
+
+    private fun setActivityPortrait(isPortrait: Boolean) {
+        requestedOrientation = if (isPortrait) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-private fun HostScreen() {
+private fun HostScreen(
+    onSetScreenPortrait: (Boolean) -> Unit,
+) {
     val systemUiController = rememberSystemUiController()
     val systemUiColor = MaterialTheme.colorScheme.primary
     val navController = rememberNavController()
@@ -73,7 +84,10 @@ private fun HostScreen() {
         modifier = Modifier.safeDrawingPadding()
     ) {
         Box {
-            AppNavHost(navController = navController)
+            AppNavHost(
+                navController = navController,
+                onSetScreenPortrait = onSetScreenPortrait
+            )
         }
     }
 }
@@ -145,6 +159,6 @@ private fun PreviewBottomBar() {
 @Composable
 private fun Preview() {
     AppTheme {
-        HostScreen()
+        HostScreen {}
     }
 }

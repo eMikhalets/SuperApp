@@ -1,4 +1,4 @@
-package com.emikhalets.salary.presentation
+package com.emikhalets.salary.presentation.chart
 
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.core.common.helper.DateHelper
@@ -11,9 +11,9 @@ import com.emikhalets.salary.domain.use_case.DeleteSalaryUseCase
 import com.emikhalets.salary.domain.use_case.GetSalariesUseCase
 import com.emikhalets.salary.domain.use_case.InsertSalaryUseCase
 import com.emikhalets.salary.domain.use_case.UpdateSalaryUseCase
-import com.emikhalets.salary.presentation.SalariesGraphContract.Action
-import com.emikhalets.salary.presentation.SalariesGraphContract.Effect
-import com.emikhalets.salary.presentation.SalariesGraphContract.State
+import com.emikhalets.salary.presentation.chart.ChartContract.Action
+import com.emikhalets.salary.presentation.chart.ChartContract.Effect
+import com.emikhalets.salary.presentation.chart.ChartContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
 @HiltViewModel
-class SalariesGraphViewModel @Inject constructor(
+class ChartViewModel @Inject constructor(
     private val getSalariesUseCase: GetSalariesUseCase,
     private val insertSalaryUseCase: InsertSalaryUseCase,
     private val updateSalaryUseCase: UpdateSalaryUseCase,

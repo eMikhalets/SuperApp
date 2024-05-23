@@ -15,15 +15,19 @@ import com.emikhalets.superapp.MainScreen
 val appBottomBar: List<BottomBarModel> = listOf()
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(
+    navController: NavHostController,
+    onSetScreenPortrait: (Boolean) -> Unit,
+) {
     NavHost(navController, AppRoute.Main) {
         composable(AppRoute.Main) {
+            onSetScreenPortrait(true)
             MainScreen(
                 navigateToApplication = { navigateApplication(navController, it) },
             )
         }
-        appConvertNavGraph(navController)
-        appSalaryNavGraph(navController)
+        appConvertNavGraph(navController, onSetScreenPortrait)
+        appSalaryNavGraph(navController, onSetScreenPortrait)
     }
 }
 

@@ -8,9 +8,9 @@ minSdk = "26"
 versionCode = "1"
 versionName = "1.0.2"
 java = "VERSION_17"
+androidxComposeCompiler = "1.5.4"
 # General
 androidx-core = '1.12.0'
-androidxComposeCompiler = "1.5.4"
 androidx-compose-bom = '2023.10.01'
 androidx-datastore = '1.0.0'
 androidx-room = '2.6.1'
