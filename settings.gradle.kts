@@ -21,8 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "SuperApp"
 include(":app")
-include(":application:convert")
-include(":application:salary")
 include(":core:common")
 include(":core:database")
 include(":core:datastore")
@@ -30,3 +28,5 @@ include(":core:network")
 include(":core:ui")
 include(":data:salary")
 include(":domain:salary")
+include(":feature:convert")
+include(":feature:salary")

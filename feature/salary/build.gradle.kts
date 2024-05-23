@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.salary"
+    namespace = "com.emikhalets.superapp.feature.salary"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
@@ -28,8 +28,9 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":core"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+    implementation(project(":domain:salary"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

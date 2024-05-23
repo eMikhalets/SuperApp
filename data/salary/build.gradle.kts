@@ -27,7 +27,6 @@ dependencies {
     implementation(project(":domain:salary"))
 
     implementation(libs.google.hilt.android)
-    implementation(project(":application:salary"))
     kapt(libs.google.hilt.compiler)
 
     testImplementation(libs.junit)

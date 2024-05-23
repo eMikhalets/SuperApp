@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.emikhalets.core.ui.BottomBarModel
-import com.emikhalets.salary.presentation.chart.ChartScreen
+import com.emikhalets.superapp.feature.salary.chart.ChartScreen
 
 val appSalaryBottomBar: List<BottomBarModel> = listOf()
 

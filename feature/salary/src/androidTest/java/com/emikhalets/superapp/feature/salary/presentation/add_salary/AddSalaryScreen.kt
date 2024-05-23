@@ -1,4 +1,4 @@
-package com.emikhalets.salary.presentation.chart
+package com.emikhalets.salary.presentation.add_salary
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,8 +40,8 @@ import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.salary.R
 import com.emikhalets.superapp.domain.salary.model.SalaryModel
 import com.emikhalets.superapp.domain.salary.model.SalaryType
-import com.emikhalets.salary.presentation.chart.ChartContract.Action
-import com.emikhalets.salary.presentation.chart.ChartContract.State
+import com.emikhalets.salary.presentation.add_salary.AddSalaryContract.Action
+import com.emikhalets.salary.presentation.add_salary.AddSalaryContract.State
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
@@ -54,7 +54,7 @@ import com.patrykandpatrick.vico.core.model.columnSeries
 @Composable
 internal fun ChartScreen(
     navigateBack: () -> Unit,
-    viewModel: ChartViewModel,
+    viewModel: AddSalaryViewModel,
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -75,15 +75,6 @@ private fun ScreenContent(
         AppTopBar(
             title = stringResource(R.string.salary_app_title),
             onBackClick = onBackClick
-        )
-        ChartBox(
-            modelProducer = state.chartModelProducer,
-            list = state.salaryList,
-            onDeleteClick = { onSetAction(Action.DeleteSalary(it)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-                .padding(top = 24.dp)
         )
         HorizontalDivider(
             modifier = Modifier
