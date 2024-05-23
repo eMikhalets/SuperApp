@@ -1,4 +1,4 @@
-package com.emikhalets.salary.domain.model
+package com.emikhalets.superapp.domain.salary.model
 
 enum class SalaryType {
     SALARY,

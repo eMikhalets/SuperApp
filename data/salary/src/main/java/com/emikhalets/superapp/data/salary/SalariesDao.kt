@@ -1,4 +1,4 @@
-package com.emikhalets.core.database.salary.table_salaries
+package com.emikhalets.superapp.data.salary
 
 import androidx.room.Dao
 import androidx.room.Query

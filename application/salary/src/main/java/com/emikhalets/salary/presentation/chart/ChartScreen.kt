@@ -38,8 +38,8 @@ import com.emikhalets.core.ui.component.AppTopBar
 import com.emikhalets.core.ui.extentions.ScreenPreview
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.salary.R
-import com.emikhalets.salary.domain.model.SalaryModel
-import com.emikhalets.salary.domain.model.SalaryType
+import com.emikhalets.superapp.domain.salary.model.SalaryModel
+import com.emikhalets.superapp.domain.salary.model.SalaryType
 import com.emikhalets.salary.presentation.chart.ChartContract.Action
 import com.emikhalets.salary.presentation.chart.ChartContract.State
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -129,8 +129,8 @@ private fun ScreenContent(
 @Composable
 private fun ChartBox(
     modelProducer: CartesianChartModelProducer,
-    list: List<SalaryModel>,
-    onDeleteClick: (SalaryModel) -> Unit,
+    list: List<com.emikhalets.superapp.domain.salary.model.SalaryModel>,
+    onDeleteClick: (com.emikhalets.superapp.domain.salary.model.SalaryModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val labelListKey = ExtraStore.Key<List<String>>()
@@ -220,11 +220,11 @@ private fun DateChooserBox(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TypeChooserBox(
-    type: SalaryType,
-    onTypeSelected: (SalaryType) -> Unit,
+    type: com.emikhalets.superapp.domain.salary.model.SalaryType,
+    onTypeSelected: (com.emikhalets.superapp.domain.salary.model.SalaryType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val options = SalaryType.entries
+    val options = com.emikhalets.superapp.domain.salary.model.SalaryType.entries
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(type) }
     ExposedDropdownMenuBox(
@@ -278,17 +278,45 @@ private fun Preview() {
             state = State(
                 chartModelProducer = CartesianChartModelProducer.build(),
                 salaryList = listOf(
-                    SalaryModel(4000000, DateHelper.timestampOf(10, 3, 2023), SalaryType.SALARY),
-                    SalaryModel(6000000, DateHelper.timestampOf(10, 4, 2023), SalaryType.SALARY),
-                    SalaryModel(10000000, DateHelper.timestampOf(10, 6, 2023), SalaryType.SALARY),
-                    SalaryModel(15000000, DateHelper.timestampOf(10, 7, 2023), SalaryType.SALARY),
-                    SalaryModel(17600000, DateHelper.timestampOf(10, 9, 2023), SalaryType.SALARY),
-                    SalaryModel(17600000, DateHelper.timestampOf(10, 10, 2023), SalaryType.SALARY),
-                    SalaryModel(17600000, DateHelper.timestampOf(10, 11, 2023), SalaryType.SALARY),
+                    com.emikhalets.superapp.domain.salary.model.SalaryModel(
+                        4000000,
+                        DateHelper.timestampOf(10, 3, 2023),
+                        com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY
+                    ),
+                    com.emikhalets.superapp.domain.salary.model.SalaryModel(
+                        6000000,
+                        DateHelper.timestampOf(10, 4, 2023),
+                        com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY
+                    ),
+                    com.emikhalets.superapp.domain.salary.model.SalaryModel(
+                        10000000,
+                        DateHelper.timestampOf(10, 6, 2023),
+                        com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY
+                    ),
+                    com.emikhalets.superapp.domain.salary.model.SalaryModel(
+                        15000000,
+                        DateHelper.timestampOf(10, 7, 2023),
+                        com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY
+                    ),
+                    com.emikhalets.superapp.domain.salary.model.SalaryModel(
+                        17600000,
+                        DateHelper.timestampOf(10, 9, 2023),
+                        com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY
+                    ),
+                    com.emikhalets.superapp.domain.salary.model.SalaryModel(
+                        17600000,
+                        DateHelper.timestampOf(10, 10, 2023),
+                        com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY
+                    ),
+                    com.emikhalets.superapp.domain.salary.model.SalaryModel(
+                        17600000,
+                        DateHelper.timestampOf(10, 11, 2023),
+                        com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY
+                    ),
                 ),
                 currentSalaryValue = 12345,
                 currentSalaryDate = DateHelper.nowTimestamp,
-                currentSalaryType = SalaryType.SALARY,
+                currentSalaryType = com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY,
                 showDateDialog = false,
             ),
             onSetAction = {},

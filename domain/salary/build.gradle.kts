@@ -6,16 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.emikhalets.superapp.core.database"
+    namespace = "com.emikhalets.superapp.domain.salary"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.valueOf(libs.versions.java.get())
@@ -28,10 +23,6 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-
-    api(libs.androidx.room)
-    api(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

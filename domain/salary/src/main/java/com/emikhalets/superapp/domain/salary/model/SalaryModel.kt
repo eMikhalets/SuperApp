@@ -1,4 +1,4 @@
-package com.emikhalets.salary.domain.model
+package com.emikhalets.superapp.domain.salary.model
 
 data class SalaryModel(
     val id: Long,

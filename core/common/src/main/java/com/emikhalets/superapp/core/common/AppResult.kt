@@ -26,7 +26,7 @@ sealed class AppResult<out S> {
     }
 }
 
-suspend fun <T> invokeLocal(block: suspend () -> T): AppResult<T> {
+suspend fun <T> invoke(block: suspend () -> T): AppResult<T> {
     return try {
         val result = block()
         AppResult.success(result)

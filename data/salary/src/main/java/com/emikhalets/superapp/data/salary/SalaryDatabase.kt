@@ -1,11 +1,9 @@
-package com.emikhalets.core.database.salary
+package com.emikhalets.superapp.data.salary
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.emikhalets.core.database.salary.table_salaries.SalariesDao
-import com.emikhalets.core.database.salary.table_salaries.SalaryDb
 
 @Database(
     entities = [
@@ -23,18 +21,18 @@ abstract class SalaryDatabase : RoomDatabase() {
 
         @Volatile
         private var instance: SalaryDatabase? = null
+        private const val NAME: String = "Salary.db"
 
         fun getInstance(context: Context): SalaryDatabase {
             return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also {
-                    instance = it
-                }
+                instance ?: buildDatabase(context)
+                    .also { instance = it }
             }
         }
 
         private fun buildDatabase(context: Context): SalaryDatabase {
             return Room
-                .databaseBuilder(context, SalaryDatabase::class.java, "Salary.db")
+                .databaseBuilder(context, SalaryDatabase::class.java, NAME)
                 .build()
         }
     }

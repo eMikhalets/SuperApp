@@ -1,8 +1,7 @@
-package com.emikhalets.salary.data
+package com.emikhalets.superapp.data.salary
 
-import com.emikhalets.core.database.salary.table_salaries.SalaryDb
-import com.emikhalets.salary.domain.model.SalaryModel
-import com.emikhalets.salary.domain.model.SalaryType
+import com.emikhalets.superapp.domain.salary.model.SalaryModel
+import com.emikhalets.superapp.domain.salary.model.SalaryType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

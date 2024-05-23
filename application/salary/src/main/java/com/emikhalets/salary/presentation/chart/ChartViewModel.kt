@@ -5,12 +5,12 @@ import com.emikhalets.core.common.helper.DateHelper
 import com.emikhalets.core.common.helper.MoneyHelper
 import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launch
-import com.emikhalets.salary.domain.model.SalaryModel
-import com.emikhalets.salary.domain.model.SalaryType
-import com.emikhalets.salary.domain.use_case.DeleteSalaryUseCase
-import com.emikhalets.salary.domain.use_case.GetSalariesUseCase
-import com.emikhalets.salary.domain.use_case.InsertSalaryUseCase
-import com.emikhalets.salary.domain.use_case.UpdateSalaryUseCase
+import com.emikhalets.superapp.domain.salary.model.SalaryModel
+import com.emikhalets.superapp.domain.salary.model.SalaryType
+import com.emikhalets.superapp.domain.salary.use_case.DeleteSalaryUseCase
+import com.emikhalets.superapp.domain.salary.use_case.GetSalariesUseCase
+import com.emikhalets.superapp.domain.salary.use_case.InsertSalaryUseCase
+import com.emikhalets.superapp.domain.salary.use_case.UpdateSalaryUseCase
 import com.emikhalets.salary.presentation.chart.ChartContract.Action
 import com.emikhalets.salary.presentation.chart.ChartContract.Effect
 import com.emikhalets.salary.presentation.chart.ChartContract.State
@@ -25,13 +25,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChartViewModel @Inject constructor(
-    private val getSalariesUseCase: GetSalariesUseCase,
-    private val insertSalaryUseCase: InsertSalaryUseCase,
-    private val updateSalaryUseCase: UpdateSalaryUseCase,
-    private val deleteSalaryUseCase: DeleteSalaryUseCase,
+    private val getSalariesUseCase: com.emikhalets.superapp.domain.salary.use_case.GetSalariesUseCase,
+    private val insertSalaryUseCase: com.emikhalets.superapp.domain.salary.use_case.InsertSalaryUseCase,
+    private val updateSalaryUseCase: com.emikhalets.superapp.domain.salary.use_case.UpdateSalaryUseCase,
+    private val deleteSalaryUseCase: com.emikhalets.superapp.domain.salary.use_case.DeleteSalaryUseCase,
 ) : MviViewModel<Action, Effect, State>() {
 
-    private val salariesFlow: Flow<List<SalaryModel>> =
+    private val salariesFlow: Flow<List<com.emikhalets.superapp.domain.salary.model.SalaryModel>> =
         flow { emitAll(getSalariesUseCase.invoke()) }.catch { setFailureState(it) }
             .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
@@ -64,7 +64,7 @@ class ChartViewModel @Inject constructor(
         setState { it.copy(currentSalaryDate = dateNotNull, showDateDialog = false) }
     }
 
-    private fun setSalaryType(type: SalaryType) {
+    private fun setSalaryType(type: com.emikhalets.superapp.domain.salary.model.SalaryType) {
         setState { it.copy(currentSalaryType = type) }
     }
 
@@ -77,19 +77,19 @@ class ChartViewModel @Inject constructor(
             val value = currentState.currentSalaryValue ?: return@launch
             val date = currentState.currentSalaryDate
             val type = currentState.currentSalaryType
-            val model = SalaryModel(value, date, type)
+            val model = com.emikhalets.superapp.domain.salary.model.SalaryModel(value, date, type)
             dropSalaryDataInState()
             insertSalaryUseCase.invoke(model)
         }
     }
 
-    private fun deleteSalary(model: SalaryModel) {
+    private fun deleteSalary(model: com.emikhalets.superapp.domain.salary.model.SalaryModel) {
         launch {
             deleteSalaryUseCase.invoke(model)
         }
     }
 
-    private fun setSalariesState(list: List<SalaryModel>) {
+    private fun setSalariesState(list: List<com.emikhalets.superapp.domain.salary.model.SalaryModel>) {
         setState { it.copy(salaryList = list) }
     }
 
@@ -102,7 +102,7 @@ class ChartViewModel @Inject constructor(
             it.copy(
                 currentSalaryValue = null,
                 currentSalaryDate = DateHelper.nowTimestamp,
-                currentSalaryType = SalaryType.SALARY,
+                currentSalaryType = com.emikhalets.superapp.domain.salary.model.SalaryType.SALARY,
             )
         }
     }
