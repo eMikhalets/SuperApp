@@ -3,16 +3,17 @@ package com.emikhalets.superapp.feature.salary
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.navArgument
 import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.emikhalets.superapp.feature.salary.AppSalariesRoute.Chart
+import com.emikhalets.superapp.feature.salary.AppSalariesRoute.EditItem
 import com.emikhalets.superapp.feature.salary.AppSalariesRoute.KEY_ITEM_ID
 import com.emikhalets.superapp.feature.salary.AppSalariesRoute.NavGraph
-import com.emikhalets.superapp.feature.salary.AppSalariesRoute.itemId
+import com.emikhalets.superapp.feature.salary.AppSalariesRoute.editItemArgs
+import com.emikhalets.superapp.feature.salary.AppSalariesRoute.editItemRoute
 import com.emikhalets.superapp.feature.salary.chart.ChartScreen
+import com.emikhalets.superapp.feature.salary.edit_item.EditItemScreen
 
 fun NavGraphBuilder.appSalaryNavGraph(
     navController: NavHostController,
@@ -23,17 +24,14 @@ fun NavGraphBuilder.appSalaryNavGraph(
             onSetScreenOrientation(AppOrientationType.Landscape)
             ChartScreen(
                 navigateBack = navController::popBackStack,
-                navigateEditItem = { id -> navController.navigate(itemId(id)) },
+                navigateEditItem = { id -> navController.navigate(editItemRoute(id)) },
                 viewModel = hiltViewModel(),
             )
         }
-        composable(
-            route = itemId(),
-            arguments = listOf(navArgument(KEY_ITEM_ID) { type = NavType.LongType })
-        ) {
-            val id = it.arguments?.getLong(KEY_ITEM_ID) ?: 0
+        composable(route = EditItem, arguments = editItemArgs()) {
             onSetScreenOrientation(AppOrientationType.Landscape)
-            ChartScreen(
+            EditItemScreen(
+                itemId = it.arguments?.getLong(KEY_ITEM_ID) ?: 0,
                 navigateBack = navController::popBackStack,
                 viewModel = hiltViewModel(),
             )

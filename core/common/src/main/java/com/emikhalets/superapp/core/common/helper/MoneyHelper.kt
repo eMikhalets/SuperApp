@@ -1,6 +1,5 @@
 package com.emikhalets.superapp.core.common.helper
 
-// TODO удалить?
 object MoneyHelper {
 
     fun convertMoney(value: Long?): String {

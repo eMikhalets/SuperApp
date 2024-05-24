@@ -1,4 +1,4 @@
-package com.emikhalets.core.ui.component
+package com.emikhalets.core.superapp.ui.component
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -14,7 +14,10 @@ fun AppButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(onClick = onClick, modifier = modifier) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+    ) {
         Text(text = text)
     }
 }
@@ -24,8 +27,13 @@ fun AppTextButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
-    TextButton(onClick = onClick, modifier = modifier) {
+    TextButton(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = modifier
+    ) {
         Text(text = text)
     }
 }
@@ -34,7 +42,10 @@ fun AppTextButton(
 @Composable
 private fun ButtonPreview() {
     AppTheme {
-        AppButton(text = "Some text", onClick = {})
+        AppButton(
+            text = "Some text",
+            onClick = {}
+        )
     }
 }
 
@@ -42,6 +53,9 @@ private fun ButtonPreview() {
 @Composable
 private fun TextButtonPreview() {
     AppTheme {
-        AppTextButton(text = "Some text", onClick = {})
+        AppTextButton(
+            text = "Some text",
+            onClick = {}
+        )
     }
 }

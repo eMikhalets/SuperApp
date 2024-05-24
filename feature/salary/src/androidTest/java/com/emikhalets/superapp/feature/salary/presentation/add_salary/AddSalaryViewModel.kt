@@ -4,14 +4,9 @@ import com.emikhalets.core.common.helper.DateHelper
 import com.emikhalets.core.common.helper.MoneyHelper
 import com.emikhalets.core.common.mvi.MviViewModel
 import com.emikhalets.core.common.mvi.launch
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
-import com.emikhalets.superapp.domain.salary.model.SalaryType
-import com.emikhalets.superapp.domain.salary.use_case.DeleteSalaryUseCase
-import com.emikhalets.superapp.domain.salary.use_case.InsertSalaryUseCase
-import com.emikhalets.superapp.domain.salary.use_case.UpdateSalaryUseCase
-import com.emikhalets.salary.presentation.add_salary.AddSalaryContract.Action
-import com.emikhalets.salary.presentation.add_salary.AddSalaryContract.Effect
-import com.emikhalets.salary.presentation.add_salary.AddSalaryContract.State
+import com.emikhalets.superapp.feature.salary.edit_item.EditItemContract.Action
+import com.emikhalets.superapp.feature.salary.edit_item.EditItemContract.Effect
+import com.emikhalets.superapp.feature.salary.edit_item.EditItemContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,7 +26,7 @@ class AddSalaryViewModel @Inject constructor(
             is Action.SetCurrentSalaryValue -> setSalaryValue(action.value)
             is Action.SetCurrentSalaryDate -> setSalaryDate(action.date)
             is Action.SetCurrentSalaryType -> setSalaryType(action.type)
-            is Action.SetDateDialogVisible -> setDateDialogVisible(action.visible)
+            is Action.ShowDateDialog -> setDateDialogVisible(action.visible)
         }
     }
 

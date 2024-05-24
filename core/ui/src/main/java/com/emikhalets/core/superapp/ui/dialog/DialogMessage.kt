@@ -12,7 +12,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.core.R
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.asString
-import com.emikhalets.core.ui.component.AppTextButton
+import com.emikhalets.core.superapp.ui.component.AppTextButton
 import com.emikhalets.core.superapp.ui.extentions.ScreenPreview
 import com.emikhalets.core.superapp.ui.theme.AppTheme
 

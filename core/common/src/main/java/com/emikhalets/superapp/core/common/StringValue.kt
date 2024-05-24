@@ -38,7 +38,7 @@ sealed class StringValue {
         fun exception(throwable: Throwable): StringValue = Exception(throwable)
 
         fun StringValue?.asString(context: Context?): String {
-            val internal = context?.getString(R.string.common_internal_error) ?: ""
+            val internal = context?.getString(R.string.common_error_internal) ?: ""
             context ?: return internal
             return when (this) {
                 Empty -> ""

@@ -38,10 +38,9 @@ import com.emikhalets.core.ui.component.AppTopBar
 import com.emikhalets.core.ui.extentions.ScreenPreview
 import com.emikhalets.core.ui.theme.AppTheme
 import com.emikhalets.salary.R
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
-import com.emikhalets.superapp.domain.salary.model.SalaryType
-import com.emikhalets.salary.presentation.add_salary.AddSalaryContract.Action
-import com.emikhalets.salary.presentation.add_salary.AddSalaryContract.State
+import com.emikhalets.superapp.feature.salary.edit_item.EditItemContract.Action
+import com.emikhalets.superapp.feature.salary.edit_item.EditItemContract.State
+import com.emikhalets.superapp.feature.salary.edit_item.EditItemViewModel
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
@@ -54,7 +53,7 @@ import com.patrykandpatrick.vico.core.model.columnSeries
 @Composable
 internal fun ChartScreen(
     navigateBack: () -> Unit,
-    viewModel: AddSalaryViewModel,
+    viewModel: EditItemViewModel,
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -93,7 +92,7 @@ private fun ScreenContent(
             timestamp = state.currentSalaryDate,
             showDialog = state.showDateDialog,
             onDatePicked = { onSetAction(Action.SetCurrentSalaryDate(it)) },
-            onDateCanceled = { onSetAction(Action.SetDateDialogVisible(false)) },
+            onDateCanceled = { onSetAction(Action.ShowDateDialog(false)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)

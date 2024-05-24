@@ -8,6 +8,8 @@ interface SalaryRepository {
 
     fun getSalaries(): Flow<List<SalaryModel>>
 
+    suspend fun getSalary(id: Long): AppResult<SalaryModel>
+
     suspend fun addSalary(model: SalaryModel): AppResult<Long>
 
     suspend fun updateSalary(model: SalaryModel): AppResult<Int>

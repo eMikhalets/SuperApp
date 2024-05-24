@@ -1,4 +1,4 @@
-package com.emikhalets.core.ui.component
+package com.emikhalets.core.superapp.ui.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun FloatingButtonBox(
+fun AppFloatingButtonBox(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
