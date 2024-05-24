@@ -42,3 +42,10 @@ fun <S, R> AppResult<S>.map(block: (S) -> R): AppResult<R> {
         is AppResult.Success -> AppResult.success(block(data))
     }
 }
+
+fun AppResult<Boolean>.getOrTrue(): Boolean {
+    return when (this) {
+        is AppResult.Failure -> true
+        is AppResult.Success -> data
+    }
+}

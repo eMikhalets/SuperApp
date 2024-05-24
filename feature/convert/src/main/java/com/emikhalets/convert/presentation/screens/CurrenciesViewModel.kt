@@ -3,12 +3,12 @@ package com.emikhalets.convert.presentation.screens
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.convert.domain.model.CurrencyModel
 import com.emikhalets.convert.domain.model.ExchangeModel
-import com.emikhalets.convert.domain.use_case.ConvertCurrencyUseCase
-import com.emikhalets.convert.domain.use_case.DeleteCurrencyUseCase
-import com.emikhalets.convert.domain.use_case.GetCurrenciesUseCase
-import com.emikhalets.convert.domain.use_case.GetExchangesUseCase
-import com.emikhalets.convert.domain.use_case.InsertCurrencyUseCase
-import com.emikhalets.convert.domain.use_case.UpdateExchangesUseCase
+import com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase
+import com.emikhalets.superapp.domain.convert.use_case.DeleteCurrencyUseCase
+import com.emikhalets.superapp.domain.convert.use_case.GetCurrenciesUseCase
+import com.emikhalets.superapp.domain.convert.use_case.GetExchangesUseCase
+import com.emikhalets.superapp.domain.convert.use_case.InsertCurrencyUseCase
+import com.emikhalets.superapp.domain.convert.use_case.UpdateExchangesUseCase
 import com.emikhalets.convert.presentation.screens.CurrenciesContract.Action
 import com.emikhalets.convert.presentation.screens.CurrenciesContract.Effect
 import com.emikhalets.convert.presentation.screens.CurrenciesContract.State
@@ -28,12 +28,12 @@ import timber.log.Timber
 
 @HiltViewModel
 class CurrenciesViewModel @Inject constructor(
-    private val getExchangesUseCase: GetExchangesUseCase,
-    private val getCurrenciesUseCase: GetCurrenciesUseCase,
-    private val insertCurrencyUseCase: InsertCurrencyUseCase,
-    private val deleteCurrencyUseCase: DeleteCurrencyUseCase,
-    private val convertCurrencyUseCase: ConvertCurrencyUseCase,
-    private val updateExchangesUseCase: UpdateExchangesUseCase,
+    private val getExchangesUseCase: com.emikhalets.superapp.domain.convert.use_case.GetExchangesUseCase,
+    private val getCurrenciesUseCase: com.emikhalets.superapp.domain.convert.use_case.GetCurrenciesUseCase,
+    private val insertCurrencyUseCase: com.emikhalets.superapp.domain.convert.use_case.InsertCurrencyUseCase,
+    private val deleteCurrencyUseCase: com.emikhalets.superapp.domain.convert.use_case.DeleteCurrencyUseCase,
+    private val convertCurrencyUseCase: com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase,
+    private val updateExchangesUseCase: com.emikhalets.superapp.domain.convert.use_case.UpdateExchangesUseCase,
 ) : MviViewModel<Action, Effect, State>() {
 
     private var updatingJob: Job? = null

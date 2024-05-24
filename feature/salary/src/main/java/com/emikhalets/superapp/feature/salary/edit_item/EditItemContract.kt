@@ -1,7 +1,7 @@
 package com.emikhalets.superapp.feature.salary.edit_item
 
 import androidx.compose.runtime.Immutable
-import com.emikhalets.superapp.core.common.helper.DateHelper
+import com.emikhalets.superapp.core.common.date.DateHelper
 import com.emikhalets.superapp.core.common.mvi.MviAction
 import com.emikhalets.superapp.core.common.mvi.MviEffect
 import com.emikhalets.superapp.core.common.mvi.MviState

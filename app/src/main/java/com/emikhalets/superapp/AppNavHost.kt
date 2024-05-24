@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.core.superapp.ui.AppFeature
+import com.emikhalets.superapp.core.ui.AppFeature
 import com.emikhalets.superapp.AppRoute.Main
 import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.emikhalets.superapp.feature.salary.AppSalaryRoute

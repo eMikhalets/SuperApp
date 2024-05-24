@@ -2,7 +2,7 @@ package com.emikhalets.superapp.data.salary
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.emikhalets.core.superapp.database.AppDao
+import com.emikhalets.superapp.core.database.AppDao
 import kotlinx.coroutines.flow.Flow
 
 @Dao

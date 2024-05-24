@@ -11,11 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.emikhalets.core.superapp.ui.AppFeature
-import com.emikhalets.core.superapp.ui.component.AppButtonTopIcon
-import com.emikhalets.core.superapp.ui.extentions.ScreenPreview
-import com.emikhalets.core.superapp.ui.getApplicationFeatures
-import com.emikhalets.core.superapp.ui.theme.AppTheme
+import com.emikhalets.superapp.core.ui.AppFeature
+import com.emikhalets.superapp.core.ui.component.AppButtonTopIcon
+import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
+import com.emikhalets.superapp.core.ui.getApplicationFeatures
+import com.emikhalets.superapp.core.ui.theme.AppTheme
 
 @Composable
 fun FeaturesScreen(

@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.core.superapp.ui.extentions.ScreenPreview
-import com.emikhalets.core.superapp.ui.theme.AppTheme
+import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
+import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint

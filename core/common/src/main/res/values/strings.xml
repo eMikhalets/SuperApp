@@ -1,9 +1,10 @@
 <resources>
-    <string name="common_error_internal">Convert</string>
+    <string name="common_error_internal">Internal error</string>
     <string name="common_error_delete">Delete error</string>
     <string name="common_error_insert">Insert error</string>
     <string name="common_error_update">Update error</string>
     <string name="common_error_get_item">Get item error</string>
+    <string name="common_error_parsing">Parsing error</string>
 
     <string name="common_ok">OK</string>
     <string name="common_select">Select</string>

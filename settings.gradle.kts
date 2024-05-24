@@ -20,13 +20,20 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "SuperApp"
+
 include(":app")
+
 include(":core:common")
 include(":core:database")
 include(":core:datastore")
 include(":core:network")
 include(":core:ui")
+
+include(":data:convert")
 include(":data:salary")
+
+include(":domain:convert")
 include(":domain:salary")
+
 include(":feature:convert")
 include(":feature:salary")
