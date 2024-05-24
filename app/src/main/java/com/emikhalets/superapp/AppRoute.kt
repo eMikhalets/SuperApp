@@ -1,4 +1,4 @@
-package com.emikhalets.superapp.navigation
+package com.emikhalets.superapp
 
 object AppRoute {
 

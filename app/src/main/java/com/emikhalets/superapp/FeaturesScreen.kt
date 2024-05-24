@@ -13,59 +13,62 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.core.common.ApplicationItem
-import com.emikhalets.core.ui.extentions.ScreenPreview
-import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.core.superapp.ui.AppFeature
+import com.emikhalets.core.superapp.ui.extentions.ScreenPreview
+import com.emikhalets.core.superapp.ui.getApplicationFeatures
+import com.emikhalets.core.superapp.ui.theme.AppTheme
 
 @Composable
-fun MainScreen(
-    navigateToApplication: (application: ApplicationItem) -> Unit,
+fun FeaturesScreen(
+    navigateToFeature: (feature: AppFeature) -> Unit,
 ) {
-    val applications = remember { ApplicationItem.getAll() }
+    val features = remember { getApplicationFeatures() }
     ScreenContent(
-        applications = applications,
-        onApplicationClick = navigateToApplication,
+        features = features,
+        onFeatureClick = navigateToFeature,
     )
 }
 
 @Composable
 private fun ScreenContent(
-    applications: List<ApplicationItem>,
-    onApplicationClick: (ApplicationItem) -> Unit,
+    features: List<AppFeature>,
+    onFeatureClick: (AppFeature) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(applications) { application ->
-            ApplicationButton(
-                application = application,
-                onClick = { onApplicationClick(application) },
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 8.dp)
+    ) {
+        items(features) { feature ->
+            FeatureButton(
+                feature = feature,
+                onClick = { onFeatureClick(feature) },
             )
         }
     }
 }
 
 @Composable
-private fun ApplicationButton(
-    application: ApplicationItem,
-    onClick: (ApplicationItem) -> Unit,
+private fun FeatureButton(
+    feature: AppFeature,
+    onClick: (AppFeature) -> Unit,
 ) {
     Button(
-        onClick = { onClick(application) },
+        onClick = { onClick(feature) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp, 16.dp, 16.dp, 0.dp)
-
     ) {
         Icon(
-            painter = painterResource(application.icon),
+            imageVector = feature.icon,
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
-            text = stringResource(application.name),
+            text = stringResource(feature.nameRes),
             fontSize = 18.sp
         )
     }
@@ -76,8 +79,8 @@ private fun ApplicationButton(
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            applications = ApplicationItem.getAll(),
-            onApplicationClick = {},
+            features = getApplicationFeatures(),
+            onFeatureClick = {},
         )
     }
 }

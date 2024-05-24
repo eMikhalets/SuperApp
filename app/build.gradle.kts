@@ -1,9 +1,9 @@
 import java.io.FileInputStream
 import java.util.Properties
 
-val keystorePropertiesFile: File? = rootProject.file("keystore.properties")
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties: Properties = Properties()
-keystorePropertiesFile?.let { keystoreProperties.load(FileInputStream(it)) }
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 plugins {
     alias(libs.plugins.android.application)
@@ -82,14 +82,12 @@ android {
 }
 
 dependencies {
-//    implementation(project(":application:convert"))
-//    implementation(project(":application:salary"))
-//    implementation(project(":application:events"))
-//    implementation(project(":application:finance"))
-//    implementation(project(":application:fitness"))
-//    implementation(project(":application:medialib"))
-//    implementation(project(":application:notes"))
-//    implementation(project(":core"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+
+    implementation(project(":data:salary"))
+    implementation(project(":domain:salary"))
+    implementation(project(":feature:salary"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

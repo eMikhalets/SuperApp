@@ -4,7 +4,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
-object AppSalariesRoute {
+object AppSalaryRoute {
 
     internal const val KEY_ITEM_ID: String = "item_id"
 

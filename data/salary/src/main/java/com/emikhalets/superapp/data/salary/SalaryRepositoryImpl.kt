@@ -18,6 +18,14 @@ class SalaryRepositoryImpl @Inject constructor(
         return SalaryMapper.toModelFlow(result)
     }
 
+    override suspend fun getSalary(id: Long): AppResult<SalaryModel> {
+        Timber.d("getSalary($id)")
+        return invoke {
+            val result = salariesDao.getItem(id)
+            SalaryMapper.toModel(result)
+        }
+    }
+
     override suspend fun addSalary(model: SalaryModel): AppResult<Long> {
         Timber.d("addSalary($model)")
         return invoke {
