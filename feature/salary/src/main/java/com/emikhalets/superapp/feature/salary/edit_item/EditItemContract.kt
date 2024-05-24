@@ -19,7 +19,6 @@ object EditItemContract {
         data class SetValue(val value: String) : Action()
         data class SetDate(val date: Long?) : Action()
         data class SetType(val type: SalaryType) : Action()
-        data class ShowDateDialog(val visible: Boolean) : Action()
     }
 
     @Immutable
@@ -31,6 +30,5 @@ object EditItemContract {
         val value: Long? = null,
         val date: Long = DateHelper.now,
         val type: SalaryType = SalaryType.SALARY,
-        val showDateDialog: Boolean = false,
     ) : MviState
 }

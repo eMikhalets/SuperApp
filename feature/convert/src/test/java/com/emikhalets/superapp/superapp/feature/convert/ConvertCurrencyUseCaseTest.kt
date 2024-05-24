@@ -1,6 +1,6 @@
-package com.emikhalets.superapp.convert
+package com.emikhalets.superapp.superapp.feature.convert
 
-import com.emikhalets.convert.domain.model.ExchangeModel
+import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
 import com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -8,8 +8,8 @@ import org.junit.Test
 
 class ConvertCurrencyUseCaseTest {
 
-    private val useCase = com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase()
-    private val exchanges = listOf(ExchangeModel(0, "USD", "RUB", 100.0, 0))
+    private val useCase = ConvertCurrencyUseCase()
+    private val exchanges = listOf(CurrencyPairModel(0, "USD", "RUB", 100.0, 0))
 
     @Test
     fun convert_empty() {

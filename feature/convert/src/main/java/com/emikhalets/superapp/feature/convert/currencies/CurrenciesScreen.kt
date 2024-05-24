@@ -1,6 +1,7 @@
-package com.emikhalets.convert.presentation.screens
+package com.emikhalets.superapp.feature.convert.currencies
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -12,6 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,29 +24,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.convert.R
-import com.emikhalets.convert.presentation.screens.CurrenciesContract.Action
-import com.emikhalets.convert.presentation.screens.CurrenciesContract.State
-import com.emikhalets.core.common.date.formatFullDate
-import com.emikhalets.core.common.date.localDate
-import com.emikhalets.core.common.date.timestamp
-import com.emikhalets.core.ui.CurrencyVisualTransformation
-import com.emikhalets.core.ui.component.AppTopBar
-import com.emikhalets.core.ui.component.FloatingButtonBox
-import com.emikhalets.core.ui.component.LinearLoader
-import com.emikhalets.core.ui.extentions.ScreenPreview
-import com.emikhalets.core.ui.extentions.clickableOnce
-import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.superapp.core.common.date.DateHelper
+import com.emikhalets.superapp.core.common.date.localDate
+import com.emikhalets.superapp.core.common.date.timestamp
+import com.emikhalets.superapp.core.ui.CurrencyVisualTransformation
+import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
+import com.emikhalets.superapp.core.ui.component.AppTopBar
+import com.emikhalets.superapp.core.ui.component.LinearLoader
+import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
+import com.emikhalets.superapp.core.ui.extentions.clickableOnce
+import com.emikhalets.superapp.core.ui.theme.AppTheme
+import com.emikhalets.superapp.core.ui.theme.rectangle
+import com.emikhalets.superapp.feature.convert.R
+import com.emikhalets.superapp.feature.convert.currencies.CurrenciesContract.Action
+import com.emikhalets.superapp.feature.convert.currencies.CurrenciesContract.State
 import java.util.Date
 
 @Composable
@@ -70,7 +75,7 @@ private fun ScreenContent(
             title = stringResource(R.string.convert_title),
             onBackClick = onBackClick
         )
-        FloatingButtonBox(
+        AppFloatingButtonBox(
             onClick = { onSetAction(Action.SetNewCurrencyVisible(true)) },
             modifier = Modifier.weight(1f)
         ) {
@@ -123,7 +128,7 @@ private fun ExchangesDateBox(
         if (timestamp > 0) {
             val dateText = stringResource(
                 R.string.convert_exchanges_date,
-                timestamp.formatFullDate()
+                DateHelper.formatDate(timestamp, "dd MMMM yyyy")
             )
             val backColor = if (isOldExchanges) {
                 MaterialTheme.colorScheme.error
@@ -159,13 +164,22 @@ private fun PairsList(
     onCurrencyDeleteClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier.padding(8.dp)) {
+    LazyColumn(modifier = modifier) {
         items(pairs, key = { it.first }) { (code, value) ->
             PairRow(
                 code = code,
                 value = value,
                 baseCode = baseCode,
                 onDeleteClick = { onCurrencyDeleteClick(code) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp, 8.dp, 12.dp, 0.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = MaterialTheme.shapes.small
+                    )
+                    .padding(24.dp, 8.dp, 8.dp, 8.dp)
             )
         }
     }
@@ -177,33 +191,46 @@ private fun PairRow(
     value: String,
     baseCode: String,
     onDeleteClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        val isBase = code == baseCode
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        val textWeight = if (code == baseCode) {
+            FontWeight.Bold
+        } else {
+            FontWeight.Normal
+        }
         Text(
             text = "$code :",
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 24.sp,
-            fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
+            fontWeight = textWeight,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(2f)
+                .weight(1f)
         )
         Text(
             text = formatPairValue(value),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 24.sp,
-            fontWeight = if (isBase) FontWeight.Bold else FontWeight.Normal,
+            fontWeight = textWeight,
             textAlign = TextAlign.End,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(3f)
-                .padding(end = 32.dp)
+                .padding(end = 40.dp)
         )
         Icon(
-            painter = painterResource(com.emikhalets.core.R.drawable.ic_round_delete_24),
+            imageVector = Icons.Rounded.Delete,
             contentDescription = null,
-            modifier = Modifier.clickableOnce { onDeleteClick(code) }
+            tint = MaterialTheme.colorScheme.onError,
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.error, MaterialTheme.shapes.small)
+                .clip(MaterialTheme.shapes.small)
+                .clickableOnce { onDeleteClick(code) }
+                .padding(8.dp)
         )
     }
 }
@@ -226,20 +253,23 @@ private fun BaseCurrencyBox(
                 onBaseCodeClick(it)
                 onBaseValueChange("")
             },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp, 2.dp)
         )
         OutlinedTextField(
             value = baseValue,
             onValueChange = { onBaseValueChange(it) },
             trailingIcon = {
                 Icon(
-                    painter = painterResource(com.emikhalets.core.R.drawable.ic_round_close_24),
+                    imageVector = Icons.Rounded.Close,
                     contentDescription = null,
                     modifier = Modifier
                         .clickableOnce { onBaseValueChange("") }
                         .padding(8.dp)
                 )
             },
+            shape = MaterialTheme.shapes.rectangle,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             visualTransformation = CurrencyVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
@@ -255,28 +285,38 @@ private fun CurrenciesChooser(
     onBaseCodeClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp, 2.dp)
-    ) {
+    FlowRow(modifier = modifier) {
         currencies.forEach { code ->
-            val backColor = if (code == baseCode) {
-                MaterialTheme.colorScheme.secondary
+            val textColor = if (code == baseCode) {
+                MaterialTheme.colorScheme.onPrimary
             } else {
-                MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f)
+                MaterialTheme.colorScheme.onBackground
+            }
+            val textModifier = if (code == baseCode) {
+                Modifier
+                    .padding(4.dp, 2.dp)
+                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(30))
+                    .clip(RoundedCornerShape(30))
+                    .clickableOnce { onBaseCodeClick(code) }
+                    .padding(8.dp, 2.dp)
+            } else {
+                Modifier
+                    .padding(4.dp, 2.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = RoundedCornerShape(30)
+                    )
+                    .clip(RoundedCornerShape(30))
+                    .clickableOnce { onBaseCodeClick(code) }
+                    .padding(8.dp, 2.dp)
             }
             Text(
                 text = code,
-                color = if (code == baseCode) Color.White else Color.Black,
+                color = textColor,
                 fontSize = 12.sp,
                 fontWeight = if (code == baseCode) FontWeight.SemiBold else FontWeight.Normal,
-                modifier = Modifier
-                    .padding(4.dp, 2.dp)
-                    .background(backColor, RoundedCornerShape(40))
-                    .clip(RoundedCornerShape(40))
-                    .clickableOnce { onBaseCodeClick(code) }
-                    .padding(4.dp)
+                modifier = textModifier
             )
         }
     }

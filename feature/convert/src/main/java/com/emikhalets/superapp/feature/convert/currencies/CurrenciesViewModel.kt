@@ -1,22 +1,20 @@
-package com.emikhalets.convert.presentation.screens
+package com.emikhalets.superapp.feature.convert.currencies
 
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.convert.domain.model.CurrencyModel
-import com.emikhalets.convert.domain.model.ExchangeModel
+import com.emikhalets.superapp.core.common.mvi.MviViewModel
+import com.emikhalets.superapp.core.common.mvi.launch
+import com.emikhalets.superapp.domain.convert.model.CurrencyModel
+import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
 import com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase
 import com.emikhalets.superapp.domain.convert.use_case.DeleteCurrencyUseCase
 import com.emikhalets.superapp.domain.convert.use_case.GetCurrenciesUseCase
 import com.emikhalets.superapp.domain.convert.use_case.GetExchangesUseCase
 import com.emikhalets.superapp.domain.convert.use_case.InsertCurrencyUseCase
 import com.emikhalets.superapp.domain.convert.use_case.UpdateExchangesUseCase
-import com.emikhalets.convert.presentation.screens.CurrenciesContract.Action
-import com.emikhalets.convert.presentation.screens.CurrenciesContract.Effect
-import com.emikhalets.convert.presentation.screens.CurrenciesContract.State
-import com.emikhalets.core.common.StringEmpty
-import com.emikhalets.core.common.mvi.MviViewModel
-import com.emikhalets.core.common.mvi.launch
+import com.emikhalets.superapp.feature.convert.currencies.CurrenciesContract.Action
+import com.emikhalets.superapp.feature.convert.currencies.CurrenciesContract.Effect
+import com.emikhalets.superapp.feature.convert.currencies.CurrenciesContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,15 +23,16 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class CurrenciesViewModel @Inject constructor(
-    private val getExchangesUseCase: com.emikhalets.superapp.domain.convert.use_case.GetExchangesUseCase,
-    private val getCurrenciesUseCase: com.emikhalets.superapp.domain.convert.use_case.GetCurrenciesUseCase,
-    private val insertCurrencyUseCase: com.emikhalets.superapp.domain.convert.use_case.InsertCurrencyUseCase,
-    private val deleteCurrencyUseCase: com.emikhalets.superapp.domain.convert.use_case.DeleteCurrencyUseCase,
-    private val convertCurrencyUseCase: com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase,
-    private val updateExchangesUseCase: com.emikhalets.superapp.domain.convert.use_case.UpdateExchangesUseCase,
+    private val getExchangesUseCase: GetExchangesUseCase,
+    private val getCurrenciesUseCase: GetCurrenciesUseCase,
+    private val insertCurrencyUseCase: InsertCurrencyUseCase,
+    private val deleteCurrencyUseCase: DeleteCurrencyUseCase,
+    private val convertCurrencyUseCase: ConvertCurrencyUseCase,
+    private val updateExchangesUseCase: UpdateExchangesUseCase,
 ) : MviViewModel<Action, Effect, State>() {
 
     private var updatingJob: Job? = null
@@ -43,7 +42,7 @@ class CurrenciesViewModel @Inject constructor(
             .catch { setFailureState(it) }
             .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
-    private val exchangesFlow: Flow<List<ExchangeModel>> =
+    private val exchangesFlow: Flow<List<CurrencyPairModel>> =
         flow { emitAll(getExchangesUseCase()) }
             .catch { setFailureState(it) }
             .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
@@ -121,7 +120,7 @@ class CurrenciesViewModel @Inject constructor(
         launch {
             if (code.isNotBlank()) {
                 if (currentState.baseCode == code) {
-                    setState { it.copy(baseCode = StringEmpty) }
+                    setState { it.copy(baseCode = "") }
                 }
                 deleteCurrencyUseCase(code)
             }
@@ -142,11 +141,11 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun setCurrenciesState(list: List<CurrencyModel>) {
         val currencies = list.map { it.code }
-        val pairs = list.map { Pair(it.code, StringEmpty) }
+        val pairs = list.map { Pair(it.code, "") }
         setState { it.copy(pairList = pairs, currencies = currencies) }
     }
 
-    private fun setExchangesState(list: List<ExchangeModel>) {
+    private fun setExchangesState(list: List<CurrencyPairModel>) {
         val needUpdate = list.any { it.isNeedUpdate() }
         val updatedDate = list.minByOrNull { it.date }?.date ?: 0
         setState { it.copy(exchanges = list, date = updatedDate, isOldExchanges = needUpdate) }

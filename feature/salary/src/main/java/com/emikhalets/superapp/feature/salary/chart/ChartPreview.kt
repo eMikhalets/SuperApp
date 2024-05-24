@@ -1,6 +1,6 @@
 package com.emikhalets.superapp.feature.salary.chart
 
-import com.emikhalets.superapp.core.common.helper.DateHelper
+import com.emikhalets.superapp.core.common.date.DateHelper
 import com.emikhalets.superapp.domain.salary.model.SalaryModel
 import com.emikhalets.superapp.domain.salary.model.SalaryType
 

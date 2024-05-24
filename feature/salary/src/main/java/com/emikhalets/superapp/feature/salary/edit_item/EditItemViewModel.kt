@@ -35,7 +35,6 @@ class EditItemViewModel @Inject constructor(
             is Action.SetValue -> setSalaryValue(action.value)
             is Action.SetDate -> setSalaryDate(action.date)
             is Action.SetType -> setSalaryType(action.type)
-            is Action.ShowDateDialog -> setDateDialogVisible(action.visible)
         }
     }
 
@@ -46,15 +45,11 @@ class EditItemViewModel @Inject constructor(
 
     private fun setSalaryDate(date: Long?) {
         val dateNotNull = date ?: DateHelper.now
-        setState { it.copy(date = dateNotNull, showDateDialog = false) }
+        setState { it.copy(date = dateNotNull) }
     }
 
     private fun setSalaryType(type: SalaryType) {
         setState { it.copy(type = type) }
-    }
-
-    private fun setDateDialogVisible(visible: Boolean) {
-        setState { it.copy(showDateDialog = visible) }
     }
 
     private fun addSalary() {

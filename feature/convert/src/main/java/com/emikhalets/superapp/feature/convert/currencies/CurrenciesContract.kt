@@ -1,15 +1,15 @@
-package com.emikhalets.convert.presentation.screens
+package com.emikhalets.superapp.feature.convert.currencies
 
 import androidx.compose.runtime.Immutable
-import com.emikhalets.convert.domain.model.ExchangeModel
-import com.emikhalets.core.common.mvi.UiAction
-import com.emikhalets.core.common.mvi.UiEffect
-import com.emikhalets.core.common.mvi.UiState
+import com.emikhalets.superapp.core.common.mvi.MviAction
+import com.emikhalets.superapp.core.common.mvi.MviEffect
+import com.emikhalets.superapp.core.common.mvi.MviState
+import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
 
 object CurrenciesContract {
 
     @Immutable
-    sealed class Action : UiAction {
+    sealed class Action : MviAction {
 
         data object AddCurrency : Action()
         data object UpdateExchanges : Action()
@@ -21,13 +21,13 @@ object CurrenciesContract {
     }
 
     @Immutable
-    sealed class Effect : UiEffect
+    sealed class Effect : MviEffect
 
     @Immutable
     data class State(
         val loading: Boolean = false,
         val pairList: List<Pair<String, String>> = emptyList(),
-        val exchanges: List<ExchangeModel> = emptyList(),
+        val exchanges: List<CurrencyPairModel> = emptyList(),
         val currencies: List<String> = emptyList(),
         val isOldExchanges: Boolean = false,
         val newCurrencyVisible: Boolean = false,
@@ -35,5 +35,5 @@ object CurrenciesContract {
         val baseCode: String = "",
         val baseValue: String = "",
         val date: Long = 0,
-    ) : UiState
+    ) : MviState
 }

@@ -30,8 +30,8 @@ import java.util.Date
 fun AppDateChooser(
     timestamp: Long,
     onSelect: (Long?) -> Unit,
-    onCancel: () -> Unit,
     modifier: Modifier = Modifier,
+    onCancel: () -> Unit = {},
     initialDialogVisible: Boolean = false,
 ) {
     val datePickerState = rememberDatePickerState()

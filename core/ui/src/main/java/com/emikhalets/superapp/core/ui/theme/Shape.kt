@@ -14,5 +14,5 @@ val Shapes = Shapes(
     extraLarge = RoundedCornerShape(32.dp)
 )
 
-val Shapes.zero get() = RectangleShape
+val Shapes.rectangle get() = RectangleShape
 val Shapes.circle get() = CircleShape

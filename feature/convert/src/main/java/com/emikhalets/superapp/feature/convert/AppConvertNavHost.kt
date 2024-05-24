@@ -1,22 +1,20 @@
-package com.emikhalets.convert.navigation
+package com.emikhalets.superapp.feature.convert
 
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.emikhalets.convert.presentation.screens.CurrenciesScreen
-import com.emikhalets.core.ui.BottomBarModel
-
-val appConvertBottomBar: List<BottomBarModel> = listOf()
+import com.emikhalets.superapp.core.common.model.AppOrientationType
+import com.emikhalets.superapp.feature.convert.currencies.CurrenciesScreen
 
 fun NavGraphBuilder.appConvertNavGraph(
     navController: NavHostController,
-    onSetScreenPortrait: (Boolean) -> Unit,
+    onSetScreenOrientation: (AppOrientationType) -> Unit,
 ) {
     navigation(AppConvertRoute.Currencies, AppConvertRoute.NavGraph) {
         composable(AppConvertRoute.Currencies) {
-            onSetScreenPortrait(true)
+            onSetScreenOrientation(AppOrientationType.Portrait)
             CurrenciesScreen(
                 navigateBack = navController::popBackStack,
                 viewModel = hiltViewModel(),

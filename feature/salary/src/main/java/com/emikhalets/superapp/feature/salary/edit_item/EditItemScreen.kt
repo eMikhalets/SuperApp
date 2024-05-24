@@ -15,13 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.emikhalets.superapp.core.common.date.DateHelper
+import com.emikhalets.superapp.core.common.helper.MoneyHelper
 import com.emikhalets.superapp.core.ui.component.AppButton
 import com.emikhalets.superapp.core.ui.component.AppDateChooser
 import com.emikhalets.superapp.core.ui.component.AppSpinner
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
-import com.emikhalets.superapp.core.common.date.DateHelper
-import com.emikhalets.superapp.core.common.helper.MoneyHelper
 import com.emikhalets.superapp.domain.salary.model.SalaryType
 import com.emikhalets.superapp.domain.salary.model.asSalaryType
 import com.emikhalets.superapp.feature.salary.R
@@ -68,7 +68,6 @@ private fun ScreenContent(
         AppDateChooser(
             timestamp = state.date,
             onSelect = { onSetAction(Action.SetDate(it)) },
-            onCancel = { onSetAction(Action.ShowDateDialog(false)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)

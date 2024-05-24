@@ -1,5 +1,6 @@
-package com.emikhalets.convert.presentation.screens
+package com.emikhalets.superapp.feature.convert.currencies
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,10 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.emikhalets.convert.R
-import com.emikhalets.core.ui.extentions.BoxPreview
-import com.emikhalets.core.ui.extentions.clickableOnce
-import com.emikhalets.core.ui.theme.AppTheme
+import com.emikhalets.superapp.core.ui.extentions.BoxPreview
+import com.emikhalets.superapp.core.ui.extentions.clickableOnce
+import com.emikhalets.superapp.core.ui.theme.AppTheme
+import com.emikhalets.superapp.feature.convert.R
 
 @Composable
 fun NewCurrencyDialog(
@@ -47,12 +49,17 @@ fun NewCurrencyDialog(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = MaterialTheme.shapes.medium,
+                )
+                .padding(16.dp)
                 .height(IntrinsicSize.Min)
         ) {
             OutlinedTextField(
                 value = code,
                 onValueChange = onCodeChanged,
-                placeholder = { Text(text = stringResource(R.string.convert_code_hint)) },
+                placeholder = { Text(stringResource(R.string.convert_code_hint)) },
                 singleLine = true,
                 keyboardActions = KeyboardActions(onDone = { onSaveClick(code) }),
                 modifier = Modifier
