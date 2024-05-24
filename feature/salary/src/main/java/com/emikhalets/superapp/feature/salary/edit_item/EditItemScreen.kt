@@ -63,7 +63,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 8.dp)
+                .padding(top = 24.dp)
         )
         AppDateChooser(
             timestamp = state.date,
@@ -73,17 +73,17 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 8.dp)
+                .padding(top = 24.dp)
         )
         AppSpinner(
             value = state.type.toString(),
             options = SalaryType.asStringList(),
-            label = stringResource(R.string.salary_app_date_label),
+            label = stringResource(R.string.salary_app_type_label),
             onSelect = { onSetAction(Action.SetType(it.asSalaryType())) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 8.dp)
+                .padding(top = 16.dp)
         )
         AppButton(
             text = stringResource(R.string.salary_app_save),
@@ -91,7 +91,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 24.dp)
+                .padding(top = 32.dp)
         )
     }
 }

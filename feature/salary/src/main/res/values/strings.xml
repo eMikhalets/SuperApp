@@ -1,7 +1,5 @@
 <resources>
     <string name="salary_app_save">Save</string>
-    <string name="salary_app_date_cancel">Cancel</string>
-    <string name="salary_app_date_select">Select</string>
     <string name="salary_app_value_label">Money value</string>
-    <string name="salary_app_date_label">Salary date</string>
+    <string name="salary_app_type_label">Salary type</string>
 </resources>

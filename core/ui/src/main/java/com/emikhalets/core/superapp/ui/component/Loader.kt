@@ -1,4 +1,4 @@
-package com.emikhalets.core.ui.component
+package com.emikhalets.core.superapp.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

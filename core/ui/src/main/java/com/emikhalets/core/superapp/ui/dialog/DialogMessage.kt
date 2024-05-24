@@ -1,4 +1,4 @@
-package com.emikhalets.core.ui.dialog
+package com.emikhalets.core.superapp.ui.dialog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,12 +9,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.emikhalets.core.R
-import com.emikhalets.superapp.core.common.StringValue
-import com.emikhalets.superapp.core.common.asString
 import com.emikhalets.core.superapp.ui.component.AppTextButton
 import com.emikhalets.core.superapp.ui.extentions.ScreenPreview
 import com.emikhalets.core.superapp.ui.theme.AppTheme
+import com.emikhalets.superapp.core.common.R
+import com.emikhalets.superapp.core.common.StringValue
+import com.emikhalets.superapp.core.common.StringValue.Companion.asString
 
 @Composable
 fun DialogMessage(
@@ -61,7 +61,7 @@ private fun DialogContent(
                 modifier = Modifier.fillMaxWidth()
             )
             AppTextButton(
-                text = stringResource(R.string.core_ok),
+                text = stringResource(R.string.common_ok),
                 onClick = onDismiss,
                 modifier = Modifier.fillMaxWidth()
             )

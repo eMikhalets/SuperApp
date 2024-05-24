@@ -29,7 +29,7 @@ fun NavGraphBuilder.appSalaryNavGraph(
             )
         }
         composable(route = EditItem, arguments = editItemArgs()) {
-            onSetScreenOrientation(AppOrientationType.Landscape)
+            onSetScreenOrientation(AppOrientationType.Portrait)
             EditItemScreen(
                 itemId = it.arguments?.getLong(KEY_ITEM_ID) ?: 0,
                 navigateBack = navController::popBackStack,

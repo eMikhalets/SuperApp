@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.emikhalets.core.superapp.ui.component.AppFloatingButtonBox
-import com.emikhalets.core.superapp.ui.extentions.ScreenPreview
+import com.emikhalets.core.superapp.ui.extentions.ScreenLandPreview
 import com.emikhalets.core.superapp.ui.theme.AppTheme
 import com.emikhalets.superapp.core.common.helper.DateHelper
 import com.emikhalets.superapp.domain.salary.model.SalaryModel
@@ -91,7 +91,7 @@ private fun ChartBox(
     }
 }
 
-@ScreenPreview
+@ScreenLandPreview
 @Composable
 private fun Preview() {
     AppTheme {
