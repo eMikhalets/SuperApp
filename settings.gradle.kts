@@ -30,10 +30,13 @@ include(":core:network")
 include(":core:ui")
 
 include(":data:convert")
-include(":data:salary")
-
 include(":domain:convert")
-include(":domain:salary")
-
 include(":feature:convert")
+
+include(":data:notes")
+include(":domain:notes")
+include(":feature:notes")
+
+include(":data:salary")
+include(":domain:salary")
 include(":feature:salary")
