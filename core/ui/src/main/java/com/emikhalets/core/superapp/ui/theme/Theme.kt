@@ -7,11 +7,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColors = lightColorScheme(
-    primary = Color.Gray600,
+    primary = Color.BlueA700,
+    onPrimary = Color.White,
+    primaryContainer = Color.BlueA700,
+    onPrimaryContainer = Color.White,
+    secondary = Color.LightBlue100,
+    onSecondary = Color.White,
+    tertiary = Color.LightBlue400,
+    onTertiary = Color.White,
+    error = Color.Red800,
+    onError = Color.White,
+    background = Color.Grey100,
+    onBackground = Color.Grey900,
+    surface = Color.Grey100,
+    onSurface = Color.Grey900,
+    onSurfaceVariant = Color.Grey700,
+    outline = Color.Grey700,
 )
 
+// TODO: set dark colors
 private val DarkColors = darkColorScheme(
-    primary = Color.Gray600,
 )
 
 @Composable

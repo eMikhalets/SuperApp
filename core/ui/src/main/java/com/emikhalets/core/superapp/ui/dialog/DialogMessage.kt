@@ -1,12 +1,16 @@
 package com.emikhalets.core.superapp.ui.dialog
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.core.superapp.ui.component.AppTextButton
@@ -17,7 +21,7 @@ import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.StringValue.Companion.asString
 
 @Composable
-fun DialogMessage(
+fun DialogOneBtn(
     message: String,
     title: String = "",
     onDismiss: () -> Unit = {},
@@ -26,7 +30,7 @@ fun DialogMessage(
 }
 
 @Composable
-fun DialogMessage(
+fun DialogOneBtn(
     message: StringValue,
     title: String = "",
     onDismiss: () -> Unit = {},
@@ -49,16 +53,28 @@ private fun DialogContent(
             usePlatformDefaultWidth = false
         )
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = MaterialTheme.shapes.medium,
+                )
+                .padding(12.dp, 16.dp, 12.dp, 8.dp)
+        ) {
             if (title.isNotBlank()) {
                 Text(
                     text = title,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
             Text(
                 text = message,
-                modifier = Modifier.fillMaxWidth()
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
             )
             AppTextButton(
                 text = stringResource(R.string.common_ok),
@@ -73,7 +89,7 @@ private fun DialogContent(
 @Composable
 private fun ScreenPreview() {
     AppTheme {
-        DialogMessage(
+        DialogOneBtn(
             message = "test message",
             title = "test title"
         )

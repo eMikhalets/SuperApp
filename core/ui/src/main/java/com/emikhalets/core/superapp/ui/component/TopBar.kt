@@ -3,7 +3,7 @@ package com.emikhalets.core.superapp.ui.component
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -12,8 +12,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.core.superapp.ui.extentions.BoxPreview
 import com.emikhalets.core.superapp.ui.extentions.clickableOnce
 import com.emikhalets.core.superapp.ui.theme.AppTheme
 
@@ -28,7 +28,7 @@ fun AppTopBar(
         navigationIcon = {
             if (onBackClick != null) {
                 Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = null,
                     modifier = Modifier
                         .clickableOnce { onBackClick() }
@@ -37,13 +37,16 @@ fun AppTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         modifier = Modifier.fillMaxWidth()
     )
 }
 
-@Preview(showBackground = true)
+@BoxPreview
 @Composable
 private fun Preview() {
     AppTheme {

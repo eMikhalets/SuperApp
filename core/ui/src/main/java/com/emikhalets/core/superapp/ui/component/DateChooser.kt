@@ -1,7 +1,8 @@
 package com.emikhalets.core.superapp.ui.component
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Update
+import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,10 +12,14 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.emikhalets.core.superapp.ui.extentions.BoxPreview
+import com.emikhalets.core.superapp.ui.extentions.clickableOnce
 import com.emikhalets.core.superapp.ui.theme.AppTheme
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.helper.DateHelper
@@ -24,52 +29,75 @@ import java.util.Date
 @Composable
 fun AppDateChooser(
     timestamp: Long,
-    showDialog: Boolean,
     onSelect: (Long?) -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
+    initialDialogVisible: Boolean = false,
 ) {
     val datePickerState = rememberDatePickerState()
     val confirmEnabled by remember { derivedStateOf { datePickerState.selectedDateMillis != null } }
-    if (showDialog) {
+    var isDialogVisible by remember { mutableStateOf(initialDialogVisible) }
+
+    if (isDialogVisible) {
         DatePickerDialog(
             onDismissRequest = onCancel,
             confirmButton = {
                 AppTextButton(
                     text = stringResource(R.string.common_select),
-                    onClick = { onSelect(datePickerState.selectedDateMillis) },
-                    enabled = confirmEnabled
+                    enabled = confirmEnabled,
+                    onClick = {
+                        onSelect(datePickerState.selectedDateMillis)
+                        isDialogVisible = false
+                    },
                 )
             },
             dismissButton = {
                 AppTextButton(
                     text = stringResource(R.string.common_cancel),
-                    onClick = onCancel
+                    onClick = {
+                        onCancel()
+                        isDialogVisible = false
+                    },
                 )
             }
         ) {
             DatePicker(state = datePickerState)
         }
     }
+
     OutlinedTextField(
         value = DateHelper.formatDate(datePickerState.selectedDateMillis, "dd.MM.yyyy"),
         onValueChange = {},
         readOnly = true,
         singleLine = true,
-        leadingIcon = { Icon(Icons.Rounded.Update, contentDescription = null) },
-        modifier = modifier
+        leadingIcon = { Icon(Icons.Rounded.CalendarMonth, contentDescription = null) },
+        modifier = modifier.clickableOnce { isDialogVisible = true }
     )
 }
 
-@Preview(showBackground = true)
+@BoxPreview
 @Composable
 private fun SpinnerPreview() {
     AppTheme {
         AppDateChooser(
             timestamp = Date().time,
-            showDialog = false,
             onSelect = {},
             onCancel = {},
+            modifier = Modifier.padding(8.dp)
+        )
+    }
+}
+
+@BoxPreview
+@Composable
+private fun SpinnerDatePreview() {
+    AppTheme {
+        AppDateChooser(
+            timestamp = Date().time,
+            onSelect = {},
+            onCancel = {},
+            initialDialogVisible = true,
+            modifier = Modifier.padding(8.dp)
         )
     }
 }

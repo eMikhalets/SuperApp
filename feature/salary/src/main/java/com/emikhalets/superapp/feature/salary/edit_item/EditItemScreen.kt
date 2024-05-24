@@ -67,7 +67,6 @@ private fun ScreenContent(
         )
         AppDateChooser(
             timestamp = state.date,
-            showDialog = state.showDateDialog,
             onSelect = { onSetAction(Action.SetDate(it)) },
             onCancel = { onSetAction(Action.ShowDateDialog(false)) },
             modifier = Modifier

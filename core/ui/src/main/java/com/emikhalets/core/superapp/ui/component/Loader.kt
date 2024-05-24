@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.core.superapp.ui.extentions.BoxPreview
 import com.emikhalets.core.superapp.ui.theme.AppTheme
 
 @Composable
@@ -19,10 +19,13 @@ fun LinearLoader(
     }
 }
 
-@Preview(showBackground = true)
+@BoxPreview
 @Composable
 private fun LinearLoaderPreview() {
     AppTheme {
-        LinearLoader(true, Modifier.padding(8.dp))
+        LinearLoader(
+            visible = true,
+            modifier = Modifier.padding(8.dp)
+        )
     }
 }

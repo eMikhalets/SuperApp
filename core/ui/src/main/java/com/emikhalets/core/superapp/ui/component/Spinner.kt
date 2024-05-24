@@ -1,5 +1,6 @@
 package com.emikhalets.core.superapp.ui.component
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -12,7 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.emikhalets.core.superapp.ui.extentions.BoxPreview
 import com.emikhalets.core.superapp.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +58,7 @@ fun AppSpinner(
     }
 }
 
-@Preview(showBackground = true)
+@BoxPreview
 @Composable
 private fun SpinnerPreview() {
     AppTheme {
@@ -65,6 +67,7 @@ private fun SpinnerPreview() {
             options = listOf("1", "test value", "2"),
             label = "test label",
             onSelect = {},
+            modifier = Modifier.padding(8.dp)
         )
     }
 }
