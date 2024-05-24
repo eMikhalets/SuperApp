@@ -1,4 +1,4 @@
-package com.emikhalets.superapp.superapp.feature.convert
+package com.emikhalets.superapp.feature.convert
 
 import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
 import com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase

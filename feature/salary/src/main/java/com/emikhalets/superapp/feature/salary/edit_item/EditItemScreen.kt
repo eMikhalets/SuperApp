@@ -104,7 +104,6 @@ private fun Preview() {
                 value = 12345,
                 date = DateHelper.now,
                 type = SalaryType.SALARY,
-                showDateDialog = false,
             ),
             onSetAction = {},
             onBackClick = {}

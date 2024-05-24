@@ -86,6 +86,10 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:ui"))
 
+    implementation(project(":data:convert"))
+    implementation(project(":domain:convert"))
+    implementation(project(":feature:convert"))
+
     implementation(project(":data:salary"))
     implementation(project(":domain:salary"))
     implementation(project(":feature:salary"))

@@ -1,6 +1,7 @@
 package com.emikhalets.superapp.data.salary
 
 import android.content.Context
+import com.emikhalets.superapp.data.salary.table_salaries.SalariesDao
 import com.emikhalets.superapp.domain.salary.repository.SalaryRepository
 import dagger.Module
 import dagger.Provides

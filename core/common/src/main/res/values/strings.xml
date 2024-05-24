@@ -10,5 +10,6 @@
     <string name="common_select">Select</string>
     <string name="common_cancel">Cancel</string>
 
+    <string name="common_feature_convert">Convert</string>
     <string name="common_feature_salary">Salary</string>
 </resources>

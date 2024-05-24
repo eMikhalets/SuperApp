@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.emikhalets.superapp.data.salary.table_salaries.SalariesDao
+import com.emikhalets.superapp.data.salary.table_salaries.SalaryDb
 
 @Database(
     entities = [

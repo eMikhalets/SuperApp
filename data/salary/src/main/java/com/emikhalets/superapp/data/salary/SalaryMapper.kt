@@ -1,5 +1,6 @@
 package com.emikhalets.superapp.data.salary
 
+import com.emikhalets.superapp.data.salary.table_salaries.SalaryDb
 import com.emikhalets.superapp.domain.salary.model.SalaryModel
 import com.emikhalets.superapp.domain.salary.model.SalaryType
 import kotlinx.coroutines.flow.Flow

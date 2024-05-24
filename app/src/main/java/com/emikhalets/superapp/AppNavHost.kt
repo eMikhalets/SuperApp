@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.superapp.core.ui.AppFeature
 import com.emikhalets.superapp.AppRoute.Main
 import com.emikhalets.superapp.core.common.model.AppOrientationType
+import com.emikhalets.superapp.core.ui.AppFeature
+import com.emikhalets.superapp.feature.convert.AppConvertRoute
+import com.emikhalets.superapp.feature.convert.appConvertNavGraph
 import com.emikhalets.superapp.feature.salary.AppSalaryRoute
 import com.emikhalets.superapp.feature.salary.appSalaryNavGraph
 
@@ -22,6 +24,9 @@ fun AppNavHost(
                 navigateToFeature = { navigateToFeature(navController, it) },
             )
         }
+        if (AppFeature.Convert.visible) {
+            appConvertNavGraph(navController, onSetScreenOrientation)
+        }
         if (AppFeature.Salary.visible) {
             appSalaryNavGraph(navController, onSetScreenOrientation)
         }
@@ -30,6 +35,7 @@ fun AppNavHost(
 
 private fun navigateToFeature(navController: NavHostController, feature: AppFeature) {
     when (feature) {
+        AppFeature.Convert -> navController.navigate(AppConvertRoute.NavGraph)
         AppFeature.Salary -> navController.navigate(AppSalaryRoute.NavGraph)
     }
 }

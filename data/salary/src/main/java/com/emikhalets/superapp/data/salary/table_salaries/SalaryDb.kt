@@ -1,4 +1,4 @@
-package com.emikhalets.superapp.data.salary
+package com.emikhalets.superapp.data.salary.table_salaries
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
