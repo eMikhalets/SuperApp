@@ -13,7 +13,7 @@ import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
 import com.emikhalets.superapp.core.ui.extentions.ScreenLandPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.core.common.date.DateHelper
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
+import com.emikhalets.superapp.domain.salary.SalaryModel
 import com.emikhalets.superapp.feature.salary.chart.ChartContract.Action
 import com.emikhalets.superapp.feature.salary.chart.ChartContract.State
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis

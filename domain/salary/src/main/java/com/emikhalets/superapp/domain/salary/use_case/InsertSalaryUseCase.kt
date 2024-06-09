@@ -3,8 +3,8 @@ package com.emikhalets.superapp.domain.salary.use_case
 import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
-import com.emikhalets.superapp.domain.salary.repository.SalaryRepository
+import com.emikhalets.superapp.domain.salary.SalaryModel
+import com.emikhalets.superapp.domain.salary.SalaryRepository
 import javax.inject.Inject
 
 class InsertSalaryUseCase @Inject constructor(

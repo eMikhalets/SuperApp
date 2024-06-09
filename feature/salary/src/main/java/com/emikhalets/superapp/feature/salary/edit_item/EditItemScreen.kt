@@ -22,8 +22,8 @@ import com.emikhalets.superapp.core.ui.component.AppDateChooser
 import com.emikhalets.superapp.core.ui.component.AppSpinner
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
-import com.emikhalets.superapp.domain.salary.model.SalaryType
-import com.emikhalets.superapp.domain.salary.model.asSalaryType
+import com.emikhalets.superapp.domain.salary.SalaryType
+import com.emikhalets.superapp.domain.salary.asSalaryType
 import com.emikhalets.superapp.feature.salary.R
 import com.emikhalets.superapp.feature.salary.edit_item.EditItemContract.Action
 import com.emikhalets.superapp.feature.salary.edit_item.EditItemContract.State

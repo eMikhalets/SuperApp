@@ -4,7 +4,7 @@ import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.getOrTrue
-import com.emikhalets.superapp.domain.convert.repository.ConvertRepository
+import com.emikhalets.superapp.domain.convert.ConvertRepository
 import javax.inject.Inject
 
 class InsertCurrencyUseCase @Inject constructor(

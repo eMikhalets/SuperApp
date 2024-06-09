@@ -33,9 +33,9 @@ include(":data:convert")
 include(":domain:convert")
 include(":feature:convert")
 
-include(":data:notes")
-include(":domain:notes")
-include(":feature:notes")
+include(":data:tasks")
+include(":domain:tasks")
+include(":feature:tasks")
 
 include(":data:salary")
 include(":domain:salary")

@@ -4,8 +4,8 @@ import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.model.CurrencyValueModel
-import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
-import com.emikhalets.superapp.domain.convert.repository.ConvertRepository
+import com.emikhalets.superapp.domain.convert.CurrencyPairModel
+import com.emikhalets.superapp.domain.convert.ConvertRepository
 import java.util.Date
 import javax.inject.Inject
 

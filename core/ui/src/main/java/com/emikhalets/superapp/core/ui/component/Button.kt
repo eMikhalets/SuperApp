@@ -8,14 +8,12 @@ import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.ui.extentions.BoxPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 
@@ -30,7 +28,10 @@ fun AppButton(
         shape = MaterialTheme.shapes.small,
         modifier = modifier.defaultMinSize(minHeight = 52.dp)
     ) {
-        Text(text = text)
+        AppTextPrimary(
+            text = text,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
 
@@ -54,9 +55,9 @@ fun AppButtonTopIcon(
                 imageVector = icon,
                 contentDescription = null
             )
-            Text(
+            AppTextPrimary(
                 text = text,
-                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
@@ -76,7 +77,7 @@ fun AppTextButton(
         shape = MaterialTheme.shapes.small,
         modifier = modifier.defaultMinSize(minHeight = 52.dp)
     ) {
-        Text(text = text)
+        AppTextButton(text = text)
     }
 }
 

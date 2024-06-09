@@ -5,8 +5,8 @@ import com.emikhalets.superapp.core.common.date.DateHelper
 import com.emikhalets.superapp.core.common.mvi.MviAction
 import com.emikhalets.superapp.core.common.mvi.MviEffect
 import com.emikhalets.superapp.core.common.mvi.MviState
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
-import com.emikhalets.superapp.domain.salary.model.SalaryType
+import com.emikhalets.superapp.domain.salary.SalaryModel
+import com.emikhalets.superapp.domain.salary.SalaryType
 
 object EditItemContract {
 

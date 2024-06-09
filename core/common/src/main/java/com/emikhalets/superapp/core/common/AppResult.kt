@@ -1,5 +1,6 @@
 package com.emikhalets.superapp.core.common
 
+import com.emikhalets.superapp.core.common.constant.Const
 import timber.log.Timber
 
 sealed class AppResult<out S> {
@@ -12,14 +13,14 @@ sealed class AppResult<out S> {
 
         fun <S> success(
             data: S,
-            code: Int = AppConstant.CODE_SUCCESS,
+            code: Int = Const.CODE_SUCCESS,
         ): AppResult<S> {
             return Success(data, code)
         }
 
         fun failure(
             message: StringValue,
-            code: Int = AppConstant.CODE_FAILURE,
+            code: Int = Const.CODE_FAILURE,
         ): AppResult<Nothing> {
             return Failure(message, code)
         }

@@ -3,7 +3,7 @@ package com.emikhalets.superapp.feature.salary.chart
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.superapp.core.common.mvi.MviViewModel
 import com.emikhalets.superapp.core.common.mvi.launch
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
+import com.emikhalets.superapp.domain.salary.SalaryModel
 import com.emikhalets.superapp.domain.salary.use_case.GetSalariesUseCase
 import com.emikhalets.superapp.feature.salary.chart.ChartContract.Action
 import com.emikhalets.superapp.feature.salary.chart.ChartContract.Effect

@@ -5,8 +5,8 @@ import com.emikhalets.superapp.core.common.date.DateHelper
 import com.emikhalets.superapp.core.common.helper.MoneyHelper
 import com.emikhalets.superapp.core.common.mvi.MviViewModel
 import com.emikhalets.superapp.core.common.mvi.launch
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
-import com.emikhalets.superapp.domain.salary.model.SalaryType
+import com.emikhalets.superapp.domain.salary.SalaryModel
+import com.emikhalets.superapp.domain.salary.SalaryType
 import com.emikhalets.superapp.domain.salary.use_case.DeleteSalaryUseCase
 import com.emikhalets.superapp.domain.salary.use_case.GetSalaryUseCase
 import com.emikhalets.superapp.domain.salary.use_case.InsertSalaryUseCase

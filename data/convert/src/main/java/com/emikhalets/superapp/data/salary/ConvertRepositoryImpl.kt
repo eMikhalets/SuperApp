@@ -11,9 +11,9 @@ import com.emikhalets.superapp.data.salary.table_currencies.CurrenciesDao
 import com.emikhalets.superapp.data.salary.table_currencies.CurrencyDb
 import com.emikhalets.superapp.data.salary.table_currency_pair.CurrencyPairDao
 import com.emikhalets.superapp.data.salary.table_currency_pair.CurrencyPairDb
-import com.emikhalets.superapp.domain.convert.model.CurrencyModel
-import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
-import com.emikhalets.superapp.domain.convert.repository.ConvertRepository
+import com.emikhalets.superapp.domain.convert.CurrencyModel
+import com.emikhalets.superapp.domain.convert.CurrencyPairModel
+import com.emikhalets.superapp.domain.convert.ConvertRepository
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject

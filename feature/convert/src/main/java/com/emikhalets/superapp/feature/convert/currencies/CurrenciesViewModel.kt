@@ -3,8 +3,8 @@ package com.emikhalets.superapp.feature.convert.currencies
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.superapp.core.common.mvi.MviViewModel
 import com.emikhalets.superapp.core.common.mvi.launch
-import com.emikhalets.superapp.domain.convert.model.CurrencyModel
-import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
+import com.emikhalets.superapp.domain.convert.CurrencyModel
+import com.emikhalets.superapp.domain.convert.CurrencyPairModel
 import com.emikhalets.superapp.domain.convert.use_case.ConvertCurrencyUseCase
 import com.emikhalets.superapp.domain.convert.use_case.DeleteCurrencyUseCase
 import com.emikhalets.superapp.domain.convert.use_case.GetCurrenciesUseCase

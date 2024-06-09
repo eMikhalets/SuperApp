@@ -3,8 +3,8 @@ package com.emikhalets.superapp.domain.convert.use_case
 import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
-import com.emikhalets.superapp.domain.convert.model.CurrencyModel
-import com.emikhalets.superapp.domain.convert.repository.ConvertRepository
+import com.emikhalets.superapp.domain.convert.CurrencyModel
+import com.emikhalets.superapp.domain.convert.ConvertRepository
 import javax.inject.Inject
 
 class DeleteCurrencyUseCase @Inject constructor(

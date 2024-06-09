@@ -1,8 +1,8 @@
 package com.emikhalets.superapp.feature.salary.chart
 
 import com.emikhalets.superapp.core.common.date.DateHelper
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
-import com.emikhalets.superapp.domain.salary.model.SalaryType
+import com.emikhalets.superapp.domain.salary.SalaryModel
+import com.emikhalets.superapp.domain.salary.SalaryType
 
 internal fun getChartSalaryList(): List<SalaryModel> {
     return listOf(

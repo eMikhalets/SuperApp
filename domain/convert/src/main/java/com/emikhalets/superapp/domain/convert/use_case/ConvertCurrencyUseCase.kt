@@ -1,6 +1,6 @@
 package com.emikhalets.superapp.domain.convert.use_case
 
-import com.emikhalets.superapp.domain.convert.model.CurrencyPairModel
+import com.emikhalets.superapp.domain.convert.CurrencyPairModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

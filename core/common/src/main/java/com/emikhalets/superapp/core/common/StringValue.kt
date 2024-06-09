@@ -6,7 +6,7 @@ sealed class StringValue {
 
     data object Empty : StringValue()
     data object InternalError : StringValue()
-    class Message(val text: String?) : StringValue()
+    class Message(val text: String) : StringValue()
     class Resource(val resId: Int, vararg val args: Any) : StringValue()
     class Exception(val throwable: Throwable) : StringValue()
 
@@ -23,9 +23,12 @@ sealed class StringValue {
         fun internalError(): StringValue = InternalError
 
         /**
-         * Возвращает [StringValue.Message]
+         * Возвращает [StringValue.Message] или [StringValue.Empty]
          */
-        fun message(message: String?): StringValue = Message(message)
+        fun message(message: String?): StringValue {
+            return if (message.isNullOrBlank()) Empty
+            else Message(message)
+        }
 
         /**
          * Возвращает [StringValue.Resource]
@@ -43,7 +46,7 @@ sealed class StringValue {
             return when (this) {
                 Empty -> ""
                 InternalError -> internal
-                is Message -> text ?: ""
+                is Message -> text
                 is Resource -> context.getString(resId, *args)
                 is Exception -> throwable.message ?: internal
                 else -> internal

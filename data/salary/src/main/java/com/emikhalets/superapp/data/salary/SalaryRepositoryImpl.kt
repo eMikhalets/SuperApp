@@ -3,8 +3,8 @@ package com.emikhalets.superapp.data.salary
 import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.invoke
 import com.emikhalets.superapp.data.salary.table_salaries.SalariesDao
-import com.emikhalets.superapp.domain.salary.model.SalaryModel
-import com.emikhalets.superapp.domain.salary.repository.SalaryRepository
+import com.emikhalets.superapp.domain.salary.SalaryModel
+import com.emikhalets.superapp.domain.salary.SalaryRepository
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject

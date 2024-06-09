@@ -1,7 +1,7 @@
 package com.emikhalets.superapp.data.salary.mapper
 
 import com.emikhalets.superapp.data.salary.table_currencies.CurrencyDb
-import com.emikhalets.superapp.domain.convert.model.CurrencyModel
+import com.emikhalets.superapp.domain.convert.CurrencyModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
