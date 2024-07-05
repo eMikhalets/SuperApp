@@ -28,9 +28,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:ui"))
     implementation(project(":core:common"))
-    implementation(project(":domain:convert"))
+    implementation(project(":core:database"))
+    implementation(project(":core:network"))
+    implementation(project(":core:ui"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

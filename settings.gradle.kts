@@ -29,14 +29,11 @@ include(":core:datastore")
 include(":core:network")
 include(":core:ui")
 
-include(":data:convert")
-include(":domain:convert")
 include(":feature:convert")
+include(":feature:salary")
+include(":feature:tasks")
 
 include(":data:tasks")
 include(":domain:tasks")
-include(":feature:tasks")
-
 include(":data:salary")
 include(":domain:salary")
-include(":feature:salary")

@@ -86,13 +86,15 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:ui"))
 
-    implementation(project(":data:convert"))
-    implementation(project(":domain:convert"))
     implementation(project(":feature:convert"))
 
     implementation(project(":data:salary"))
     implementation(project(":domain:salary"))
     implementation(project(":feature:salary"))
+
+    implementation(project(":data:tasks"))
+    implementation(project(":domain:tasks"))
+    implementation(project(":feature:tasks"))
 
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)

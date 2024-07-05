@@ -7,8 +7,8 @@ import androidx.navigation.compose.composable
 import com.emikhalets.superapp.AppRoute.Main
 import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.emikhalets.superapp.core.ui.AppFeature
-import com.emikhalets.superapp.feature.convert.AppConvertRoute
-import com.emikhalets.superapp.feature.convert.appConvertNavGraph
+import com.emikhalets.superapp.feature.convert.ui.AppConvertRoute
+import com.emikhalets.superapp.feature.convert.ui.appConvertNavGraph
 import com.emikhalets.superapp.feature.salary.AppSalaryRoute
 import com.emikhalets.superapp.feature.salary.appSalaryNavGraph
 
