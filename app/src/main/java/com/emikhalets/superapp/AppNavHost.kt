@@ -9,8 +9,8 @@ import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.emikhalets.superapp.core.ui.AppFeature
 import com.emikhalets.superapp.feature.convert.ui.AppConvertRoute
 import com.emikhalets.superapp.feature.convert.ui.appConvertNavGraph
-import com.emikhalets.superapp.feature.salary.AppSalaryRoute
-import com.emikhalets.superapp.feature.salary.appSalaryNavGraph
+import com.emikhalets.superapp.feature.salary.ui.AppSalaryRoute
+import com.emikhalets.superapp.feature.salary.ui.appSalaryNavGraph
 
 @Composable
 fun AppNavHost(

@@ -35,5 +35,3 @@ include(":feature:tasks")
 
 include(":data:tasks")
 include(":domain:tasks")
-include(":data:salary")
-include(":domain:salary")

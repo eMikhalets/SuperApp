@@ -87,9 +87,6 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(project(":feature:convert"))
-
-    implementation(project(":data:salary"))
-    implementation(project(":domain:salary"))
     implementation(project(":feature:salary"))
 
     implementation(project(":data:tasks"))
