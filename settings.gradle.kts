@@ -31,7 +31,4 @@ include(":core:ui")
 
 include(":feature:convert")
 include(":feature:salary")
-include(":feature:tasks")
-
-include(":data:tasks")
-include(":domain:tasks")
+include(":feature:notes")
