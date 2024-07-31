@@ -11,16 +11,11 @@ class InsertSalaryUseCase @Inject constructor(
     private val salaryRepository: SalaryRepository,
 ) {
 
-    suspend operator fun invoke(model: SalaryModel): Result {
+    suspend operator fun invoke(model: SalaryModel): AppResult<Long> {
         val insertError = R.string.common_error_insert
-        return when (salaryRepository.addSalary(model)) {
-            is AppResult.Failure -> Result.Failure(StringValue.resource(insertError))
-            is AppResult.Success -> Result.Success
+        return when (val result = salaryRepository.addSalary(model)) {
+            is AppResult.Failure -> AppResult.failure(StringValue.resource(insertError))
+            is AppResult.Success -> result
         }
-    }
-
-    sealed interface Result {
-        class Failure(val message: StringValue) : Result
-        data object Success : Result
     }
 }

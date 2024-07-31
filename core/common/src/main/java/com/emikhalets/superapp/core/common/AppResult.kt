@@ -7,7 +7,8 @@ sealed class AppResult<out S> {
 
     class Success<out S>(val data: S, val code: Int) : AppResult<S>()
 
-    class Failure(val message: StringValue, val code: Int) : AppResult<Nothing>()
+    class Failure(val message: StringValue, val code: Int, val exception: Exception?) :
+        AppResult<Nothing>()
 
     companion object {
 
@@ -21,8 +22,9 @@ sealed class AppResult<out S> {
         fun failure(
             message: StringValue,
             code: Int = Const.CODE_FAILURE,
+            exception: Exception? = null,
         ): AppResult<Nothing> {
-            return Failure(message, code)
+            return Failure(message, code, exception)
         }
     }
 }
@@ -33,7 +35,7 @@ suspend fun <T> invoke(block: suspend () -> T): AppResult<T> {
         AppResult.success(result)
     } catch (e: Exception) {
         Timber.e(e)
-        AppResult.failure(StringValue.internalError())
+        AppResult.failure(StringValue.internalError(), exception = e)
     }
 }
 

@@ -6,7 +6,6 @@ import com.emikhalets.superapp.core.database.salary.table_salaries.SalariesDao
 import com.emikhalets.superapp.feature.salary.data.SalaryRepository
 import com.emikhalets.superapp.feature.salary.domain.use_case.DeleteSalaryUseCase
 import com.emikhalets.superapp.feature.salary.domain.use_case.GetSalariesUseCase
-import com.emikhalets.superapp.feature.salary.domain.use_case.GetSalaryUseCase
 import com.emikhalets.superapp.feature.salary.domain.use_case.InsertSalaryUseCase
 import com.emikhalets.superapp.feature.salary.domain.use_case.UpdateSalaryUseCase
 import dagger.Module
@@ -42,11 +41,6 @@ object SalaryModule {
     @Provides
     fun provideGetSalariesUseCase(salaryRepository: SalaryRepository): GetSalariesUseCase {
         return GetSalariesUseCase(salaryRepository)
-    }
-
-    @Provides
-    fun provideGetSalaryUseCase(salaryRepository: SalaryRepository): GetSalaryUseCase {
-        return GetSalaryUseCase(salaryRepository)
     }
 
     @Provides

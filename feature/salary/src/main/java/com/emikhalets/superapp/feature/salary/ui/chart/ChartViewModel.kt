@@ -1,10 +1,15 @@
 package com.emikhalets.superapp.feature.salary.ui.chart
 
 import androidx.lifecycle.viewModelScope
+import com.emikhalets.superapp.core.common.AppResult
+import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.common.mvi.MviViewModel
 import com.emikhalets.superapp.core.common.mvi.launch
 import com.emikhalets.superapp.feature.salary.domain.SalaryModel
+import com.emikhalets.superapp.feature.salary.domain.use_case.DeleteSalaryUseCase
 import com.emikhalets.superapp.feature.salary.domain.use_case.GetSalariesUseCase
+import com.emikhalets.superapp.feature.salary.domain.use_case.InsertSalaryUseCase
+import com.emikhalets.superapp.feature.salary.domain.use_case.UpdateSalaryUseCase
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.Action
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.Effect
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.State
@@ -20,6 +25,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ChartViewModel @Inject constructor(
     private val getSalariesUseCase: GetSalariesUseCase,
+    private val insertSalaryUseCase: InsertSalaryUseCase,
+    private val updateSalaryUseCase: UpdateSalaryUseCase,
+    private val deleteSalaryUseCase: DeleteSalaryUseCase,
 ) : MviViewModel<Action, Effect, State>() {
 
     private val salariesFlow: Flow<List<SalaryModel>> =
@@ -36,14 +44,57 @@ class ChartViewModel @Inject constructor(
     override fun setInitialState() = State()
 
     override fun handleAction(action: Action) {
-        // Nothing
+        when (action) {
+            is Action.DeleteSalary -> deleteSalary(action.model)
+            is Action.SaveSalary -> saveSalary(action.model)
+            is Action.SetEditSalary -> setEditSalary(action.model)
+        }
+    }
+
+    private fun setEditSalary(model: SalaryModel?) {
+        setState { it.copy(editSalary = model) }
+    }
+
+    private fun saveSalary(model: SalaryModel) {
+        if (model.id == Const.IdNew) {
+            insertSalary(model)
+        } else {
+            updateSalary(model)
+        }
+    }
+
+    private fun insertSalary(model: SalaryModel) {
+        launch {
+            when (val result = insertSalaryUseCase.invoke(model)) {
+                is AppResult.Failure -> setFailureState(result.exception)
+                is AppResult.Success -> Unit
+            }
+        }
+    }
+
+    private fun updateSalary(model: SalaryModel) {
+        launch {
+            when (val result = updateSalaryUseCase.invoke(model)) {
+                is AppResult.Failure -> setFailureState(result.exception)
+                is AppResult.Success -> setState { it.copy(editSalary = null) }
+            }
+        }
+    }
+
+    private fun deleteSalary(model: SalaryModel) {
+        launch {
+            when (val result = deleteSalaryUseCase.invoke(model)) {
+                is AppResult.Failure -> setFailureState(result.exception)
+                is AppResult.Success -> setState { it.copy(editSalary = null) }
+            }
+        }
     }
 
     private fun setSalariesState(list: List<SalaryModel>) {
         setState { it.copy(salaryList = list) }
     }
 
-    private fun setFailureState(throwable: Throwable) {
+    private fun setFailureState(throwable: Throwable?) {
         // TODO show error dialog
     }
 }

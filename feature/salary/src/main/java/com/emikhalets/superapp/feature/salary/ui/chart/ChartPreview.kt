@@ -14,12 +14,12 @@ internal fun getChartSalaryList(): List<SalaryModel> {
         SalaryModel(
             6000000,
             DateHelper.timestampOf(10, 4, 2023),
-            SalaryType.SALARY
+            SalaryType.PREPAYMENT
         ),
         SalaryModel(
             10000000,
             DateHelper.timestampOf(10, 6, 2023),
-            SalaryType.SALARY
+            SalaryType.OTHER
         ),
         SalaryModel(
             15000000,
