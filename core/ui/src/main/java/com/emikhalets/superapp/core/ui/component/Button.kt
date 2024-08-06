@@ -8,6 +8,7 @@ import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -77,7 +78,7 @@ fun AppTextButton(
         shape = MaterialTheme.shapes.small,
         modifier = modifier.defaultMinSize(minHeight = 52.dp)
     ) {
-        AppTextButton(text = text)
+        Text(text = text)
     }
 }
 

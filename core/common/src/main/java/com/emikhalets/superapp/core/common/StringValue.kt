@@ -8,7 +8,7 @@ sealed class StringValue {
     data object InternalError : StringValue()
     class Message(val text: String) : StringValue()
     class Resource(val resId: Int, vararg val args: Any) : StringValue()
-    class Exception(val throwable: Throwable) : StringValue()
+    class Exception(val throwable: Throwable?) : StringValue()
 
     companion object {
 
@@ -38,7 +38,7 @@ sealed class StringValue {
         /**
          * Возвращает [StringValue.Exception]
          */
-        fun exception(throwable: Throwable): StringValue = Exception(throwable)
+        fun exception(throwable: Throwable?): StringValue = Exception(throwable)
 
         fun StringValue?.asString(context: Context?): String {
             val internal = context?.getString(R.string.common_error_internal) ?: ""
@@ -48,7 +48,7 @@ sealed class StringValue {
                 InternalError -> internal
                 is Message -> text
                 is Resource -> context.getString(resId, *args)
-                is Exception -> throwable.message ?: internal
+                is Exception -> throwable?.message ?: internal
                 else -> internal
             }
         }

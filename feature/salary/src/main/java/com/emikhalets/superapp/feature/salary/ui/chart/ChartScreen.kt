@@ -14,11 +14,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.emikhalets.superapp.core.common.date.DateHelper
-import com.emikhalets.superapp.core.common.date.format
+import com.emikhalets.superapp.core.common.helper.MoneyHelper
 import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
+import com.emikhalets.superapp.core.ui.extentions.toast
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.feature.salary.domain.SalaryModel
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.Action
@@ -26,18 +28,30 @@ import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.State
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
-import com.patrykandpatrick.vico.compose.chart.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.chart.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.chart.scroll.rememberVicoScrollState
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.ExtraStore
-import com.patrykandpatrick.vico.core.model.columnSeries
+import com.patrykandpatrick.vico.core.model.lineSeries
+import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 
 @Composable
 internal fun ChartScreen(
     navigateBack: () -> Unit,
     viewModel: ChartViewModel,
 ) {
+    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                is ChartContract.Effect.Error -> toast(context, effect.message)
+            }
+        }
+    }
 
     ScreenContent(
         state = state,
@@ -84,27 +98,30 @@ private fun ChartBox(
     modifier: Modifier = Modifier,
 ) {
     val labelListKey = ExtraStore.Key<List<String>>()
+    val scrollState = rememberVicoScrollState()
     LaunchedEffect(list) {
-        modelProducer.tryRunTransaction {
-            val yValues = list.map { it.value / 100 }
-            val datesMap = list.associate {
-                DateHelper.formatDate(it.timestamp, "M/yy") to it.timestamp
-            }
-            columnSeries { series(yValues) }
-            updateExtras { it[labelListKey] = datesMap.keys.toList() }
+        modelProducer.runTransaction {
+            Timber.d("runTransaction $list")
+            lineSeries { series(4, 12, 8, 16) }
+//            val yValues = list.map { it.value / 100 }
+//            val datesMap = list.associate {
+//                (DateHelper.format("M/yy", it.timestamp) ?: "") to it.timestamp
+//            }
+//            columnSeries { series(yValues) }
+//            updateExtras { it[labelListKey] = datesMap.keys.toList() }
         }
     }
-    val chartState = rememberCartesianChart(
-        rememberColumnCartesianLayer(),
+    val chart = rememberCartesianChart(
+        rememberLineCartesianLayer(),
         startAxis = rememberStartAxis(),
-        bottomAxis = rememberBottomAxis(
-            valueFormatter = { x, chartValues, _ ->
-                chartValues.model.extraStore[labelListKey][x.toInt()]
-            }
-        ),
+        bottomAxis = rememberBottomAxis(),
     )
     Column(modifier = modifier) {
-        CartesianChartHost(chartState, modelProducer)
+        CartesianChartHost(
+            chart = chart,
+            modelProducer = modelProducer,
+            scrollState = scrollState
+        )
     }
 }
 
@@ -138,24 +155,24 @@ private fun SalaryRow(
         modifier = modifier,
     ) {
         Text(
-            text = model.value.toString(),
+            text = MoneyHelper.convertMoney(model.value),
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(3f)
+                .weight(1f)
                 .padding(end = 8.dp)
         )
         Text(
             text = model.type.toString(),
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(3f)
+                .weight(1f)
                 .padding(end = 8.dp)
         )
         Text(
-            text = model.timestamp.format("dd MMM yyyy") ?: "date null",
+            text = DateHelper.format("dd MMM yyyy", model.timestamp) ?: "date null",
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(2f)
+                .weight(1f)
                 .padding(end = 8.dp)
         )
     }

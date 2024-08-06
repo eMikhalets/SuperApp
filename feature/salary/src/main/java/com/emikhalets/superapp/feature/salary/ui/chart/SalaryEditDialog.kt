@@ -1,6 +1,7 @@
 package com.emikhalets.superapp.feature.salary.ui.chart
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -8,12 +9,17 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import com.emikhalets.superapp.core.common.helper.MoneyHelper
+import com.emikhalets.superapp.core.ui.component.AppDateChooser
+import com.emikhalets.superapp.core.ui.component.AppSpinner
 import com.emikhalets.superapp.core.ui.dialog.DialogOneAction
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -31,15 +37,18 @@ internal fun SalaryEditDialog(
     model ?: return
 
     var value by remember { mutableLongStateOf(model.value) }
+    var timestamp by remember { mutableLongStateOf(model.timestamp) }
+    var type by remember { mutableStateOf(model.type) }
 
     DialogOneAction(
         actionText = stringResource(R.string.salary_app_save),
+        backClickDismiss = true,
         onDismiss = onDismiss,
-        onConfirm = { onSaveClick(model.copy(value = value)) }
+        onConfirm = { onSaveClick(model.set(value, timestamp, type)) }
     ) {
         OutlinedTextField(
-            value = value.toString(),
-            onValueChange = { value = it.toLongOrNull() ?: 0 },
+            value = MoneyHelper.convertMoney(value),
+            onValueChange = { value = MoneyHelper.convertMoney(it) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -51,7 +60,26 @@ internal fun SalaryEditDialog(
             ),
             modifier = Modifier.fillMaxWidth()
         )
+        AppDateChooser(
+            timestamp = timestamp,
+            onSelect = { timestamp = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        )
+        AppSpinner(
+            value = type.toString(),
+            options = SalaryType.asStringList(),
+            onSelect = { type = SalaryType.valueOf(it) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        )
     }
+}
+
+private fun SalaryModel.set(value: Long, timestamp: Long, type: SalaryType): SalaryModel {
+    return this.copy(value = value, timestamp = timestamp, type = type)
 }
 
 @ScreenPreview
@@ -61,7 +89,7 @@ private fun Preview() {
         SalaryEditDialog(
             model = SalaryModel(
                 id = 1,
-                value = 0,
+                value = 12345,
                 timestamp = Date().time,
                 type = SalaryType.SALARY,
             ),

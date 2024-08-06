@@ -12,7 +12,7 @@ fun StringValue?.asString(): String {
         StringValue.Empty -> internal
         StringValue.InternalError -> internal
         is StringValue.Message -> text ?: internal
-        is StringValue.Exception -> throwable.message ?: internal
+        is StringValue.Exception -> throwable?.message ?: internal
         is StringValue.Resource -> stringResource(resId, *args)
         else -> internal
     }

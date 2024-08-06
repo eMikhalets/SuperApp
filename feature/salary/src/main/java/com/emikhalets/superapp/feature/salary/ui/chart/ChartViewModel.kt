@@ -2,6 +2,7 @@ package com.emikhalets.superapp.feature.salary.ui.chart
 
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.superapp.core.common.AppResult
+import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.common.mvi.MviViewModel
 import com.emikhalets.superapp.core.common.mvi.launch
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,7 +69,7 @@ class ChartViewModel @Inject constructor(
         launch {
             when (val result = insertSalaryUseCase.invoke(model)) {
                 is AppResult.Failure -> setFailureState(result.exception)
-                is AppResult.Success -> Unit
+                is AppResult.Success -> setState { it.copy(editSalary = null) }
             }
         }
     }
@@ -91,10 +93,11 @@ class ChartViewModel @Inject constructor(
     }
 
     private fun setSalariesState(list: List<SalaryModel>) {
+        Timber.d("Salaries list size = ${list.size}")
         setState { it.copy(salaryList = list) }
     }
 
     private fun setFailureState(throwable: Throwable?) {
-        // TODO show error dialog
+        setEffect { Effect.Error(StringValue.exception(throwable)) }
     }
 }

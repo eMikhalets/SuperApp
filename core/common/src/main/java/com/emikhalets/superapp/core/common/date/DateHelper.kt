@@ -1,5 +1,6 @@
 package com.emikhalets.superapp.core.common.date
 
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -9,9 +10,19 @@ object DateHelper {
     val now: Long
         get() = Calendar.getInstance().timeInMillis
 
+    @Deprecated("")
     fun formatDate(timestamp: Long?, pattern: String): String {
         val formatter = SimpleDateFormat(pattern, Locale.getDefault())
         return formatter.format(timestamp ?: now)
+    }
+
+    fun format(pattern: String, value: Long): String? {
+        return try {
+            SimpleDateFormat(pattern, Locale.getDefault()).format(value)
+        } catch (e: Exception) {
+            Timber.d(e)
+            null
+        }
     }
 
     fun timestampOf(day: Int, month: Int, year: Int): Long {

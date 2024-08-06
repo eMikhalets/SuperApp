@@ -1,6 +1,7 @@
 package com.emikhalets.superapp.feature.salary.ui.chart
 
 import androidx.compose.runtime.Immutable
+import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.mvi.MviAction
 import com.emikhalets.superapp.core.common.mvi.MviEffect
 import com.emikhalets.superapp.core.common.mvi.MviState
@@ -17,7 +18,9 @@ object ChartContract {
     }
 
     @Immutable
-    sealed class Effect : MviEffect
+    sealed class Effect : MviEffect {
+        data class Error(val message: StringValue) : Effect()
+    }
 
     @Immutable
     data class State(

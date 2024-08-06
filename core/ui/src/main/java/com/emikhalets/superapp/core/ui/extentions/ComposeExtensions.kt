@@ -1,32 +1,58 @@
 package com.emikhalets.superapp.core.ui.extentions
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import kotlinx.coroutines.delay
+import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.semantics.Role
 
-// TODO check this Modifier.clickableOnce
-fun Modifier.clickableOnce(onClick: () -> Unit): Modifier = composed(
-    inspectorInfo = {
-        name = "clickableOnce"
-        value = onClick
+fun Modifier.clickableOnce(
+    enabled: Boolean = true,
+    onClickLabel: String? = null,
+    role: Role? = null,
+    onClick: () -> Unit,
+): Modifier = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "clickable"
+        properties["enabled"] = enabled
+        properties["onClickLabel"] = onClickLabel
+        properties["role"] = role
+        properties["onClick"] = onClick
     }
 ) {
-    var enableAgain by remember { mutableStateOf(true) }
-    LaunchedEffect(enableAgain, block = {
-        if (enableAgain) return@LaunchedEffect
-        delay(timeMillis = 500L)
-        enableAgain = true
-    })
-    Modifier.clickable {
-        if (enableAgain) {
-            enableAgain = false
-            onClick()
+    val multipleEventsCutter = remember { MultipleEventsCutter.get() }
+    this.clickable(
+        enabled = enabled,
+        onClickLabel = onClickLabel,
+        onClick = { multipleEventsCutter.processEvent { onClick() } },
+        role = role,
+        indication = LocalIndication.current,
+        interactionSource = remember { MutableInteractionSource() }
+    )
+}
+
+internal interface MultipleEventsCutter {
+    fun processEvent(event: () -> Unit)
+
+    companion object
+}
+
+internal fun MultipleEventsCutter.Companion.get(): MultipleEventsCutter =
+    MultipleEventsCutterImpl()
+
+private class MultipleEventsCutterImpl : MultipleEventsCutter {
+    private val now: Long
+        get() = System.currentTimeMillis()
+
+    private var lastEventTimeMs: Long = 0
+
+    override fun processEvent(event: () -> Unit) {
+        if (now - lastEventTimeMs >= 300L) {
+            event.invoke()
         }
+        lastEventTimeMs = now
     }
 }

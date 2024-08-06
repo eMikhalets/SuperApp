@@ -22,9 +22,9 @@ import com.emikhalets.superapp.core.ui.theme.AppTheme
 fun AppSpinner(
     value: String,
     options: List<String>,
-    label: String,
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
+    label: String = "",
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -36,7 +36,9 @@ fun AppSpinner(
             value = value,
             onValueChange = {},
             readOnly = true,
-            label = { Text(label) },
+            label = if (label.isNotBlank()) {
+                { Text(label) }
+            } else null,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = modifier.menuAnchor(),
         )

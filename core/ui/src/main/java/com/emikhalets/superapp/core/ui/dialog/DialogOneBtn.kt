@@ -52,12 +52,13 @@ fun DialogOneAction(
     onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {},
     actionText: String = "",
+    backClickDismiss: Boolean = false,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Dialog(
         onDismissRequest = { onDismiss() },
         properties = DialogProperties(
-            dismissOnBackPress = false,
+            dismissOnBackPress = backClickDismiss,
             dismissOnClickOutside = false,
             usePlatformDefaultWidth = false
         )
@@ -76,7 +77,7 @@ fun DialogOneAction(
             content()
             AppTextButton(
                 text = actionText.ifBlank { stringResource(R.string.common_ok) },
-                onClick = onDismiss,
+                onClick = onConfirm,
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .align(Alignment.End)

@@ -11,6 +11,6 @@ interface SalariesDao : AppDao<SalaryDb> {
     @Query("DELETE FROM salaries")
     suspend fun drop()
 
-    @Query("SELECT * FROM salaries")
+    @Query("SELECT * FROM salaries ORDER BY timestamp DESC")
     fun getAllFlow(): Flow<List<SalaryDb>>
 }

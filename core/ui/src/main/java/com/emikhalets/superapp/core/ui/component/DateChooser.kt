@@ -7,7 +7,9 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -18,25 +20,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.emikhalets.superapp.core.common.R
+import com.emikhalets.superapp.core.common.date.DateHelper
 import com.emikhalets.superapp.core.ui.extentions.BoxPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
-import com.emikhalets.superapp.core.common.R
-import com.emikhalets.superapp.core.common.date.DateHelper
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDateChooser(
     timestamp: Long,
-    onSelect: (Long?) -> Unit,
+    onSelect: (Long) -> Unit,
     modifier: Modifier = Modifier,
     onCancel: () -> Unit = {},
     initialDialogVisible: Boolean = false,
 ) {
-    val datePickerState = rememberDatePickerState()
-    val confirmEnabled by remember { derivedStateOf { datePickerState.selectedDateMillis != null } }
+    val state = rememberDatePickerState()
     var isDialogVisible by remember { mutableStateOf(initialDialogVisible) }
+    val confirmEnabled by remember {
+        derivedStateOf {
+            val time = state.selectedDateMillis
+            time != null && time != 0L
+        }
+    }
 
     if (isDialogVisible) {
         DatePickerDialog(
@@ -46,7 +53,7 @@ fun AppDateChooser(
                     text = stringResource(R.string.common_select),
                     enabled = confirmEnabled,
                     onClick = {
-                        onSelect(datePickerState.selectedDateMillis)
+                        onSelect(state.selectedDateMillis ?: 0)
                         isDialogVisible = false
                     },
                 )
@@ -61,16 +68,28 @@ fun AppDateChooser(
                 )
             }
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(state = state)
         }
     }
 
     OutlinedTextField(
-        value = DateHelper.formatDate(datePickerState.selectedDateMillis, "dd.MM.yyyy"),
+        value = DateHelper.format("dd.MM.yyyy", timestamp) ?: "null date",
         onValueChange = {},
         readOnly = true,
         singleLine = true,
+        enabled = false,
         leadingIcon = { Icon(Icons.Rounded.CalendarMonth, contentDescription = null) },
+        colors = OutlinedTextFieldDefaults.colors(
+            disabledTextColor = MaterialTheme.colorScheme.onSurface,
+            disabledBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        ),
         modifier = modifier.clickableOnce { isDialogVisible = true }
     )
 }
