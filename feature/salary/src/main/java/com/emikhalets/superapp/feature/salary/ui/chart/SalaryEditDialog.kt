@@ -17,13 +17,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.common.convertMoney
 import com.emikhalets.superapp.core.ui.component.DateSelection
-import com.emikhalets.superapp.core.ui.component.DropDownRow
-import com.emikhalets.superapp.core.ui.dialog.DialogOneAction
+import com.emikhalets.superapp.core.ui.component.DropDownBox
+import com.emikhalets.superapp.core.ui.dialog.DialogTwoAction
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
-import com.emikhalets.superapp.feature.salary.R
 import com.emikhalets.superapp.feature.salary.domain.SalaryModel
 import com.emikhalets.superapp.feature.salary.domain.SalaryType
 import java.util.Date
@@ -32,7 +32,7 @@ import java.util.Date
 internal fun SalaryEditDialog(
     model: SalaryModel?,
     onSaveClick: (SalaryModel) -> Unit,
-    onDismiss: () -> Unit = {},
+    onLeftClick: () -> Unit,
 ) {
     model ?: return
 
@@ -40,11 +40,17 @@ internal fun SalaryEditDialog(
     var timestamp by remember { mutableLongStateOf(model.timestamp) }
     var type by remember { mutableStateOf(model.type) }
 
-    DialogOneAction(
-        actionText = stringResource(R.string.salary_app_save),
-        backClickDismiss = true,
-        onDismiss = onDismiss,
-        onConfirm = { onSaveClick(model.set(value, timestamp, type)) }
+    val leftText = if (model.id == Const.IdNew) {
+        stringResource(com.emikhalets.superapp.core.common.R.string.cancel)
+    } else {
+        stringResource(com.emikhalets.superapp.core.common.R.string.delete)
+    }
+
+    DialogTwoAction(
+        leftText = leftText,
+        rightText = stringResource(com.emikhalets.superapp.core.common.R.string.save),
+        onLeftClick = onLeftClick,
+        onRightClick = { onSaveClick(model.set(value, timestamp, type)) }
     ) {
         OutlinedTextField(
             value = value.convertMoney(),
@@ -67,7 +73,7 @@ internal fun SalaryEditDialog(
                 .fillMaxWidth()
                 .padding(top = 8.dp)
         )
-        DropDownRow(
+        DropDownBox(
             value = type.toString(),
             options = SalaryType.asStringList(),
             onSelect = { type = SalaryType.valueOf(it) },
@@ -93,7 +99,7 @@ private fun Preview() {
                 timestamp = Date().time,
                 type = SalaryType.SALARY,
             ),
-            onDismiss = {},
+            onLeftClick = {},
             onSaveClick = {}
         )
     }

@@ -19,10 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.common.convertMoney
 import com.emikhalets.superapp.core.common.format
 import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
+import com.emikhalets.superapp.core.ui.component.TextSecondary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
+import com.emikhalets.superapp.core.ui.extentions.capitalize
+import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.extentions.toast
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.feature.salary.domain.SalaryModel
@@ -79,7 +83,13 @@ private fun ScreenContent(
     SalaryEditDialog(
         model = state.editSalary,
         onSaveClick = { onSetAction(Action.SaveSalary(it)) },
-        onDismiss = { onSetAction(Action.SetEditSalary(null)) }
+        onLeftClick = {
+            if (state.editSalary?.id == Const.IdNew) {
+                onSetAction(Action.SetEditSalary(null))
+            } else {
+                onSetAction(Action.DeleteSalary(state.editSalary))
+            }
+        }
     )
 }
 
@@ -94,7 +104,7 @@ private fun ChartBox(
             .fillMaxWidth()
             .height(200.dp)
     ) {
-        Text(
+        TextSecondary(
             text = "ГРАФИК",
             fontSize = 30.sp
         )
@@ -112,9 +122,7 @@ private fun SalaryList(
             SalaryRow(
                 model = model,
                 onClick = onClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp, 8.dp)
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -128,7 +136,9 @@ private fun SalaryRow(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
+        modifier = modifier
+            .clickableOnce { onClick(model) }
+            .padding(16.dp, 4.dp),
     ) {
         Text(
             text = model.value.convertMoney(),
@@ -138,7 +148,7 @@ private fun SalaryRow(
                 .padding(end = 8.dp)
         )
         Text(
-            text = model.type.toString(),
+            text = model.type.toString().capitalize(),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)

@@ -12,7 +12,7 @@ object ChartContract {
     @Immutable
     sealed class Action : MviAction {
         data class SaveSalary(val model: SalaryModel) : Action()
-        data class DeleteSalary(val model: SalaryModel) : Action()
+        data class DeleteSalary(val model: SalaryModel?) : Action()
         data class SetEditSalary(val model: SalaryModel?) : Action()
     }
 

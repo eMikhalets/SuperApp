@@ -57,7 +57,6 @@ internal fun TaskEditDialog(
 
     DialogOneAction(
         actionText = stringResource(R.string.notes_save),
-        onDismiss = onDismiss,
         onConfirm = { onSaveClick(task.updateTask(mainContent, subContent)) }
     ) {
         TaskTextField(

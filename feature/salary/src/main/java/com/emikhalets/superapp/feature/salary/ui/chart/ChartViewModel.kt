@@ -83,7 +83,8 @@ class ChartViewModel @Inject constructor(
         }
     }
 
-    private fun deleteSalary(model: SalaryModel) {
+    private fun deleteSalary(model: SalaryModel?) {
+        model ?: return
         launch {
             when (val result = deleteSalaryUseCase.invoke(model)) {
                 is AppResult.Failure -> setFailureState(result.exception)

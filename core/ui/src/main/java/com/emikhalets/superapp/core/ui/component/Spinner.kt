@@ -21,7 +21,7 @@ import com.emikhalets.superapp.core.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownRow(
+fun DropDownBox(
     value: String,
     options: List<String>,
     onSelect: (String) -> Unit,
@@ -77,7 +77,7 @@ fun DropDownRow(
 @Composable
 private fun Preview() {
     AppTheme {
-        DropDownRow(
+        DropDownBox(
             value = "test value",
             options = listOf("1", "test value", "2"),
             label = "test label",

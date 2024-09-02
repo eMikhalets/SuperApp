@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -23,10 +24,11 @@ fun TextHeader(
     color: Color = MaterialTheme.colorScheme.onBackground,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Ellipsis,
+    fontSize: TextUnit = 20.sp,
 ) {
     Text(
         text = text,
-        fontSize = 20.sp,
+        fontSize = fontSize,
         fontWeight = FontWeight.SemiBold,
         fontFamily = FontFamily.SansSerif,
         lineHeight = 24.sp,
@@ -44,10 +46,11 @@ fun TextPrimary(
     color: Color = MaterialTheme.colorScheme.onBackground,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Ellipsis,
+    fontSize: TextUnit = 16.sp,
 ) {
     Text(
         text = text,
-        fontSize = 16.sp,
+        fontSize = fontSize,
         fontWeight = FontWeight.Normal,
         fontFamily = FontFamily.SansSerif,
         lineHeight = 20.sp,
@@ -65,10 +68,11 @@ fun TextSecondary(
     color: Color = MaterialTheme.colorScheme.secondary,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Ellipsis,
+    fontSize: TextUnit = 14.sp,
 ) {
     Text(
         text = text,
-        fontSize = 14.sp,
+        fontSize = fontSize,
         fontWeight = FontWeight.Normal,
         fontFamily = FontFamily.SansSerif,
         lineHeight = 18.sp,

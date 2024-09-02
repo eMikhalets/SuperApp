@@ -10,10 +10,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 fun toast(context: Context?, massage: StringValue) {
     context ?: return
     Toast.makeText(context, massage.asString(context), Toast.LENGTH_SHORT).show()
+}
+
+fun String.capitalize(): String {
+    return buildString {
+        this@capitalize.forEachIndexed { index, item ->
+            if (index == 0) append(item.titlecase(Locale.getDefault()))
+            else append(item.lowercase(Locale.getDefault()))
+        }
+    }
 }
 
 fun ViewModel.launch(block: suspend CoroutineScope.() -> Unit): Job {
