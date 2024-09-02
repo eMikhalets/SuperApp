@@ -92,9 +92,11 @@ class ChartViewModel @Inject constructor(
         }
     }
 
-    private fun setSalariesState(list: List<SalaryModel>) {
-        Timber.d("Salaries list size = ${list.size}")
-        setState { it.copy(salaryList = list) }
+    private fun setSalariesState(data: List<SalaryModel>) {
+        Timber.d("Salaries list size = ${data.size}")
+        val list = data.sortedByDescending { it.timestamp }
+        val map = data.associate { it.timestamp to it.value / 100 }
+        setState { it.copy(salaryList = list, salaryMap = map) }
     }
 
     private fun setFailureState(throwable: Throwable?) {

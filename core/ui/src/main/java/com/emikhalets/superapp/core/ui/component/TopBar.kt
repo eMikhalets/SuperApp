@@ -3,7 +3,7 @@ package com.emikhalets.superapp.core.ui.component
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +28,7 @@ fun AppTopBar(
         navigationIcon = {
             if (onBackClick != null) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                    imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = null,
                     modifier = Modifier
                         .clickableOnce { onBackClick() }

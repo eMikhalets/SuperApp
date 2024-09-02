@@ -25,6 +25,12 @@ object DateHelper {
         }
     }
 
+    /**
+     * Return timestamp of date
+     * @param day values 1 - 31
+     * @param month values 1 - 12
+     * @param year any values
+     */
     fun timestampOf(day: Int, month: Int, year: Int): Long {
         if (day !in 1..31) return now
         if (month !in 1..12) return now

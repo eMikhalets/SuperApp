@@ -25,7 +25,6 @@ google-accompanist = "0.30.1"
 jetbrains-coroutines = '1.7.3'
 # Third-Party
 jakewharton-timber = "5.0.1"
-patrykandpatrickVico = "2.0.0-alpha.12"
 # Testing
 junit = "4.13.2"
 jsoup = "1.16.1"
@@ -62,7 +61,6 @@ jetbrains-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 jetbrains-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "jetbrains-coroutines" }
 junit = { module = "junit:junit", version.ref = "junit" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
-patrykandpatrick-vico = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "patrykandpatrickVico" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

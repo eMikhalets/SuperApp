@@ -1,9 +1,11 @@
 package com.emikhalets.superapp.feature.salary.ui.chart
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.common.date.DateHelper
 import com.emikhalets.superapp.core.common.helper.MoneyHelper
 import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
@@ -25,17 +28,7 @@ import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.feature.salary.domain.SalaryModel
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.Action
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.State
-import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
-import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
-import com.patrykandpatrick.vico.compose.chart.layer.rememberLineCartesianLayer
-import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
-import com.patrykandpatrick.vico.compose.chart.scroll.rememberVicoScrollState
-import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.model.ExtraStore
-import com.patrykandpatrick.vico.core.model.lineSeries
 import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 
 @Composable
 internal fun ChartScreen(
@@ -69,8 +62,7 @@ private fun ScreenContent(
     AppFloatingButtonBox(onClick = { onSetAction(Action.SetEditSalary(SalaryModel())) }) {
         Column(modifier = Modifier.fillMaxSize()) {
             ChartBox(
-                modelProducer = state.chartModelProducer,
-                list = state.salaryList,
+                salaries = state.salaryMap,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
@@ -93,34 +85,18 @@ private fun ScreenContent(
 
 @Composable
 private fun ChartBox(
-    modelProducer: CartesianChartModelProducer,
-    list: List<SalaryModel>,
+    salaries: Map<Long, Long>,
     modifier: Modifier = Modifier,
 ) {
-    val labelListKey = ExtraStore.Key<List<String>>()
-    val scrollState = rememberVicoScrollState()
-    LaunchedEffect(list) {
-        modelProducer.runTransaction {
-            Timber.d("runTransaction $list")
-            lineSeries { series(4, 12, 8, 16) }
-//            val yValues = list.map { it.value / 100 }
-//            val datesMap = list.associate {
-//                (DateHelper.format("M/yy", it.timestamp) ?: "") to it.timestamp
-//            }
-//            columnSeries { series(yValues) }
-//            updateExtras { it[labelListKey] = datesMap.keys.toList() }
-        }
-    }
-    val chart = rememberCartesianChart(
-        rememberLineCartesianLayer(),
-        startAxis = rememberStartAxis(),
-        bottomAxis = rememberBottomAxis(),
-    )
-    Column(modifier = modifier) {
-        CartesianChartHost(
-            chart = chart,
-            modelProducer = modelProducer,
-            scrollState = scrollState
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        Text(
+            text = "ГРАФИК",
+            fontSize = 30.sp
         )
     }
 }
@@ -184,7 +160,6 @@ private fun Preview() {
     AppTheme {
         ScreenContent(
             state = State(
-                chartModelProducer = CartesianChartModelProducer.build(),
                 salaryList = getChartSalaryList(),
             ),
             onSetAction = {},

@@ -41,8 +41,6 @@ dependencies {
     api(libs.androidx.navigation.compose)
     api(libs.androidx.hilt.navigation)
 
-    api(libs.patrykandpatrick.vico)
-
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
 

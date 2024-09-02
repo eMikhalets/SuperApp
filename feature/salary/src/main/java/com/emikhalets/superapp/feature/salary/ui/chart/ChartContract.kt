@@ -6,7 +6,6 @@ import com.emikhalets.superapp.core.common.mvi.MviAction
 import com.emikhalets.superapp.core.common.mvi.MviEffect
 import com.emikhalets.superapp.core.common.mvi.MviState
 import com.emikhalets.superapp.feature.salary.domain.SalaryModel
-import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 
 object ChartContract {
 
@@ -24,8 +23,8 @@ object ChartContract {
 
     @Immutable
     data class State(
+        val salaryMap: Map<Long, Long> = emptyMap(),
         val salaryList: List<SalaryModel> = emptyList(),
-        val chartModelProducer: CartesianChartModelProducer = CartesianChartModelProducer.build(),
         val editSalary: SalaryModel? = null,
     ) : MviState
 }
