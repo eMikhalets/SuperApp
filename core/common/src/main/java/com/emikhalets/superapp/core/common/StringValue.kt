@@ -15,30 +15,41 @@ sealed class StringValue {
         /**
          * Возвращает [StringValue.Empty]
          */
-        fun empty(): StringValue = Empty
+        fun empty(): StringValue {
+            return Empty
+        }
 
         /**
          * Возвращает [StringValue.InternalError]
          */
-        fun internalError(): StringValue = InternalError
+        fun internalError(): StringValue {
+            return InternalError
+        }
 
         /**
          * Возвращает [StringValue.Message] или [StringValue.Empty]
          */
         fun message(message: String?): StringValue {
-            return if (message.isNullOrBlank()) Empty
-            else Message(message)
+            return if (message.isNullOrBlank()) {
+                Empty
+            } else {
+                Message(message)
+            }
         }
 
         /**
          * Возвращает [StringValue.Resource]
          */
-        fun resource(stringRes: Int, vararg args: Any): StringValue = Resource(stringRes, args)
+        fun resource(stringRes: Int, vararg args: Any): StringValue {
+            return Resource(stringRes, args)
+        }
 
         /**
          * Возвращает [StringValue.Exception]
          */
-        fun exception(throwable: Throwable?): StringValue = Exception(throwable)
+        fun exception(throwable: Throwable?): StringValue {
+            return Exception(throwable)
+        }
 
         fun StringValue?.asString(context: Context?): String {
             val internal = context?.getString(R.string.common_error_internal) ?: ""

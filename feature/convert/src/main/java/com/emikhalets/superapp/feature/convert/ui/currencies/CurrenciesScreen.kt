@@ -34,9 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.superapp.core.common.date.DateHelper
-import com.emikhalets.superapp.core.common.date.localDate
-import com.emikhalets.superapp.core.common.date.timestamp
+import com.emikhalets.superapp.core.common.format
 import com.emikhalets.superapp.core.ui.CurrencyVisualTransformation
 import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
 import com.emikhalets.superapp.core.ui.component.AppTopBar
@@ -128,7 +126,7 @@ private fun ExchangesDateBox(
         if (timestamp > 0) {
             val dateText = stringResource(
                 R.string.convert_exchanges_date,
-                DateHelper.formatDate(timestamp, "dd MMMM yyyy")
+                timestamp.format("dd MMMM yyyy") ?: ""
             )
             val backColor = if (isOldExchanges) {
                 MaterialTheme.colorScheme.error
@@ -349,7 +347,7 @@ private fun Preview() {
                 currencies = listOf("USD", "RUB", "VND"),
                 baseCode = "RUB",
                 baseValue = "1200.00",
-                date = Date().time.localDate().timestamp(),
+                date = Date().time,
                 loading = false,
             ),
             onSetAction = {},

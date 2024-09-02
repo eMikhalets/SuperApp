@@ -1,9 +1,9 @@
 package com.emikhalets.superapp.feature.notes.ui.task_list
 
 import androidx.compose.runtime.Immutable
-import com.emikhalets.superapp.core.common.mvi.MviAction
-import com.emikhalets.superapp.core.common.mvi.MviEffect
-import com.emikhalets.superapp.core.common.mvi.MviState
+import com.emikhalets.superapp.core.ui.mvi.MviAction
+import com.emikhalets.superapp.core.ui.mvi.MviEffect
+import com.emikhalets.superapp.core.ui.mvi.MviState
 import com.emikhalets.superapp.feature.notes.domain.TaskModel
 
 object TasksContract {

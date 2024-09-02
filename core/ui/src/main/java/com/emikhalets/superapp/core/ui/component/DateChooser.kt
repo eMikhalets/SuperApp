@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.emikhalets.superapp.core.common.R
-import com.emikhalets.superapp.core.common.date.DateHelper
+import com.emikhalets.superapp.core.common.format
 import com.emikhalets.superapp.core.ui.extentions.BoxPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -73,7 +73,7 @@ fun AppDateChooser(
     }
 
     OutlinedTextField(
-        value = DateHelper.format("dd.MM.yyyy", timestamp) ?: "null date",
+        value = timestamp.format("dd.MM.yyyy") ?: "null date",
         onValueChange = {},
         readOnly = true,
         singleLine = true,

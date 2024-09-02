@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.superapp.core.common.date.DateHelper
-import com.emikhalets.superapp.core.common.helper.MoneyHelper
+import com.emikhalets.superapp.core.common.convertMoney
+import com.emikhalets.superapp.core.common.format
 import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.extentions.toast
@@ -131,7 +131,7 @@ private fun SalaryRow(
         modifier = modifier,
     ) {
         Text(
-            text = MoneyHelper.convertMoney(model.value),
+            text = model.value.convertMoney(),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -145,7 +145,7 @@ private fun SalaryRow(
                 .padding(end = 8.dp)
         )
         Text(
-            text = DateHelper.format("dd MMM yyyy", model.timestamp) ?: "date null",
+            text = model.timestamp.format("dd MMM yyyy") ?: "date null",
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)

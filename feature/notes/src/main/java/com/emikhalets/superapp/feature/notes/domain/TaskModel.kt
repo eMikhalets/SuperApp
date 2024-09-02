@@ -1,7 +1,7 @@
 package com.emikhalets.superapp.feature.notes.domain
 
 import com.emikhalets.superapp.core.common.constant.Const
-import com.emikhalets.superapp.core.common.date.DateHelper
+import com.emikhalets.superapp.core.common.timestamp
 
 data class TaskModel(
     val id: Long,
@@ -18,8 +18,8 @@ data class TaskModel(
         parentId = Const.IdNew,
         content = "",
         completed = false,
-        createDate = DateHelper.now,
-        updateDate = DateHelper.now,
+        createDate = timestamp(),
+        updateDate = timestamp(),
         subtasks = emptyList()
     )
 }

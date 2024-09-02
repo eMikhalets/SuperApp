@@ -1,6 +1,7 @@
-package com.emikhalets.superapp.core.common.mvi
+package com.emikhalets.superapp.core.ui.mvi
 
 import androidx.lifecycle.ViewModel
+import com.emikhalets.superapp.core.ui.extentions.launch
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

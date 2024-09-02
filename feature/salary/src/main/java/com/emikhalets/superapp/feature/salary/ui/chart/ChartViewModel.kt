@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.constant.Const
-import com.emikhalets.superapp.core.common.mvi.MviViewModel
-import com.emikhalets.superapp.core.common.mvi.launch
+import com.emikhalets.superapp.core.ui.mvi.MviViewModel
+import com.emikhalets.superapp.core.ui.mvi.launch
 import com.emikhalets.superapp.feature.salary.domain.SalaryModel
 import com.emikhalets.superapp.feature.salary.domain.use_case.DeleteSalaryUseCase
 import com.emikhalets.superapp.feature.salary.domain.use_case.GetSalariesUseCase

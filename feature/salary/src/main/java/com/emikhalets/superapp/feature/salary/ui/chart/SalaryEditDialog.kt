@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.emikhalets.superapp.core.common.helper.MoneyHelper
+import com.emikhalets.superapp.core.common.convertMoney
 import com.emikhalets.superapp.core.ui.component.AppDateChooser
 import com.emikhalets.superapp.core.ui.component.AppSpinner
 import com.emikhalets.superapp.core.ui.dialog.DialogOneAction
@@ -47,8 +47,8 @@ internal fun SalaryEditDialog(
         onConfirm = { onSaveClick(model.set(value, timestamp, type)) }
     ) {
         OutlinedTextField(
-            value = MoneyHelper.convertMoney(value),
-            onValueChange = { value = MoneyHelper.convertMoney(it) },
+            value = value.convertMoney(),
+            onValueChange = { value = it.convertMoney() },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,

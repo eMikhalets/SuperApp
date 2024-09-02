@@ -1,7 +1,7 @@
 package com.emikhalets.superapp.feature.convert.domain
 
-import com.emikhalets.superapp.core.common.date.localDate
-import com.emikhalets.superapp.core.common.date.timestamp
+import com.emikhalets.superapp.core.common.localDate
+import com.emikhalets.superapp.core.common.timestamp
 import java.util.Date
 
 data class CurrencyPairModel(

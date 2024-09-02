@@ -5,10 +5,16 @@ import timber.log.Timber
 
 sealed class AppResult<out S> {
 
-    class Success<out S>(val data: S, val code: Int) : AppResult<S>()
+    class Success<out S>(
+        val data: S,
+        val code: Int,
+    ) : AppResult<S>()
 
-    class Failure(val message: StringValue, val code: Int, val exception: Exception?) :
-        AppResult<Nothing>()
+    class Failure(
+        val message: StringValue,
+        val code: Int,
+        val exception: Exception?,
+    ) : AppResult<Nothing>()
 
     companion object {
 

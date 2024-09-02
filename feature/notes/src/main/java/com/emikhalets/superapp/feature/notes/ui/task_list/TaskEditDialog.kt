@@ -28,13 +28,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.emikhalets.superapp.core.common.constant.Const
-import com.emikhalets.superapp.core.common.date.DateHelper
+import com.emikhalets.superapp.core.common.timestamp
 import com.emikhalets.superapp.core.ui.dialog.DialogOneAction
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.core.ui.theme.rectangle
-import com.emikhalets.superapp.feature.notes.domain.TaskModel
 import com.emikhalets.superapp.feature.notes.R
+import com.emikhalets.superapp.feature.notes.domain.TaskModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -155,16 +155,16 @@ private fun Preview() {
                 parentId = 0,
                 content = "Some task content",
                 completed = false,
-                createDate = DateHelper.now,
-                updateDate = DateHelper.now,
+                createDate = timestamp(),
+                updateDate = timestamp(),
                 subtasks = listOf(
                     TaskModel(
                         id = 2,
                         parentId = 1,
                         content = "Some task content",
                         completed = false,
-                        createDate = DateHelper.now,
-                        updateDate = DateHelper.now,
+                        createDate = timestamp(),
+                        updateDate = timestamp(),
                         subtasks = emptyList()
                     ),
                     TaskModel(
@@ -172,8 +172,8 @@ private fun Preview() {
                         parentId = 1,
                         content = "Some task content",
                         completed = false,
-                        createDate = DateHelper.now,
-                        updateDate = DateHelper.now,
+                        createDate = timestamp(),
+                        updateDate = timestamp(),
                         subtasks = emptyList()
                     )
                 )
