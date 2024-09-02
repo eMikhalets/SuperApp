@@ -25,8 +25,8 @@ import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.StringValue.Companion.asString
 import com.emikhalets.superapp.core.ui.component.ButtonBorderless
-import com.emikhalets.superapp.core.ui.component.AppTextHeader
-import com.emikhalets.superapp.core.ui.component.AppTextPrimary
+import com.emikhalets.superapp.core.ui.component.TextHeader
+import com.emikhalets.superapp.core.ui.component.TextPrimary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 
@@ -34,7 +34,6 @@ import com.emikhalets.superapp.core.ui.theme.AppTheme
 fun DialogOneAction(
     message: StringValue,
     title: String = "",
-    onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -42,21 +41,19 @@ fun DialogOneAction(
     DialogOneAction(
         message = content,
         title = title,
-        onDismiss = onDismiss,
         onConfirm = onConfirm
     )
 }
 
 @Composable
 fun DialogOneAction(
-    onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {},
     actionText: String = "",
     backClickDismiss: Boolean = false,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Dialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = { onConfirm() },
         properties = DialogProperties(
             dismissOnBackPress = backClickDismiss,
             dismissOnClickOutside = false,
@@ -91,13 +88,12 @@ fun DialogOneAction(
     message: String,
     title: String = "",
     actionText: String = "",
-    onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
     AlertDialog(
-        text = { AppTextPrimary(message) },
+        text = { TextPrimary(message) },
         title = if (title.isNotBlank()) {
-            { AppTextHeader(title) }
+            { TextHeader(title) }
         } else null,
         properties = DialogProperties(
             dismissOnBackPress = false,
@@ -107,11 +103,11 @@ fun DialogOneAction(
         shape = MaterialTheme.shapes.large,
         containerColor = MaterialTheme.colorScheme.background,
         tonalElevation = 0.dp,
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = { onConfirm() },
         confirmButton = {
             ButtonBorderless(
                 text = actionText.ifBlank { stringResource(R.string.ok) },
-                onClick = onDismiss,
+                onClick = onConfirm,
             )
         }
     )
@@ -123,8 +119,8 @@ private fun TextPreview() {
     AppTheme {
         Box(modifier = Modifier.fillMaxWidth()) {
             DialogOneAction(
+                title = "test title",
                 message = "test message",
-                title = "test title"
             )
         }
     }

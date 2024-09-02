@@ -18,8 +18,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.emikhalets.superapp.core.common.convertMoney
-import com.emikhalets.superapp.core.ui.component.AppDateChooser
-import com.emikhalets.superapp.core.ui.component.AppSpinner
+import com.emikhalets.superapp.core.ui.component.DateSelection
+import com.emikhalets.superapp.core.ui.component.DropDownRow
 import com.emikhalets.superapp.core.ui.dialog.DialogOneAction
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -60,14 +60,14 @@ internal fun SalaryEditDialog(
             ),
             modifier = Modifier.fillMaxWidth()
         )
-        AppDateChooser(
+        DateSelection(
             timestamp = timestamp,
             onSelect = { timestamp = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
         )
-        AppSpinner(
+        DropDownRow(
             value = type.toString(),
             options = SalaryType.asStringList(),
             onSelect = { type = SalaryType.valueOf(it) },

@@ -30,7 +30,7 @@ import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppDateChooser(
+fun DateSelection(
     timestamp: Long,
     onSelect: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -100,9 +100,9 @@ fun AppDateChooser(
 
 @BoxPreview
 @Composable
-private fun SpinnerPreview() {
+private fun Preview() {
     AppTheme {
-        AppDateChooser(
+        DateSelection(
             timestamp = Date().time,
             onSelect = {},
             onCancel = {},
@@ -113,9 +113,9 @@ private fun SpinnerPreview() {
 
 @BoxPreview
 @Composable
-private fun SpinnerDatePreview() {
+private fun DialogPreview() {
     AppTheme {
-        AppDateChooser(
+        DateSelection(
             timestamp = Date().time,
             onSelect = {},
             onCancel = {},

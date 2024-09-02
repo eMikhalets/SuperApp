@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.common.convertMoney
 import com.emikhalets.superapp.core.common.format
-import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
+import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.extentions.toast
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -59,7 +59,7 @@ private fun ScreenContent(
     onSetAction: (Action) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    AppFloatingButtonBox(onClick = { onSetAction(Action.SetEditSalary(SalaryModel())) }) {
+    FloatingButtonBox(onClick = { onSetAction(Action.SetEditSalary(SalaryModel())) }) {
         Column(modifier = Modifier.fillMaxSize()) {
             ChartBox(
                 salaries = state.salaryMap,

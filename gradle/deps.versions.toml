@@ -1,6 +1,6 @@
 [versions]
 # Project
-agp = "8.2.1"
+agp = "8.2.2"
 kotlin = "1.9.20"
 compileSdk = "34"
 targetSdk = "34"
@@ -8,7 +8,7 @@ minSdk = "26"
 versionCode = "1"
 versionName = "1.0.2"
 java = "VERSION_17"
-androidxComposeCompiler = "1.5.4"
+androidxComposeCompiler = "1.5.5"
 # General
 accompanist = "0.30.1"
 androidCore = '1.13.1'

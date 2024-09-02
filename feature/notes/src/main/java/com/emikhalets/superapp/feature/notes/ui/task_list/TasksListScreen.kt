@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
+import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -51,7 +51,7 @@ private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        AppFloatingButtonBox(onClick = { onSetAction(Action.SetEditTask()) }) {
+        FloatingButtonBox(onClick = { onSetAction(Action.SetEditTask()) }) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()

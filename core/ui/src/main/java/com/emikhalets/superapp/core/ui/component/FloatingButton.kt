@@ -18,7 +18,7 @@ import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.core.ui.theme.circle
 
 @Composable
-fun AppFloatingButtonBox(
+fun FloatingButtonBox(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
@@ -28,20 +28,25 @@ fun AppFloatingButtonBox(
         FloatingActionButton(
             onClick = onClick,
             shape = MaterialTheme.shapes.circle,
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
         ) {
-            Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = null
+            )
         }
     }
 }
 
 @BoxPreview
 @Composable
-private fun TextButtonPreview() {
+private fun Preview() {
     AppTheme {
-        AppFloatingButtonBox(
+        FloatingButtonBox(
             onClick = {},
             modifier = Modifier.padding(8.dp)
         ) {

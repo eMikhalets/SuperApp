@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.common.format
 import com.emikhalets.superapp.core.ui.CurrencyVisualTransformation
-import com.emikhalets.superapp.core.ui.component.AppFloatingButtonBox
+import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
 import com.emikhalets.superapp.core.ui.component.AppTopBar
 import com.emikhalets.superapp.core.ui.component.LinearLoader
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
@@ -73,7 +73,7 @@ private fun ScreenContent(
             title = stringResource(R.string.convert_title),
             onBackClick = onBackClick
         )
-        AppFloatingButtonBox(
+        FloatingButtonBox(
             onClick = { onSetAction(Action.SetNewCurrencyVisible(true)) },
             modifier = Modifier.weight(1f)
         ) {

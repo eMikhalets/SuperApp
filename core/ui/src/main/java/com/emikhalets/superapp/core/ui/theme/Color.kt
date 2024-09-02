@@ -1,6 +1,5 @@
 package com.emikhalets.superapp.core.ui.theme
 
-import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
 val Color.Companion.LightBlue50: Color get() = Color(0xFFe1f5fe)
@@ -12,5 +11,3 @@ val Color.Companion.Grey600: Color get() = Color(0xFF757575)
 val Color.Companion.Grey700: Color get() = Color(0xFF616161)
 val Color.Companion.Grey900: Color get() = Color(0xFF212121)
 val Color.Companion.Red800: Color get() = Color(0xFFc62828)
-
-val ColorScheme.textSecondary get() = Color.Grey600
