@@ -1,9 +1,9 @@
 plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.application) apply false
+    alias(libs.plugins.library) apply false
+    alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.serialization) apply false
     alias(libs.plugins.hilt) apply false
 }
 tasks.register("clean").configure {

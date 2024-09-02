@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
 }
 
@@ -29,13 +29,13 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
-    api(libs.androidx.room)
-    api(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
+    api(libs.android.room.core)
+    api(libs.android.room.runtime)
+    kapt(libs.android.room.compiler)
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.junit.ext)
 }

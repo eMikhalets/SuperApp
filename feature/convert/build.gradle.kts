@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
 }
 
@@ -33,11 +33,11 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:ui"))
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.compose.ui.test.junit)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

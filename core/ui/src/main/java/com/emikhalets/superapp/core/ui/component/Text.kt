@@ -93,7 +93,7 @@ fun AppTextSecondary(
 }
 
 @Composable
-fun AppTextButton(
+fun ButtonBorderless(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
@@ -145,7 +145,7 @@ private fun TextPreview() {
             AppTextSecondary(
                 text = "Text Secondary", modifier = Modifier.padding(8.dp, 0.dp)
             )
-            AppTextButton(
+            ButtonBorderless(
                 text = "Text Button", modifier = Modifier.padding(8.dp, 0.dp)
             )
             AppTextCaption(

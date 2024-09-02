@@ -2,8 +2,8 @@ package com.emikhalets.superapp.feature.notes.ui.task_list
 
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.superapp.core.common.constant.Const
+import com.emikhalets.superapp.core.ui.extentions.launch
 import com.emikhalets.superapp.core.ui.mvi.MviViewModel
-import com.emikhalets.superapp.core.ui.mvi.launch
 import com.emikhalets.superapp.feature.notes.domain.TaskModel
 import com.emikhalets.superapp.feature.notes.domain.use_case.DeleteTaskUseCase
 import com.emikhalets.superapp.feature.notes.domain.use_case.GetTasksUseCase

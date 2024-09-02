@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
 }
 
@@ -30,20 +30,20 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
-    api(platform(libs.androidx.compose.bom))
-    debugApi(libs.androidx.compose.ui.tooling)
-    api(libs.androidx.compose.ui)
-    api(libs.androidx.compose.ui.graphics)
-    api(libs.androidx.compose.ui.tooling.preview)
-    api(libs.androidx.compose.material3)
-    api(libs.androidx.compose.material.icons)
-    api(libs.androidx.compose.material.icons.ext)
-    api(libs.androidx.navigation.compose)
-    api(libs.androidx.hilt.navigation)
+    api(platform(libs.compose.bom))
+    debugApi(libs.compose.ui.tooling)
+    api(libs.compose.ui.core)
+    api(libs.compose.ui.graphics)
+    api(libs.compose.ui.tooling.preview)
+    api(libs.compose.material3)
+    api(libs.compose.material.icons)
+    api(libs.compose.material.icons.ext)
+    api(libs.android.navigation.compose)
+    api(libs.hilt.navigation)
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.junit.ext)
 }

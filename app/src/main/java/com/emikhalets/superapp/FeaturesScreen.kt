@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.emikhalets.superapp.core.ui.AppFeature
-import com.emikhalets.superapp.core.ui.component.AppButtonTopIcon
+import com.emikhalets.superapp.core.ui.component.ButtonPrimaryTopIcon
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.getApplicationFeatures
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -53,7 +53,7 @@ private fun FeatureButton(
     feature: AppFeature,
     onClick: (AppFeature) -> Unit,
 ) {
-    AppButtonTopIcon(
+    ButtonPrimaryTopIcon(
         text = stringResource(feature.nameRes),
         icon = feature.icon,
         onClick = { onClick(feature) },

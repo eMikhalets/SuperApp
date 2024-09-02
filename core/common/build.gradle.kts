@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
 }
 
@@ -22,19 +22,19 @@ android {
 }
 
 dependencies {
-    api(libs.androidx.core)
-    api(libs.jetbrains.coroutines.core)
-    api(libs.jetbrains.coroutines.android)
-    api(libs.androidx.lifecycle.runtime.compose)
-    api(libs.androidx.lifecycle.viewmodel)
-    api(libs.androidx.lifecycle.viewmodel.compose)
-    api(libs.google.accompanist.insets)
-    api(libs.google.accompanist.systemuicontroller)
-    api(libs.jakewharton.timber)
+    api(libs.core)
+    api(libs.coroutines.core)
+    api(libs.coroutines.android)
+    api(libs.lifecycle.runtime.compose)
+    api(libs.lifecycle.viewmodel)
+    api(libs.lifecycle.viewmodel.compose)
+    api(libs.accompanist.insets)
+    api(libs.accompanist.systemuicontroller)
+    api(libs.timber)
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.junit.ext)
 }

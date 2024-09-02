@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -49,7 +50,7 @@ fun AppDateChooser(
         DatePickerDialog(
             onDismissRequest = onCancel,
             confirmButton = {
-                AppTextButton(
+                ButtonBorderless(
                     text = stringResource(R.string.select),
                     enabled = confirmEnabled,
                     onClick = {
@@ -59,14 +60,17 @@ fun AppDateChooser(
                 )
             },
             dismissButton = {
-                AppTextButton(
+                ButtonBorderless(
                     text = stringResource(R.string.cancel),
                     onClick = {
                         onCancel()
                         isDialogVisible = false
                     },
                 )
-            }
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
         ) {
             DatePicker(state = state)
         }

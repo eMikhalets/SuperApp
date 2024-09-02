@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
 }
 
@@ -24,11 +24,11 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
-    implementation(libs.androidx.datastore)
+    implementation(libs.android.datastore)
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.junit.ext)
 }

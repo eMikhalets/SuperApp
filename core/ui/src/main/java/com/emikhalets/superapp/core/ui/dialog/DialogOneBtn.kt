@@ -24,7 +24,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.StringValue.Companion.asString
-import com.emikhalets.superapp.core.ui.component.AppTextButton
+import com.emikhalets.superapp.core.ui.component.ButtonBorderless
 import com.emikhalets.superapp.core.ui.component.AppTextHeader
 import com.emikhalets.superapp.core.ui.component.AppTextPrimary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
@@ -75,7 +75,7 @@ fun DialogOneAction(
                 .padding(24.dp)
         ) {
             content()
-            AppTextButton(
+            ButtonBorderless(
                 text = actionText.ifBlank { stringResource(R.string.ok) },
                 onClick = onConfirm,
                 modifier = Modifier
@@ -109,7 +109,7 @@ fun DialogOneAction(
         tonalElevation = 0.dp,
         onDismissRequest = { onDismiss() },
         confirmButton = {
-            AppTextButton(
+            ButtonBorderless(
                 text = actionText.ifBlank { stringResource(R.string.ok) },
                 onClick = onDismiss,
             )
