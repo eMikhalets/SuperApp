@@ -7,7 +7,7 @@ import com.emikhalets.superapp.core.common.StringValue
 
 @Composable
 fun StringValue?.asString(): String {
-    val internal = stringResource(R.string.common_error_internal)
+    val internal = stringResource(R.string.error_internal)
     return when (this) {
         StringValue.Empty -> internal
         StringValue.InternalError -> internal

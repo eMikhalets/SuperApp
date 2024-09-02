@@ -15,7 +15,7 @@ class UpdateExchangesUseCase @Inject constructor(
 
     suspend operator fun invoke(list: List<CurrencyPairModel>): Result {
         val needUpdateList = list.filter { it.isNeedUpdate() }
-        val parseError = R.string.common_error_parsing
+        val parseError = R.string.error_parsing
         return when (val result = convertRepository.parseCurrencyPairs(needUpdateList)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(parseError))
             is AppResult.Success -> updateInDatabase(result.data, list)
@@ -34,7 +34,7 @@ class UpdateExchangesUseCase @Inject constructor(
                 item.copy(value = currency.value, date = Date().time)
             }
         }
-        val updateError = R.string.common_error_update
+        val updateError = R.string.error_update
         return when (convertRepository.updateCurrencyPairs(updatedList)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(updateError))
             is AppResult.Success -> Result.Success

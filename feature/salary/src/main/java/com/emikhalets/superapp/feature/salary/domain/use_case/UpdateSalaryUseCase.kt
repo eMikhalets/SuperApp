@@ -12,7 +12,7 @@ class UpdateSalaryUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(model: SalaryModel): AppResult<Int> {
-        val updateError = R.string.common_error_update
+        val updateError = R.string.error_update
         return when (val result = salaryRepository.updateSalary(model)) {
             is AppResult.Failure -> AppResult.failure(StringValue.resource(updateError))
             is AppResult.Success -> result

@@ -12,7 +12,7 @@ class DeleteCurrencyUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(code: String): Result {
-        val deleteError = R.string.common_error_delete
+        val deleteError = R.string.error_delete
         when (convertRepository.deleteCurrency(code)) {
             is AppResult.Failure -> return Result.Failure(StringValue.resource(deleteError))
             is AppResult.Success -> Unit
@@ -23,7 +23,7 @@ class DeleteCurrencyUseCase @Inject constructor(
         }
 
         val currencies: List<CurrencyModel>
-        val getError = R.string.common_error_get_item
+        val getError = R.string.error_get_item
         when (val result = convertRepository.getCurrenciesSync()) {
             is AppResult.Failure -> return Result.Failure(StringValue.resource(getError))
             is AppResult.Success -> currencies = result.data

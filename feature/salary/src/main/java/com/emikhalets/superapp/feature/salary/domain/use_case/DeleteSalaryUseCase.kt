@@ -12,7 +12,7 @@ class DeleteSalaryUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(model: SalaryModel): AppResult<Int> {
-        val deleteError = R.string.common_error_delete
+        val deleteError = R.string.error_delete
         return when (val result = salaryRepository.deleteSalary(model)) {
             is AppResult.Failure -> AppResult.failure(StringValue.resource(deleteError))
             is AppResult.Success -> result

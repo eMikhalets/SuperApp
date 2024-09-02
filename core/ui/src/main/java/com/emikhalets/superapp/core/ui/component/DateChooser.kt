@@ -50,7 +50,7 @@ fun AppDateChooser(
             onDismissRequest = onCancel,
             confirmButton = {
                 AppTextButton(
-                    text = stringResource(R.string.common_select),
+                    text = stringResource(R.string.select),
                     enabled = confirmEnabled,
                     onClick = {
                         onSelect(state.selectedDateMillis ?: 0)
@@ -60,7 +60,7 @@ fun AppDateChooser(
             },
             dismissButton = {
                 AppTextButton(
-                    text = stringResource(R.string.common_cancel),
+                    text = stringResource(R.string.cancel),
                     onClick = {
                         onCancel()
                         isDialogVisible = false

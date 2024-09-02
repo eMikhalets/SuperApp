@@ -12,7 +12,7 @@ class InsertTaskUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(model: TaskModel): Result {
-        val insertError = R.string.common_error_insert
+        val insertError = R.string.error_insert
         return when (tasksRepository.insertTask(model)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(insertError))
             is AppResult.Success -> Result.Success

@@ -52,7 +52,7 @@ sealed class StringValue {
         }
 
         fun StringValue?.asString(context: Context?): String {
-            val internal = context?.getString(R.string.common_error_internal) ?: ""
+            val internal = context?.getString(R.string.error_internal) ?: ""
             context ?: return internal
             return when (this) {
                 Empty -> ""

@@ -15,7 +15,7 @@ class InsertCurrencyUseCase @Inject constructor(
         val existResult = convertRepository.isCodeExist(code).getOrTrue()
         if (existResult) return Result.Exist
 
-        val insertError = R.string.common_error_insert
+        val insertError = R.string.error_insert
         return when (val result = convertRepository.insertCode(code)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(insertError))
             is AppResult.Success -> {
@@ -29,7 +29,7 @@ class InsertCurrencyUseCase @Inject constructor(
     }
 
     private suspend fun checkExchanges(code: String): Result {
-        val updateError = R.string.common_error_update
+        val updateError = R.string.error_update
         return when (convertRepository.checkCurrencyPairsPostInsert(code)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(updateError))
             is AppResult.Success -> Result.Success

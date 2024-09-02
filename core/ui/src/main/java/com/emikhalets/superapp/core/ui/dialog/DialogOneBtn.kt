@@ -76,7 +76,7 @@ fun DialogOneAction(
         ) {
             content()
             AppTextButton(
-                text = actionText.ifBlank { stringResource(R.string.common_ok) },
+                text = actionText.ifBlank { stringResource(R.string.ok) },
                 onClick = onConfirm,
                 modifier = Modifier
                     .padding(top = 24.dp)
@@ -110,7 +110,7 @@ fun DialogOneAction(
         onDismissRequest = { onDismiss() },
         confirmButton = {
             AppTextButton(
-                text = actionText.ifBlank { stringResource(R.string.common_ok) },
+                text = actionText.ifBlank { stringResource(R.string.ok) },
                 onClick = onDismiss,
             )
         }

@@ -12,7 +12,7 @@ class UpdateTaskUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(model: TaskModel): Result {
-        val updateError = R.string.common_error_update
+        val updateError = R.string.error_update
         return when (tasksRepository.updateTask(model)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(updateError))
             is AppResult.Success -> Result.Success

@@ -12,7 +12,7 @@ class DeleteTaskUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(model: TaskModel): Result {
-        val deleteError = R.string.common_error_delete
+        val deleteError = R.string.error_delete
         return when (tasksRepository.deleteTask(model)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(deleteError))
             is AppResult.Success -> Result.Success

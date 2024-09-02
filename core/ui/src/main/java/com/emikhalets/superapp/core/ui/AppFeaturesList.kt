@@ -14,13 +14,13 @@ sealed class AppFeature(
 ) {
 
     data object Convert : AppFeature(
-        nameRes = R.string.common_feature_convert,
+        nameRes = R.string.feature_convert,
         icon = Icons.Rounded.PublishedWithChanges,
         visible = true
     )
 
     data object Salary : AppFeature(
-        nameRes = R.string.common_feature_salary,
+        nameRes = R.string.feature_salary,
         icon = Icons.Rounded.MonetizationOn,
         visible = true
     )
