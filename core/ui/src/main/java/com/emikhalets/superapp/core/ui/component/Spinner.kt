@@ -1,13 +1,13 @@
 package com.emikhalets.superapp.core.ui.component
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,25 +34,12 @@ fun DropDownBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
     ) {
-        OutlinedTextField(
+        TextFieldPrimary(
             value = value,
             onValueChange = {},
             readOnly = true,
-            label = if (label.isNotBlank()) {
-                { Text(label) }
-            } else null,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = OutlinedTextFieldDefaults.colors(
-                disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                disabledBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            ),
+            label = label,
+            trailingIcon = if (expanded) Icons.Rounded.ArrowDropUp else Icons.Rounded.ArrowDropDown,
             modifier = modifier.menuAnchor(),
         )
         ExposedDropdownMenu(

@@ -17,3 +17,4 @@ val Shapes = Shapes(
 val Shapes.rectangle get() = RectangleShape
 val Shapes.circle get() = CircleShape
 val Shapes.button get() = RoundedCornerShape(8.dp)
+val Shapes.textField get() = RoundedCornerShape(4.dp)

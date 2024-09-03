@@ -3,9 +3,6 @@ package com.emikhalets.superapp.feature.salary.ui.chart
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -21,6 +18,7 @@ import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.common.convertMoney
 import com.emikhalets.superapp.core.ui.component.DateSelection
 import com.emikhalets.superapp.core.ui.component.DropDownBox
+import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
 import com.emikhalets.superapp.core.ui.dialog.DialogTwoAction
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -52,17 +50,13 @@ internal fun SalaryEditDialog(
         onLeftClick = onLeftClick,
         onRightClick = { onSaveClick(model.set(value, timestamp, type)) }
     ) {
-        OutlinedTextField(
+        TextFieldPrimary(
             value = value.convertMoney(),
             onValueChange = { value = it.convertMoney() },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(
+            options = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
-            ),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                focusedContainerColor = MaterialTheme.colorScheme.background,
             ),
             modifier = Modifier.fillMaxWidth()
         )

@@ -19,7 +19,6 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,10 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.common.format
-import com.emikhalets.superapp.core.ui.CurrencyVisualTransformation
-import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
 import com.emikhalets.superapp.core.ui.component.AppTopBar
+import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
 import com.emikhalets.superapp.core.ui.component.LinearLoader
+import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -255,21 +254,13 @@ private fun BaseCurrencyBox(
                 .fillMaxWidth()
                 .padding(4.dp, 2.dp)
         )
-        OutlinedTextField(
+        TextFieldPrimary(
             value = baseValue,
             onValueChange = { onBaseValueChange(it) },
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickableOnce { onBaseValueChange("") }
-                        .padding(8.dp)
-                )
-            },
+            trailingIcon = Icons.Rounded.Close,
+            trailingIconClick = { onBaseValueChange("") },
             shape = MaterialTheme.shapes.rectangle,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            visualTransformation = CurrencyVisualTransformation(),
+            options = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
     }

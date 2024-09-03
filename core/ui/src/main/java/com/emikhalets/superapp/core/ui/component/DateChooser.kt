@@ -7,10 +7,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -76,24 +73,14 @@ fun DateSelection(
         }
     }
 
-    OutlinedTextField(
+    TextFieldPrimary(
         value = timestamp.format("dd.MM.yyyy") ?: "null date",
         onValueChange = {},
         readOnly = true,
         singleLine = true,
         enabled = false,
-        leadingIcon = { Icon(Icons.Rounded.CalendarMonth, contentDescription = null) },
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
+        ignoreNonEnabledColors = true,
+        leadingIcon = Icons.Rounded.CalendarMonth,
         modifier = modifier.clickableOnce { isDialogVisible = true }
     )
 }
