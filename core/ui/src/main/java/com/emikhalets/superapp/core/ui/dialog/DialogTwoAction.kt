@@ -1,6 +1,5 @@
 package com.emikhalets.superapp.core.ui.dialog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -16,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +27,7 @@ import com.emikhalets.superapp.core.ui.component.ButtonBorderless
 import com.emikhalets.superapp.core.ui.component.TextHeader
 import com.emikhalets.superapp.core.ui.component.TextPrimary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
+import com.emikhalets.superapp.core.ui.extentions.dialogBackground
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 
 @Composable
@@ -68,17 +67,7 @@ fun DialogTwoAction(
             usePlatformDefaultWidth = false
         )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.background,
-                    shape = MaterialTheme.shapes.large,
-                )
-                .clip(MaterialTheme.shapes.large)
-                .padding(24.dp)
-        ) {
+        Column(modifier = Modifier.dialogBackground()) {
             content()
             Row(modifier = Modifier.align(Alignment.End)) {
                 ButtonBorderless(
