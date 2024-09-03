@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,9 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
+import com.emikhalets.superapp.core.ui.dialog.DialogNoAction
 import com.emikhalets.superapp.core.ui.extentions.BoxPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -34,15 +31,10 @@ fun NewCurrencyDialog(
     code: String,
     onCodeChanged: (String) -> Unit,
     onSaveClick: (String) -> Unit,
-    onDismiss: () -> Unit = {},
+    onCancelClick: () -> Unit = {},
 ) {
-    Dialog(
-        onDismissRequest = { onDismiss() },
-        properties = DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false
-        )
+    DialogNoAction(
+        onDismiss = onCancelClick
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -52,7 +44,6 @@ fun NewCurrencyDialog(
                     color = MaterialTheme.colorScheme.background,
                     shape = MaterialTheme.shapes.medium,
                 )
-                .padding(16.dp)
                 .height(IntrinsicSize.Min)
         ) {
             TextFieldPrimary(
@@ -69,19 +60,15 @@ fun NewCurrencyDialog(
                 imageVector = Icons.Rounded.Save,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f)
+                    .padding(horizontal = 12.dp)
                     .clickableOnce { onSaveClick(code) }
-                    .padding(12.dp)
             )
             Icon(
                 imageVector = Icons.Rounded.Close,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f)
-                    .clickableOnce { onDismiss() }
-                    .padding(12.dp)
+                    .padding(end = 12.dp)
+                    .clickableOnce { onCancelClick() }
             )
         }
     }

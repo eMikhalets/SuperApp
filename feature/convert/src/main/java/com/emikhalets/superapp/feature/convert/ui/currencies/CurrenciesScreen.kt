@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,14 +35,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.common.format
-import com.emikhalets.superapp.core.ui.component.AppTopBar
-import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
 import com.emikhalets.superapp.core.ui.component.LinearLoader
 import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
+import com.emikhalets.superapp.core.ui.component.TextPrimary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
-import com.emikhalets.superapp.core.ui.theme.rectangle
+import com.emikhalets.superapp.core.ui.theme.listItemBox
 import com.emikhalets.superapp.feature.convert.R
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.Action
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.State
@@ -68,31 +68,27 @@ private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        AppTopBar(
-            title = stringResource(R.string.convert_title),
-            onBackClick = onBackClick
-        )
-        FloatingButtonBox(
-            onClick = { onSetAction(Action.SetNewCurrencyVisible(true)) },
-            modifier = Modifier.weight(1f)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                LinearLoader(visible = state.loading)
-                ExchangesDateBox(
-                    timestamp = state.date,
-                    isOldExchanges = state.isOldExchanges,
-                    onUpdateClick = { onSetAction(Action.UpdateExchanges) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                PairsList(
-                    pairs = state.pairList,
-                    baseCode = state.baseCode,
-                    onCurrencyDeleteClick = { onSetAction(Action.DeleteCurrency(it)) },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
-            }
+            LinearLoader(visible = state.loading)
+            ExchangesDateBox(
+                timestamp = state.date,
+                isOldExchanges = state.isOldExchanges,
+                onUpdateClick = { onSetAction(Action.UpdateExchanges) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            PairsList(
+                pairs = state.pairList,
+                baseCode = state.baseCode,
+                onCurrencyDeleteClick = { onSetAction(Action.DeleteCurrency(it)) },
+                onNewCurrencyClick = { onSetAction(Action.SetNewCurrencyVisible(true)) },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            )
         }
         BaseCurrencyBox(
             currencies = state.currencies,
@@ -108,8 +104,8 @@ private fun ScreenContent(
         NewCurrencyDialog(
             code = state.newCurrencyCode,
             onCodeChanged = { onSetAction(Action.SetNewCurrencyCode(it)) },
-            onDismiss = { onSetAction(Action.SetNewCurrencyVisible(false)) },
-            onSaveClick = { onSetAction(Action.AddCurrency) }
+            onSaveClick = { onSetAction(Action.AddCurrency) },
+            onCancelClick = { onSetAction(Action.SetNewCurrencyVisible(false)) },
         )
     }
 }
@@ -151,6 +147,7 @@ private fun ExchangesDateBox(
                 Text(text = stringResource(R.string.convert_update))
             }
         }
+        HorizontalDivider()
     }
 }
 
@@ -159,6 +156,7 @@ private fun PairsList(
     pairs: List<Pair<String, String>>,
     baseCode: String,
     onCurrencyDeleteClick: (String) -> Unit,
+    onNewCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
@@ -174,9 +172,27 @@ private fun PairsList(
                     .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.onBackground,
-                        shape = MaterialTheme.shapes.small
+                        shape = MaterialTheme.shapes.listItemBox
                     )
                     .padding(24.dp, 8.dp, 8.dp, 8.dp)
+            )
+        }
+        item {
+            TextPrimary(
+                text = stringResource(R.string.convert_add),
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp, 8.dp, 12.dp, 0.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = MaterialTheme.shapes.listItemBox
+                    )
+                    .clickableOnce { onNewCurrencyClick() }
+                    .padding(16.dp)
             )
         }
     }
@@ -199,7 +215,7 @@ private fun PairRow(
         } else {
             FontWeight.Normal
         }
-        Text(
+        TextPrimary(
             text = "$code :",
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 24.sp,
@@ -222,9 +238,13 @@ private fun PairRow(
         Icon(
             imageVector = Icons.Rounded.Delete,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onError,
+            tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.error, MaterialTheme.shapes.small)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    shape = MaterialTheme.shapes.listItemBox
+                )
                 .clip(MaterialTheme.shapes.small)
                 .clickableOnce { onDeleteClick(code) }
                 .padding(8.dp)
@@ -252,16 +272,19 @@ private fun BaseCurrencyBox(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp, 2.dp)
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp)
         )
         TextFieldPrimary(
             value = baseValue,
             onValueChange = { onBaseValueChange(it) },
             trailingIcon = Icons.Rounded.Close,
             trailingIconClick = { onBaseValueChange("") },
-            shape = MaterialTheme.shapes.rectangle,
             options = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 24.dp)
         )
     }
 }

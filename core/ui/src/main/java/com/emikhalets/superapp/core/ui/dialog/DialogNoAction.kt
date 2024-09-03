@@ -15,7 +15,7 @@ import com.emikhalets.superapp.core.ui.theme.AppTheme
 
 @Composable
 fun DialogNoAction(
-    onDismiss: () -> Unit = {},
+    onDismiss: () -> Unit,
     backClickDismiss: Boolean = false,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
@@ -40,6 +40,7 @@ private fun ContentPreview() {
     AppTheme {
         Box(modifier = Modifier.fillMaxWidth()) {
             DialogNoAction(
+                onDismiss = {},
                 content = {
                     Text(text = "first text")
                     Text(text = "second text")
