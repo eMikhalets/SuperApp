@@ -47,6 +47,7 @@ class TasksViewModel @Inject constructor(
             is Action.SaveEditTask -> saveTaskEdit(action.model)
             is Action.CheckTask -> changeTaskCompleted(action.model)
             is Action.SetEditTask -> setEditTask(action.model)
+            is Action.DeleteTask -> setEditTask(action.model)
         }
     }
 
@@ -60,6 +61,14 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+    private fun deleteTask(model: TaskModel?) {
+        setEditTask(null)
+        model ?: return
+        launch {
+            deleteTaskUseCase.invoke(model)
+        }
+    }
+
     private fun changeTaskCompleted(model: TaskModel) {
         launch {
             val checkedModel = model.copy(completed = !model.completed)
@@ -67,7 +76,7 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    private fun setEditTask(model: TaskModel) {
+    private fun setEditTask(model: TaskModel?) {
         setState { it.copy(editTask = model) }
     }
 

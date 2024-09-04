@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -50,6 +51,7 @@ fun TextPrimary(
     fontSize: TextUnit = 16.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign? = null,
+    textDecoration: TextDecoration? = null,
 ) {
     Text(
         text = text,
@@ -61,6 +63,7 @@ fun TextPrimary(
         maxLines = maxLines,
         overflow = overflow,
         textAlign = textAlign,
+        textDecoration = textDecoration,
         modifier = modifier
     )
 }

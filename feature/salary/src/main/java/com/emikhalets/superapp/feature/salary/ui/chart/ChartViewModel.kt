@@ -84,6 +84,7 @@ class ChartViewModel @Inject constructor(
     }
 
     private fun deleteSalary(model: SalaryModel?) {
+        setEditSalary(null)
         model ?: return
         launch {
             when (val result = deleteSalaryUseCase.invoke(model)) {

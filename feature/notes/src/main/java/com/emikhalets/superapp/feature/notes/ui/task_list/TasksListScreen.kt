@@ -12,7 +12,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
+import com.emikhalets.superapp.core.ui.component.TextPrimary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
@@ -51,7 +52,7 @@ private fun ScreenContent(
     onBackClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        FloatingButtonBox(onClick = { onSetAction(Action.SetEditTask()) }) {
+        FloatingButtonBox(onClick = { onSetAction(Action.SetEditTask(TaskModel())) }) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -71,7 +72,14 @@ private fun ScreenContent(
         }
         TaskEditDialog(
             task = state.editTask,
-            onSaveClick = { onSetAction(Action.SaveEditTask(it)) }
+            onSaveClick = { onSetAction(Action.SaveEditTask(it)) },
+            onCancelClick = {
+                if (state.editTask?.id == Const.IdNew) {
+                    onSetAction(Action.SetEditTask(null))
+                } else {
+                    onSetAction(Action.DeleteTask(state.editTask))
+                }
+            }
         )
     }
 }
@@ -136,7 +144,7 @@ private fun TaskItemRow(
             onCheckedChange = { onChecked(task) },
             modifier = Modifier.padding(start = 16.dp)
         )
-        Text(
+        TextPrimary(
             text = task.content,
             color = textColor,
             fontSize = 16.sp,

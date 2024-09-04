@@ -12,7 +12,8 @@ object TasksContract {
     sealed class Action : MviAction {
         data class SaveEditTask(val model: TaskModel) : Action()
         data class CheckTask(val model: TaskModel) : Action()
-        data class SetEditTask(val model: TaskModel = TaskModel()) : Action()
+        data class SetEditTask(val model: TaskModel?) : Action()
+        data class DeleteTask(val model: TaskModel?) : Action()
     }
 
     @Immutable
