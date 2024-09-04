@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.superapp.core.common.format
+import com.emikhalets.superapp.core.ui.component.ButtonPrimary
 import com.emikhalets.superapp.core.ui.component.LinearLoader
 import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
 import com.emikhalets.superapp.core.ui.component.TextPrimary
@@ -128,8 +128,9 @@ private fun ExchangesDateBox(
             } else {
                 Color.Transparent
             }
-            Text(
+            TextPrimary(
                 text = dateText,
+                fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -138,14 +139,13 @@ private fun ExchangesDateBox(
             )
         }
         if (isOldExchanges) {
-            Button(
+            ButtonPrimary(
+                text = stringResource(R.string.convert_update),
                 onClick = onUpdateClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-            ) {
-                Text(text = stringResource(R.string.convert_update))
-            }
+            )
         }
         HorizontalDivider()
     }
@@ -224,7 +224,7 @@ private fun PairRow(
                 .fillMaxWidth()
                 .weight(1f)
         )
-        Text(
+        TextPrimary(
             text = formatPairValue(value),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 24.sp,
@@ -323,7 +323,7 @@ private fun CurrenciesChooser(
                     .clickableOnce { onBaseCodeClick(code) }
                     .padding(8.dp, 2.dp)
             }
-            Text(
+            TextPrimary(
                 text = code,
                 color = textColor,
                 fontSize = 12.sp,
