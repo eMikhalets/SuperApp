@@ -9,6 +9,8 @@ import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.emikhalets.superapp.core.ui.AppFeature
 import com.emikhalets.superapp.feature.convert.ui.AppConvertRoute
 import com.emikhalets.superapp.feature.convert.ui.appConvertNavGraph
+import com.emikhalets.superapp.feature.notes.ui.AppNotesRoute
+import com.emikhalets.superapp.feature.notes.ui.appNotesNavGraph
 import com.emikhalets.superapp.feature.salary.ui.AppSalaryRoute
 import com.emikhalets.superapp.feature.salary.ui.appSalaryNavGraph
 
@@ -27,6 +29,9 @@ fun AppNavHost(
         if (AppFeature.Convert.visible) {
             appConvertNavGraph(navController, onSetScreenOrientation)
         }
+        if (AppFeature.Notes.visible) {
+            appNotesNavGraph(navController, onSetScreenOrientation)
+        }
         if (AppFeature.Salary.visible) {
             appSalaryNavGraph(navController, onSetScreenOrientation)
         }
@@ -36,6 +41,7 @@ fun AppNavHost(
 private fun navigateToFeature(navController: NavHostController, feature: AppFeature) {
     when (feature) {
         AppFeature.Convert -> navController.navigate(AppConvertRoute.NavGraph)
+        AppFeature.Notes -> navController.navigate(AppNotesRoute.NavGraph)
         AppFeature.Salary -> navController.navigate(AppSalaryRoute.NavGraph)
     }
 }

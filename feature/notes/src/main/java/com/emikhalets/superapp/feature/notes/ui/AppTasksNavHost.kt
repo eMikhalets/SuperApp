@@ -7,10 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.emikhalets.superapp.feature.notes.ui.task_list.TasksListScreen
-import com.emikhalets.superapp.feature.notes.ui.AppTasksRoute.NavGraph
-import com.emikhalets.superapp.feature.notes.ui.AppTasksRoute.TasksList
+import com.emikhalets.superapp.feature.notes.ui.AppNotesRoute.NavGraph
+import com.emikhalets.superapp.feature.notes.ui.AppNotesRoute.TasksList
 
-fun NavGraphBuilder.appTasksNavGraph(
+fun NavGraphBuilder.appNotesNavGraph(
     navController: NavHostController,
     onSetScreenOrientation: (AppOrientationType) -> Unit,
 ) {

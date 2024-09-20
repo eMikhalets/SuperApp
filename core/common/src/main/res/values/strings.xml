@@ -15,5 +15,6 @@
     <string name="error_parsing">Parsing error</string>
 
     <string name="feature_convert">Convert</string>
+    <string name="feature_notes">Notes</string>
     <string name="feature_salary">Salary</string>
 </resources>
