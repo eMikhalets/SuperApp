@@ -9,37 +9,38 @@ import com.emikhalets.superapp.core.database.convert.table_currencies.CurrencyDb
 import com.emikhalets.superapp.core.database.convert.table_currency_pair.CurrencyPairDao
 import com.emikhalets.superapp.core.database.convert.table_currency_pair.CurrencyPairDb
 import com.emikhalets.superapp.core.network.CurrencyParser
+import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
 import com.emikhalets.superapp.feature.convert.domain.CurrencyModel
 import com.emikhalets.superapp.feature.convert.domain.CurrencyPairModel
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
-class ConvertRepository @Inject constructor(
+class ConvertRepositoryImpl @Inject constructor(
     private val currencyParser: CurrencyParser,
     private val currenciesDao: CurrenciesDao,
     private val currencyPairDao: CurrencyPairDao,
-) {
+) : ConvertRepository {
 
     // CurrencyPairs
 
-    fun getCurrencyPairs(): Flow<List<CurrencyPairModel>> {
+    override fun getCurrencyPairs(): Flow<List<CurrencyPairModel>> {
         Timber.d("getCurrencyPairs()")
         val result = currencyPairDao.getAllFlow()
         return CurrencyPairMapper.toModelFlow(result)
     }
 
-    suspend fun updateCurrencyPairs(list: List<CurrencyPairModel>): AppResult<Int> {
+    override suspend fun updateCurrencyPairs(list: List<CurrencyPairModel>): AppResult<Int> {
         Timber.d("updateCurrencyPairs($list)")
         return invoke { currencyPairDao.update(CurrencyPairMapper.toDbList(list)) }
     }
 
-    suspend fun deleteCurrencyPairs(code: String): AppResult<Unit> {
+    override suspend fun deleteCurrencyPairs(code: String): AppResult<Unit> {
         Timber.d("deleteCurrencyPairs($code)")
         return invoke { currencyPairDao.deleteByCode(code) }
     }
 
-    suspend fun insertFirstCurrencyPairs(code: String): AppResult<Unit> {
+    override suspend fun insertFirstCurrencyPairs(code: String): AppResult<Unit> {
         Timber.d("insertFirstCurrencyPairs($code)")
         return invoke {
             val exchange = CurrencyPairMapper.toDb(CurrencyPairModel(code))
@@ -48,7 +49,7 @@ class ConvertRepository @Inject constructor(
         }
     }
 
-    suspend fun parseCurrencyPairs(
+    override suspend fun parseCurrencyPairs(
         list: List<CurrencyPairModel>,
     ): AppResult<List<CurrencyValueModel>> {
         Timber.d("parseCurrencyPairs($list)")
@@ -56,7 +57,7 @@ class ConvertRepository @Inject constructor(
         return invoke { currencyParser.parseCurrencyPairs(codes) }
     }
 
-    suspend fun checkCurrencyPairsPostInsert(code: String): AppResult<Unit> {
+    override suspend fun checkCurrencyPairsPostInsert(code: String): AppResult<Unit> {
         Timber.d("checkCurrencyPairsPostInsert($code)")
         return invoke {
             val currencies = currenciesDao.getAll()
@@ -72,30 +73,30 @@ class ConvertRepository @Inject constructor(
 
     // Currencies
 
-    fun getCurrencies(): Flow<List<CurrencyModel>> {
+    override fun getCurrencies(): Flow<List<CurrencyModel>> {
         Timber.d("getCurrencies()")
         val result = currenciesDao.getAllFlow()
         return CurrencyMapper.toModelFlow(result)
     }
 
-    suspend fun getCurrenciesSync(): AppResult<List<CurrencyModel>> {
+    override suspend fun getCurrenciesSync(): AppResult<List<CurrencyModel>> {
         Timber.d("getCurrenciesSync()")
         return invoke { currenciesDao.getAll() }
             .map { CurrencyMapper.toModelList(it) }
     }
 
-    suspend fun isCodeExist(code: String): AppResult<Boolean> {
+    override suspend fun isCodeExist(code: String): AppResult<Boolean> {
         Timber.d("isCodeExist($code)")
         return invoke { currenciesDao.isCodeExist(code) }
     }
 
-    suspend fun insertCode(code: String): AppResult<Long> {
+    override suspend fun insertCode(code: String): AppResult<Long> {
         Timber.d("insertCode($code)")
         val model = CurrencyMapper.toDb(CurrencyModel(code))
         return invoke { currenciesDao.insert(model) }
     }
 
-    suspend fun deleteCurrency(code: String): AppResult<Unit> {
+    override suspend fun deleteCurrency(code: String): AppResult<Unit> {
         Timber.d("deleteCurrency($code)")
         return invoke { currenciesDao.deleteByCode(code) }
     }

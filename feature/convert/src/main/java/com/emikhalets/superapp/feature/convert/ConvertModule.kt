@@ -1,11 +1,12 @@
 package com.emikhalets.superapp.feature.convert
 
 import android.content.Context
-import com.emikhalets.superapp.core.network.CurrencyParser
 import com.emikhalets.superapp.core.database.convert.ConvertDatabase
-import com.emikhalets.superapp.feature.convert.data.ConvertRepository
 import com.emikhalets.superapp.core.database.convert.table_currencies.CurrenciesDao
 import com.emikhalets.superapp.core.database.convert.table_currency_pair.CurrencyPairDao
+import com.emikhalets.superapp.core.network.CurrencyParser
+import com.emikhalets.superapp.feature.convert.data.ConvertRepositoryImpl
+import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
 import com.emikhalets.superapp.feature.convert.domain.use_case.ConvertCurrencyUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.DeleteCurrencyUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.GetCurrenciesUseCase
@@ -43,7 +44,7 @@ object ConvertModule {
         currenciesDao: CurrenciesDao,
         currencyPairDao: CurrencyPairDao,
     ): ConvertRepository {
-        return ConvertRepository(currencyParser, currenciesDao, currencyPairDao)
+        return ConvertRepositoryImpl(currencyParser, currenciesDao, currencyPairDao)
     }
 
     @Provides

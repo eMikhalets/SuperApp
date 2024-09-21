@@ -4,19 +4,19 @@ import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.getOrTrue
-import com.emikhalets.superapp.feature.convert.data.ConvertRepository
+import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
 import javax.inject.Inject
 
 class InsertCurrencyUseCase @Inject constructor(
-    private val convertRepository: ConvertRepository,
+    private val repository: ConvertRepository,
 ) {
 
     suspend operator fun invoke(code: String): Result {
-        val existResult = convertRepository.isCodeExist(code).getOrTrue()
+        val existResult = repository.isCodeExist(code).getOrTrue()
         if (existResult) return Result.Exist
 
         val insertError = R.string.error_insert
-        return when (val result = convertRepository.insertCode(code)) {
+        return when (val result = repository.insertCode(code)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(insertError))
             is AppResult.Success -> {
                 if (result.data <= 0) {
@@ -30,7 +30,7 @@ class InsertCurrencyUseCase @Inject constructor(
 
     private suspend fun checkExchanges(code: String): Result {
         val updateError = R.string.error_update
-        return when (convertRepository.checkCurrencyPairsPostInsert(code)) {
+        return when (repository.checkCurrencyPairsPostInsert(code)) {
             is AppResult.Failure -> Result.Failure(StringValue.resource(updateError))
             is AppResult.Success -> Result.Success
         }
