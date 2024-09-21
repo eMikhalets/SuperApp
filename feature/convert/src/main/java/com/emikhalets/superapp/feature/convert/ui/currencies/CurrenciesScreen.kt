@@ -32,7 +32,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.emikhalets.superapp.core.common.convertMoney
 import com.emikhalets.superapp.core.common.format
+import com.emikhalets.superapp.core.common.timestamp
 import com.emikhalets.superapp.core.ui.component.ButtonPrimary
 import com.emikhalets.superapp.core.ui.component.LinearLoader
 import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
@@ -44,7 +46,6 @@ import com.emikhalets.superapp.core.ui.theme.listItemBox
 import com.emikhalets.superapp.feature.convert.R
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.Action
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.State
-import java.util.Date
 
 @Composable
 internal fun CurrenciesScreen(
@@ -74,13 +75,13 @@ private fun ScreenContent(
         ) {
             LinearLoader(visible = state.loading)
             ExchangesDateBox(
-                timestamp = state.date,
+                timestamp = state.updateDate,
                 isOldExchanges = state.isOldExchanges,
                 onUpdateClick = { onSetAction(Action.UpdateExchanges) },
                 modifier = Modifier.fillMaxWidth()
             )
             PairsList(
-                pairs = state.pairList,
+                pairs = state.pairs,
                 baseCode = state.baseCode,
                 onCurrencyDeleteClick = { onSetAction(Action.DeleteCurrency(it)) },
                 onNewCurrencyClick = { onSetAction(Action.SetNewCurrencyVisible(true)) },
@@ -90,7 +91,7 @@ private fun ScreenContent(
             )
         }
         BaseCurrencyBox(
-            currencies = state.currencies,
+            currencies = state.codes,
             baseCode = state.baseCode,
             baseValue = state.baseValue,
             onAddCurrencyClick = { onSetAction(Action.AddCurrency) },
@@ -99,9 +100,9 @@ private fun ScreenContent(
             modifier = Modifier.fillMaxWidth()
         )
     }
-    if (state.newCurrencyVisible) {
+    if (state.newCodeVisible) {
         NewCurrencyDialog(
-            code = state.newCurrencyCode,
+            code = state.newCode,
             onCodeChanged = { onSetAction(Action.SetNewCurrencyCode(it)) },
             onSaveClick = { onSetAction(Action.AddCurrency) },
             onCancelClick = { onSetAction(Action.SetNewCurrencyVisible(false)) },
@@ -152,7 +153,7 @@ private fun ExchangesDateBox(
 
 @Composable
 private fun PairsList(
-    pairs: List<Pair<String, String>>,
+    pairs: List<Pair<String, Long>>,
     baseCode: String,
     onCurrencyDeleteClick: (String) -> Unit,
     onNewCurrencyClick: () -> Unit,
@@ -162,7 +163,7 @@ private fun PairsList(
         items(pairs, key = { it.first }) { (code, value) ->
             PairRow(
                 code = code,
-                value = value,
+                value = value.convertMoney(),
                 baseCode = baseCode,
                 onDeleteClick = { onCurrencyDeleteClick(code) },
                 modifier = Modifier
@@ -356,12 +357,13 @@ private fun Preview() {
     AppTheme {
         ScreenContent(
             state = State(
-                pairList = listOf("USD" to "1200.00", "RUB" to "150000.00", "VND" to "7500000.00"),
-                currencies = listOf("USD", "RUB", "VND"),
+                loading = false,
+                pairs = listOf("USD" to 120000, "RUB" to 15000000, "VND" to 750000000),
+                codes = listOf("USD", "RUB", "VND"),
                 baseCode = "RUB",
                 baseValue = "1200.00",
-                date = Date().time,
-                loading = false,
+                isOldExchanges = true,
+                updateDate = timestamp(),
             ),
             onSetAction = {},
             onBackClick = {}

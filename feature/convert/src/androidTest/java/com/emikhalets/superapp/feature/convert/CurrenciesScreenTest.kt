@@ -4,7 +4,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.emikhalets.superapp.feature.convert.domain.use_case.ConvertCurrencyUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.DeleteCurrencyUseCase
-import com.emikhalets.superapp.feature.convert.domain.use_case.GetCurrenciesUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.GetExchangesUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.InsertCurrencyUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.UpdateExchangesUseCase

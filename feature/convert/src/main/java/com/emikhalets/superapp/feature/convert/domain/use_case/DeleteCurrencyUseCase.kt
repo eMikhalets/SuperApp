@@ -4,7 +4,7 @@ import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
-import com.emikhalets.superapp.feature.convert.domain.CurrencyModel
+import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
 import javax.inject.Inject
 
 class DeleteCurrencyUseCase @Inject constructor(
@@ -22,7 +22,7 @@ class DeleteCurrencyUseCase @Inject constructor(
             is AppResult.Success -> Unit
         }
 
-        val currencies: List<CurrencyModel>
+        val currencies: List<ExchangeModel>
         val getError = R.string.error_get_item
         when (val result = repository.getCurrenciesSync()) {
             is AppResult.Failure -> return Result.Failure(StringValue.resource(getError))
@@ -41,7 +41,7 @@ class DeleteCurrencyUseCase @Inject constructor(
     }
 
     sealed interface Result {
-        class Failure(val message: StringValue) : Result
+        data class Error(val value: StringValue) : Result
         data object Success : Result
     }
 }

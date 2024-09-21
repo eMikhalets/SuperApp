@@ -1,6 +1,5 @@
 package com.emikhalets.superapp.feature.convert
 
-import com.emikhalets.superapp.feature.convert.domain.CurrencyPairModel
 import com.emikhalets.superapp.feature.convert.domain.use_case.ConvertCurrencyUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals

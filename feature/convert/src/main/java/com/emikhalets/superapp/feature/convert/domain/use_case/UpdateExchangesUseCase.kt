@@ -3,46 +3,52 @@ package com.emikhalets.superapp.feature.convert.domain.use_case
 import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.R
 import com.emikhalets.superapp.core.common.StringValue
-import com.emikhalets.superapp.core.common.model.CurrencyValueModel
+import com.emikhalets.superapp.core.common.timestamp
 import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
-import com.emikhalets.superapp.feature.convert.domain.CurrencyPairModel
-import java.util.Date
+import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
 import javax.inject.Inject
 
 class UpdateExchangesUseCase @Inject constructor(
     private val repository: ConvertRepository,
 ) {
 
-    suspend operator fun invoke(list: List<CurrencyPairModel>): Result {
-        val needUpdateList = list.filter { it.isNeedUpdate() }
-        val parseError = R.string.error_parsing
-        return when (val result = repository.parseCurrencyPairs(needUpdateList)) {
-            is AppResult.Failure -> Result.Failure(StringValue.resource(parseError))
-            is AppResult.Success -> updateInDatabase(result.data, list)
+    suspend operator fun invoke(list: List<ExchangeModel>): Result {
+        val needUpdate = list.filter { it.isNeedUpdate() }
+        val fullCodes = needUpdate.map { it.fullCode }
+        return when (val result = repository.loadRemoteExchanges(fullCodes)) {
+            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_parsing))
+            is AppResult.Success -> updateInDatabase(result.data, needUpdate)
         }
     }
 
     private suspend fun updateInDatabase(
-        currencies: List<CurrencyValueModel>,
-        exchanges: List<CurrencyPairModel>,
+        currencies: List<Pair<String, Double>>,
+        exchanges: List<ExchangeModel>,
     ): Result {
+        if (currencies.isEmpty()) return Result.Success
         val updatedList = exchanges.map { item ->
-            val currency = currencies.find { it.code == item.code }
+            val currency = currencies.find { it.first == item.fullCode }
             if (currency == null) {
-                item.copy(value = 0.0, date = 0)
+                item.copy(value = 0.0, updateDate = 0)
             } else {
-                item.copy(value = currency.value, date = Date().time)
+                item.copy(value = currency.second, updateDate = timestamp())
             }
         }
-        val updateError = R.string.error_update
-        return when (repository.updateCurrencyPairs(updatedList)) {
-            is AppResult.Failure -> Result.Failure(StringValue.resource(updateError))
-            is AppResult.Success -> Result.Success
+        return when (val result = repository.updateExchanges(updatedList)) {
+            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_update))
+            is AppResult.Success -> {
+                if (result.data) {
+                    Result.Success
+                } else {
+                    Result.NotUpdated
+                }
+            }
         }
     }
 
     sealed interface Result {
-        class Failure(val message: StringValue) : Result
+        data class Error(val value: StringValue) : Result
+        data object NotUpdated : Result
         data object Success : Result
     }
 }

@@ -20,4 +20,7 @@ interface AppDao<T> {
 
     @Delete
     suspend fun delete(item: T): Int
+
+    @Delete
+    suspend fun delete(list: List<T>): Int
 }

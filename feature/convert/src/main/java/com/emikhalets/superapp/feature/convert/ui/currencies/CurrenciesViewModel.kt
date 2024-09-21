@@ -1,13 +1,13 @@
 package com.emikhalets.superapp.feature.convert.ui.currencies
 
-import androidx.lifecycle.viewModelScope
+import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.ui.extentions.launch
 import com.emikhalets.superapp.core.ui.mvi.MviViewModel
-import com.emikhalets.superapp.feature.convert.domain.CurrencyModel
-import com.emikhalets.superapp.feature.convert.domain.CurrencyPairModel
+import com.emikhalets.superapp.feature.convert.R
+import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
+import com.emikhalets.superapp.feature.convert.domain.buildCodesList
 import com.emikhalets.superapp.feature.convert.domain.use_case.ConvertCurrencyUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.DeleteCurrencyUseCase
-import com.emikhalets.superapp.feature.convert.domain.use_case.GetCurrenciesUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.GetExchangesUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.InsertCurrencyUseCase
 import com.emikhalets.superapp.feature.convert.domain.use_case.UpdateExchangesUseCase
@@ -15,45 +15,20 @@ import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.Effect
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.shareIn
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrenciesViewModel @Inject constructor(
     private val getExchangesUseCase: GetExchangesUseCase,
-    private val getCurrenciesUseCase: GetCurrenciesUseCase,
     private val insertCurrencyUseCase: InsertCurrencyUseCase,
     private val deleteCurrencyUseCase: DeleteCurrencyUseCase,
     private val convertCurrencyUseCase: ConvertCurrencyUseCase,
     private val updateExchangesUseCase: UpdateExchangesUseCase,
 ) : MviViewModel<Action, Effect, State>() {
 
-    private var updatingJob: Job? = null
-
-    private val currenciesFlow: Flow<List<CurrencyModel>> =
-        flow { emitAll(getCurrenciesUseCase()) }
-            .catch { setFailureState(it) }
-            .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
-
-    private val exchangesFlow: Flow<List<CurrencyPairModel>> =
-        flow { emitAll(getExchangesUseCase()) }
-            .catch { setFailureState(it) }
-            .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
-
     init {
-        launch {
-            exchangesFlow.collect { setExchangesState(it) }
-        }
-        launch {
-            currenciesFlow.collect { setCurrenciesState(it) }
-        }
+        setAction(Action.GetExchanges)
     }
 
     override fun setInitialState() = State()
@@ -61,7 +36,10 @@ class CurrenciesViewModel @Inject constructor(
     override fun handleAction(action: Action) {
         when (action) {
             Action.AddCurrency -> addCurrency()
+            Action.GetExchanges -> getExchanges()
             Action.UpdateExchanges -> updateExchanges()
+            is Action.DropError -> dropError(action.value)
+            is Action.DropTempMessage -> dropTempMessage(action.value)
             is Action.DeleteCurrency -> deleteCurrency(action.code)
             is Action.SetBaseCode -> setBaseCode(action.code)
             is Action.SetBaseValue -> setBaseValue(action.value)
@@ -70,15 +48,23 @@ class CurrenciesViewModel @Inject constructor(
         }
     }
 
+    private fun dropTempMessage(value: StringValue?) {
+        setState { it.copy(tempMessage = value) }
+    }
+
+    private fun dropError(value: StringValue?) {
+        setState { it.copy(error = value) }
+    }
+
     private fun setNewCurrencyCode(code: String) {
-        if (currentState.newCurrencyCode != code) {
-            setState { it.copy(newCurrencyCode = code) }
+        if (currentState.newCode != code) {
+            setState { it.copy(newCode = code.uppercase()) }
         }
     }
 
     private fun setNewCurrencyVisible(visible: Boolean) {
-        if (currentState.newCurrencyVisible != visible) {
-            setState { it.copy(newCurrencyVisible = visible, newCurrencyCode = "") }
+        if (currentState.newCodeVisible != visible) {
+            setState { it.copy(newCodeVisible = visible, newCode = "") }
         }
     }
 
@@ -89,30 +75,66 @@ class CurrenciesViewModel @Inject constructor(
     }
 
     private fun setBaseValue(value: String) {
-        Timber.d("set base value: $value")
         if (currentState.baseValue != value) {
             setState { it.copy(baseValue = value) }
-//            convert(value)
+            convert(value)
+        }
+    }
+
+    private fun getExchanges() {
+        launch {
+            getExchangesUseCase.invoke()
+                .catch { setFailureState(it) }
+                .collect { setExchangesState(it) }
         }
     }
 
     private fun updateExchanges() {
-        if (updatingJob?.isActive == true) updatingJob?.cancel()
-        updatingJob = launch {
+        launch {
             setState { it.copy(loading = true) }
-            updateExchangesUseCase.invoke(currentState.exchanges)
-            setState { it.copy(loading = false) }
+            when (val result = updateExchangesUseCase.invoke(currentState.exchanges)) {
+                is UpdateExchangesUseCase.Result.Error -> {
+                    setFailureState(result.value)
+                }
+
+                UpdateExchangesUseCase.Result.NotUpdated -> {
+                    val message = StringValue.resource(R.string.convert_exchanges_not_updated)
+                    setState { it.copy(tempMessage = message) }
+                }
+
+                UpdateExchangesUseCase.Result.Success -> {
+                    Unit
+                }
+            }
         }
     }
 
     private fun addCurrency() {
         launch {
-            val code = currentState.newCurrencyCode
-            // TODO add new code validation
-            if (code.isNotBlank()) {
-                insertCurrencyUseCase.invoke(code.take(3).uppercase())
+            when (val result = insertCurrencyUseCase.invoke(currentState.newCode)) {
+                is InsertCurrencyUseCase.Result.Error -> {
+                    setState { it.copy(newCode = "", newCodeVisible = false) }
+                    setFailureState(result.value)
+                }
+
+                is InsertCurrencyUseCase.Result.Validation -> {
+                    setState { it.copy(tempMessage = result.value) }
+                }
+
+                InsertCurrencyUseCase.Result.NotUpdated -> {
+                    val message = StringValue.resource(R.string.convert_exchanges_not_updated)
+                    setState { it.copy(tempMessage = message) }
+                }
+
+                InsertCurrencyUseCase.Result.Exist -> {
+                    val message = StringValue.resource(R.string.convert_new_code_exist)
+                    setState { it.copy(tempMessage = message) }
+                }
+
+                InsertCurrencyUseCase.Result.Success -> {
+                    setState { it.copy(newCode = "", newCodeVisible = false) }
+                }
             }
-            setState { it.copy(newCurrencyCode = "", newCurrencyVisible = false) }
         }
     }
 
@@ -139,19 +161,28 @@ class CurrenciesViewModel @Inject constructor(
         }
     }
 
-    private fun setCurrenciesState(list: List<CurrencyModel>) {
-        val currencies = list.map { it.code }
-        val pairs = list.map { Pair(it.code, "") }
-        setState { it.copy(pairList = pairs, currencies = currencies) }
+    private fun setExchangesState(list: List<ExchangeModel>) {
+        val codes = list.buildCodesList()
+        val pairs = codes.map { Pair(it, 0L) }
+        val updatedDate = list.maxOf { it.updateDate }
+        val isOldExchanges = list.any { it.isNeedUpdate() }
+        setState {
+            it.copy(
+                exchanges = list,
+                pairs = pairs,
+                codes = codes,
+                updateDate = updatedDate,
+                isOldExchanges = isOldExchanges,
+                loading = false,
+            )
+        }
     }
 
-    private fun setExchangesState(list: List<CurrencyPairModel>) {
-        val needUpdate = list.any { it.isNeedUpdate() }
-        val updatedDate = list.minByOrNull { it.date }?.date ?: 0
-        setState { it.copy(exchanges = list, date = updatedDate, isOldExchanges = needUpdate) }
+    private fun setFailureState(throwable: Throwable?) {
+        setFailureState(StringValue.exception(throwable))
     }
 
-    private fun setFailureState(throwable: Throwable) {
-        // TODO show error dialog
+    private fun setFailureState(error: StringValue) {
+        setState { it.copy(loading = false, error = error) }
     }
 }

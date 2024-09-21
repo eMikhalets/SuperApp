@@ -12,6 +12,7 @@
     <string name="error_insert">Insert error</string>
     <string name="error_update">Update error</string>
     <string name="error_get_item">Get item error</string>
+    <string name="error_get_list">Get items error</string>
     <string name="error_parsing">Parsing error</string>
 
     <string name="feature_convert">Convert</string>

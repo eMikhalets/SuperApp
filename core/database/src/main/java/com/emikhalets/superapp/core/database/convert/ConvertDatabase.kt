@@ -4,15 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.emikhalets.superapp.core.database.convert.table_currencies.CurrenciesDao
-import com.emikhalets.superapp.core.database.convert.table_currencies.CurrencyDb
-import com.emikhalets.superapp.core.database.convert.table_currency_pair.CurrencyPairDao
-import com.emikhalets.superapp.core.database.convert.table_currency_pair.CurrencyPairDb
+import com.emikhalets.superapp.core.database.convert.table_exchanges.ExchangeDb
+import com.emikhalets.superapp.core.database.convert.table_exchanges.ExchangesDao
 
 @Database(
     entities = [
-        CurrencyDb::class,
-        CurrencyPairDb::class,
+        ExchangeDb::class,
     ],
     autoMigrations = [],
     version = 1,
@@ -20,8 +17,7 @@ import com.emikhalets.superapp.core.database.convert.table_currency_pair.Currenc
 )
 abstract class ConvertDatabase : RoomDatabase() {
 
-    abstract val currenciesDao: CurrenciesDao
-    abstract val currencyPairDao: CurrencyPairDao
+    abstract val exchangesDao: ExchangesDao
 
     companion object {
 

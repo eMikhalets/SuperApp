@@ -1,10 +1,8 @@
 package com.emikhalets.superapp.feature.convert
 
 import com.emikhalets.superapp.core.common.AppResult
-import com.emikhalets.superapp.core.common.model.CurrencyValueModel
 import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
-import com.emikhalets.superapp.feature.convert.domain.CurrencyModel
-import com.emikhalets.superapp.feature.convert.domain.CurrencyPairModel
+import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.lastOrNull
@@ -12,7 +10,7 @@ import kotlinx.coroutines.flow.lastOrNull
 class ConvertRepositoryTestImpl : ConvertRepository {
 
     var currencyPairsFlow = MutableSharedFlow<List<CurrencyPairModel>>()
-    var currenciesFlow = MutableSharedFlow<List<CurrencyModel>>()
+    var currenciesFlow = MutableSharedFlow<List<ExchangeModel>>()
 
     // CurrencyPairs
 
@@ -44,11 +42,11 @@ class ConvertRepositoryTestImpl : ConvertRepository {
 
     // Currencies
 
-    override fun getCurrencies(): Flow<List<CurrencyModel>> {
+    override fun getCurrencies(): Flow<List<ExchangeModel>> {
         return currenciesFlow
     }
 
-    override suspend fun getCurrenciesSync(): AppResult<List<CurrencyModel>> {
+    override suspend fun getCurrenciesSync(): AppResult<List<ExchangeModel>> {
         return TODO()
     }
 

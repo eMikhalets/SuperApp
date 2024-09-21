@@ -1,6 +1,5 @@
 package com.emikhalets.superapp.core.network
 
-import com.emikhalets.superapp.core.common.model.CurrencyValueModel
 import org.jsoup.nodes.Element
 import timber.log.Timber
 import javax.inject.Inject
