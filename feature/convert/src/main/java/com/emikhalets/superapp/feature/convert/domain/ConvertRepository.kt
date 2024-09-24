@@ -17,16 +17,9 @@ interface ConvertRepository {
 
     suspend fun insertExchanges(data: List<ExchangeModel>): AppResult<Boolean>
 
-    suspend fun deleteExchanges(data: List<ExchangeModel>): AppResult<Boolean>
+    suspend fun deleteExchanges(code: String): AppResult<Boolean>
+
+    suspend fun isCodeExist(code: String): AppResult<Boolean>
 
     suspend fun loadRemoteExchanges(data: List<String>): AppResult<List<Pair<String, Double>>>
-
-
-    suspend fun insertFirstCurrencyPairs(code: String): AppResult<Unit>
-
-    suspend fun checkCurrencyPairsPostInsert(code: String): AppResult<Unit>
-
-    fun getCurrencies(): Flow<List<ExchangeModel>>
-
-    suspend fun deleteCurrency(code: String): AppResult<Unit>
 }

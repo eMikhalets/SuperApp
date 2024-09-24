@@ -19,7 +19,7 @@ object CurrenciesContract {
         data class DropError(val value: StringValue?) : Action()
         data class DeleteCurrency(val code: String) : Action()
         data class SetBaseCode(val code: String) : Action()
-        data class SetBaseValue(val value: String) : Action()
+        data class SetBaseValue(val value: Long) : Action()
         data class SetNewCurrencyVisible(val visible: Boolean) : Action()
         data class SetNewCurrencyCode(val code: String) : Action()
     }
@@ -37,7 +37,7 @@ object CurrenciesContract {
         val newCodeVisible: Boolean = false,
         val newCode: String = "",
         val baseCode: String = "",
-        val baseValue: String = "",
+        val baseValue: Long = 0,
         val updateDate: Long = 0,
         val tempMessage: StringValue? = null,
         val error: StringValue? = null,

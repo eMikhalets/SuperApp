@@ -1,5 +1,6 @@
 package com.emikhalets.superapp.feature.convert.domain.use_case
 
+import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -7,41 +8,35 @@ import javax.inject.Inject
 class ConvertCurrencyUseCase @Inject constructor() {
 
     suspend operator fun invoke(
-        pairs: List<Pair<String, String>>,
-        exchanges: List<CurrencyPairModel>,
+        pairs: List<Pair<String, Long>>,
+        exchanges: List<ExchangeModel>,
         baseCode: String,
-        baseValue: String,
-    ): List<Pair<String, String>> {
+        baseValue: Long,
+    ): List<Pair<String, Long>> {
         return withContext(Dispatchers.IO) {
-            val value = baseValue.format()
             pairs.map { pair ->
-                if (pair.first != baseCode) {
-                    exchanges.find { it.containsPair(pair.first, baseCode) }
-                        ?.let { Pair(pair.first, it.calculateAndFormat(baseCode, value)) }
-                        ?: Pair(pair.first, "")
+                val code = pair.first
+                if (code != baseCode) {
+                    exchanges.find { it.contains(code, baseCode) }
+                        ?.let { Pair(code, it.calculate(baseCode, baseValue)) }
+                        ?: Pair(code, 0)
                 } else {
-                    Pair(pair.first, baseValue)
+                    Pair(code, baseValue)
                 }
             }
         }
     }
 
-    private fun CurrencyPairModel.calculateAndFormat(baseCode: String, value: Long): String {
-        return calculate(baseCode, value).toCurrencyValue()
+    private fun ExchangeModel.contains(base: String, currency: String): Boolean {
+        return (mainCode == base && subCode == currency) ||
+                (mainCode == currency && subCode == base)
     }
 
-    private fun Long.toCurrencyValue(): String {
-        if (this < 10) return "0.0$this"
-        if (this < 100) return "0.$this"
-        val leftPart = (this / 100).toString()
-        val rightPart = (this - ((this / 100) * 100)).toString()
-        return "$leftPart.$rightPart".trim()
-    }
-
-    private fun String.format(): Long {
-        val parts = this.split(".")
-        val leftPart = (parts.getOrNull(0)?.toLongOrNull() ?: 0) * 100
-        val rightPart = parts.getOrNull(1)?.toLongOrNull() ?: 0
-        return leftPart + rightPart
+    private fun ExchangeModel.calculate(base: String, value: Long): Long {
+        return when (base) {
+            mainCode -> ((value / 100) * this.value).toLong()
+            subCode -> ((value / 100) * (1 / this.value)).toLong()
+            else -> 0
+        }
     }
 }

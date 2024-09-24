@@ -15,7 +15,7 @@ class InsertCurrencyUseCase @Inject constructor(
     suspend operator fun invoke(code: String): Result {
         val validation = getValidateMessage(code)
         if (validation != null) return Result.Validation(validation)
-        return getExchanges(code)
+        return checkExist(code)
     }
 
     private fun getValidateMessage(code: String): StringValue? {
@@ -31,17 +31,23 @@ class InsertCurrencyUseCase @Inject constructor(
         return null
     }
 
+    private suspend fun checkExist(code: String): Result {
+        return when (val result = repository.isCodeExist(code)) {
+            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_item_exist))
+            is AppResult.Success -> {
+                if (result.data) {
+                    return Result.Exist
+                } else {
+                    getExchanges(code)
+                }
+            }
+        }
+    }
+
     private suspend fun getExchanges(code: String): Result {
         return when (val result = repository.getExchangesSync()) {
             is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_get_list))
-            is AppResult.Success -> {
-                val isCodeExist = result.data.any { it.mainCode == code || it.subCode == code }
-                if (isCodeExist) {
-                    return Result.Exist
-                } else {
-                    prepareModel(code, result.data)
-                }
-            }
+            is AppResult.Success -> prepareModel(code, result.data)
         }
     }
 

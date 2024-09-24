@@ -10,6 +10,7 @@
     <string name="convert_code_length_error">Currency code must consist 3 characters</string>
     <string name="convert_code_letters_error">Currency code contains invalid characters</string>
     <string name="convert_exchanges_not_updated">Exchange rates are not updated</string>
+    <string name="convert_exchanges_not_deleted">Exchange rates are not deleted</string>
     <string name="convert_code_insert_error">Error adding new currency code</string>
     <string name="convert_new_code_exist">Currency code has already been added</string>
 </resources>

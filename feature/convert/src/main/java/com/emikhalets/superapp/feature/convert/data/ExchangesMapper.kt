@@ -19,10 +19,6 @@ fun List<ExchangeModel>.mapToDb(): List<ExchangeDb> {
     return this.map { it.mapToDb() }
 }
 
-fun Flow<List<ExchangeModel>>.mapToDb(): Flow<List<ExchangeDb>> {
-    return this.map { it.mapToDb() }
-}
-
 fun ExchangeDb.mapToModel(): ExchangeModel {
     return ExchangeModel(
         id = this.id,

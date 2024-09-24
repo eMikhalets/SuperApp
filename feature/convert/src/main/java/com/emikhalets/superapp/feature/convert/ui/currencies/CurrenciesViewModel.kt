@@ -70,11 +70,11 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun setBaseCode(code: String) {
         if (currentState.baseCode != code) {
-            setState { it.copy(baseCode = code, baseValue = "") }
+            setState { it.copy(baseCode = code, baseValue = 0) }
         }
     }
 
-    private fun setBaseValue(value: String) {
+    private fun setBaseValue(value: Long) {
         if (currentState.baseValue != value) {
             setState { it.copy(baseValue = value) }
             convert(value)
@@ -140,24 +140,40 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun deleteCurrency(code: String) {
         launch {
-            if (code.isNotBlank()) {
-                if (currentState.baseCode == code) {
-                    setState { it.copy(baseCode = "") }
+            if (currentState.baseCode == code) {
+                setState { it.copy(baseCode = "") }
+            }
+            when (val result = deleteCurrencyUseCase.invoke(code)) {
+                is DeleteCurrencyUseCase.Result.Error -> {
+                    setFailureState(result.value)
                 }
-                deleteCurrencyUseCase(code)
+
+                DeleteCurrencyUseCase.Result.NotDeleted -> {
+                    val message = StringValue.resource(R.string.convert_exchanges_not_updated)
+                    setState { it.copy(tempMessage = message) }
+                }
+
+                DeleteCurrencyUseCase.Result.NotUpdated -> {
+                    val message = StringValue.resource(R.string.convert_exchanges_not_deleted)
+                    setState { it.copy(tempMessage = message) }
+                }
+
+                DeleteCurrencyUseCase.Result.Success -> {
+                    setState { it.copy(newCode = "", newCodeVisible = false) }
+                }
             }
         }
     }
 
-    private fun convert(baseValue: String) {
+    private fun convert(baseValue: Long) {
         launch {
-            val newList = convertCurrencyUseCase.invoke(
-                pairs = currentState.pairList,
+            val result = convertCurrencyUseCase.invoke(
+                pairs = currentState.pairs,
                 exchanges = currentState.exchanges,
                 baseCode = currentState.baseCode,
                 baseValue = baseValue
             )
-            setState { it.copy(pairList = newList) }
+            setState { it.copy(pairs = result) }
         }
     }
 

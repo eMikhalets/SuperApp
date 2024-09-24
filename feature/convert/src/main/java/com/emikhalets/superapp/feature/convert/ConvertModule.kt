@@ -3,7 +3,6 @@ package com.emikhalets.superapp.feature.convert
 import android.content.Context
 import com.emikhalets.superapp.core.database.convert.ConvertDatabase
 import com.emikhalets.superapp.core.database.convert.table_exchanges.ExchangesDao
-import com.emikhalets.superapp.core.database.convert.table_currency_pair.CurrencyPairDao
 import com.emikhalets.superapp.core.network.CurrencyParser
 import com.emikhalets.superapp.feature.convert.data.ConvertRepositoryImpl
 import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
@@ -28,22 +27,16 @@ object ConvertModule {
     }
 
     @Provides
-    fun providesCurrenciesDao(database: ConvertDatabase): ExchangesDao {
-        return database.currenciesDao
-    }
-
-    @Provides
-    fun providesCurrencyPairDao(database: ConvertDatabase): CurrencyPairDao {
-        return database.currencyPairDao
+    fun providesExchangesDao(database: ConvertDatabase): ExchangesDao {
+        return database.exchangesDao
     }
 
     @Provides
     fun provideConvertRepository(
         currencyParser: CurrencyParser,
-        currenciesDao: ExchangesDao,
-        currencyPairDao: CurrencyPairDao,
+        exchangesDao: ExchangesDao,
     ): ConvertRepository {
-        return ConvertRepositoryImpl(currencyParser, currenciesDao, currencyPairDao)
+        return ConvertRepositoryImpl(currencyParser, exchangesDao)
     }
 
     @Provides
@@ -54,11 +47,6 @@ object ConvertModule {
     @Provides
     fun provideDeleteCurrencyUseCase(convertRepository: ConvertRepository): DeleteCurrencyUseCase {
         return DeleteCurrencyUseCase(convertRepository)
-    }
-
-    @Provides
-    fun provideGetCurrenciesUseCase(convertRepository: ConvertRepository): GetCurrenciesUseCase {
-        return GetCurrenciesUseCase(convertRepository)
     }
 
     @Provides

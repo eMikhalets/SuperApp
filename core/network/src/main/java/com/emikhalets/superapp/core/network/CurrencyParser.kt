@@ -10,7 +10,7 @@ class CurrencyParser @Inject constructor() : AppParser {
     private val currencyRowKey = "[data-symbol*=CUR]"
     private val dataSymbolKey = "data-symbol"
 
-    suspend fun parseCurrencyPairs(codes: List<String>): List<CurrencyValueModel> {
+    suspend fun parseCurrencyPairs(codes: List<String>): List<Pair<String, Double>> {
         return codes
             .map { it.take(3) }.toSet()
             .map { parseSource("$source$it") }
@@ -19,12 +19,12 @@ class CurrencyParser @Inject constructor() : AppParser {
             .mapNotNull { convertData(it) }
     }
 
-    private fun convertData(element: Element): CurrencyValueModel? {
+    private fun convertData(element: Element): Pair<String, Double>? {
         return try {
             val data = element.text().split(" ")
             val code = data[0]
             val value = data[1].toDouble()
-            CurrencyValueModel(code, value)
+            Pair(code, value)
         } catch (e: IndexOutOfBoundsException) {
             Timber.e(e)
             null

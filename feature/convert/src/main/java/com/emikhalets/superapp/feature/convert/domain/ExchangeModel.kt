@@ -18,19 +18,6 @@ data class ExchangeModel(
     val fullCode: String
         get() = "$mainCode$subCode"
 
-    fun contains(base: String, currency: String): Boolean {
-        return (mainCode == base && subCode == currency) ||
-                (mainCode == currency && subCode == base)
-    }
-
-    fun calculate(base: String, value: Long): Long {
-        return when (base) {
-            mainCode -> ((value / 100) * this.value).toLong()
-            subCode -> ((value / 100) * (1 / this.value)).toLong()
-            else -> 0
-        }
-    }
-
     fun isNeedUpdate(): Boolean {
         if (subCode.isEmpty()) return false
         if (updateDate == 0L) return true

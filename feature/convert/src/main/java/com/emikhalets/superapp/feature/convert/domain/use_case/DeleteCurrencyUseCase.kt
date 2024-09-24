@@ -12,36 +12,56 @@ class DeleteCurrencyUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(code: String): Result {
-        val deleteError = R.string.error_delete
-        when (repository.deleteCurrency(code)) {
-            is AppResult.Failure -> return Result.Failure(StringValue.resource(deleteError))
-            is AppResult.Success -> Unit
+        return when (val result = repository.getExchangesSync()) {
+            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_get_list))
+            is AppResult.Success -> checkExchanges(code, result.data)
         }
-        when (repository.deleteCurrencyPairs(code)) {
-            is AppResult.Failure -> return Result.Failure(StringValue.resource(deleteError))
-            is AppResult.Success -> Unit
-        }
+    }
 
-        val currencies: List<ExchangeModel>
-        val getError = R.string.error_get_item
-        when (val result = repository.getCurrenciesSync()) {
-            is AppResult.Failure -> return Result.Failure(StringValue.resource(getError))
-            is AppResult.Success -> currencies = result.data
-        }
-
-        return if (currencies.count() == 1) {
-            val lastCode = currencies.first().code
-            when (repository.insertFirstCurrencyPairs(lastCode)) {
-                is AppResult.Failure -> Result.Failure(StringValue.internalError())
-                is AppResult.Success -> Result.Success
+    private suspend fun checkExchanges(code: String, list: List<ExchangeModel>): Result {
+        return if (list.size == 1) {
+            val item = list.first()
+            val newItem = if (item.mainCode == code) {
+                item.copy(mainCode = item.subCode, subCode = "", value = 0.0, updateDate = 0)
+            } else {
+                item.copy(subCode = "", value = 0.0, updateDate = 0)
             }
+            update(newItem)
         } else {
-            Result.Success
+            delete(code)
+        }
+    }
+
+    private suspend fun update(data: ExchangeModel): Result {
+        return when (val result = repository.updateExchange(data)) {
+            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_update))
+            is AppResult.Success -> {
+                if (result.data) {
+                    Result.Success
+                } else {
+                    Result.NotUpdated
+                }
+            }
+        }
+    }
+
+    private suspend fun delete(code: String): Result {
+        return when (val result = repository.deleteExchanges(code)) {
+            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_delete))
+            is AppResult.Success -> {
+                if (result.data) {
+                    Result.Success
+                } else {
+                    Result.NotDeleted
+                }
+            }
         }
     }
 
     sealed interface Result {
         data class Error(val value: StringValue) : Result
+        data object NotDeleted : Result
+        data object NotUpdated : Result
         data object Success : Result
     }
 }

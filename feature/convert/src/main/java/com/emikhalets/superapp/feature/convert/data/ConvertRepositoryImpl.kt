@@ -2,7 +2,6 @@ package com.emikhalets.superapp.feature.convert.data
 
 import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.invoke
-import com.emikhalets.superapp.core.common.map
 import com.emikhalets.superapp.core.database.convert.table_exchanges.ExchangesDao
 import com.emikhalets.superapp.core.network.CurrencyParser
 import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
@@ -19,6 +18,13 @@ class ConvertRepositoryImpl @Inject constructor(
     override fun getExchanges(): Flow<List<ExchangeModel>> {
         Timber.d("getExchanges")
         return exchangesDao.getAllFlow().mapToModel()
+    }
+
+    override suspend fun getExchangesSync(): AppResult<List<ExchangeModel>> {
+        Timber.d("getExchangesSync")
+        return invoke {
+            exchangesDao.getAll().mapToModel()
+        }
     }
 
     override suspend fun updateExchanges(data: List<ExchangeModel>): AppResult<Boolean> {
@@ -46,12 +52,27 @@ class ConvertRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteExchanges(data: List<ExchangeModel>): AppResult<Boolean> {
+    override suspend fun insertExchanges(data: List<ExchangeModel>): AppResult<Boolean> {
         val ids = data.joinToString { it.id.toString() }
-        Timber.d("deleteExchanges with ids $ids")
+        Timber.d("insertExchanges with ids $ids")
         return invoke {
-            val deletedCount = exchangesDao.delete(data.mapToDb())
+            val insertedIds = exchangesDao.insert(data.mapToDb())
+            insertedIds.isNotEmpty()
+        }
+    }
+
+    override suspend fun deleteExchanges(code: String): AppResult<Boolean> {
+        Timber.d("deleteExchanges with code $code")
+        return invoke {
+            val deletedCount = exchangesDao.deleteByCode(code)
             deletedCount > 0
+        }
+    }
+
+    override suspend fun isCodeExist(code: String): AppResult<Boolean> {
+        Timber.d("isCodeExist data")
+        return invoke {
+            exchangesDao.isCodeExist(code)
         }
     }
 
@@ -59,7 +80,6 @@ class ConvertRepositoryImpl @Inject constructor(
         data: List<String>,
     ): AppResult<List<Pair<String, Double>>> {
         Timber.d("loadRemoteExchanges")
-        val codes = list.map { it.code }
-        return invoke { currencyParser.parseCurrencyPairs(codes) }
+        return invoke { currencyParser.parseCurrencyPairs(data) }
     }
 }
