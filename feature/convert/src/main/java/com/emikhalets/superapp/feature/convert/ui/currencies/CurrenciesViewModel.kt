@@ -71,6 +71,7 @@ class CurrenciesViewModel @Inject constructor(
     private fun setBaseCode(code: String) {
         if (currentState.baseCode != code) {
             setState { it.copy(baseCode = code, baseValue = 0) }
+            convert(currentState.baseValue)
         }
     }
 
@@ -182,6 +183,7 @@ class CurrenciesViewModel @Inject constructor(
         val pairs = codes.map { Pair(it, 0L) }
         val updatedDate = list.maxOf { it.updateDate }
         val isOldExchanges = list.any { it.isNeedUpdate() }
+        convert(currentState.baseValue)
         setState {
             it.copy(
                 exchanges = list,

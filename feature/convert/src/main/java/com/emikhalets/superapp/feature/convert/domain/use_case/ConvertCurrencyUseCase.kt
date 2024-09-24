@@ -32,10 +32,10 @@ class ConvertCurrencyUseCase @Inject constructor() {
                 (mainCode == currency && subCode == base)
     }
 
-    private fun ExchangeModel.calculate(base: String, value: Long): Long {
-        return when (base) {
-            mainCode -> ((value / 100) * this.value).toLong()
-            subCode -> ((value / 100) * (1 / this.value)).toLong()
+    private fun ExchangeModel.calculate(code: String, value: Long): Long {
+        return when (code) {
+            mainCode -> (value * this.value).toLong()
+            subCode -> (value * (1 / this.value)).toLong()
             else -> 0
         }
     }
