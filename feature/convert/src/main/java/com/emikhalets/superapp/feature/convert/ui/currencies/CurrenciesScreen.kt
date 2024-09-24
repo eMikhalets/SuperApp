@@ -93,10 +93,10 @@ private fun ScreenContent(
         BaseCurrencyBox(
             currencies = state.codes,
             baseCode = state.baseCode,
-            baseValue = state.baseValue,
+            baseValue = state.baseValue.convertMoney(),
             onAddCurrencyClick = { onSetAction(Action.AddCurrency) },
             onBaseCodeClick = { onSetAction(Action.SetBaseCode(it)) },
-            onBaseValueChange = { onSetAction(Action.SetBaseValue(it)) },
+            onBaseValueChange = { onSetAction(Action.SetBaseValue(it.convertMoney())) },
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -361,7 +361,7 @@ private fun Preview() {
                 pairs = listOf("USD" to 120000, "RUB" to 15000000, "VND" to 750000000),
                 codes = listOf("USD", "RUB", "VND"),
                 baseCode = "RUB",
-                baseValue = "1200.00",
+                baseValue = 15000000,
                 isOldExchanges = true,
                 updateDate = timestamp(),
             ),

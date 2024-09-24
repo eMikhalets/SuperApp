@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7ca9c110f0c45bcff99ba8399b1e9223",
+    "identityHash": "f85f4603cf423f15c41d6518fe85269a",
     "entities": [
       {
-        "tableName": "currencies",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL)",
+        "tableName": "exchanges",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `main_code` TEXT NOT NULL, `sub_code` TEXT NOT NULL, `value` REAL NOT NULL, `update_date` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,40 +15,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "code",
-            "columnName": "code",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "currency_pair",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `main` TEXT NOT NULL, `sub` TEXT NOT NULL, `value` REAL NOT NULL, `date` INTEGER NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "main",
-            "columnName": "main",
+            "fieldPath": "mainCode",
+            "columnName": "main_code",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "sub",
-            "columnName": "sub",
+            "fieldPath": "subCode",
+            "columnName": "sub_code",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -59,8 +33,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "date",
-            "columnName": "date",
+            "fieldPath": "updateDate",
+            "columnName": "update_date",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -78,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7ca9c110f0c45bcff99ba8399b1e9223')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f85f4603cf423f15c41d6518fe85269a')"
     ]
   }
 }

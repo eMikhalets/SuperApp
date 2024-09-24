@@ -9,56 +9,40 @@ import kotlinx.coroutines.flow.lastOrNull
 
 class ConvertRepositoryTestImpl : ConvertRepository {
 
-    var currencyPairsFlow = MutableSharedFlow<List<CurrencyPairModel>>()
-    var currenciesFlow = MutableSharedFlow<List<ExchangeModel>>()
-
-    // CurrencyPairs
-
-    override fun getCurrencyPairs(): Flow<List<CurrencyPairModel>> {
-        return currencyPairsFlow
+    var exchangesFlow = MutableSharedFlow<List<ExchangeModel>>()
+    override fun getExchanges(): Flow<List<ExchangeModel>> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun updateCurrencyPairs(list: List<CurrencyPairModel>): AppResult<Int> {
-        return TODO()
+    override suspend fun getExchangesSync(): AppResult<List<ExchangeModel>> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun deleteCurrencyPairs(code: String): AppResult<Unit> {
-        return TODO()
+    override suspend fun updateExchanges(data: List<ExchangeModel>): AppResult<Boolean> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun insertFirstCurrencyPairs(code: String): AppResult<Unit> {
-        return TODO()
+    override suspend fun updateExchange(data: ExchangeModel): AppResult<Boolean> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun parseCurrencyPairs(
-        list: List<CurrencyPairModel>,
-    ): AppResult<List<CurrencyValueModel>> {
-        return TODO()
+    override suspend fun insertExchange(data: ExchangeModel): AppResult<Boolean> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun checkCurrencyPairsPostInsert(code: String): AppResult<Unit> {
-        return TODO()
+    override suspend fun insertExchanges(data: List<ExchangeModel>): AppResult<Boolean> {
+        TODO("Not yet implemented")
     }
 
-    // Currencies
-
-    override fun getCurrencies(): Flow<List<ExchangeModel>> {
-        return currenciesFlow
-    }
-
-    override suspend fun getCurrenciesSync(): AppResult<List<ExchangeModel>> {
-        return TODO()
+    override suspend fun deleteExchanges(code: String): AppResult<Boolean> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun isCodeExist(code: String): AppResult<Boolean> {
-        return AppResult.success(currenciesFlow.lastOrNull()?.find { it.code == code } != null)
+        TODO("Not yet implemented")
     }
 
-    override suspend fun insertCode(code: String): AppResult<Long> {
-        return AppResult.success(currenciesFlow.tryEmit(code))
-    }
-
-    override suspend fun deleteCurrency(code: String): AppResult<Unit> {
-        return TODO()
+    override suspend fun loadRemoteExchanges(data: List<String>): AppResult<List<Pair<String, Double>>> {
+        TODO("Not yet implemented")
     }
 }

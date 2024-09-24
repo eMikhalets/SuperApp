@@ -17,14 +17,12 @@ class CurrenciesScreenTest {
 
     private val repository = ConvertRepositoryTestImpl()
     private val getExchangesUseCase = GetExchangesUseCase(repository)
-    private val getCurrenciesUseCase = GetCurrenciesUseCase(repository)
     private val insertCurrencyUseCase = InsertCurrencyUseCase(repository)
     private val deleteCurrencyUseCase = DeleteCurrencyUseCase(repository)
     private val convertCurrencyUseCase = ConvertCurrencyUseCase()
     private val updateExchangesUseCase = UpdateExchangesUseCase(repository)
     private val viewModel = CurrenciesViewModel(
         getExchangesUseCase,
-        getCurrenciesUseCase,
         insertCurrencyUseCase,
         deleteCurrencyUseCase,
         convertCurrencyUseCase,
@@ -36,7 +34,7 @@ class CurrenciesScreenTest {
 
     @Test
     fun no_saved_currencies_no_visible() {
-        val currencies = viewModel.currentState.currencies
+        val currencies = viewModel.currentState.exchanges
 
         composeTestRule.setContent {
             CurrenciesScreen(
@@ -46,8 +44,8 @@ class CurrenciesScreenTest {
         }
 
         for (currency in currencies) {
-            composeTestRule.onNodeWithText("$currency :").assertExists()
-            composeTestRule.onNodeWithText(currency).assertExists()
+            composeTestRule.onNodeWithText("${currency.mainCode} :").assertExists()
+            composeTestRule.onNodeWithText(currency.mainCode).assertExists()
         }
     }
 
@@ -56,7 +54,7 @@ class CurrenciesScreenTest {
         runBlocking {
             insertCurrencyUseCase.invoke("RUB")
             insertCurrencyUseCase.invoke("USD")
-            val currencies = viewModel.currentState.currencies
+            val currencies = viewModel.currentState.exchanges
 
             composeTestRule.setContent {
                 CurrenciesScreen(
@@ -66,8 +64,8 @@ class CurrenciesScreenTest {
             }
 
             for (currency in currencies) {
-                composeTestRule.onNodeWithText("$currency :").assertExists()
-                composeTestRule.onNodeWithText(currency).assertExists()
+                composeTestRule.onNodeWithText("${currency.mainCode} :").assertExists()
+                composeTestRule.onNodeWithText(currency.mainCode).assertExists()
             }
         }
     }
