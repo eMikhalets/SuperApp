@@ -19,6 +19,8 @@ interface ConvertRepository {
 
     suspend fun deleteExchanges(code: String): AppResult<Boolean>
 
+    suspend fun deleteExchange(data: ExchangeModel): AppResult<Boolean>
+
     suspend fun isCodeExist(code: String): AppResult<Boolean>
 
     suspend fun loadRemoteExchanges(data: List<String>): AppResult<List<Pair<String, Double>>>

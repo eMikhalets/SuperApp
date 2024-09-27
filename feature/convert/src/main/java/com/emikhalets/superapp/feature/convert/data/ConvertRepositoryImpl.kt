@@ -69,6 +69,14 @@ class ConvertRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteExchange(data: ExchangeModel): AppResult<Boolean> {
+        Timber.d("deleteExchange with id ${data.id}")
+        return invoke {
+            val deletedCount = exchangesDao.delete(data.mapToDb())
+            deletedCount > 0
+        }
+    }
+
     override suspend fun isCodeExist(code: String): AppResult<Boolean> {
         Timber.d("isCodeExist data")
         return invoke {

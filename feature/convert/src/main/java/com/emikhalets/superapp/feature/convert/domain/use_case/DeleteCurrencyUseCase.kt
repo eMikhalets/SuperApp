@@ -19,16 +19,18 @@ class DeleteCurrencyUseCase @Inject constructor(
     }
 
     private suspend fun checkExchanges(code: String, list: List<ExchangeModel>): Result {
-        return if (list.size == 1) {
-            val item = list.first()
-            val newItem = if (item.mainCode == code) {
-                item.copy(mainCode = item.subCode, subCode = "", value = 0.0, updateDate = 0)
-            } else {
-                item.copy(subCode = "", value = 0.0, updateDate = 0)
+        return when {
+            list.size == 1 && list.first().subCode.isBlank() -> delete(list.first())
+            list.size > 1 -> delete(code)
+            else -> {
+                val item = list.firstOrNull() ?: return Result.NotDeleted
+                val newItem = if (item.mainCode == code) {
+                    item.copy(mainCode = item.subCode, subCode = "", value = 0.0, updateDate = 0)
+                } else {
+                    item.copy(subCode = "", value = 0.0, updateDate = 0)
+                }
+                update(newItem)
             }
-            update(newItem)
-        } else {
-            delete(code)
         }
     }
 
@@ -47,6 +49,19 @@ class DeleteCurrencyUseCase @Inject constructor(
 
     private suspend fun delete(code: String): Result {
         return when (val result = repository.deleteExchanges(code)) {
+            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_delete))
+            is AppResult.Success -> {
+                if (result.data) {
+                    Result.Success
+                } else {
+                    Result.NotDeleted
+                }
+            }
+        }
+    }
+
+    private suspend fun delete(data: ExchangeModel): Result {
+        return when (val result = repository.deleteExchange(data)) {
             is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_delete))
             is AppResult.Success -> {
                 if (result.data) {
