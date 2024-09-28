@@ -3,8 +3,8 @@ package com.emikhalets.superapp.feature.convert
 import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
 import com.emikhalets.superapp.feature.convert.domain.use_case.ConvertCurrencyUseCase
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class ConvertCurrencyUseCaseTest {
 

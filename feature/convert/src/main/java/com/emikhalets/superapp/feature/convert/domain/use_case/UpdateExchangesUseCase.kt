@@ -14,6 +14,7 @@ class UpdateExchangesUseCase @Inject constructor(
 
     suspend operator fun invoke(list: List<ExchangeModel>): Result {
         val needUpdate = list.filter { it.isNeedUpdate() }
+        if (needUpdate.isEmpty()) return Result.NotUpdated
         val fullCodes = needUpdate.map { it.fullCode }
         return when (val result = repository.loadRemoteExchanges(fullCodes)) {
             is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_parsing))
@@ -25,7 +26,7 @@ class UpdateExchangesUseCase @Inject constructor(
         currencies: List<Pair<String, Double>>,
         exchanges: List<ExchangeModel>,
     ): Result {
-        if (currencies.isEmpty()) return Result.Success
+        if (currencies.isEmpty()) return Result.NotUpdated
         val updatedList = exchanges.map { item ->
             val currency = currencies.find { it.first == item.fullCode }
             if (currency == null) {

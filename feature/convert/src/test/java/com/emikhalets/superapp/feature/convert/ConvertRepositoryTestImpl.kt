@@ -9,9 +9,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class ConvertRepositoryTestImpl : ConvertRepository {
 
     private var exchangesFlow: MutableStateFlow<List<ExchangeModel>> = MutableStateFlow(emptyList())
+    private var exchangesRemote: List<Pair<String, Double>> = emptyList()
 
     fun setExchangesFlow(list: List<ExchangeModel>) {
         exchangesFlow.tryEmit(list)
+    }
+
+    fun setExchangesRemote(list: List<Pair<String, Double>>) {
+        exchangesRemote = list
     }
 
     override fun getExchanges(): Flow<List<ExchangeModel>> {
@@ -91,6 +96,6 @@ class ConvertRepositoryTestImpl : ConvertRepository {
     override suspend fun loadRemoteExchanges(
         data: List<String>,
     ): AppResult<List<Pair<String, Double>>> {
-        return AppResult.success(emptyList())
+        return AppResult.success(exchangesRemote)
     }
 }

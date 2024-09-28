@@ -4,8 +4,8 @@ import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
 import com.emikhalets.superapp.feature.convert.domain.use_case.DeleteCurrencyUseCase
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class DeleteCurrencyUseCaseTest {
 
