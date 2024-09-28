@@ -25,7 +25,7 @@ class InsertCurrencyUseCase @Inject constructor(
         if (code.length != 3) {
             return StringValue.resource(R.string.convert_code_length_error)
         }
-        if (code.all { it.isLetter() }) {
+        if (code.any { !it.isLetter() }) {
             return StringValue.resource(R.string.convert_code_letters_error)
         }
         return null

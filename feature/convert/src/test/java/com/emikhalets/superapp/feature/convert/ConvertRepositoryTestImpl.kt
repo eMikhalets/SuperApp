@@ -44,7 +44,8 @@ class ConvertRepositoryTestImpl : ConvertRepository {
         exchangesFlow.tryEmit(
             buildList {
                 addAll(exchangesFlow.value)
-                add(data)
+                val lastId = exchangesFlow.value.lastOrNull()?.id ?: 0
+                add(data.copy(id = lastId + 1))
             }
         )
         return AppResult.success(true)
@@ -54,7 +55,8 @@ class ConvertRepositoryTestImpl : ConvertRepository {
         exchangesFlow.tryEmit(
             buildList {
                 addAll(exchangesFlow.value)
-                addAll(data)
+                var lastId = exchangesFlow.value.lastOrNull()?.id ?: 0
+                addAll(data.map { it.copy(id = ++lastId) })
             }
         )
         return AppResult.success(true)

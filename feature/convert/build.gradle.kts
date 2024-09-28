@@ -37,6 +37,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlin.test)
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.compose.ui.test.junit)
     debugImplementation(libs.compose.ui.test.manifest)
