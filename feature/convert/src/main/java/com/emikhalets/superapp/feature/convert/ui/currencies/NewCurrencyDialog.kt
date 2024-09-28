@@ -17,9 +17,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
+import com.emikhalets.superapp.core.ui.component.TextPrimary
 import com.emikhalets.superapp.core.ui.dialog.DialogNoAction
 import com.emikhalets.superapp.core.ui.extentions.BoxPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
@@ -36,6 +38,12 @@ fun NewCurrencyDialog(
     DialogNoAction(
         onDismiss = onCancelClick
     ) {
+        TextPrimary(
+            text = stringResource(R.string.convert_new_currency),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 16.dp)
+        )
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -55,6 +63,7 @@ fun NewCurrencyDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .testTag("currencyCodeTextField")
             )
             Icon(
                 imageVector = Icons.Rounded.Save,
@@ -62,6 +71,7 @@ fun NewCurrencyDialog(
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .clickableOnce { onSaveClick(code) }
+                    .testTag("currencyCodeSaveIcon")
             )
             Icon(
                 imageVector = Icons.Rounded.Close,

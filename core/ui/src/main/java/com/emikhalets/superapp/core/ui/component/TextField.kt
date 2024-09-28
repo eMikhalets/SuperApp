@@ -113,6 +113,7 @@ fun TextFieldBorderless(
             { Icon(imageVector = trailingIcon, contentDescription = null) }
         } else null,
         singleLine = singleLine,
+        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         isError = isError,
         readOnly = readOnly,
         enabled = enabled,
@@ -145,6 +146,13 @@ private fun Preview() {
         Column(Modifier.fillMaxWidth()) {
             TextFieldPrimary(
                 value = "Text Header",
+                onValueChange = {},
+                modifier = Modifier.padding(8.dp)
+            )
+            TextFieldPrimary(
+                value = "",
+                placeholder = "Text Header Long Long Long Long Long Long Long",
+                singleLine = true,
                 onValueChange = {},
                 modifier = Modifier.padding(8.dp)
             )

@@ -36,5 +36,5 @@ fun List<ExchangeModel>.buildCodesList(): List<String> {
         codes.add(it.mainCode)
         codes.add(it.subCode)
     }
-    return codes.toList()
+    return codes.filter { it.isNotBlank() }.toList()
 }

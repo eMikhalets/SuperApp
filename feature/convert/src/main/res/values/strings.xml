@@ -1,9 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="convert_title">Currency convert</string>
     <string name="convert_add">Add currency</string>
     <string name="convert_update">Update exchanges</string>
+    <string name="convert_new_currency">New currency code</string>
     <string name="convert_value_hint">Currency value: 123.45</string>
-    <string name="convert_code_hint">Currency code: USB, RUB, etc.</string>
+    <string name="convert_code_hint" tools:ignore="TypographyEllipsis">USD, RUB ...</string>
     <string name="convert_exchanges_date">Exchange rates are current as of %s</string>
     <string name="convert_parsing_error">Error while parsing exchanges</string>
     <string name="convert_code_empty">Currency code is empty</string>

@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -46,12 +48,16 @@ import com.emikhalets.superapp.core.ui.theme.listItemBox
 import com.emikhalets.superapp.feature.convert.R
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.Action
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.State
+import timber.log.Timber
+
+private const val SCREEN_TAG: String = "CurrenciesScreen"
 
 @Composable
 internal fun CurrenciesScreen(
     navigateBack: () -> Unit,
     viewModel: CurrenciesViewModel,
 ) {
+    Timber.tag(SCREEN_TAG).d("Root")
     val state by viewModel.state.collectAsState()
 
     ScreenContent(
@@ -67,6 +73,7 @@ private fun ScreenContent(
     onSetAction: (Action) -> Unit,
     onBackClick: () -> Unit,
 ) {
+    Timber.tag(SCREEN_TAG).d("ScreenContent")
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -117,6 +124,7 @@ private fun ExchangesDateBox(
     onUpdateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Timber.tag(SCREEN_TAG).d("ExchangesDateBox old=$isOldExchanges, $timestamp")
     Column(modifier = Modifier.fillMaxWidth()) {
         if (timestamp > 0) {
             val dateText = stringResource(
@@ -159,7 +167,11 @@ private fun PairsList(
     onNewCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Timber.tag(SCREEN_TAG).d("PairsList code=$baseCode, size=${pairs.size}")
     LazyColumn(modifier = modifier) {
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
         items(pairs, key = { it.first }) { (code, value) ->
             PairRow(
                 code = code,
@@ -206,6 +218,7 @@ private fun PairRow(
     onDeleteClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Timber.tag(SCREEN_TAG).d("PairRow $code : $value")
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -225,7 +238,7 @@ private fun PairRow(
                 .weight(1f)
         )
         TextPrimary(
-            text = formatPairValue(value),
+            text = value,
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 24.sp,
             fontWeight = textWeight,
@@ -262,6 +275,7 @@ private fun BaseCurrencyBox(
     onAddCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Timber.tag(SCREEN_TAG).d("BaseCurrencyBox $baseCode $baseValue")
     Column {
         CurrenciesChooser(
             currencies = currencies,
@@ -297,6 +311,7 @@ private fun CurrenciesChooser(
     onBaseCodeClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Timber.tag(SCREEN_TAG).d("CurrenciesChooser selected=$baseCode")
     FlowRow(modifier = modifier) {
         currencies.forEach { code ->
             val textColor = if (code == baseCode) {
@@ -334,23 +349,6 @@ private fun CurrenciesChooser(
     }
 }
 
-private fun formatPairValue(value: String): String {
-    if (value.isBlank()) return ""
-    val parts = value.split(".")
-    val leftPart = parts.getOrNull(0) ?: ""
-    var spaceCounter = 0
-    val charList = leftPart.toMutableList()
-    for (i in leftPart.length downTo 0) {
-        if (spaceCounter == 3) {
-            spaceCounter = 0
-            charList.add(i, ' ')
-        }
-        spaceCounter++
-    }
-    val newLeftPart = charList.joinToString("").trim()
-    return "$newLeftPart.${parts.getOrNull(1) ?: "00"}"
-}
-
 @ScreenPreview
 @Composable
 private fun Preview() {
@@ -364,6 +362,26 @@ private fun Preview() {
                 baseValue = 15000000,
                 isOldExchanges = true,
                 updateDate = timestamp(),
+            ),
+            onSetAction = {},
+            onBackClick = {}
+        )
+    }
+}
+
+@ScreenPreview
+@Composable
+private fun EmptyPreview() {
+    AppTheme {
+        ScreenContent(
+            state = State(
+                loading = false,
+                pairs = emptyList(),
+                codes = emptyList(),
+                baseCode = "",
+                baseValue = 0,
+                isOldExchanges = false,
+                updateDate = 0,
             ),
             onSetAction = {},
             onBackClick = {}

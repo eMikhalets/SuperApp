@@ -112,9 +112,9 @@ class CurrenciesViewModel @Inject constructor(
 
     private fun addCurrency() {
         launch {
+            setState { it.copy(newCodeVisible = false) }
             when (val result = insertCurrencyUseCase.invoke(currentState.newCode)) {
                 is InsertCurrencyUseCase.Result.Error -> {
-                    setState { it.copy(newCode = "", newCodeVisible = false) }
                     setFailureState(result.value)
                 }
 
@@ -133,7 +133,7 @@ class CurrenciesViewModel @Inject constructor(
                 }
 
                 InsertCurrencyUseCase.Result.Success -> {
-                    setState { it.copy(newCode = "", newCodeVisible = false) }
+                    Unit
                 }
             }
         }
@@ -181,9 +181,8 @@ class CurrenciesViewModel @Inject constructor(
     private fun setExchangesState(list: List<ExchangeModel>) {
         val codes = list.buildCodesList()
         val pairs = codes.map { Pair(it, 0L) }
-        val updatedDate = list.maxOf { it.updateDate }
+        val updatedDate = list.maxOfOrNull { it.updateDate } ?: 0
         val isOldExchanges = list.any { it.isNeedUpdate() }
-        convert(currentState.baseValue)
         setState {
             it.copy(
                 exchanges = list,

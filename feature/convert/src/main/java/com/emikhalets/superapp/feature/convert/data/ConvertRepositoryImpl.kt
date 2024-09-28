@@ -37,7 +37,7 @@ class ConvertRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateExchange(data: ExchangeModel): AppResult<Boolean> {
-        Timber.d("updateExchange with id ${data.id}")
+        Timber.d("updateExchange ${data.fullCode}")
         return invoke {
             val updatedCount = exchangesDao.update(data.mapToDb())
             updatedCount == 1
@@ -45,7 +45,7 @@ class ConvertRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertExchange(data: ExchangeModel): AppResult<Boolean> {
-        Timber.d("insertExchange with id ${data.id}")
+        Timber.d("insertExchange ${data.fullCode}")
         return invoke {
             val insertId = exchangesDao.insert(data.mapToDb())
             insertId != 0L
@@ -53,8 +53,8 @@ class ConvertRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertExchanges(data: List<ExchangeModel>): AppResult<Boolean> {
-        val ids = data.joinToString { it.id.toString() }
-        Timber.d("insertExchanges with ids $ids")
+        val codes = data.joinToString { it.fullCode }
+        Timber.d("insertExchanges $codes")
         return invoke {
             val insertedIds = exchangesDao.insert(data.mapToDb())
             insertedIds.isNotEmpty()
