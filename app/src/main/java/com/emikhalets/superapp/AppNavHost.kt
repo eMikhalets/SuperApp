@@ -4,44 +4,47 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.emikhalets.superapp.AppRoute.Main
 import com.emikhalets.superapp.core.common.model.AppOrientationType
 import com.emikhalets.superapp.core.ui.AppFeature
-import com.emikhalets.superapp.feature.convert.ui.AppConvertRoute
-import com.emikhalets.superapp.feature.convert.ui.appConvertNavGraph
-import com.emikhalets.superapp.feature.notes.ui.AppNotesRoute
-import com.emikhalets.superapp.feature.notes.ui.appNotesNavGraph
-import com.emikhalets.superapp.feature.salary.ui.AppSalaryRoute
-import com.emikhalets.superapp.feature.salary.ui.appSalaryNavGraph
+import com.emikhalets.superapp.feature.convert.ConvertCurrenciesRoute
+import com.emikhalets.superapp.feature.convert.convertNavigation
+import com.emikhalets.superapp.feature.notes.TasksListRoute
+import com.emikhalets.superapp.feature.notes.notesNavigation
+import com.emikhalets.superapp.feature.salary.SalaryChartRoute
+import com.emikhalets.superapp.feature.salary.salaryNavigation
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object MainRoute
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     onSetScreenOrientation: (AppOrientationType) -> Unit,
 ) {
-    NavHost(navController, Main) {
-        composable(Main) {
+    NavHost(navController, MainRoute) {
+        composable<MainRoute> {
             onSetScreenOrientation(AppOrientationType.Portrait)
             FeaturesScreen(
                 navigateToFeature = { navigateToFeature(navController, it) },
             )
         }
         if (AppFeature.Convert.visible) {
-            appConvertNavGraph(navController, onSetScreenOrientation)
+            convertNavigation(navController, onSetScreenOrientation)
         }
         if (AppFeature.Notes.visible) {
-            appNotesNavGraph(navController, onSetScreenOrientation)
+            notesNavigation(navController, onSetScreenOrientation)
         }
         if (AppFeature.Salary.visible) {
-            appSalaryNavGraph(navController, onSetScreenOrientation)
+            salaryNavigation(navController, onSetScreenOrientation)
         }
     }
 }
 
 private fun navigateToFeature(navController: NavHostController, feature: AppFeature) {
     when (feature) {
-        AppFeature.Convert -> navController.navigate(AppConvertRoute.NavGraph)
-        AppFeature.Notes -> navController.navigate(AppNotesRoute.NavGraph)
-        AppFeature.Salary -> navController.navigate(AppSalaryRoute.NavGraph)
+        AppFeature.Convert -> navController.navigate(ConvertCurrenciesRoute)
+        AppFeature.Notes -> navController.navigate(TasksListRoute)
+        AppFeature.Salary -> navController.navigate(SalaryChartRoute)
     }
 }

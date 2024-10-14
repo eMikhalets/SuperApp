@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -31,6 +32,7 @@ dependencies {
     api(libs.accompanist.insets)
     api(libs.accompanist.systemuicontroller)
     api(libs.timber)
+    api(libs.kotlin.serialization.json)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
