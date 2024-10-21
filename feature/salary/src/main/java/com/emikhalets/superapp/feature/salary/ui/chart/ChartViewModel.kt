@@ -1,6 +1,5 @@
 package com.emikhalets.superapp.feature.salary.ui.chart
 
-import androidx.lifecycle.viewModelScope
 import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.constant.Const
@@ -15,12 +14,7 @@ import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.Action
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.Effect
 import com.emikhalets.superapp.feature.salary.ui.chart.ChartContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.shareIn
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,25 +26,24 @@ class ChartViewModel @Inject constructor(
     private val deleteSalaryUseCase: DeleteSalaryUseCase,
 ) : MviViewModel<Action, Effect, State>() {
 
-    private val salariesFlow: Flow<List<SalaryModel>> =
-        flow { emitAll(getSalariesUseCase.invoke()) }
-            .catch { setFailureState(it) }
-            .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
-
     init {
-        launch {
-            salariesFlow.collect { setSalariesState(it) }
-        }
+        setAction(Action.GetSalaries)
     }
 
     override fun setInitialState() = State()
 
     override fun handleAction(action: Action) {
         when (action) {
+            is Action.GetSalaries -> getSalaries()
             is Action.DeleteSalary -> deleteSalary(action.model)
             is Action.SaveSalary -> saveSalary(action.model)
             is Action.SetEditSalary -> setEditSalary(action.model)
+            is Action.SetError -> setError(action.value)
         }
+    }
+
+    private fun setError(value: StringValue?) {
+        setState { it.copy(error = value) }
     }
 
     private fun setEditSalary(model: SalaryModel?) {
@@ -62,6 +55,14 @@ class ChartViewModel @Inject constructor(
             insertSalary(model)
         } else {
             updateSalary(model)
+        }
+    }
+
+    private fun getSalaries() {
+        launch {
+            getSalariesUseCase.invoke()
+                .catch { setFailureState(it) }
+                .collect { setSalariesState(it) }
         }
     }
 

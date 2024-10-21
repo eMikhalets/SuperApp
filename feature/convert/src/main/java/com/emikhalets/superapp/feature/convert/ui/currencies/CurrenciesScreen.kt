@@ -48,16 +48,12 @@ import com.emikhalets.superapp.core.ui.theme.listItemBox
 import com.emikhalets.superapp.feature.convert.R
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.Action
 import com.emikhalets.superapp.feature.convert.ui.currencies.CurrenciesContract.State
-import timber.log.Timber
-
-private const val SCREEN_TAG: String = "CurrenciesScreen"
 
 @Composable
 internal fun CurrenciesScreen(
     navigateBack: () -> Unit,
     viewModel: CurrenciesViewModel,
 ) {
-    Timber.tag(SCREEN_TAG).d("Root")
     val state by viewModel.state.collectAsState()
 
     ScreenContent(
@@ -73,7 +69,6 @@ private fun ScreenContent(
     onSetAction: (Action) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    Timber.tag(SCREEN_TAG).d("ScreenContent")
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -124,7 +119,6 @@ private fun ExchangesDateBox(
     onUpdateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Timber.tag(SCREEN_TAG).d("ExchangesDateBox old=$isOldExchanges, $timestamp")
     Column(modifier = Modifier.fillMaxWidth()) {
         if (timestamp > 0) {
             val dateText = stringResource(
@@ -167,7 +161,6 @@ private fun PairsList(
     onNewCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Timber.tag(SCREEN_TAG).d("PairsList code=$baseCode, size=${pairs.size}")
     LazyColumn(modifier = modifier) {
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -218,7 +211,6 @@ private fun PairRow(
     onDeleteClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Timber.tag(SCREEN_TAG).d("PairRow $code : $value")
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -275,7 +267,6 @@ private fun BaseCurrencyBox(
     onAddCurrencyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Timber.tag(SCREEN_TAG).d("BaseCurrencyBox $baseCode $baseValue")
     Column {
         CurrenciesChooser(
             currencies = currencies,
@@ -311,7 +302,6 @@ private fun CurrenciesChooser(
     onBaseCodeClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Timber.tag(SCREEN_TAG).d("CurrenciesChooser selected=$baseCode")
     FlowRow(modifier = modifier) {
         currencies.forEach { code ->
             val textColor = if (code == baseCode) {

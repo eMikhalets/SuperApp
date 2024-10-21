@@ -38,7 +38,7 @@ class CurrenciesViewModel @Inject constructor(
             Action.AddCurrency -> addCurrency()
             Action.GetExchanges -> getExchanges()
             Action.UpdateExchanges -> updateExchanges()
-            is Action.DropError -> dropError(action.value)
+            is Action.SetError -> dropError(action.value)
             is Action.DropTempMessage -> dropTempMessage(action.value)
             is Action.DeleteCurrency -> deleteCurrency(action.code)
             is Action.SetBaseCode -> setBaseCode(action.code)

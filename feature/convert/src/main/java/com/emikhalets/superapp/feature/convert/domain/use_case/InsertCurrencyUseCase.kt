@@ -7,6 +7,7 @@ import com.emikhalets.superapp.feature.convert.domain.ConvertRepository
 import com.emikhalets.superapp.feature.convert.domain.ExchangeModel
 import com.emikhalets.superapp.feature.convert.domain.buildCodesList
 import javax.inject.Inject
+import com.emikhalets.superapp.core.common.R as commonR
 
 class InsertCurrencyUseCase @Inject constructor(
     private val repository: ConvertRepository,
@@ -33,7 +34,10 @@ class InsertCurrencyUseCase @Inject constructor(
 
     private suspend fun checkExist(code: String): Result {
         return when (val result = repository.isCodeExist(code)) {
-            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_item_exist))
+            is AppResult.Failure -> {
+                Result.Error(StringValue.resource(commonR.string.error_item_exist))
+            }
+
             is AppResult.Success -> {
                 if (result.data) {
                     return Result.Exist
@@ -46,7 +50,7 @@ class InsertCurrencyUseCase @Inject constructor(
 
     private suspend fun getExchanges(code: String): Result {
         return when (val result = repository.getExchangesSync()) {
-            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_get_list))
+            is AppResult.Failure -> Result.Error(StringValue.resource(commonR.string.error_get_list))
             is AppResult.Success -> prepareModel(code, result.data)
         }
     }
@@ -70,21 +74,21 @@ class InsertCurrencyUseCase @Inject constructor(
 
     private suspend fun insertExchange(data: ExchangeModel): Result {
         return when (repository.insertExchange(data)) {
-            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_insert))
+            is AppResult.Failure -> Result.Error(StringValue.resource(commonR.string.error_insert))
             is AppResult.Success -> Result.Success
         }
     }
 
     private suspend fun insertExchanges(data: List<ExchangeModel>): Result {
         return when (repository.insertExchanges(data)) {
-            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_insert))
+            is AppResult.Failure -> Result.Error(StringValue.resource(commonR.string.error_insert))
             is AppResult.Success -> Result.Success
         }
     }
 
     private suspend fun updateExchange(data: ExchangeModel): Result {
         return when (val result = repository.updateExchange(data)) {
-            is AppResult.Failure -> Result.Error(StringValue.resource(R.string.error_update))
+            is AppResult.Failure -> Result.Error(StringValue.resource(commonR.string.error_update))
             is AppResult.Success -> {
                 if (result.data) {
                     Result.Success

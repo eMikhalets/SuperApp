@@ -72,11 +72,15 @@ private fun ScreenContent(
                     .padding(horizontal = 8.dp)
                     .padding(top = 24.dp)
             )
-            SalaryList(
-                list = state.salaryList,
-                onClick = { onSetAction(Action.SetEditSalary(it)) },
-                modifier = Modifier.fillMaxWidth()
-            )
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(state.salaryList) { model ->
+                    SalaryRow(
+                        model = model,
+                        onClick = { onSetAction(Action.SetEditSalary(it)) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
     }
 
@@ -108,23 +112,6 @@ private fun ChartBox(
             text = "ГРАФИК",
             fontSize = 30.sp
         )
-    }
-}
-
-@Composable
-private fun SalaryList(
-    list: List<SalaryModel>,
-    onClick: (SalaryModel) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    LazyColumn(modifier = modifier) {
-        items(list) { model ->
-            SalaryRow(
-                model = model,
-                onClick = onClick,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
     }
 }
 

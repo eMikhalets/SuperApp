@@ -16,7 +16,7 @@ object CurrenciesContract {
         data object GetExchanges : Action()
         data object UpdateExchanges : Action()
         data class DropTempMessage(val value: StringValue?) : Action()
-        data class DropError(val value: StringValue?) : Action()
+        data class SetError(val value: StringValue?) : Action()
         data class DeleteCurrency(val code: String) : Action()
         data class SetBaseCode(val code: String) : Action()
         data class SetBaseValue(val value: Long) : Action()
