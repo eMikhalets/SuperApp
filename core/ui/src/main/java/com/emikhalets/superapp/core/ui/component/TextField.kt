@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.core.ui.theme.textField
 
@@ -34,7 +35,7 @@ fun TextFieldPrimary(
     ignoreNonEnabledColors: Boolean = false,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
-    trailingIconClick: (() -> Unit)? = null,
+    trailingIconClick: () -> Unit = {},
     actions: KeyboardActions = KeyboardActions.Default,
     options: KeyboardOptions = KeyboardOptions.Default,
     shape: Shape = MaterialTheme.shapes.textField,
@@ -52,7 +53,13 @@ fun TextFieldPrimary(
             { Icon(imageVector = leadingIcon, contentDescription = null) }
         } else null,
         trailingIcon = if (trailingIcon != null) {
-            { Icon(imageVector = trailingIcon, contentDescription = null) }
+            {
+                Icon(
+                    imageVector = trailingIcon,
+                    contentDescription = null,
+                    modifier = Modifier.clickableOnce { trailingIconClick() }
+                )
+            }
         } else null,
         singleLine = singleLine,
         isError = isError,
@@ -92,7 +99,7 @@ fun TextFieldBorderless(
     ignoreNonEnabledColors: Boolean = false,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
-    trailingIconClick: (() -> Unit)? = null,
+    trailingIconClick: () -> Unit = {},
     actions: KeyboardActions = KeyboardActions.Default,
     options: KeyboardOptions = KeyboardOptions.Default,
     shape: Shape = MaterialTheme.shapes.textField,
@@ -110,7 +117,13 @@ fun TextFieldBorderless(
             { Icon(imageVector = leadingIcon, contentDescription = null) }
         } else null,
         trailingIcon = if (trailingIcon != null) {
-            { Icon(imageVector = trailingIcon, contentDescription = null) }
+            {
+                Icon(
+                    imageVector = trailingIcon,
+                    contentDescription = null,
+                    modifier = Modifier.clickableOnce { trailingIconClick() }
+                )
+            }
         } else null,
         singleLine = singleLine,
         maxLines = if (singleLine) 1 else Int.MAX_VALUE,
