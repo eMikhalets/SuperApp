@@ -1,17 +1,24 @@
 package com.emikhalets.superapp.feature.notes.ui.task_list
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,12 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.superapp.core.common.constant.Const
-import com.emikhalets.superapp.core.ui.component.FloatingButtonBox
 import com.emikhalets.superapp.core.ui.component.TextPrimary
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.extentions.clickableOnce
 import com.emikhalets.superapp.core.ui.theme.AppTheme
+import com.emikhalets.superapp.feature.notes.domain.SubTaskModel
 import com.emikhalets.superapp.feature.notes.domain.TaskModel
 import com.emikhalets.superapp.feature.notes.ui.task_list.TasksContract.Action
 import com.emikhalets.superapp.feature.notes.ui.task_list.TasksContract.State
@@ -51,85 +57,138 @@ private fun ScreenContent(
     onSetAction: (Action) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        FloatingButtonBox(onClick = { onSetAction(Action.SetEditTask(TaskModel())) }) {
-            LazyColumn(
+    Column(modifier = Modifier.fillMaxSize()) {
+        TasksList(
+            list = state.tasksList,
+            onExpandClick = {},
+            onTaskClick = {},
+            onCheck = { onSetAction(Action.CheckTask(it)) },
+            modifier = Modifier.weight(1f)
+        )
+        AddCard(
+            onClick = { onSetAction(Action.SetEditTask(TaskModel())) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp, 8.dp, 12.dp, 24.dp)
+        )
+    }
+
+//    TaskEditDialog(
+//        task = state.editTask,
+//        onSaveClick = { onSetAction(Action.SaveEditTask(it)) },
+//        onCancelClick = {
+//            if (state.editTask?.id == Const.IdNew) {
+//                onSetAction(Action.SetEditTask(null))
+//            } else {
+//                onSetAction(Action.DeleteTask(state.editTask))
+//            }
+//        }
+//    )
+}
+
+@Composable
+private fun AddCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(4.dp),
+        modifier = modifier.clickableOnce { onClick() }
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun TasksList(
+    list: List<TaskModel>,
+    onExpandClick: (TaskModel) -> Unit,
+    onTaskClick: (SubTaskModel) -> Unit,
+    onCheck: (SubTaskModel) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+    ) {
+        items(list) { task ->
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(4.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(12.dp, 8.dp, 12.dp, 0.dp)
             ) {
-                items(state.tasksList) { task ->
-                    TaskItemBox(
-                        task = task,
-                        onClick = { onSetAction(Action.SetEditTask(it)) },
-                        onCheckTask = { onSetAction(Action.CheckTask(it)) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp)
+                Column {
+                    TaskHeader(
+                        text = task.header,
+                        onExpandClick = {},
+                        onAddClick = {},
+                        modifier = Modifier.fillMaxWidth()
                     )
+                    task.subtasks.forEach { subtask ->
+                        TaskRow(
+                            task = subtask,
+                            onChecked = onCheck,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickableOnce { onTaskClick(subtask) }
+                        )
+                    }
                 }
             }
         }
-        TaskEditDialog(
-            task = state.editTask,
-            onSaveClick = { onSetAction(Action.SaveEditTask(it)) },
-            onCancelClick = {
-                if (state.editTask?.id == Const.IdNew) {
-                    onSetAction(Action.SetEditTask(null))
-                } else {
-                    onSetAction(Action.DeleteTask(state.editTask))
-                }
-            }
+    }
+}
+
+@Composable
+private fun TaskHeader(
+    text: String,
+    onExpandClick: () -> Unit,
+    onAddClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.clickable { onExpandClick() },
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier
+                .weight(1f)
+                .padding(16.dp, 12.dp)
+        )
+        Icon(
+            imageVector = Icons.Rounded.Add,
+            contentDescription = null,
+            modifier = Modifier
+                .clickable { onAddClick() }
+                .padding(16.dp, 12.dp)
+                .size(32.dp)
         )
     }
 }
 
 @Composable
-private fun TaskItemBox(
-    task: TaskModel,
-    onClick: (TaskModel) -> Unit,
-    onCheckTask: (TaskModel) -> Unit,
+private fun TaskRow(
+    task: SubTaskModel,
+    onChecked: (SubTaskModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(5.dp),
-        modifier = modifier
-            .clickableOnce { onClick(task) }
-            .padding(vertical = 8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-            TaskItemRow(
-                task = task,
-                parentCompleted = false,
-                onChecked = onCheckTask
-            )
-            task.subtasks.forEach { subtask ->
-                TaskItemRow(
-                    task = subtask,
-                    parentCompleted = task.completed,
-                    onChecked = onCheckTask,
-                    modifier = Modifier.padding(start = 24.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun TaskItemRow(
-    task: TaskModel,
-    parentCompleted: Boolean,
-    onChecked: (TaskModel) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val completed = if (parentCompleted) true else task.completed
-    val textDecoration = if (completed) TextDecoration.LineThrough else null
-    val textColor = if (completed) {
+    val textDecoration = if (task.completed) TextDecoration.LineThrough else null
+    val textColor = if (task.completed) {
         MaterialTheme.colorScheme.secondary
     } else {
         MaterialTheme.colorScheme.onBackground
@@ -139,20 +198,16 @@ private fun TaskItemRow(
         modifier = modifier,
     ) {
         Checkbox(
-            checked = completed,
-            enabled = !completed,
+            checked = task.completed,
+            enabled = !task.completed,
             onCheckedChange = { onChecked(task) },
-            modifier = Modifier.padding(start = 16.dp)
         )
         TextPrimary(
-            text = task.content,
+            text = task.text,
             color = textColor,
             fontSize = 16.sp,
             textDecoration = textDecoration,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(horizontal = 16.dp)
+            modifier = Modifier.padding(end = 12.dp)
         )
     }
 }

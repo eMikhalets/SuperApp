@@ -3,11 +3,12 @@ package com.emikhalets.superapp.feature.notes
 import android.content.Context
 import com.emikhalets.superapp.core.database.notes.NotesDatabase
 import com.emikhalets.superapp.core.database.notes.table_tasks.TasksDao
+import com.emikhalets.superapp.feature.notes.data.TasksRepositoryImpl
+import com.emikhalets.superapp.feature.notes.domain.TasksRepository
 import com.emikhalets.superapp.feature.notes.domain.use_case.DeleteTaskUseCase
 import com.emikhalets.superapp.feature.notes.domain.use_case.GetTasksUseCase
 import com.emikhalets.superapp.feature.notes.domain.use_case.InsertTaskUseCase
 import com.emikhalets.superapp.feature.notes.domain.use_case.UpdateTaskUseCase
-import com.emikhalets.superapp.feature.notes.data.TasksRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +31,7 @@ internal object NotesModule {
 
     @Provides
     fun provideNotesRepository(tasksDao: TasksDao): TasksRepository {
-        return TasksRepository(tasksDao)
+        return TasksRepositoryImpl(tasksDao)
     }
 
     @Provides

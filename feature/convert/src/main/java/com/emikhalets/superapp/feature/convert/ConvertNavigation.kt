@@ -15,8 +15,8 @@ fun NavGraphBuilder.convertNavigation(
     navController: NavHostController,
     onSetScreenOrientation: (AppOrientationType) -> Unit,
 ) {
+    onSetScreenOrientation(AppOrientationType.Portrait)
     composable<ConvertCurrenciesRoute> {
-        onSetScreenOrientation(AppOrientationType.Portrait)
         CurrenciesScreen(
             navigateBack = navController::popBackStack,
             viewModel = hiltViewModel(),

@@ -11,18 +11,18 @@ object TasksMapper {
     fun toFullDb(model: TaskModel): TaskFullDb {
         return TaskFullDb(
             task = toDb(model),
-            subtasks = toDbList(model.subtasks, model.id),
+            subtasks = emptyList()// toDbList(model.subtasks, model.id),
         )
     }
 
     fun toDb(model: TaskModel, parentId: Long? = null): TaskDb {
         return TaskDb(
             id = model.id,
-            parentId = parentId ?: model.parentId,
-            content = model.content,
-            completed = model.completed,
+            parentId = 0,
+            content = "",
+            completed = true,
             createDate = model.createDate,
-            updateDate = model.updateDate,
+            updateDate = model.createDate,
         )
     }
 
@@ -32,13 +32,13 @@ object TasksMapper {
 
     fun toModel(model: TaskFullDb): TaskModel {
         return TaskModel(
-            id = model.task.id,
-            parentId = model.task.parentId,
-            content = model.task.content,
-            completed = model.task.completed,
-            createDate = model.task.createDate,
-            updateDate = model.task.updateDate,
-            subtasks = toSubModelList(model.subtasks),
+//            id = model.task.id,
+//            parentId = model.task.parentId,
+//            content = model.task.content,
+//            completed = model.task.completed,
+//            createDate = model.task.createDate,
+//            updateDate = model.task.updateDate,
+//            subtasks = toSubModelList(model.subtasks),
         )
     }
 
@@ -52,13 +52,13 @@ object TasksMapper {
 
     fun toSubModel(model: TaskDb): TaskModel {
         return TaskModel(
-            id = model.id,
-            parentId = model.parentId,
-            content = model.content,
-            completed = model.completed,
-            createDate = model.createDate,
-            updateDate = model.updateDate,
-            subtasks = emptyList(),
+//            id = model.id,
+//            parentId = model.parentId,
+//            content = model.content,
+//            completed = model.completed,
+//            createDate = model.createDate,
+//            updateDate = model.updateDate,
+//            subtasks = emptyList(),
         )
     }
 

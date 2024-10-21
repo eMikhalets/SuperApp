@@ -1,9 +1,11 @@
 package com.emikhalets.superapp.feature.notes.ui.task_list
 
 import androidx.lifecycle.viewModelScope
+import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.ui.extentions.launch
 import com.emikhalets.superapp.core.ui.mvi.MviViewModel
+import com.emikhalets.superapp.feature.notes.domain.SubTaskModel
 import com.emikhalets.superapp.feature.notes.domain.TaskModel
 import com.emikhalets.superapp.feature.notes.domain.use_case.DeleteTaskUseCase
 import com.emikhalets.superapp.feature.notes.domain.use_case.GetTasksUseCase
@@ -47,8 +49,13 @@ class TasksViewModel @Inject constructor(
             is Action.SaveEditTask -> saveTaskEdit(action.model)
             is Action.CheckTask -> changeTaskCompleted(action.model)
             is Action.SetEditTask -> setEditTask(action.model)
-            is Action.DeleteTask -> setEditTask(action.model)
+            is Action.DeleteTask -> deleteTask(action.model)
+            is Action.SetError -> dropError(action.value)
         }
+    }
+
+    private fun dropError(value: StringValue?) {
+        setState { it.copy(error = value) }
     }
 
     private fun saveTaskEdit(model: TaskModel) {
@@ -69,10 +76,10 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    private fun changeTaskCompleted(model: TaskModel) {
+    private fun changeTaskCompleted(model: SubTaskModel) {
         launch {
-            val checkedModel = model.copy(completed = !model.completed)
-            updateTaskUseCase.invoke(checkedModel)
+//            val checkedModel = model.copy(completed = !model.completed)
+//            updateTaskUseCase.invoke(checkedModel)
         }
     }
 

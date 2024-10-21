@@ -57,13 +57,14 @@ fun DialogTwoAction(
     onRightClick: () -> Unit = {},
     leftText: String = "",
     rightText: String = "",
+    dismissOnBackPress: Boolean = false,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Dialog(
         onDismissRequest = { onLeftClick() },
         properties = DialogProperties(
             dismissOnBackPress = false,
-            dismissOnClickOutside = false,
+            dismissOnClickOutside = dismissOnBackPress,
             usePlatformDefaultWidth = false
         )
     ) {

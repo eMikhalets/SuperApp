@@ -15,8 +15,8 @@ fun NavGraphBuilder.notesNavigation(
     navController: NavHostController,
     onSetScreenOrientation: (AppOrientationType) -> Unit,
 ) {
+    onSetScreenOrientation(AppOrientationType.Portrait)
     composable<TasksListRoute> {
-        onSetScreenOrientation(AppOrientationType.Landscape)
         TasksListScreen(
             navigateBack = navController::popBackStack,
             viewModel = hiltViewModel(),

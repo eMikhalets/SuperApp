@@ -1,25 +1,39 @@
 package com.emikhalets.superapp.feature.notes.domain
 
+import androidx.compose.runtime.Immutable
 import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.common.timestamp
 
+@Immutable
 data class TaskModel(
     val id: Long,
+    val header: String,
+    val createDate: Long,
+    val subtasks: List<SubTaskModel>,
+) {
+
+    constructor() : this(
+        id = Const.IdNew,
+        header = "",
+        createDate = timestamp(),
+        subtasks = emptyList()
+    )
+}
+
+@Immutable
+data class SubTaskModel(
+    val id: Long,
     val parentId: Long,
-    val content: String,
+    val text: String,
     val completed: Boolean,
     val createDate: Long,
-    val updateDate: Long,
-    val subtasks: List<TaskModel>,
 ) {
 
     constructor() : this(
         id = Const.IdNew,
         parentId = Const.IdNew,
-        content = "",
+        text = "",
         completed = false,
         createDate = timestamp(),
-        updateDate = timestamp(),
-        subtasks = emptyList()
     )
 }
