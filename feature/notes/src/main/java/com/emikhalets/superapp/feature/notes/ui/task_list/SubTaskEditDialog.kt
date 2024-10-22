@@ -20,12 +20,12 @@ import com.emikhalets.superapp.core.ui.component.TextFieldPrimary
 import com.emikhalets.superapp.core.ui.dialog.DialogTwoAction
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
-import com.emikhalets.superapp.feature.notes.domain.TaskModel
+import com.emikhalets.superapp.feature.notes.domain.SubTaskModel
 
 @Composable
-internal fun TaskEditDialog(
-    task: TaskModel?,
-    onFirstClick: (TaskModel) -> Unit,
+internal fun SubTaskEditDialog(
+    task: SubTaskModel?,
+    onFirstClick: (SubTaskModel) -> Unit,
     onCancelClick: () -> Unit = {},
 ) {
     task ?: return
@@ -37,7 +37,7 @@ internal fun TaskEditDialog(
     }
 
     val focusRequester = FocusRequester.Default
-    var content by remember { mutableStateOf(task.header) }
+    var content by remember { mutableStateOf(task.text) }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -48,7 +48,7 @@ internal fun TaskEditDialog(
         rightText = stringResource(com.emikhalets.superapp.core.common.R.string.save),
         dismissOnBackPress = true,
         onLeftClick = { onCancelClick() },
-        onRightClick = { onFirstClick(task.copy(header = content)) },
+        onRightClick = { onFirstClick(task.copy(text = content)) },
     ) {
         TextFieldPrimary(
             value = content,
@@ -72,8 +72,8 @@ internal fun TaskEditDialog(
 @Composable
 private fun Preview() {
     AppTheme {
-        TaskEditDialog(
-            task = TaskModel(header = "Some task content"),
+        SubTaskEditDialog(
+            task = SubTaskModel(text = "Some task content"),
             onCancelClick = {},
             onFirstClick = {}
         )

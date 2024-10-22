@@ -12,10 +12,13 @@ object TasksContract {
 
     @Immutable
     sealed class Action : MviAction {
-        data class SaveEditTask(val model: TaskModel) : Action()
-        data class CheckTask(val model: SubTaskModel) : Action()
+        data class SaveTask(val model: TaskModel) : Action()
         data class SetEditTask(val model: TaskModel?) : Action()
         data class DeleteTask(val model: TaskModel?) : Action()
+        data class CheckSubTask(val model: SubTaskModel) : Action()
+        data class SaveSubTask(val model: SubTaskModel) : Action()
+        data class SetEditSubTask(val model: SubTaskModel?) : Action()
+        data class DeleteSubTask(val model: SubTaskModel?) : Action()
         data class SetError(val value: StringValue?) : Action()
     }
 
@@ -26,6 +29,7 @@ object TasksContract {
     data class State(
         val tasksList: List<TaskModel> = emptyList(),
         val editTask: TaskModel? = null,
+        val editSubTask: SubTaskModel? = null,
         val error: StringValue? = null,
     ) : MviState
 }

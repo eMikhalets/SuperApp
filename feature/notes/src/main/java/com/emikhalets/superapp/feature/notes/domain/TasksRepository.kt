@@ -7,9 +7,15 @@ interface TasksRepository {
 
     fun getTasks(): Flow<List<TaskModel>>
 
-    suspend fun insertTask(model: TaskModel): AppResult<Long>
+    suspend fun insertTask(model: TaskModel): AppResult<Boolean>
 
-    suspend fun updateTask(model: TaskModel): AppResult<Int>
+    suspend fun updateTask(model: TaskModel): AppResult<Boolean>
 
-    suspend fun deleteTask(model: TaskModel): AppResult<Int>
+    suspend fun deleteTask(model: TaskModel): AppResult<Boolean>
+
+    suspend fun insertSubTask(model: SubTaskModel): AppResult<Boolean>
+
+    suspend fun updateSubTask(model: SubTaskModel): AppResult<Boolean>
+
+    suspend fun deleteSubTask(model: SubTaskModel): AppResult<Boolean>
 }

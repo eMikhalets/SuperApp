@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -61,8 +62,9 @@ private fun ScreenContent(
         TasksList(
             list = state.tasksList,
             onExpandClick = {},
-            onTaskClick = {},
-            onCheck = { onSetAction(Action.CheckTask(it)) },
+            onTaskClick = { onSetAction(Action.SetEditTask(it)) },
+            onSubTaskClick = { onSetAction(Action.SetEditSubTask(it)) },
+            onSubTaskCheck = { onSetAction(Action.CheckSubTask(it)) },
             modifier = Modifier.weight(1f)
         )
         AddCard(
@@ -73,17 +75,29 @@ private fun ScreenContent(
         )
     }
 
-//    TaskEditDialog(
-//        task = state.editTask,
-//        onSaveClick = { onSetAction(Action.SaveEditTask(it)) },
-//        onCancelClick = {
-//            if (state.editTask?.id == Const.IdNew) {
-//                onSetAction(Action.SetEditTask(null))
-//            } else {
-//                onSetAction(Action.DeleteTask(state.editTask))
-//            }
-//        }
-//    )
+    TaskEditDialog(
+        task = state.editTask,
+        onFirstClick = { onSetAction(Action.SaveTask(it)) },
+        onCancelClick = {
+            if (state.editTask?.id == 0L) {
+                onSetAction(Action.SetEditTask(null))
+            } else {
+                onSetAction(Action.DeleteTask(state.editTask))
+            }
+        }
+    )
+
+    SubTaskEditDialog(
+        task = state.editSubTask,
+        onFirstClick = { onSetAction(Action.SaveSubTask(it)) },
+        onCancelClick = {
+            if (state.editTask?.id == 0L) {
+                onSetAction(Action.SetEditSubTask(null))
+            } else {
+                onSetAction(Action.DeleteSubTask(state.editSubTask))
+            }
+        }
+    )
 }
 
 @Composable
@@ -115,8 +129,9 @@ private fun AddCard(
 private fun TasksList(
     list: List<TaskModel>,
     onExpandClick: (TaskModel) -> Unit,
-    onTaskClick: (SubTaskModel) -> Unit,
-    onCheck: (SubTaskModel) -> Unit,
+    onTaskClick: (TaskModel) -> Unit,
+    onSubTaskClick: (SubTaskModel) -> Unit,
+    onSubTaskCheck: (SubTaskModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -134,17 +149,17 @@ private fun TasksList(
                 Column {
                     TaskHeader(
                         text = task.header,
-                        onExpandClick = {},
-                        onAddClick = {},
+                        onExpandClick = { onExpandClick(task) },
+                        onAddSubTaskClick = { onSubTaskClick(SubTaskModel(parentId = task.id)) },
+                        onEditClick = { onTaskClick(task) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     task.subtasks.forEach { subtask ->
-                        TaskRow(
+                        SubTaskBox(
                             task = subtask,
-                            onChecked = onCheck,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickableOnce { onTaskClick(subtask) }
+                            onClick = onSubTaskCheck,
+                            onChecked = onSubTaskClick,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
@@ -157,7 +172,8 @@ private fun TasksList(
 private fun TaskHeader(
     text: String,
     onExpandClick: () -> Unit,
-    onAddClick: () -> Unit,
+    onAddSubTaskClick: () -> Unit,
+    onEditClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -171,10 +187,18 @@ private fun TaskHeader(
                 .padding(16.dp, 12.dp)
         )
         Icon(
+            imageVector = Icons.Rounded.Edit,
+            contentDescription = null,
+            modifier = Modifier
+                .clickable { onEditClick() }
+                .padding(16.dp, 12.dp)
+                .size(32.dp)
+        )
+        Icon(
             imageVector = Icons.Rounded.Add,
             contentDescription = null,
             modifier = Modifier
-                .clickable { onAddClick() }
+                .clickable { onAddSubTaskClick() }
                 .padding(16.dp, 12.dp)
                 .size(32.dp)
         )
@@ -182,8 +206,9 @@ private fun TaskHeader(
 }
 
 @Composable
-private fun TaskRow(
+private fun SubTaskBox(
     task: SubTaskModel,
+    onClick: (SubTaskModel) -> Unit,
     onChecked: (SubTaskModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -195,7 +220,7 @@ private fun TaskRow(
     }
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
+        modifier = modifier.clickableOnce { onClick(task) },
     ) {
         Checkbox(
             checked = task.completed,

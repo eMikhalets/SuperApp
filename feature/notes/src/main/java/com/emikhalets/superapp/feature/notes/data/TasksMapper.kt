@@ -6,6 +6,14 @@ import com.emikhalets.superapp.feature.notes.domain.TaskModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+fun TaskModel.toDb(): TaskDb {
+    return TaskDb(
+        id = this.id,
+        header = this.header,
+        createDate = this.createDate,
+    )
+}
+
 object TasksMapper {
 
     fun toFullDb(model: TaskModel): TaskFullDb {
