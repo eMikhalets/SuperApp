@@ -2,6 +2,7 @@ package com.emikhalets.superapp.feature.notes
 
 import android.content.Context
 import com.emikhalets.superapp.core.database.notes.NotesDatabase
+import com.emikhalets.superapp.core.database.notes.table_subtasks.SubTasksDao
 import com.emikhalets.superapp.core.database.notes.table_tasks.TasksDao
 import com.emikhalets.superapp.feature.notes.data.TasksRepositoryImpl
 import com.emikhalets.superapp.feature.notes.domain.TasksRepository
@@ -30,8 +31,13 @@ internal object NotesModule {
     }
 
     @Provides
-    fun provideNotesRepository(tasksDao: TasksDao): TasksRepository {
-        return TasksRepositoryImpl(tasksDao)
+    fun providesSubTasksDao(database: NotesDatabase): SubTasksDao {
+        return database.subTasksDao
+    }
+
+    @Provides
+    fun provideNotesRepository(tasksDao: TasksDao, subTasksDao: SubTasksDao): TasksRepository {
+        return TasksRepositoryImpl(tasksDao, subTasksDao)
     }
 
     @Provides

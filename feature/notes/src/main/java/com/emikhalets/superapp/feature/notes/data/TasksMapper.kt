@@ -1,10 +1,41 @@
 package com.emikhalets.superapp.feature.notes.data
 
 import com.emikhalets.superapp.core.database.notes.embeded.TaskFullDb
+import com.emikhalets.superapp.core.database.notes.table_subtasks.SubTaskDb
 import com.emikhalets.superapp.core.database.notes.table_tasks.TaskDb
+import com.emikhalets.superapp.feature.notes.domain.SubTaskModel
 import com.emikhalets.superapp.feature.notes.domain.TaskModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+
+fun TaskFullDb.toModel(): TaskModel {
+    return TaskModel(
+        id = this.task.id,
+        header = this.task.header,
+        createDate = this.task.createDate,
+        subtasks = this.subtasks.map { it.toModel() },
+    )
+}
+
+fun SubTaskDb.toModel(): SubTaskModel {
+    return SubTaskModel(
+        id = this.id,
+        parentId = this.parentId,
+        text = this.text,
+        completed = this.completed,
+        createDate = this.createDate,
+    )
+}
+
+@JvmName("toModelListTaskFullDb")
+fun List<TaskFullDb>.toModel(): List<TaskModel> {
+    return this.map { it.toModel() }
+}
+
+@JvmName("toModelFlowTaskFullDb")
+fun Flow<List<TaskFullDb>>.toModel(): Flow<List<TaskModel>> {
+    return this.map { it.toModel() }
+}
 
 fun TaskModel.toDb(): TaskDb {
     return TaskDb(
@@ -14,63 +45,12 @@ fun TaskModel.toDb(): TaskDb {
     )
 }
 
-object TasksMapper {
-
-    fun toFullDb(model: TaskModel): TaskFullDb {
-        return TaskFullDb(
-            task = toDb(model),
-            subtasks = emptyList()// toDbList(model.subtasks, model.id),
-        )
-    }
-
-    fun toDb(model: TaskModel, parentId: Long? = null): TaskDb {
-        return TaskDb(
-            id = model.id,
-            parentId = 0,
-            content = "",
-            completed = true,
-            createDate = model.createDate,
-            updateDate = model.createDate,
-        )
-    }
-
-    fun toDbList(list: List<TaskModel>, parentId: Long? = null): List<TaskDb> {
-        return list.map { toDb(it, parentId) }
-    }
-
-    fun toModel(model: TaskFullDb): TaskModel {
-        return TaskModel(
-//            id = model.task.id,
-//            parentId = model.task.parentId,
-//            content = model.task.content,
-//            completed = model.task.completed,
-//            createDate = model.task.createDate,
-//            updateDate = model.task.updateDate,
-//            subtasks = toSubModelList(model.subtasks),
-        )
-    }
-
-    fun toModelList(list: List<TaskFullDb>): List<TaskModel> {
-        return list.map { toModel(it) }
-    }
-
-    fun toModelFlow(flow: Flow<List<TaskFullDb>>): Flow<List<TaskModel>> {
-        return flow.map { toModelList(it) }
-    }
-
-    fun toSubModel(model: TaskDb): TaskModel {
-        return TaskModel(
-//            id = model.id,
-//            parentId = model.parentId,
-//            content = model.content,
-//            completed = model.completed,
-//            createDate = model.createDate,
-//            updateDate = model.updateDate,
-//            subtasks = emptyList(),
-        )
-    }
-
-    fun toSubModelList(list: List<TaskDb>): List<TaskModel> {
-        return list.map { toSubModel(it) }
-    }
+fun SubTaskModel.toDb(): SubTaskDb {
+    return SubTaskDb(
+        id = this.id,
+        text = this.text,
+        createDate = this.createDate,
+        parentId = this.parentId,
+        completed = this.completed,
+    )
 }

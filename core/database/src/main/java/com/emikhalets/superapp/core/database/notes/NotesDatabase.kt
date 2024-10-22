@@ -4,12 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.emikhalets.superapp.core.database.notes.table_subtasks.SubTaskDb
+import com.emikhalets.superapp.core.database.notes.table_subtasks.SubTasksDao
 import com.emikhalets.superapp.core.database.notes.table_tasks.TaskDb
 import com.emikhalets.superapp.core.database.notes.table_tasks.TasksDao
 
 @Database(
     entities = [
         TaskDb::class,
+        SubTaskDb::class,
     ],
     autoMigrations = [],
     version = 1,
@@ -18,6 +21,7 @@ import com.emikhalets.superapp.core.database.notes.table_tasks.TasksDao
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract val tasksDao: TasksDao
+    abstract val subTasksDao: SubTasksDao
 
     companion object {
 
