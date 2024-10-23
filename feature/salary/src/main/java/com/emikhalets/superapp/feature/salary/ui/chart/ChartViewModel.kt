@@ -1,6 +1,5 @@
 package com.emikhalets.superapp.feature.salary.ui.chart
 
-import com.emikhalets.superapp.core.common.AppResult
 import com.emikhalets.superapp.core.common.StringValue
 import com.emikhalets.superapp.core.common.constant.Const
 import com.emikhalets.superapp.core.ui.extentions.launch
@@ -69,8 +68,8 @@ class ChartViewModel @Inject constructor(
     private fun insertSalary(model: SalaryModel) {
         launch {
             when (val result = insertSalaryUseCase.invoke(model)) {
-                is AppResult.Failure -> setFailureState(result.exception)
-                is AppResult.Success -> setState { it.copy(editSalary = null) }
+                is InsertSalaryUseCase.Result.Failure -> setFailureState(result.message)
+                InsertSalaryUseCase.Result.Success -> setState { it.copy(editSalary = null) }
             }
         }
     }
@@ -78,8 +77,8 @@ class ChartViewModel @Inject constructor(
     private fun updateSalary(model: SalaryModel) {
         launch {
             when (val result = updateSalaryUseCase.invoke(model)) {
-                is AppResult.Failure -> setFailureState(result.exception)
-                is AppResult.Success -> setState { it.copy(editSalary = null) }
+                is UpdateSalaryUseCase.Result.Failure -> setFailureState(result.message)
+                UpdateSalaryUseCase.Result.Success -> setState { it.copy(editSalary = null) }
             }
         }
     }
@@ -89,8 +88,8 @@ class ChartViewModel @Inject constructor(
         model ?: return
         launch {
             when (val result = deleteSalaryUseCase.invoke(model)) {
-                is AppResult.Failure -> setFailureState(result.exception)
-                is AppResult.Success -> setState { it.copy(editSalary = null) }
+                is DeleteSalaryUseCase.Result.Failure -> setFailureState(result.message)
+                DeleteSalaryUseCase.Result.Success -> setState { it.copy(editSalary = null) }
             }
         }
     }
@@ -104,5 +103,9 @@ class ChartViewModel @Inject constructor(
 
     private fun setFailureState(throwable: Throwable?) {
         setEffect { Effect.Error(StringValue.exception(throwable)) }
+    }
+
+    private fun setFailureState(message: StringValue) {
+        setEffect { Effect.Error(message) }
     }
 }

@@ -11,11 +11,16 @@ class DeleteSalaryUseCase @Inject constructor(
     private val salaryRepository: SalaryRepository,
 ) {
 
-    suspend operator fun invoke(model: SalaryModel): AppResult<Boolean> {
+    suspend operator fun invoke(model: SalaryModel): Result {
         val deleteError = R.string.error_delete
-        return when (val result = salaryRepository.deleteSalary(model)) {
-            is AppResult.Failure -> AppResult.failure(StringValue.resource(deleteError))
-            is AppResult.Success -> result
+        return when (salaryRepository.deleteSalary(model)) {
+            is AppResult.Failure -> Result.Failure(StringValue.resource(deleteError))
+            is AppResult.Success -> Result.Success
         }
+    }
+
+    sealed interface Result {
+        data class Failure(val message: StringValue) : Result
+        data object Success : Result
     }
 }
