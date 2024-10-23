@@ -1,50 +1,50 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.serialization)
 }
 
 android {
-    namespace = "com.emikhalets.core.ui"
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
+    namespace = "com.emikhalets.superapp.core.ui"
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
+        minSdk = libs.versions.minSdk.get().toInt()
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = JavaVersion.valueOf(libs.versions.java.get())
+        targetCompatibility = JavaVersion.valueOf(libs.versions.java.get())
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = JavaVersion.valueOf(libs.versions.java.get()).toString()
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 }
 
 dependencies {
-
     implementation(project(":core:common"))
-    implementation(project(":core:navigation"))
 
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
-    api(libs.androidx.compose.ui)
-    api(libs.androidx.compose.ui.graphics)
-    api(libs.androidx.compose.ui.tooling)
-    api(libs.androidx.compose.ui.tooling.preview)
-    api(libs.androidx.compose.material)
-    api(libs.androidx.compose.material.icons)
-    api(libs.androidx.compose.material.icons.ext)
+    api(platform(libs.compose.bom))
+    debugApi(libs.compose.ui.tooling)
+    api(libs.compose.ui.core)
+    api(libs.compose.ui.graphics)
+    api(libs.compose.ui.tooling.preview)
+    api(libs.compose.material3)
+    api(libs.compose.material.icons)
+    api(libs.compose.material.icons.ext)
+    api(libs.android.navigation.compose)
+    api(libs.hilt.navigation)
 
-    api(libs.google.accompanist.insets)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
 }

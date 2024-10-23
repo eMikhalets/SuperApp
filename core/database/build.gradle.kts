@@ -1,40 +1,42 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.serialization)
 }
 
 android {
-    namespace = "com.emikhalets.core.database"
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
+    namespace = "com.emikhalets.superapp.core.database"
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
+        minSdk = libs.versions.minSdk.get().toInt()
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
     }
-
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = JavaVersion.valueOf(libs.versions.java.get())
+        targetCompatibility = JavaVersion.valueOf(libs.versions.java.get())
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = JavaVersion.valueOf(libs.versions.java.get()).toString()
     }
 }
 
 dependencies {
-
     implementation(project(":core:common"))
 
-    api(libs.androidx.room.runtime)
-    api(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    api(libs.android.room.core)
+    api(libs.android.room.runtime)
+    kapt(libs.android.room.compiler)
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
 }
