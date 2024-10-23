@@ -17,6 +17,7 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -154,11 +155,12 @@ private fun TasksList(
                         onEditClick = { onTaskClick(task) },
                         modifier = Modifier.fillMaxWidth()
                     )
+                    HorizontalDivider()
                     task.subtasks.forEach { subtask ->
                         SubTaskBox(
                             task = subtask,
-                            onClick = onSubTaskCheck,
-                            onChecked = onSubTaskClick,
+                            onClick = onSubTaskClick,
+                            onChecked = onSubTaskCheck,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }

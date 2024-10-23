@@ -72,6 +72,7 @@ class TasksViewModel @Inject constructor(
     }
 
     private fun saveTask(model: TaskModel) {
+        setEditTask(null)
         launch {
             if (model.id == Const.IdNew) {
                 when (val result = insertTaskUseCase.invoke(model)) {
@@ -113,6 +114,7 @@ class TasksViewModel @Inject constructor(
     }
 
     private fun saveSubTask(model: SubTaskModel) {
+        setEditSubTask(null)
         launch {
             if (model.id == Const.IdNew) {
                 when (val result = insertSubTaskUseCase.invoke(model)) {

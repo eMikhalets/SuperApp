@@ -21,6 +21,7 @@ import com.emikhalets.superapp.core.ui.dialog.DialogTwoAction
 import com.emikhalets.superapp.core.ui.extentions.ScreenPreview
 import com.emikhalets.superapp.core.ui.theme.AppTheme
 import com.emikhalets.superapp.feature.notes.domain.TaskModel
+import timber.log.Timber
 
 @Composable
 internal fun TaskEditDialog(
@@ -36,12 +37,8 @@ internal fun TaskEditDialog(
         stringResource(com.emikhalets.superapp.core.common.R.string.delete)
     }
 
-    val focusRequester = FocusRequester.Default
+    val focusRequester = remember { FocusRequester() }
     var content by remember { mutableStateOf(task.header) }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
 
     DialogTwoAction(
         leftText = leftText,
@@ -65,6 +62,14 @@ internal fun TaskEditDialog(
                 .fillMaxWidth()
                 .focusRequester(focusRequester),
         )
+    }
+
+    LaunchedEffect(Unit) {
+        try {
+            focusRequester.requestFocus()
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 }
 

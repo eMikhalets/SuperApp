@@ -36,12 +36,8 @@ internal fun SubTaskEditDialog(
         stringResource(com.emikhalets.superapp.core.common.R.string.delete)
     }
 
-    val focusRequester = FocusRequester.Default
+    val focusRequester = remember { FocusRequester() }
     var content by remember { mutableStateOf(task.text) }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
 
     DialogTwoAction(
         leftText = leftText,
@@ -65,6 +61,10 @@ internal fun SubTaskEditDialog(
                 .fillMaxWidth()
                 .focusRequester(focusRequester),
         )
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 }
 
