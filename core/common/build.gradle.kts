@@ -1,35 +1,42 @@
-@file:Suppress("UnstableApiUsage")
-
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.kapt.get().pluginId)
-    id(libs.plugins.hilt.get().pluginId)
+    alias(libs.plugins.library)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.serialization)
 }
 
 android {
-    namespace = "com.emikhalets.core.common"
-    compileSdk = rootProject.extra["compileSdk"] as Int
-
+    namespace = "com.emikhalets.superapp.core.common"
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = rootProject.extra["minSdk"] as Int
+        minSdk = libs.versions.minSdk.get().toInt()
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     compileOptions {
-        sourceCompatibility = rootProject.extra["java"] as JavaVersion
-        targetCompatibility = rootProject.extra["java"] as JavaVersion
+        sourceCompatibility = JavaVersion.valueOf(libs.versions.java.get())
+        targetCompatibility = JavaVersion.valueOf(libs.versions.java.get())
     }
     kotlinOptions {
-        jvmTarget = rootProject.extra["java"].toString()
+        jvmTarget = JavaVersion.valueOf(libs.versions.java.get()).toString()
     }
 }
 
 dependencies {
+    api(libs.core)
+    api(libs.coroutines.core)
+    api(libs.coroutines.android)
+    api(libs.lifecycle.runtime.compose)
+    api(libs.lifecycle.viewmodel)
+    api(libs.lifecycle.viewmodel.compose)
+    api(libs.accompanist.insets)
+    api(libs.accompanist.systemuicontroller)
+    api(libs.timber)
+    api(libs.kotlin.serialization.json)
 
-    api(libs.androidx.core.ktx)
-    api(libs.androidx.lifecycle.viewmodel.ktx)
-    api(libs.androidx.datastore)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
 }
